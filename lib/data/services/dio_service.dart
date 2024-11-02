@@ -1,9 +1,7 @@
 import 'package:dio/dio.dart';
 
 class DioService {
-  final Dio _dio;
-
-  DioService(this._dio);
+  final Dio _dio = Dio();
 
   Future<Response> get(String path, Map<String, dynamic>? params) async {
     try {
