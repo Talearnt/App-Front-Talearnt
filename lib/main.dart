@@ -17,6 +17,7 @@ class MyApp extends StatelessWidget {
       title: 'Talearnt',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        fontFamily: "Pretendard",
       ),
       home: LoginPage(),
     );
