@@ -1,5 +1,5 @@
 import 'package:app_front_talearnt/provider/provider_set_up.dart';
-import 'package:app_front_talearnt/view/test_page.dart';
+import 'package:app_front_talearnt/view/auth/login_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         fontFamily: "Pretendard",
       ),
-      home: LoginPage(),
+      home: const LoginPage(),
     );
   }
 }
