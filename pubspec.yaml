@@ -86,6 +86,7 @@ flutter:
     - assets/icons/chips_close.svg
     - assets/icons/close.svg
     - assets/icons/eye_close.svg
+    - assets/icons/eye_open.svg
     - assets/icons/kebab_menu.svg
     - assets/icons/next_arrow.svg
     - assets/icons/reset.svg
