@@ -1,5 +1,6 @@
 import 'package:app_front_talearnt/common/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class ObscureTextField extends StatelessWidget {
   final String hint;
@@ -58,15 +59,13 @@ class ObscureTextField extends StatelessWidget {
       return Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          IconButton(
-            onPressed: () {
-              obscureNotifier.value = !obscureNotifier.value; // 상태 반전
+          GestureDetector(
+            onTap: () {
+              obscureNotifier.value = !obscureNotifier.value;
             },
-            hoverColor: Colors.transparent,
-            icon: Icon(
-              obscureNotifier.value ? Icons.visibility_off : Icons.visibility,
-              color: Palette.icon01,
-            ),
+            child: obscureNotifier.value
+                ? SvgPicture.asset('assets/icons/eye_close.svg')
+                : SvgPicture.asset('assets/icons/eye_open.svg'),
           ),
         ],
       );
