@@ -19,7 +19,11 @@ class PrimaryXs extends StatelessWidget {
           borderRadius: BorderRadius.circular(6),
         ),
         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 16),
-        elevation: 0,
+        minimumSize: Size.zero,
+      ).copyWith(
+        elevation: WidgetStateProperty.resolveWith<double>((states) {
+          return 0;
+        }),
       ),
       onPressed: onPressed ?? () {},
       child: Text(
@@ -33,49 +37,46 @@ class PrimaryXs extends StatelessWidget {
 }
 
 class PrimaryS extends StatelessWidget {
-  final String type, content;
+  final String content;
   final VoidCallback? onPressed;
+  final bool isEnabled;
+
   const PrimaryS({
     super.key,
-    required this.type,
     required this.content,
     this.onPressed,
+    this.isEnabled = true,
   });
 
   @override
   Widget build(BuildContext context) {
-    final Map<String, Map<String, Color>> typeStyles = {
-      "default": {
-        "backgroundColor": Palette.primary01,
-        "textColor": Palette.bgBackGround,
-      },
-      "hover": {
-        "backgroundColor": Palette.primaryBG02,
-        "textColor": Palette.bgBackGround,
-      },
-      "disabled": {
-        "backgroundColor": Palette.bgUp02,
-        "textColor": Palette.text04,
-      },
-    };
-
-    final backgroundColor =
-        typeStyles[type]?["backgroundColor"] ?? Palette.bgBackGround;
-    final textColor = typeStyles[type]?["textColor"] ?? Palette.text01;
+    final Color backgroundColor =
+        isEnabled ? Palette.primary01 : Palette.bgUp02;
+    final Color textColor = isEnabled ? Palette.bgBackGround : Palette.text04;
 
     return ElevatedButton(
       onPressed: () {
-        if (type != "disabled") {
-          onPressed ?? () {};
+        if (isEnabled && onPressed != null) {
+          onPressed!();
         }
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: backgroundColor,
-        elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        minimumSize: Size.zero,
+      ).copyWith(
+        overlayColor: WidgetStateProperty.resolveWith<Color?>((states) {
+          if (isEnabled && states.contains(WidgetState.pressed)) {
+            return Palette.primaryBG02;
+          }
+          return Colors.transparent;
+        }),
+        elevation: WidgetStateProperty.resolveWith<double>((states) {
+          return 0;
+        }),
       ),
       child: Text(
         content,
@@ -86,49 +87,45 @@ class PrimaryS extends StatelessWidget {
 }
 
 class PrimaryM extends StatelessWidget {
-  final String type, content;
+  final String content;
   final VoidCallback? onPressed;
+  final bool isEnabled;
+
   const PrimaryM({
     super.key,
-    required this.type,
     required this.content,
     this.onPressed,
+    this.isEnabled = true,
   });
 
   @override
   Widget build(BuildContext context) {
-    final Map<String, Map<String, Color>> typeStyles = {
-      "default": {
-        "backgroundColor": Palette.primary01,
-        "textColor": Palette.bgBackGround,
-      },
-      "hover": {
-        "backgroundColor": Palette.primaryBG02,
-        "textColor": Palette.bgBackGround,
-      },
-      "disabled": {
-        "backgroundColor": Palette.bgUp02,
-        "textColor": Palette.text04,
-      },
-    };
-
-    final backgroundColor =
-        typeStyles[type]?["backgroundColor"] ?? Palette.bgBackGround;
-    final textColor = typeStyles[type]?["textColor"] ?? Palette.text01;
+    final Color backgroundColor =
+        isEnabled ? Palette.primary01 : Palette.bgUp02;
+    final Color textColor = isEnabled ? Palette.bgBackGround : Palette.text04;
 
     return ElevatedButton(
       onPressed: () {
-        if (type != "disabled") {
-          onPressed ?? () {};
+        if (isEnabled && onPressed != null) {
+          onPressed!();
         }
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: backgroundColor,
-        elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
         padding: const EdgeInsets.symmetric(vertical: 13.5, horizontal: 16),
+      ).copyWith(
+        overlayColor: WidgetStateProperty.resolveWith<Color?>((states) {
+          if (isEnabled && states.contains(WidgetState.pressed)) {
+            return Palette.primaryBG02;
+          }
+          return Colors.transparent;
+        }),
+        elevation: WidgetStateProperty.resolveWith<double>((states) {
+          return 0;
+        }),
       ),
       child: Text(
         content,
@@ -139,53 +136,49 @@ class PrimaryM extends StatelessWidget {
 }
 
 class SecondarySGray extends StatelessWidget {
-  final String type, content;
+  final String content;
   final VoidCallback? onPressed;
+  final bool isEnabled;
+
   const SecondarySGray({
     super.key,
-    required this.type,
     required this.content,
     this.onPressed,
+    this.isEnabled = true,
   });
 
   @override
   Widget build(BuildContext context) {
-    final Map<String, Map<String, Color>> typeStyles = {
-      "default": {
-        "borderColor": Palette.icon02,
-        "textColor": Palette.text02,
-      },
-      "hover": {
-        "borderColor": Palette.icon02,
-        "textColor": Palette.text02,
-      },
-      "disabled": {
-        "borderColor": Palette.icon02,
-        "textColor": Palette.text04,
-      },
-    };
-
-    final borderColor =
-        typeStyles[type]?["borderColor"] ?? Palette.bgBackGround;
-    final textColor = typeStyles[type]?["textColor"] ?? Palette.text01;
+    final Color borderColor = isEnabled ? Palette.icon02 : Palette.icon02;
+    final Color textColor = isEnabled ? Palette.text02 : Palette.text04;
 
     return ElevatedButton(
       onPressed: () {
-        if (type != "disabled") {
-          onPressed ?? () {};
+        if (isEnabled && onPressed != null) {
+          onPressed!();
         }
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: Palette.bgBackGround,
-        elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        minimumSize: Size.zero,
         side: BorderSide(
           color: borderColor,
           width: 1,
         ),
+      ).copyWith(
+        overlayColor: WidgetStateProperty.resolveWith<Color?>((states) {
+          if (isEnabled && states.contains(WidgetState.pressed)) {
+            return Palette.bgBackGround;
+          }
+          return Colors.transparent;
+        }),
+        elevation: WidgetStateProperty.resolveWith<double>((states) {
+          return 0;
+        }),
       ),
       child: Text(
         content,
@@ -196,45 +189,30 @@ class SecondarySGray extends StatelessWidget {
 }
 
 class SecondaryMGray extends StatelessWidget {
-  final String type, content;
+  final String content;
   final VoidCallback? onPressed;
+  final bool isEnabled;
+
   const SecondaryMGray({
     super.key,
-    required this.type,
     required this.content,
     this.onPressed,
+    this.isEnabled = true,
   });
 
   @override
   Widget build(BuildContext context) {
-    final Map<String, Map<String, Color>> typeStyles = {
-      "default": {
-        "borderColor": Palette.icon02,
-        "textColor": Palette.text02,
-      },
-      "hover": {
-        "borderColor": Palette.icon02,
-        "textColor": Palette.text02,
-      },
-      "disabled": {
-        "borderColor": Palette.icon02,
-        "textColor": Palette.text04,
-      },
-    };
-
-    final borderColor =
-        typeStyles[type]?["borderColor"] ?? Palette.bgBackGround;
-    final textColor = typeStyles[type]?["textColor"] ?? Palette.text01;
+    final Color borderColor = isEnabled ? Palette.icon02 : Palette.icon02;
+    final Color textColor = isEnabled ? Palette.text02 : Palette.text04;
 
     return ElevatedButton(
       onPressed: () {
-        if (type != "disabled") {
-          onPressed ?? () {};
+        if (isEnabled && onPressed != null) {
+          onPressed!();
         }
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: Palette.bgBackGround,
-        elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
@@ -243,6 +221,16 @@ class SecondaryMGray extends StatelessWidget {
           color: borderColor,
           width: 1,
         ),
+      ).copyWith(
+        overlayColor: WidgetStateProperty.resolveWith<Color?>((states) {
+          if (isEnabled && states.contains(WidgetState.pressed)) {
+            return Palette.bgBackGround;
+          }
+          return Colors.transparent;
+        }),
+        elevation: WidgetStateProperty.resolveWith<double>((states) {
+          return 0;
+        }),
       ),
       child: Text(
         content,
@@ -253,53 +241,49 @@ class SecondaryMGray extends StatelessWidget {
 }
 
 class SecondarySBlue extends StatelessWidget {
-  final String type, content;
+  final String content;
   final VoidCallback? onPressed;
+  final bool isEnabled;
+
   const SecondarySBlue({
     super.key,
-    required this.type,
     required this.content,
     this.onPressed,
+    this.isEnabled = true,
   });
 
   @override
   Widget build(BuildContext context) {
-    final Map<String, Map<String, Color>> typeStyles = {
-      "default": {
-        "borderColor": Palette.primary01,
-        "textColor": Palette.primary01,
-      },
-      "hover": {
-        "borderColor": Palette.primary01,
-        "textColor": Palette.primary01,
-      },
-      "disabled": {
-        "borderColor": Palette.icon02,
-        "textColor": Palette.text04,
-      },
-    };
-
-    final borderColor =
-        typeStyles[type]?["borderColor"] ?? Palette.bgBackGround;
-    final textColor = typeStyles[type]?["textColor"] ?? Palette.text01;
+    final Color borderColor = isEnabled ? Palette.primary01 : Palette.icon02;
+    final Color textColor = isEnabled ? Palette.primary01 : Palette.text04;
 
     return ElevatedButton(
       onPressed: () {
-        if (type != "disabled") {
-          onPressed ?? () {};
+        if (isEnabled && onPressed != null) {
+          onPressed!();
         }
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: Palette.bgBackGround,
-        elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        minimumSize: Size.zero,
         side: BorderSide(
           color: borderColor,
           width: 1,
         ),
+      ).copyWith(
+        overlayColor: WidgetStateProperty.resolveWith<Color?>((states) {
+          if (isEnabled && states.contains(WidgetState.pressed)) {
+            return Palette.bgBackGround;
+          }
+          return Colors.transparent;
+        }),
+        elevation: WidgetStateProperty.resolveWith<double>((states) {
+          return 0;
+        }),
       ),
       child: Text(
         content,
@@ -310,45 +294,30 @@ class SecondarySBlue extends StatelessWidget {
 }
 
 class SecondaryMBlue extends StatelessWidget {
-  final String type, content;
+  final String content;
   final VoidCallback? onPressed;
+  final bool isEnabled;
+
   const SecondaryMBlue({
     super.key,
-    required this.type,
     required this.content,
     this.onPressed,
+    this.isEnabled = true,
   });
 
   @override
   Widget build(BuildContext context) {
-    final Map<String, Map<String, Color>> typeStyles = {
-      "default": {
-        "borderColor": Palette.primary01,
-        "textColor": Palette.primary01,
-      },
-      "hover": {
-        "borderColor": Palette.primary01,
-        "textColor": Palette.primary01,
-      },
-      "disabled": {
-        "borderColor": Palette.icon02,
-        "textColor": Palette.text04,
-      },
-    };
-
-    final borderColor =
-        typeStyles[type]?["borderColor"] ?? Palette.bgBackGround;
-    final textColor = typeStyles[type]?["textColor"] ?? Palette.text01;
+    final Color borderColor = isEnabled ? Palette.primary01 : Palette.icon02;
+    final Color textColor = isEnabled ? Palette.primary01 : Palette.text04;
 
     return ElevatedButton(
       onPressed: () {
-        if (type != "disabled") {
-          onPressed ?? () {};
+        if (isEnabled && onPressed != null) {
+          onPressed!();
         }
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: Palette.bgBackGround,
-        elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
@@ -357,6 +326,16 @@ class SecondaryMBlue extends StatelessWidget {
           color: borderColor,
           width: 1,
         ),
+      ).copyWith(
+        overlayColor: WidgetStateProperty.resolveWith<Color?>((states) {
+          if (isEnabled && states.contains(WidgetState.pressed)) {
+            return Palette.bgBackGround;
+          }
+          return Colors.transparent;
+        }),
+        elevation: WidgetStateProperty.resolveWith<double>((states) {
+          return 0;
+        }),
       ),
       child: Text(
         content,
@@ -367,53 +346,49 @@ class SecondaryMBlue extends StatelessWidget {
 }
 
 class TertiaryS extends StatelessWidget {
-  final String type, content;
+  final String content;
   final VoidCallback? onPressed;
+  final bool isEnabled;
+
   const TertiaryS({
     super.key,
-    required this.type,
     required this.content,
     this.onPressed,
+    this.isEnabled = true,
   });
 
   @override
   Widget build(BuildContext context) {
-    final Map<String, Map<String, Color>> typeStyles = {
-      "default": {
-        "borderColor": Palette.icon02,
-        "textColor": Palette.text02,
-      },
-      "hover": {
-        "borderColor": Palette.icon02,
-        "textColor": Palette.text02,
-      },
-      "disabled": {
-        "borderColor": Palette.icon02,
-        "textColor": Palette.text04,
-      },
-    };
-
-    final borderColor =
-        typeStyles[type]?["borderColor"] ?? Palette.bgBackGround;
-    final textColor = typeStyles[type]?["textColor"] ?? Palette.text01;
+    final Color borderColor = isEnabled ? Palette.icon02 : Palette.icon02;
+    final Color textColor = isEnabled ? Palette.text02 : Palette.text04;
 
     return ElevatedButton(
       onPressed: () {
-        if (type != "disabled") {
-          onPressed ?? () {};
+        if (isEnabled && onPressed != null) {
+          onPressed!();
         }
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: Palette.bgBackGround,
-        elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(999),
         ),
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        minimumSize: Size.zero,
         side: BorderSide(
           color: borderColor,
           width: 1,
         ),
+      ).copyWith(
+        overlayColor: WidgetStateProperty.resolveWith<Color?>((states) {
+          if (isEnabled && states.contains(WidgetState.pressed)) {
+            return Palette.bgBackGround;
+          }
+          return Colors.transparent;
+        }),
+        elevation: WidgetStateProperty.resolveWith<double>((states) {
+          return 0;
+        }),
       ),
       child: Text(
         content,
@@ -424,45 +399,30 @@ class TertiaryS extends StatelessWidget {
 }
 
 class TertiaryM extends StatelessWidget {
-  final String type, content;
+  final String content;
   final VoidCallback? onPressed;
+  final bool isEnabled;
+
   const TertiaryM({
     super.key,
-    required this.type,
     required this.content,
     this.onPressed,
+    this.isEnabled = true,
   });
 
   @override
   Widget build(BuildContext context) {
-    final Map<String, Map<String, Color>> typeStyles = {
-      "default": {
-        "borderColor": Palette.icon02,
-        "textColor": Palette.text02,
-      },
-      "hover": {
-        "borderColor": Palette.icon02,
-        "textColor": Palette.text02,
-      },
-      "disabled": {
-        "borderColor": Palette.icon02,
-        "textColor": Palette.text04,
-      },
-    };
-
-    final borderColor =
-        typeStyles[type]?["borderColor"] ?? Palette.bgBackGround;
-    final textColor = typeStyles[type]?["textColor"] ?? Palette.text01;
+    final Color borderColor = isEnabled ? Palette.icon02 : Palette.icon02;
+    final Color textColor = isEnabled ? Palette.text02 : Palette.text04;
 
     return ElevatedButton(
       onPressed: () {
-        if (type != "disabled") {
-          onPressed ?? () {};
+        if (isEnabled && onPressed != null) {
+          onPressed!();
         }
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: Palette.bgBackGround,
-        elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(999),
         ),
@@ -471,6 +431,16 @@ class TertiaryM extends StatelessWidget {
           color: borderColor,
           width: 1,
         ),
+      ).copyWith(
+        overlayColor: WidgetStateProperty.resolveWith<Color?>((states) {
+          if (isEnabled && states.contains(WidgetState.pressed)) {
+            return Palette.bgBackGround;
+          }
+          return Colors.transparent;
+        }),
+        elevation: WidgetStateProperty.resolveWith<double>((states) {
+          return 0;
+        }),
       ),
       child: Text(
         content,
@@ -518,9 +488,9 @@ class TextBtnS extends StatelessWidget {
     return TextButton(
       onPressed: onPressed ?? () {},
       style: TextButton.styleFrom(
-          padding: const EdgeInsets.symmetric(
-        horizontal: 3,
-      )),
+        padding: const EdgeInsets.symmetric(horizontal: 3),
+        minimumSize: Size.zero,
+      ),
       child: Text(
         content,
         style: TextTypes.caption01(
@@ -545,10 +515,12 @@ class TextBtnM extends StatelessWidget {
     return TextButton(
       onPressed: onPressed ?? () {},
       style: TextButton.styleFrom(
-          padding: const EdgeInsets.symmetric(
-        horizontal: 12,
-        vertical: 4,
-      )),
+        padding: const EdgeInsets.symmetric(
+          horizontal: 12,
+          vertical: 4,
+        ),
+        minimumSize: Size.zero,
+      ),
       child: Text(
         content,
         style: TextTypes.bodyMedium01(
