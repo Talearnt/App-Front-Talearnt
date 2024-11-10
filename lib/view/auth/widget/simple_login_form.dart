@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
+import '../../../common/theme.dart';
 
 class SimpleLoginForm extends StatelessWidget {
   const SimpleLoginForm({super.key});
@@ -8,15 +11,15 @@ class SimpleLoginForm extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        const Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Expanded(child: Divider()),
-          SizedBox(width: 16),
+        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+          const Expanded(child: Divider()),
+          const SizedBox(width: 16),
           Text(
             '간편로그인',
-            style: TextStyle(color: Colors.grey),
+            style: TextTypes.caption01(color: Palette.text03),
           ),
-          SizedBox(width: 16),
-          Expanded(child: Divider()),
+          const SizedBox(width: 16),
+          const Expanded(child: Divider()),
         ]),
         const SizedBox(height: 16.0),
         Row(
@@ -25,13 +28,13 @@ class SimpleLoginForm extends StatelessWidget {
             CircleAvatar(
               radius: 24.0,
               backgroundColor: Colors.green, // 첫 번째 아이콘 색상
-              child: Image.asset('assets/img/login_naver.png'),
+              child: SvgPicture.asset('assets/icons/sns_naver.svg'),
             ),
             const SizedBox(width: 16.0),
             CircleAvatar(
               radius: 24.0,
               backgroundColor: Colors.yellow, // 두 번째 아이콘 색상
-              child: Image.asset('assets/img/login_kakao.png'),
+              child: SvgPicture.asset('assets/icons/sns_kakao.svg'),
             ),
           ],
         ),
