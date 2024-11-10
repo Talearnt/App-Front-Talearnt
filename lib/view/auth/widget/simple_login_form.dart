@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../common/theme.dart';
 
@@ -27,13 +28,13 @@ class SimpleLoginForm extends StatelessWidget {
             CircleAvatar(
               radius: 24.0,
               backgroundColor: Colors.green, // 첫 번째 아이콘 색상
-              child: Image.asset('assets/img/login_naver.png'),
+              child: SvgPicture.asset('assets/icons/sns_naver.svg'),
             ),
             const SizedBox(width: 16.0),
             CircleAvatar(
               radius: 24.0,
               backgroundColor: Colors.yellow, // 두 번째 아이콘 색상
-              child: Image.asset('assets/img/login_kakao.png'),
+              child: SvgPicture.asset('assets/icons/sns_kakao.svg'),
             ),
           ],
         ),

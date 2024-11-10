@@ -1,6 +1,7 @@
 import 'package:app_front_talearnt/view/auth/widget/login_form.dart';
 import 'package:app_front_talearnt/view/auth/widget/simple_login_form.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -22,7 +23,7 @@ class LoginPage extends StatelessWidget {
             const SizedBox(
               height: 52,
             ),
-            Image.asset('assets/img/no_rabbit_logo.png'),
+            SvgPicture.asset('assets/icons/no_rabbit_logo.svg'),
             const SizedBox(height: 54),
             Expanded(
                 child: ListView(
