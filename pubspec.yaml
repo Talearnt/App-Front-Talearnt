@@ -62,11 +62,41 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/img/no_rabbit_logo.png
-    - assets/img/login_kakao.png
-    - assets/img/login_naver.png
     - assets/icons/fail_helper.svg
     - assets/icons/success_helper.svg
+    - assets/icons/add_square.svg
+    - assets/icons/back_arrow.svg
+    - assets/icons/bell_off.svg
+    - assets/icons/bell_on.svg
+    - assets/icons/bookmark_default.svg
+    - assets/icons/bookmark_hover.svg
+    - assets/icons/bookmark_pressed.svg
+    - assets/icons/check_off_primary.svg
+    - assets/icons/check_off_second.svg
+    - assets/icons/check_on_primary.svg
+    - assets/icons/check_on_second.svg
+    - assets/icons/chevron_down_after.svg
+    - assets/icons/chevron_down_before.svg
+    - assets/icons/chevron_left_after.svg
+    - assets/icons/chevron_left_before.svg
+    - assets/icons/chevron_right_after.svg
+    - assets/icons/chevron_right_before.svg
+    - assets/icons/chevron_up_after.svg
+    - assets/icons/chevron_up_before.svg
+    - assets/icons/chips_close.svg
+    - assets/icons/close.svg
+    - assets/icons/eye_close.svg
+    - assets/icons/kebab_menu.svg
+    - assets/icons/next_arrow.svg
+    - assets/icons/reset.svg
+    - assets/icons/search.svg
+    - assets/icons/search_small.svg
+    - assets/icons/share.svg
+    - assets/icons/text_delete.svg
+    - assets/icons/text_edit.svg
+    - assets/icons/symbol_64_64.svg
+    - assets/icons/sns_naver.svg
+    - assets/icons/sns_kakao.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
