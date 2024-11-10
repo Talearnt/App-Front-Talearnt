@@ -97,6 +97,8 @@ flutter:
     - assets/icons/symbol_64_64.svg
     - assets/icons/sns_naver.svg
     - assets/icons/sns_kakao.svg
+    - assets/icons/default_logo.svg
+    - assets/icons/no_rabbit_logo.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
