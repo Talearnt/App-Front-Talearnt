@@ -1,67 +1,47 @@
+import 'package:app_front_talearnt/common/widget/default_text_field.dart';
+import 'package:app_front_talearnt/common/widget/obscure_text_field.dart';
+import 'package:app_front_talearnt/common/widget/text_field_label.dart';
+import 'package:app_front_talearnt/provider/auth/auth_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../../common/theme.dart';
 
 class LoginForm extends StatelessWidget {
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-
-  LoginForm({super.key});
+  const LoginForm({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<AuthProvider>(context);
+    final ValueNotifier<bool> obscureNotifier = ValueNotifier(true);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const Text(
-          '아이디(이메일)',
-          style: TextStyle(fontSize: 14),
+        const TextFieldLabel(
+          content: '아이디',
         ),
         const SizedBox(height: 4),
-        TextField(
-            style: const TextStyle(fontSize: 16),
-            decoration: InputDecoration(
-              hintText: '메일을 입력해주세요',
-              hintStyle: const TextStyle(color: Color(0xFF98A3A9)),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8.0),
-                borderSide: const BorderSide(color: Colors.grey),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8.0),
-                borderSide: const BorderSide(color: Colors.grey),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8.0),
-                borderSide: const BorderSide(color: Colors.blue),
-              ),
-              contentPadding:
-                  const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
-            )),
+        DefaultTextField(
+            type: 'default',
+            hint: '메일을 입력해주세요',
+            textEditingController: provider.emailController,
+            onChanged: (value) {
+              provider.updateController(provider.emailController);
+            },
+            provider: provider),
         const SizedBox(height: 16.0),
-        const Text(
-          '비밀번호',
-          style: TextStyle(fontSize: 14),
+        const TextFieldLabel(
+          content: '비밀번호',
         ),
         const SizedBox(height: 4),
-        TextField(
-            style: const TextStyle(fontSize: 16),
-            decoration: InputDecoration(
-              hintText: '비밀번호를 입력해주세요',
-              hintStyle: const TextStyle(color: Color(0xFF98A3A9)),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8.0),
-                borderSide: const BorderSide(color: Colors.grey),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8.0),
-                borderSide: const BorderSide(color: Colors.grey),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8.0),
-                borderSide: const BorderSide(color: Colors.blue),
-              ),
-              contentPadding:
-                  const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
-            )),
+        ObscureTextField(
+            hint: '비밀번호를 입력해주세요',
+            textEditingController: provider.passwordController,
+            textOnChanged: (value) {
+              provider.updateController(provider.passwordController);
+            },
+            obscureNotifier: obscureNotifier),
         const SizedBox(height: 24.0),
         ElevatedButton(
           onPressed: () {
@@ -77,8 +57,7 @@ class LoginForm extends StatelessWidget {
             padding: EdgeInsets.all(11.5),
             child: Text(
               '로그인',
-              style:
-                  TextStyle(fontSize: 18, color: Color(0xFFFFFFFF)),
+              style: TextStyle(fontSize: 18, color: Color(0xFFFFFFFF)),
             ),
           ),
         ),
@@ -99,10 +78,8 @@ class LoginForm extends StatelessWidget {
                       padding: WidgetStateProperty.all(EdgeInsets.zero),
                       overlayColor: WidgetStateProperty.all(Colors.transparent),
                     ),
-                    child: const Text(
-                      '아이디 찾기',
-                      style: TextStyle(fontSize: 14, color: Color(0xFF98A3A9)),
-                    ),
+                    child: Text('아이디 찾기',
+                        style: TextTypes.caption01(color: Palette.text03)),
                   ),
                   const SizedBox(
                     height: 12,
@@ -116,10 +93,8 @@ class LoginForm extends StatelessWidget {
                       padding: WidgetStateProperty.all(EdgeInsets.zero),
                       overlayColor: WidgetStateProperty.all(Colors.transparent),
                     ),
-                    child: const Text(
-                      '비밀번호 찾기',
-                      style: TextStyle(fontSize: 14, color: Color(0xFF98A3A9)),
-                    ),
+                    child: Text('비밀번호 찾기',
+                        style: TextTypes.caption01(color: Palette.text03)),
                   ),
                 ],
               ),
@@ -134,10 +109,8 @@ class LoginForm extends StatelessWidget {
                   ),
                   overlayColor: WidgetStateProperty.all(Colors.transparent),
                 ),
-                child: const Text(
-                  '회원가입',
-                  style: TextStyle(fontSize: 14, color: Color(0xFF414A4E)),
-                ),
+                child: Text('회원가입',
+                    style: TextTypes.caption01(color: Palette.text02)),
               ),
             ],
           ),

@@ -30,7 +30,7 @@ class LoginPage extends StatelessWidget {
                 const SizedBox(height: 54),
                 Container(
                   margin: const EdgeInsets.symmetric(horizontal: 24),
-                  child: LoginForm(),
+                  child: const LoginForm(),
                 ),
                 const SizedBox(height: 40.0),
                 Container(

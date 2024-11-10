@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../common/theme.dart';
+
 class SimpleLoginForm extends StatelessWidget {
   const SimpleLoginForm({super.key});
 
@@ -8,15 +10,15 @@ class SimpleLoginForm extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        const Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Expanded(child: Divider()),
-          SizedBox(width: 16),
+        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+          const Expanded(child: Divider()),
+          const SizedBox(width: 16),
           Text(
             '간편로그인',
-            style: TextStyle(color: Colors.grey),
+            style: TextTypes.caption01(color: Palette.text03),
           ),
-          SizedBox(width: 16),
-          Expanded(child: Divider()),
+          const SizedBox(width: 16),
+          const Expanded(child: Divider()),
         ]),
         const SizedBox(height: 16.0),
         Row(
