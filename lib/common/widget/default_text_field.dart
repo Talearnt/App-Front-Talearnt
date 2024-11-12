@@ -2,9 +2,11 @@ import 'package:app_front_talearnt/common/theme.dart';
 import 'package:app_front_talearnt/common/widget/time_set.dart';
 import 'package:app_front_talearnt/provider/clear_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class DefaultTextField extends StatelessWidget {
   final String type;
+  final String keyboardType;
   final String hint;
   final TextEditingController textEditingController;
   final ClearText provider;
@@ -15,6 +17,7 @@ class DefaultTextField extends StatelessWidget {
   const DefaultTextField({
     super.key,
     required this.type,
+    this.keyboardType = 'default',
     required this.hint,
     required this.textEditingController,
     required this.provider,
@@ -28,6 +31,10 @@ class DefaultTextField extends StatelessWidget {
     return TextField(
       controller: textEditingController,
       onChanged: onChanged,
+      keyboardType:
+          keyboardType == 'num' ? TextInputType.number : TextInputType.text,
+      inputFormatters:
+          keyboardType == 'num' ? [FilteringTextInputFormatter.digitsOnly] : [],
       style: TextTypes.bodyMedium02(color: Palette.text02),
       enabled: isEnabled,
       decoration: InputDecoration(
