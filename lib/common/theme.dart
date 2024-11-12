@@ -43,11 +43,11 @@ class TextTypes {
     );
   }
 
-  static TextStyle textMedium02({Color color = Palette.textStrong}) {
+  static TextStyle bodyLarge02({Color color = Palette.textStrong}) {
     return TextStyle(
       fontSize: 16,
       fontWeight: FontWeight.w500,
-      height: 1.3,
+      height: 1.5,
       color: color,
     );
   }
