@@ -3,6 +3,7 @@ import 'package:app_front_talearnt/common/widget/time_set.dart';
 import 'package:app_front_talearnt/provider/clear_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/svg.dart';
 
 class DefaultTextField extends StatelessWidget {
   final String type;
@@ -64,25 +65,25 @@ class DefaultTextField extends StatelessWidget {
   }
 
   Widget? _getSuffixIcon() {
-    if (textEditingController.text.isNotEmpty) {
-      return Row(mainAxisSize: MainAxisSize.min, children: [
-        IconButton(
-          onPressed: () => provider.clearText(textEditingController),
-          hoverColor: Colors.transparent,
-          icon: const Icon(
-            Icons.cancel,
-            color: Palette.icon03,
+    return Row(mainAxisSize: MainAxisSize.min, children: [
+      if (textEditingController.text.isNotEmpty)
+        SizedBox(
+          width: 24,
+          height: 24,
+          child: GestureDetector(
+            onTap: () {
+              provider.clearText(textEditingController);
+            },
+            child: SvgPicture.asset("assets/icons/text_delete.svg"),
           ),
         ),
-        if (type == "cert")
-          Visibility(
-            visible: isSendAuth ? true : false,
-            child: const Row(
-              children: [TimeSet(), SizedBox(width: 8)],
-            ),
-          )
-      ]);
-    }
-    return null;
+      if (type == "cert")
+        Visibility(
+          visible: isSendAuth ? true : false,
+          child: const Row(
+            children: [TimeSet(), SizedBox(width: 8)],
+          ),
+        )
+    ]);
   }
 }
