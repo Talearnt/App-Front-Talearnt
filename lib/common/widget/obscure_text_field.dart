@@ -1,6 +1,7 @@
-import 'package:app_front_talearnt/common/theme.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_svg/svg.dart';
+
+import 'base_text_field.dart';
 
 class ObscureTextField extends StatelessWidget {
   final String hint;
@@ -9,67 +10,50 @@ class ObscureTextField extends StatelessWidget {
   final bool isEnabled;
   final ValueNotifier<bool> obscureNotifier;
 
-  const ObscureTextField(
-      {super.key,
-      required this.hint,
-      required this.textEditingController,
-      required this.textOnChanged,
-      this.isEnabled = true,
-      required this.obscureNotifier});
+  final String validType;
+  final FocusNode? focusNode;
+  final Function(String)? validFunc;
+  final String validMessage;
+  final bool isValid;
+
+  const ObscureTextField({
+    super.key,
+    required this.hint,
+    required this.textEditingController,
+    required this.textOnChanged,
+    this.isEnabled = true,
+    required this.obscureNotifier,
+    this.validType = 'default',
+    this.focusNode,
+    this.validFunc,
+    this.validMessage = '',
+    this.isValid = true,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<bool>(
-        valueListenable: obscureNotifier,
-        builder: (context, isObscure, child) {
-          return TextField(
-            obscureText: isObscure,
-            controller: textEditingController,
-            onChanged: textOnChanged,
-            style: TextTypes.bodyMedium02(color: Palette.text02),
-            enabled: isEnabled,
-            decoration: InputDecoration(
-                hintText: hint,
-                hintStyle: const TextStyle(color: Palette.text04),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                  borderSide: const BorderSide(color: Palette.line01),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                  borderSide: const BorderSide(color: Palette.line01),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                  borderSide: const BorderSide(color: Palette.primary01),
-                ),
-                errorBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                  borderSide: const BorderSide(color: Palette.error02),
-                ),
-                fillColor: isEnabled ? Colors.transparent : Palette.bgUp02,
-                contentPadding: const EdgeInsets.fromLTRB(16, 13, 8, 13),
-                suffixIcon: _getSuffixIcon(obscureNotifier)),
-          );
-        });
+    return BaseTextField(
+      hint: hint,
+      textEditingController: textEditingController,
+      onChanged: textOnChanged,
+      isEnabled: isEnabled,
+      validMessage: validMessage,
+      isValid: isValid,
+      validFunc: validFunc,
+      validType: validType,
+      focusNode: focusNode,
+      suffixIcon: _getSuffixIcon(), // ObscureTextField에서 suffixIcon 처리
+    );
   }
 
-  Widget? _getSuffixIcon(obscureNotifier) {
-    if (textEditingController.text.isNotEmpty) {
-      return Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          GestureDetector(
-            onTap: () {
-              obscureNotifier.value = !obscureNotifier.value;
-            },
-            child: obscureNotifier.value
-                ? SvgPicture.asset('assets/icons/eye_close.svg')
-                : SvgPicture.asset('assets/icons/eye_open.svg'),
-          ),
-        ],
-      );
-    }
-    return null; // 텍스트가 비어있으면 아무것도 표시하지 않음
+  Widget _getSuffixIcon() {
+    return GestureDetector(
+      onTap: () {
+        obscureNotifier.value = !obscureNotifier.value;
+      },
+      child: obscureNotifier.value
+          ? SvgPicture.asset('assets/icons/eye_close.svg')
+          : SvgPicture.asset('assets/icons/eye_open.svg'),
+    );
   }
 }

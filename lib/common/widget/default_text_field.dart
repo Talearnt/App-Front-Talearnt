@@ -1,9 +1,9 @@
-import 'package:app_front_talearnt/common/theme.dart';
 import 'package:app_front_talearnt/common/widget/time_set.dart';
-import 'package:app_front_talearnt/provider/clear_text.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/svg.dart';
+
+import '../../provider/clear_text.dart';
+import 'base_text_field.dart';
 
 class DefaultTextField extends StatelessWidget {
   final String type;
@@ -14,6 +14,14 @@ class DefaultTextField extends StatelessWidget {
   final Function(String) onChanged;
   final bool isEnabled;
   final bool isSendAuth;
+  final int? maxTextLength;
+
+  //검증관련
+  final String validType;
+  final FocusNode? focusNode;
+  final Function(String)? validFunc;
+  final String validMessage;
+  final bool isValid;
 
   const DefaultTextField({
     super.key,
@@ -25,65 +33,48 @@ class DefaultTextField extends StatelessWidget {
     required this.onChanged,
     this.isEnabled = true,
     this.isSendAuth = false,
+    this.maxTextLength,
+    this.validType = 'default',
+    this.focusNode,
+    this.validFunc,
+    this.validMessage = '',
+    this.isValid = true,
   });
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      controller: textEditingController,
+    return BaseTextField(
+      hint: hint,
+      textEditingController: textEditingController,
       onChanged: onChanged,
-      keyboardType:
-          keyboardType == 'num' ? TextInputType.number : TextInputType.text,
-      inputFormatters:
-          keyboardType == 'num' ? [FilteringTextInputFormatter.digitsOnly] : [],
-      style: TextTypes.bodyMedium02(color: Palette.text02),
-      enabled: isEnabled,
-      decoration: InputDecoration(
-        hintText: hint,
-        hintStyle: const TextStyle(color: Palette.text04),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8.0),
-          borderSide: const BorderSide(color: Palette.line01),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8.0),
-          borderSide: const BorderSide(color: Palette.line01),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8.0),
-          borderSide: const BorderSide(color: Palette.primary01),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8.0),
-          borderSide: const BorderSide(color: Palette.error02),
-        ),
-        fillColor: isEnabled ? Colors.transparent : Palette.bgUp02,
-        contentPadding: const EdgeInsets.fromLTRB(16, 13, 8, 13),
-        suffixIcon: _getSuffixIcon(),
-      ),
+      isEnabled: isEnabled,
+      maxTextLength: maxTextLength,
+      focusNode: focusNode,
+      validMessage: validMessage,
+      isValid: isValid,
+      validFunc: validFunc,
+      validType: validType,
+      keyboardType: keyboardType,
+      suffixIcon: _getSuffixIcon(),
     );
   }
 
   Widget? _getSuffixIcon() {
-    return Row(mainAxisSize: MainAxisSize.min, children: [
-      if (textEditingController.text.isNotEmpty)
-        SizedBox(
-          width: 24,
-          height: 24,
-          child: GestureDetector(
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (textEditingController.text.isNotEmpty)
+          GestureDetector(
             onTap: () {
               provider.clearText(textEditingController);
             },
             child: SvgPicture.asset("assets/icons/text_delete.svg"),
           ),
-        ),
-      if (type == "cert")
-        Visibility(
-          visible: isSendAuth ? true : false,
-          child: const Row(
+        if (type == "cert" && isSendAuth)
+          const Row(
             children: [TimeSet(), SizedBox(width: 8)],
           ),
-        )
-    ]);
+      ],
+    );
   }
 }

@@ -1,11 +1,11 @@
 import 'package:app_front_talearnt/provider/auth/auth_provider.dart';
-import 'package:app_front_talearnt/provider/common/common_provider.dart';
 import 'package:app_front_talearnt/provider/test_provider.dart';
 import 'package:app_front_talearnt/view_model/test_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../data/repositories/test_repository.dart';
+import 'common/common_provider.dart';
 
 class ProviderSetup extends StatelessWidget {
   final Widget child;
@@ -29,7 +29,7 @@ class ProviderSetup extends StatelessWidget {
           ),
         ),
         ChangeNotifierProvider<AuthProvider>(create: (_) => AuthProvider()),
-        ChangeNotifierProvider<CommonProvider>(create: (_) => CommonProvider())
+        ChangeNotifierProvider<CommonProvider>(create: (_) => CommonProvider()),
       ],
       child: child,
     );
