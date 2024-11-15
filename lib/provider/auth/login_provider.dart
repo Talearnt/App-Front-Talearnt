@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../clear_text.dart';
 
-class AuthProvider extends ChangeNotifier with ClearText {
+class LoginProvider extends ChangeNotifier with ClearText {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _passwordObscure = true;

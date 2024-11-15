@@ -1,7 +1,7 @@
 import 'package:app_front_talearnt/common/widget/default_text_field.dart';
 import 'package:app_front_talearnt/common/widget/obscure_text_field.dart';
 import 'package:app_front_talearnt/common/widget/text_field_label.dart';
-import 'package:app_front_talearnt/provider/auth/auth_provider.dart';
+import 'package:app_front_talearnt/provider/auth/login_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -12,7 +12,7 @@ class LoginForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<AuthProvider>(context);
+    final loginProvider = Provider.of<LoginProvider>(context);
     final ValueNotifier<bool> obscureNotifier = ValueNotifier(true);
 
     return Column(
@@ -25,11 +25,11 @@ class LoginForm extends StatelessWidget {
         DefaultTextField(
             type: 'default',
             hint: '메일을 입력해주세요',
-            textEditingController: provider.emailController,
+            textEditingController: loginProvider.emailController,
             onChanged: (value) {
-              provider.updateController(provider.emailController);
+              loginProvider.updateController(loginProvider.emailController);
             },
-            provider: provider),
+            provider: loginProvider),
         const SizedBox(height: 16.0),
         const TextFieldLabel(
           content: '비밀번호',
@@ -37,9 +37,9 @@ class LoginForm extends StatelessWidget {
         const SizedBox(height: 4),
         ObscureTextField(
             hint: '비밀번호를 입력해주세요',
-            textEditingController: provider.passwordController,
+            textEditingController: loginProvider.passwordController,
             textOnChanged: (value) {
-              provider.updateController(provider.passwordController);
+              loginProvider.updateController(loginProvider.passwordController);
             },
             obscureNotifier: obscureNotifier),
         const SizedBox(height: 24.0),
