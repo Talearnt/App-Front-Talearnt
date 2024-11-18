@@ -56,7 +56,7 @@ class BaseTextField extends StatelessWidget {
                   textEditingController, focusNode!.hasFocus, validFunc!);
               break;
             case 'phone':
-              commonProvider.validatePasswordText(
+              commonProvider.validatePhoneNum(
                   textEditingController, focusNode!.hasFocus, validFunc!);
               break;
             default:
