@@ -14,6 +14,7 @@ class BaseTextField extends StatelessWidget {
   final int? maxTextLength;
   final String keyboardType;
   final Widget? suffixIcon;
+  final bool? obscureText; // nullable로 변경
 
   //검증관련
   final String validType;
@@ -22,21 +23,21 @@ class BaseTextField extends StatelessWidget {
   final bool isValid;
   final Function(String)? validFunc;
 
-  const BaseTextField({
-    super.key,
-    required this.hint,
-    required this.textEditingController,
-    required this.onChanged,
-    this.isEnabled = true,
-    this.maxTextLength,
-    this.keyboardType = 'default',
-    this.suffixIcon,
-    this.validType = 'default',
-    this.focusNode,
-    this.validMessage = '',
-    this.isValid = true,
-    this.validFunc,
-  });
+  const BaseTextField(
+      {super.key,
+      required this.hint,
+      required this.textEditingController,
+      required this.onChanged,
+      this.isEnabled = true,
+      this.maxTextLength,
+      this.keyboardType = 'default',
+      this.suffixIcon,
+      this.validType = 'default',
+      this.focusNode,
+      this.validMessage = '',
+      this.isValid = true,
+      this.validFunc,
+      this.obscureText});
 
   @override
   Widget build(BuildContext context) {
@@ -68,6 +69,7 @@ class BaseTextField extends StatelessWidget {
     return Column(
       children: [
         TextField(
+          obscureText: obscureText ?? false,
           focusNode: focusNode,
           controller: textEditingController,
           onChanged: onChanged,
@@ -86,7 +88,6 @@ class BaseTextField extends StatelessWidget {
             enabledBorder: _getBorder(),
             focusedBorder: _getFocusedBorder(),
             fillColor: isEnabled ? Colors.transparent : Palette.bgUp02,
-            contentPadding: const EdgeInsets.fromLTRB(16, 13, 8, 13),
             suffixIcon: suffixIcon,
           ),
         ),

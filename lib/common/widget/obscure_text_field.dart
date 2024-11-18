@@ -32,28 +32,47 @@ class ObscureTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BaseTextField(
-      hint: hint,
-      textEditingController: textEditingController,
-      onChanged: textOnChanged,
-      isEnabled: isEnabled,
-      validMessage: validMessage,
-      isValid: isValid,
-      validFunc: validFunc,
-      validType: validType,
-      focusNode: focusNode,
-      suffixIcon: _getSuffixIcon(), // ObscureTextField에서 suffixIcon 처리
-    );
+    return ValueListenableBuilder<bool>(
+        valueListenable: obscureNotifier,
+        builder: (context, isObscured, child) {
+          return BaseTextField(
+            obscureText: isObscured,
+            hint: hint,
+            textEditingController: textEditingController,
+            onChanged: textOnChanged,
+            isEnabled: isEnabled,
+            validMessage: validMessage,
+            isValid: isValid,
+            validFunc: validFunc,
+            validType: validType,
+            focusNode: focusNode,
+            suffixIcon: _getSuffixIcon(), // ObscureTextField에서 suffixIcon 처리
+          );
+        });
   }
 
-  Widget _getSuffixIcon() {
-    return GestureDetector(
-      onTap: () {
-        obscureNotifier.value = !obscureNotifier.value;
-      },
-      child: obscureNotifier.value
-          ? SvgPicture.asset('assets/icons/eye_close.svg')
-          : SvgPicture.asset('assets/icons/eye_open.svg'),
+  Widget? _getSuffixIcon() {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (textEditingController.text.isNotEmpty)
+          GestureDetector(
+            onTap: () {
+              obscureNotifier.value = !obscureNotifier.value;
+            },
+            child: obscureNotifier.value
+                ? SvgPicture.asset(
+                    'assets/icons/eye_close.svg',
+                    width: 24,
+                    height: 24,
+                  )
+                : SvgPicture.asset(
+                    'assets/icons/eye_open.svg',
+                    width: 24,
+                    height: 24,
+                  ),
+          )
+      ],
     );
   }
 }
