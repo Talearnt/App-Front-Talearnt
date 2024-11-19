@@ -8,7 +8,8 @@ class ObscureTextField extends StatelessWidget {
   final TextEditingController textEditingController;
   final Function(String) textOnChanged;
   final bool isEnabled;
-  final ValueNotifier<bool> obscureNotifier;
+  final bool isObscured;
+  final Function() changeObscured;
 
   final String validType;
   final FocusNode? focusNode;
@@ -22,33 +23,30 @@ class ObscureTextField extends StatelessWidget {
     required this.textEditingController,
     required this.textOnChanged,
     this.isEnabled = true,
-    required this.obscureNotifier,
+    required this.isObscured,
     this.validType = 'default',
     this.focusNode,
     this.validFunc,
     this.validMessage = '',
     this.isValid = true,
+    required this.changeObscured,
   });
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<bool>(
-        valueListenable: obscureNotifier,
-        builder: (context, isObscured, child) {
-          return BaseTextField(
-            obscureText: isObscured,
-            hint: hint,
-            textEditingController: textEditingController,
-            onChanged: textOnChanged,
-            isEnabled: isEnabled,
-            validMessage: validMessage,
-            isValid: isValid,
-            validFunc: validFunc,
-            validType: validType,
-            focusNode: focusNode,
-            suffixIcon: _getSuffixIcon(), // ObscureTextField에서 suffixIcon 처리
-          );
-        });
+    return BaseTextField(
+      obscureText: isObscured,
+      hint: hint,
+      textEditingController: textEditingController,
+      onChanged: textOnChanged,
+      isEnabled: isEnabled,
+      validMessage: validMessage,
+      isValid: isValid,
+      validFunc: validFunc,
+      validType: validType,
+      focusNode: focusNode,
+      suffixIcon: _getSuffixIcon(), // ObscureTextField에서 suffixIcon 처리
+    );
   }
 
   Widget? _getSuffixIcon() {
@@ -57,21 +55,15 @@ class ObscureTextField extends StatelessWidget {
       children: [
         if (textEditingController.text.isNotEmpty)
           GestureDetector(
-            onTap: () {
-              obscureNotifier.value = !obscureNotifier.value;
-            },
-            child: obscureNotifier.value
-                ? SvgPicture.asset(
-                    'assets/icons/eye_close.svg',
-                    width: 24,
-                    height: 24,
-                  )
-                : SvgPicture.asset(
-                    'assets/icons/eye_open.svg',
-                    width: 24,
-                    height: 24,
-                  ),
-          )
+            onTap: changeObscured,
+            child: SvgPicture.asset(
+              isObscured
+                  ? 'assets/icons/eye_close.svg'
+                  : 'assets/icons/eye_open.svg',
+              width: 24,
+              height: 24,
+            ),
+          ),
       ],
     );
   }
