@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../common/theme.dart';
+import '../../../view_model/auth_view_model.dart';
 
 class LoginForm extends StatelessWidget {
   const LoginForm({super.key});
@@ -14,6 +15,7 @@ class LoginForm extends StatelessWidget {
   Widget build(BuildContext context) {
     final loginProvider = Provider.of<LoginProvider>(context);
     final ValueNotifier<bool> obscureNotifier = ValueNotifier(true);
+    final authViewModel = Provider.of<AuthViewModel>(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -22,30 +24,46 @@ class LoginForm extends StatelessWidget {
           content: '아이디',
         ),
         const SizedBox(height: 4),
+        const SizedBox(height: 4),
         DefaultTextField(
-            type: 'default',
-            hint: '메일을 입력해주세요',
-            textEditingController: loginProvider.emailController,
-            onChanged: (value) {
-              loginProvider.updateController(loginProvider.emailController);
-            },
-            provider: loginProvider),
+          type: 'default',
+          hint: '메일을 입력해주세요',
+          textEditingController: loginProvider.emailController,
+          onChanged: (value) {
+            loginProvider.updateController(loginProvider.emailController);
+          },
+          provider: loginProvider,
+          validType: 'email',
+          focusNode: loginProvider.emailFocusNode,
+          validFunc: loginProvider.updateEmailValid,
+          validMessage: loginProvider.emailValidMessage,
+          isValid: loginProvider.emailValid,
+        ),
         const SizedBox(height: 16.0),
         const TextFieldLabel(
           content: '비밀번호',
         ),
         const SizedBox(height: 4),
         ObscureTextField(
-            hint: '비밀번호를 입력해주세요',
-            textEditingController: loginProvider.passwordController,
-            textOnChanged: (value) {
-              loginProvider.updateController(loginProvider.passwordController);
-            },
-            obscureNotifier: obscureNotifier),
+          hint: '비밀번호를 입력해주세요',
+          textEditingController: loginProvider.passwordController,
+          textOnChanged: (value) {
+            loginProvider.updateController(loginProvider.passwordController);
+          },
+          obscureNotifier: obscureNotifier,
+          validType: 'password',
+          focusNode: loginProvider.passwordFocusNode,
+          validFunc: loginProvider.updatePasswordValid,
+          validMessage: loginProvider.passwordValidMessage,
+          isValid: loginProvider.passwordValid,
+        ),
         const SizedBox(height: 24.0),
         ElevatedButton(
-          onPressed: () {
-            // 버튼 동작 없음
+          onPressed: () async {
+            if (loginProvider.checkLoginValidity()) {
+              await authViewModel.login(loginProvider.emailController.text,
+                  loginProvider.passwordController.text);
+            }
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xFF1B76FF),
