@@ -65,7 +65,7 @@ class PrimaryS extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        padding: const EdgeInsets.symmetric(vertical: 8.5, horizontal: 16),
         minimumSize: Size.zero,
       ).copyWith(
         overlayColor: WidgetStateProperty.resolveWith<Color?>((states) {
@@ -163,7 +163,7 @@ class SecondarySGray extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        padding: const EdgeInsets.symmetric(vertical: 8.5, horizontal: 16),
         minimumSize: Size.zero,
         side: BorderSide(
           color: borderColor,
@@ -268,7 +268,7 @@ class SecondarySBlue extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        padding: const EdgeInsets.symmetric(vertical: 8.5, horizontal: 16),
         minimumSize: Size.zero,
         side: BorderSide(
           color: borderColor,
@@ -373,7 +373,7 @@ class TertiaryS extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(999),
         ),
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        padding: const EdgeInsets.symmetric(vertical: 8.5, horizontal: 16),
         minimumSize: Size.zero,
         side: BorderSide(
           color: borderColor,
