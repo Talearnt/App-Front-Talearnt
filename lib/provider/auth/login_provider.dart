@@ -44,8 +44,8 @@ class LoginProvider extends ChangeNotifier with ClearText {
     });
   }
 
-  void changePasswordObscure(bool newObscure) {
-    _passwordObscure = newObscure;
+  void changePasswordObscure() {
+    _passwordObscure = !_passwordObscure;
     notifyListeners();
   }
 
