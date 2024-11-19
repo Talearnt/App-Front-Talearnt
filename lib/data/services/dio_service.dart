@@ -1,4 +1,7 @@
+import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+
+import '../model/respone/failure.dart';
 
 class DioService {
   final Dio _dio = Dio();
@@ -13,12 +16,22 @@ class DioService {
     }
   }
 
-  Future<Response> post(String path, dynamic data) async {
+  Future<Either<Failure, Map<String, dynamic>>> post(
+      String path, dynamic data) async {
     try {
       final response = await _dio.post(path, data: data);
-      return response;
+      return right(response.data as Map<String, dynamic>);
     } on DioException catch (e) {
-      throw Exception(e.message);
+      if (e.response?.data is Map<String, dynamic>) {
+        final failureData = e.response!.data;
+        return left(Failure.fromJson(failureData));
+      } else {
+        return left(Failure(
+          errorCode: 'DIO_ERROR',
+          errorMessage: e.message ?? 'Unknown error occurred',
+          success: false,
+        ));
+      }
     }
   }
 
