@@ -14,7 +14,6 @@ class LoginForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final loginProvider = Provider.of<LoginProvider>(context);
-    final ValueNotifier<bool> obscureNotifier = ValueNotifier(true);
     final authViewModel = Provider.of<AuthViewModel>(context);
 
     return Column(
@@ -50,7 +49,8 @@ class LoginForm extends StatelessWidget {
           textOnChanged: (value) {
             loginProvider.updateController(loginProvider.passwordController);
           },
-          obscureNotifier: obscureNotifier,
+          isObscured: loginProvider.passwordObscure,
+          changeObscured: loginProvider.changePasswordObscure,
           validType: 'password',
           focusNode: loginProvider.passwordFocusNode,
           validFunc: loginProvider.updatePasswordValid,
