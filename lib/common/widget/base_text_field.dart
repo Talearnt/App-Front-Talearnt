@@ -92,7 +92,7 @@ class BaseTextField extends StatelessWidget {
           ),
         ),
         Visibility(
-          visible: !isValid,
+          visible: !isValid && validMessage.isNotEmpty,
           child: Column(
             children: [
               const SizedBox(height: 4),

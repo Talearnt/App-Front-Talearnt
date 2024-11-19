@@ -54,7 +54,7 @@ class CommonProvider with ChangeNotifier {
                   .hasMatch(textEditingController.text) ==
               false
           ? callback('영문, 숫자, 특수문자의 조합 8자리 이상 입력해 주세요')
-          : '';
+          : callback('');
       notifyListeners();
     }
   }
@@ -66,7 +66,7 @@ class CommonProvider with ChangeNotifier {
       RegExp(r'^(010-\d{4}-\d{4})$').hasMatch(textEditingController.text) ==
               false
           ? callback('올바른 전화번호를 입력하세요.')
-          : '';
+          : callback('');
       notifyListeners();
     }
   }
