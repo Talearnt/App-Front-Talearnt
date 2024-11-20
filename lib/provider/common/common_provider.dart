@@ -63,8 +63,7 @@ class CommonProvider with ChangeNotifier {
   void validatePhoneNum(TextEditingController textEditingController,
       bool hasFocus, Function(String) callback) {
     if (!hasFocus) {
-      RegExp(r'^(010-\d{4}-\d{4})$').hasMatch(textEditingController.text) ==
-              false
+      RegExp(r'^010\d{8}$').hasMatch(textEditingController.text) == false
           ? callback('올바른 전화번호를 입력하세요.')
           : callback('');
       notifyListeners();
