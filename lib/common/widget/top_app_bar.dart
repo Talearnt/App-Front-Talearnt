@@ -7,6 +7,7 @@ class TopAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool leftIcon;
   final Widget? first;
   final Widget? second;
+  final VoidCallback? onPressed;
 
   const TopAppBar({
     super.key,
@@ -14,6 +15,7 @@ class TopAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.leftIcon = true,
     this.first,
     this.second,
+    this.onPressed,
   });
 
   @override
@@ -26,9 +28,7 @@ class TopAppBar extends StatelessWidget implements PreferredSizeWidget {
               icon: SvgPicture.asset(
                 'assets/icons/back_arrow.svg', // SVG 파일 경로
               ),
-              onPressed: () {
-                Navigator.of(context).pop(); // 뒤로 가는 동작
-              },
+              onPressed: onPressed ?? () {},
             )
           : Container(),
       title: Text(
