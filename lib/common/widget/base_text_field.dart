@@ -74,6 +74,13 @@ class BaseTextField extends StatelessWidget {
           controller: textEditingController,
           onChanged: onChanged,
           maxLength: maxTextLength,
+          maxLengthEnforcement: MaxLengthEnforcement.enforced,
+          buildCounter: (context,
+              {required int currentLength,
+              required bool isFocused,
+              required int? maxLength}) {
+            return null;
+          },//maxLength 설정시 하위에 생기는 숫자 제거
           style: TextTypes.bodyMedium02(color: Palette.text02),
           enabled: isEnabled,
           keyboardType:
