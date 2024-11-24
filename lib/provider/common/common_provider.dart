@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 class CommonProvider with ChangeNotifier {
-  static const int _initialTimerSeconds = 180;
+  static const int _initialTimerSeconds = 600;
   int _timerSeconds = _initialTimerSeconds;
   Timer? _timer;
 
