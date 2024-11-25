@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:app_front_talearnt/common/theme.dart';
+import 'package:flutter/material.dart';
 
 class BottomBtn extends StatelessWidget {
   final double mediaBottom;
@@ -34,7 +34,7 @@ class BottomBtn extends StatelessWidget {
           ),
           elevation: 0,
         ),
-        onPressed: onPressed ?? () {},
+        onPressed: isEnabled ? onPressed : null,
         child: Center(
           child: Text(
             content,
