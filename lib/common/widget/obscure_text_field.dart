@@ -16,6 +16,8 @@ class ObscureTextField extends StatelessWidget {
   final Function(String)? validFunc;
   final String validMessage;
   final bool isValid;
+  final bool isOtherValid; //비밀번호 넣을때 이메일에 대한 선행이 먼저 이뤄져야하는 경우 사용 고민 중..
+  final Function()? checkOtherValidFun;
 
   const ObscureTextField({
     super.key,
@@ -30,6 +32,8 @@ class ObscureTextField extends StatelessWidget {
     this.validMessage = '',
     this.isValid = true,
     required this.changeObscured,
+    this.isOtherValid = false,
+    this.checkOtherValidFun,
   });
 
   @override
@@ -45,6 +49,8 @@ class ObscureTextField extends StatelessWidget {
       validFunc: validFunc,
       validType: validType,
       focusNode: focusNode,
+      isOtherValid: isOtherValid,
+      checkOtherValidFun: checkOtherValidFun,
       suffixIcon: _getSuffixIcon(), // ObscureTextField에서 suffixIcon 처리
     );
   }

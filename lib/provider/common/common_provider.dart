@@ -70,6 +70,12 @@ class CommonProvider with ChangeNotifier {
     }
   }
 
+  //다른거 확인하는거..
+  void checkBeforeValid(Function() callback) {
+    callback();
+    notifyListeners();
+  }
+
   @override
   void dispose() {
     _timer?.cancel();

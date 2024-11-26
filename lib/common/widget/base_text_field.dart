@@ -23,21 +23,28 @@ class BaseTextField extends StatelessWidget {
   final bool isValid;
   final Function(String)? validFunc;
 
-  const BaseTextField(
-      {super.key,
-      required this.hint,
-      required this.textEditingController,
-      required this.onChanged,
-      this.isEnabled = true,
-      this.maxTextLength,
-      this.keyboardType = 'default',
-      this.suffixIcon,
-      this.validType = 'default',
-      this.focusNode,
-      this.validMessage = '',
-      this.isValid = true,
-      this.validFunc,
-      this.obscureText});
+  //다른 검증이 하나 더 들어갈때
+  final bool isOtherValid; //비밀번호 넣을때 이메일에 대한 선행이 먼저 이뤄져야하는 경우 사용 고민 중..
+  final Function()? checkOtherValidFun;
+
+  const BaseTextField({
+    super.key,
+    required this.hint,
+    required this.textEditingController,
+    required this.onChanged,
+    this.isEnabled = true,
+    this.maxTextLength,
+    this.keyboardType = 'default',
+    this.suffixIcon,
+    this.validType = 'default',
+    this.focusNode,
+    this.validMessage = '',
+    this.isValid = true,
+    this.validFunc,
+    this.obscureText,
+    this.isOtherValid = false,
+    this.checkOtherValidFun,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +52,12 @@ class BaseTextField extends StatelessWidget {
 
     if (focusNode != null) {
       focusNode?.addListener(() {
-        if (!focusNode!.hasFocus) {
+        if (isOtherValid) {
+          commonProvider.checkBeforeValid(checkOtherValidFun!);
+        }
+        if (!focusNode!.hasFocus &&
+            (textEditingController.text.isNotEmpty ||
+                textEditingController.text != '')) {
           switch (validType) {
             case 'email':
               commonProvider.validateEmailText(
