@@ -63,7 +63,7 @@ class DefaultTextField extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (textEditingController.text.isNotEmpty)
+        if (textEditingController.text.isNotEmpty && focusNode!.hasFocus)
           GestureDetector(
             onTap: () {
               provider.clearText(textEditingController);

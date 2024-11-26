@@ -71,6 +71,10 @@ class BaseTextField extends StatelessWidget {
               commonProvider.validatePhoneNum(
                   textEditingController, focusNode!.hasFocus, validFunc!);
               break;
+            case 'name':
+              commonProvider.validateName(
+                  textEditingController, focusNode!.hasFocus, validFunc!);
+              break;
             default:
               break;
           }

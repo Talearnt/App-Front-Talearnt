@@ -70,6 +70,17 @@ class CommonProvider with ChangeNotifier {
     }
   }
 
+  //이름
+  void validateName(TextEditingController textEditingController, bool hasFocus,
+      Function(String) callback) {
+    if (!hasFocus) {
+      RegExp(r'^[가-힣]{2,}$').hasMatch(textEditingController.text) == false
+          ? callback('한글만 가능하며, 최소 2글자 이상 입력해야 합니다.')
+          : callback('');
+      notifyListeners();
+    }
+  }
+
   //다른거 확인하는거..
   void checkBeforeValid(Function() callback) {
     callback();
