@@ -6,6 +6,7 @@ import '../data/model/respone/token.dart';
 import '../data/repositories/auth_repository.dart';
 import '../utils/token_manager.dart';
 import '../view_model/auth_view_model.dart';
+import 'auth/kakao_provider.dart';
 import 'common/common_provider.dart';
 
 class ProviderSetup extends StatelessWidget {
@@ -27,6 +28,7 @@ class ProviderSetup extends StatelessWidget {
             TokenManager(Token.empty()),
           ),
         ),
+        ChangeNotifierProvider<KakaoProvider>(create: (_) => KakaoProvider()),
       ],
       child: child,
     );
