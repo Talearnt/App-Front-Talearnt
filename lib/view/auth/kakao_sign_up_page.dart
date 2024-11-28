@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 import '../../common/widget/bottom_btn.dart';
+import '../../common/widget/button.dart';
 import '../../common/widget/default_text_field.dart';
 import '../../common/widget/text_field_label.dart';
 import '../../common/widget/top_app_bar.dart';
@@ -185,7 +186,7 @@ class KakaoSignUpPage extends StatelessWidget {
                           child: GestureDetector(
                             onTap: () {
                               kakaoProvider
-                                  .updateAllCheck(kakaoProvider.allCheck!);
+                                  .updateAllCheck(kakaoProvider.allCheck);
                             },
                             child: kakaoProvider.allCheck
                                 ? SvgPicture.asset(
@@ -242,12 +243,9 @@ class KakaoSignUpPage extends StatelessWidget {
                                 )
                               ],
                             ),
-                            Text('보기',
-                                style: TextTypes.caption01(
-                                        color: Palette.text03)
-                                    .copyWith(
-                                        decoration: TextDecoration.underline,
-                                        decorationColor: Palette.text03))
+                            const TextLineXs(
+                              content: '보기',
+                            ),
                           ]),
                       const SizedBox(
                         height: 8,
@@ -285,12 +283,9 @@ class KakaoSignUpPage extends StatelessWidget {
                                 )
                               ],
                             ),
-                            Text('보기',
-                                style: TextTypes.caption01(
-                                        color: Palette.text03)
-                                    .copyWith(
-                                        decoration: TextDecoration.underline,
-                                        decorationColor: Palette.text03))
+                            const TextLineXs(
+                              content: '보기',
+                            ),
                           ]),
                       const SizedBox(
                         height: 8,
@@ -334,13 +329,9 @@ class KakaoSignUpPage extends StatelessWidget {
                               ],
                             ),
                           ),
-                          Text(
-                            '보기',
-                            style: TextTypes.caption01(color: Palette.text03)
-                                .copyWith(
-                                    decoration: TextDecoration.underline,
-                                    decorationColor: Palette.text03),
-                          )
+                          const TextLineXs(
+                            content: '보기',
+                          ),
                         ],
                       ),
                       const SizedBox(
@@ -379,12 +370,8 @@ class KakaoSignUpPage extends StatelessWidget {
                               )
                             ],
                           ),
-                          Text(
-                            '보기',
-                            style: TextTypes.caption01(color: Palette.text03)
-                                .copyWith(
-                                    decoration: TextDecoration.underline,
-                                    decorationColor: Palette.text03),
+                          const TextLineXs(
+                            content: '보기',
                           ),
                         ],
                       ),
