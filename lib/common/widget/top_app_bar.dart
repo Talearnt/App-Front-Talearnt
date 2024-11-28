@@ -25,6 +25,7 @@ class TopAppBar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: true,
       leading: leftIcon
           ? IconButton(
+              hoverColor: Colors.transparent,
               icon: SvgPicture.asset(
                 'assets/icons/back_arrow.svg', // SVG 파일 경로
               ),

@@ -1,9 +1,10 @@
-import 'package:flutter/material.dart';
 import 'package:app_front_talearnt/common/theme.dart';
+import 'package:flutter/material.dart';
 
 class PrimaryXs extends StatelessWidget {
   final String content;
   final VoidCallback? onPressed;
+
   const PrimaryXs({
     super.key,
     required this.content,
@@ -453,6 +454,7 @@ class TertiaryM extends StatelessWidget {
 class TextBtnXs extends StatelessWidget {
   final String content;
   final VoidCallback? onPressed;
+
   const TextBtnXs({
     super.key,
     required this.content,
@@ -504,6 +506,7 @@ class TextBtnS extends StatelessWidget {
 class TextBtnM extends StatelessWidget {
   final String content;
   final VoidCallback? onPressed;
+
   const TextBtnM({
     super.key,
     required this.content,
@@ -545,6 +548,9 @@ class TextLineXs extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       onPressed: onPressed ?? () {},
+      style: ButtonStyle(
+        overlayColor: WidgetStateProperty.all(Colors.transparent),
+      ),
       child: Text(
         content,
         style: TextTypes.caption02(
@@ -562,6 +568,7 @@ class TextLineXs extends StatelessWidget {
 class TextLineS extends StatelessWidget {
   final String content;
   final VoidCallback? onPressed;
+
   const TextLineS({
     super.key,
     required this.content,
@@ -572,6 +579,9 @@ class TextLineS extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       onPressed: onPressed ?? () {},
+      style: ButtonStyle(
+        overlayColor: WidgetStateProperty.all(Colors.transparent),
+      ),
       child: Text(
         content,
         style: TextTypes.caption01(
@@ -590,6 +600,7 @@ class TextWithIcon extends StatelessWidget {
   final String content;
   final IconData icon;
   final VoidCallback? onPressed;
+
   const TextWithIcon({
     super.key,
     required this.content,
@@ -601,6 +612,9 @@ class TextWithIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       onPressed: onPressed ?? () {},
+      style: ButtonStyle(
+        overlayColor: WidgetStateProperty.all(Colors.transparent),
+      ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
