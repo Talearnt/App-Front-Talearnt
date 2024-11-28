@@ -8,11 +8,14 @@ class CommonProvider with ChangeNotifier {
   Timer? _timer;
 
   // 타이머 시작 메서드
-  void startTimer() {
+  void startTimer({required Timer timer, int? initialSeconds}) {
+    _timerSeconds = initialSeconds ?? _initialTimerSeconds;
+    _timer = timer;
+
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (_timerSeconds > 0) {
         _timerSeconds--;
-        notifyListeners(); // 타이머 값이 바뀔 때마다 UI에 알림
+        notifyListeners();
       } else {
         timer.cancel();
       }
