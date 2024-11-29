@@ -20,7 +20,8 @@ class FindIdProvider extends ChangeNotifier with ClearText {
   bool _isCertSend = false;
   bool _isCertReSend = false;
   final bool _certValidAndNotEmpty = false;
-  final String _certValidMessage = '';
+  String _certValidMessage = '';
+  int _certNumberCount = 0;
 
   String _userId = '';
   String _createdAt = '';
@@ -46,6 +47,8 @@ class FindIdProvider extends ChangeNotifier with ClearText {
   bool get isCertReSend => _isCertReSend;
   bool get certValidAndNotEmpty => _certValidAndNotEmpty;
 
+  int get certNumberCount => _certNumberCount;
+
   String get userId => _userId;
   String get createdAt => _createdAt;
 
@@ -65,6 +68,11 @@ class FindIdProvider extends ChangeNotifier with ClearText {
     _phoneNumberValidMessage = '';
     _isCertSend = false;
     _isCertReSend = false;
+
+    _certNumberCount = 0;
+
+    _userId = '';
+    _createdAt = '';
 
     notifyListeners();
   }
@@ -117,6 +125,7 @@ class FindIdProvider extends ChangeNotifier with ClearText {
   }
 
   void reSendCertNum() {
+    _certNumberCount = 0;
     _isCertReSend = false;
     notifyListeners();
   }
@@ -129,5 +138,12 @@ class FindIdProvider extends ChangeNotifier with ClearText {
 
   void checkCertNum(bool success) {
     _certNumberValid = success;
+  }
+
+  void failedValidChkCertNum() {
+    _certNumberCount++;
+    _certNumberValid = false;
+    _certValidMessage = "인증번호가 일치하지 않습니다 ($certNumberCount/5)";
+    notifyListeners();
   }
 }

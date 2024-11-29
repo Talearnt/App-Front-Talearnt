@@ -79,6 +79,7 @@ class _FindIdViewState extends State<FindIdPage> {
                 textEditingController: findIdprovider.userNameController,
                 maxTextLength: 5,
                 validType: 'name',
+                isEnabled: !findIdprovider.isCertSend,
                 onChanged: (value) {
                   findIdprovider
                       .updateController(findIdprovider.userNameController);
@@ -117,6 +118,7 @@ class _FindIdViewState extends State<FindIdPage> {
                 textEditingController: findIdprovider.phoneNumberController,
                 keyboardType: "num",
                 validType: 'phone',
+                isEnabled: !findIdprovider.isCertSend,
                 maxTextLength: 11,
                 onChanged: (value) {
                   findIdprovider
@@ -171,6 +173,8 @@ class _FindIdViewState extends State<FindIdPage> {
                         provider: findIdprovider,
                         focusNode: findIdprovider.certFocusNode,
                         isSendAuth: findIdprovider.isCertSend,
+                        isValid: findIdprovider.certNumberValid,
+                        validMessage: findIdprovider.certValidMessage,
                       );
                     },
                   )),
@@ -198,6 +202,7 @@ class _FindIdViewState extends State<FindIdPage> {
                         commonProvider.resetTimer();
                         commonProvider.startTimer();
                         await authViewModel.reSendCertNum(
+                            context,
                             findIdprovider.userNameController.text,
                             findIdprovider.phoneNumberController.text);
                       },
@@ -217,10 +222,11 @@ class _FindIdViewState extends State<FindIdPage> {
                       isEnabled: true,
                       onPressed: () async {
                         await authViewModel.findUserIdInfo(
+                            context,
                             findIdprovider.phoneNumberController.text,
                             findIdprovider.certNumberController.text);
 
-                        if (findIdprovider.certNumberValid) {
+                        if (findIdprovider.userId.isNotEmpty) {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -236,10 +242,11 @@ class _FindIdViewState extends State<FindIdPage> {
                       isEnabled: findIdprovider.phoneNumberValidAndNotEmpty,
                       onPressed: findIdprovider.phoneNumberValidAndNotEmpty
                           ? () async {
-                              commonProvider.startTimer();
                               await authViewModel.sendCertNum(
+                                  context,
                                   findIdprovider.userNameController.text,
                                   findIdprovider.phoneNumberController.text);
+                              commonProvider.startTimer();
                             }
                           : () {},
                     );
