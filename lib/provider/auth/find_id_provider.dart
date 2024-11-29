@@ -57,7 +57,6 @@ class FindIdProvider extends ChangeNotifier with ClearText {
     _userNameController.clear();
     _phoneNumberController.clear();
     _certNumberController.clear();
-
     _userNameFocusNode.unfocus();
     _phoneNumberFocusNode.unfocus();
     _certFocusNode.unfocus();
