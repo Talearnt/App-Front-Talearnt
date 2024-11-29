@@ -2,6 +2,7 @@ import 'package:app_front_talearnt/common/widget/default_text_field.dart';
 import 'package:app_front_talearnt/common/widget/obscure_text_field.dart';
 import 'package:app_front_talearnt/common/widget/text_field_label.dart';
 import 'package:app_front_talearnt/provider/auth/login_provider.dart';
+import 'package:app_front_talearnt/view/auth/find_id_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -89,7 +90,16 @@ class LoginForm extends StatelessWidget {
               Row(
                 children: [
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return const FindIdPage();
+                          },
+                        ),
+                      );
+                    },
                     style: ButtonStyle(
                       padding: WidgetStateProperty.all(EdgeInsets.zero),
                       overlayColor: WidgetStateProperty.all(Colors.transparent),
