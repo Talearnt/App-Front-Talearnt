@@ -1,3 +1,4 @@
+import 'package:app_front_talearnt/provider/auth/find_id_provider.dart';
 import 'package:app_front_talearnt/provider/auth/find_password_provider.dart';
 import 'package:app_front_talearnt/provider/auth/login_provider.dart';
 import 'package:app_front_talearnt/provider/auth/sign_up_provider.dart';
@@ -27,12 +28,14 @@ class ProviderSetup extends StatelessWidget {
             create: (_) => FindPasswordProvider()),
         ChangeNotifierProvider<KakaoProvider>(create: (_) => KakaoProvider()),
         ChangeNotifierProvider<SignUpProvider>(create: (_) => SignUpProvider()),
+        ChangeNotifierProvider<FindIdProvider>(create: (_) => FindIdProvider()),
         ChangeNotifierProvider<AuthViewModel>(
           create: (context) => AuthViewModel(
-            context.read<SignUpProvider>(),
             context.read<LoginProvider>(),
+            context.read<SignUpProvider>(),
             AuthRepository(),
             TokenManager(Token.empty()),
+            context.read<FindIdProvider>(),
           ),
         ),
       ],
