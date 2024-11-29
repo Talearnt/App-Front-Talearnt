@@ -39,9 +39,14 @@ class AuthViewModel extends ChangeNotifier {
 
   Future<void> sendCertNum(
       BuildContext context, String userName, String phoneNumber) async {
+<<<<<<< HEAD
     SendCertNumberParam body =
         SendCertNumberParam(phoneNumber: phoneNumber, name: userName);
     final result = await authRepository.sendCertNumber(body);
+=======
+    SendCertNumberParam param = SendCertNumberParam(phoneNumber: phoneNumber);
+    final result = await authRepository.sendCertNumber(userName, param);
+>>>>>>> 0a45ff0 (feat : Add 아이디 찾기 기능 추가)
 
     result.fold(
       (failure) {
@@ -52,7 +57,11 @@ class AuthViewModel extends ChangeNotifier {
 
         SingleBtnDialog.show(
           context,
+<<<<<<< HEAD
           content: msg,
+=======
+          content: "$msg.",
+>>>>>>> 0a45ff0 (feat : Add 아이디 찾기 기능 추가)
           button: PrimaryM(
             content: '확인',
             onPressed: () {
@@ -71,9 +80,14 @@ class AuthViewModel extends ChangeNotifier {
 
   Future<void> reSendCertNum(
       BuildContext context, String userName, String phoneNumber) async {
+<<<<<<< HEAD
     SendCertNumberParam param =
         SendCertNumberParam(phoneNumber: phoneNumber, name: userName);
     final result = await authRepository.sendCertNumber(param);
+=======
+    SendCertNumberParam param = SendCertNumberParam(phoneNumber: phoneNumber);
+    final result = await authRepository.sendCertNumber(userName, param);
+>>>>>>> 0a45ff0 (feat : Add 아이디 찾기 기능 추가)
     result.fold(
       (failure) {
         String msg = "알 수 없는 이유로 인증번호 재발송에 실패하였습니다.다시 시도해 주세요.";
@@ -83,7 +97,11 @@ class AuthViewModel extends ChangeNotifier {
 
         SingleBtnDialog.show(
           context,
+<<<<<<< HEAD
           content: msg,
+=======
+          content: "$msg.",
+>>>>>>> 0a45ff0 (feat : Add 아이디 찾기 기능 추가)
           button: PrimaryM(
             content: '확인',
             onPressed: () {
@@ -118,7 +136,11 @@ class AuthViewModel extends ChangeNotifier {
 
         SingleBtnDialog.show(
           context,
+<<<<<<< HEAD
           content: msg,
+=======
+          content: "$msg.",
+>>>>>>> 0a45ff0 (feat : Add 아이디 찾기 기능 추가)
           button: PrimaryM(
             content: '확인',
             onPressed: () {
