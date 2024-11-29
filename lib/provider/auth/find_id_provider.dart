@@ -79,6 +79,11 @@ class FindIdProvider extends ChangeNotifier with ClearText {
     _userId = '';
     _createdAt = '';
 
+    _certNumberCount = 0;
+
+    _userId = '';
+    _createdAt = '';
+
     notifyListeners();
   }
 
