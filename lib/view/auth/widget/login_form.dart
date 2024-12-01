@@ -3,6 +3,7 @@ import 'package:app_front_talearnt/common/widget/obscure_text_field.dart';
 import 'package:app_front_talearnt/common/widget/text_field_label.dart';
 import 'package:app_front_talearnt/provider/auth/login_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../../common/theme.dart';
@@ -105,7 +106,7 @@ class LoginForm extends StatelessWidget {
                   ),
                   TextButton(
                     onPressed: () {
-                      // 비밀번호 찾기 동작
+                      context.go('/find-password');
                     },
                     style: ButtonStyle(
                       padding: WidgetStateProperty.all(EdgeInsets.zero),

@@ -1,3 +1,4 @@
+import 'package:app_front_talearnt/provider/auth/find_password_provider.dart';
 import 'package:app_front_talearnt/provider/auth/login_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -21,6 +22,8 @@ class ProviderSetup extends StatelessWidget {
       providers: [
         ChangeNotifierProvider<LoginProvider>(create: (_) => LoginProvider()),
         ChangeNotifierProvider<CommonProvider>(create: (_) => CommonProvider()),
+        ChangeNotifierProvider<FindPasswordProvider>(
+            create: (_) => FindPasswordProvider()),
         ChangeNotifierProvider<AuthViewModel>(
           create: (context) => AuthViewModel(
             context.read<LoginProvider>(),

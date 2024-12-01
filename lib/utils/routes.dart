@@ -1,3 +1,6 @@
+import 'package:app_front_talearnt/view/auth/find_password_page.dart';
+import 'package:app_front_talearnt/view/auth/find_password_success_page.dart';
+import 'package:app_front_talearnt/view/auth/reset_password_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -11,13 +14,25 @@ class Routes {
         builder: (BuildContext context, GoRouterState state) {
           return const LoginPage();
         },
-        routes: const <RouteBase>[
-          // GoRoute(
-          //   path: '/sign-up',
-          //   builder: (BuildContext context, GoRouterState state) {
-          //     return SignUpPage();
-          //   },
-          // ),
+        routes: <RouteBase>[
+          GoRoute(
+            path: '/find-password',
+            builder: (BuildContext context, GoRouterState state) {
+              return const FindPasswordPage();
+            },
+          ),
+          GoRoute(
+            path: '/find-password-success',
+            builder: (BuildContext context, GoRouterState state) {
+              return const FindPasswordSuccessPage();
+            },
+          ),
+          GoRoute(
+            path: '/reset-password',
+            builder: (BuildContext context, GoRouterState state) {
+              return const ResetPasswordPage();
+            },
+          ),
         ],
       ),
     ],

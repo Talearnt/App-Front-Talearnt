@@ -3,15 +3,12 @@ import 'package:app_front_talearnt/common/widget/bottom_btn.dart';
 import 'package:app_front_talearnt/common/widget/default_text_field.dart';
 import 'package:app_front_talearnt/common/widget/top_app_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:app_front_talearnt/view/auth/find_password_success_page.dart';
+import 'package:go_router/go_router.dart';
 import 'package:app_front_talearnt/provider/auth/find_password_provider.dart';
 import 'package:provider/provider.dart';
 
 class FindPasswordPage extends StatelessWidget {
-  FindPasswordPage({super.key});
-
-  final _phoneNumberFormKey = GlobalKey<FormState>();
-  final _userEmailFormKey = GlobalKey<FormState>();
+  const FindPasswordPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -50,36 +47,6 @@ class FindPasswordPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 24),
                 const Text(
-                  '휴대폰 번호',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(
-                  height: 4,
-                ),
-                Form(
-                  key: _phoneNumberFormKey,
-                  child: DefaultTextField(
-                    type: 'default',
-                    hint: '01012345678 형식으로 입력해주세요',
-                    textEditingController:
-                        findPasswordProvider.phoneNumberController,
-                    keyboardType: "num",
-                    validType: 'phone',
-                    maxTextLength: 11,
-                    onChanged: (value) {
-                      findPasswordProvider.updateController();
-                    },
-                    provider: findPasswordProvider,
-                    focusNode: findPasswordProvider.phoneNumberFocusNode,
-                    validMessage: findPasswordProvider.phoneNumberValidMessage,
-                    isValid: findPasswordProvider.phoneNumberValid,
-                  ),
-                ),
-                const SizedBox(height: 24),
-                const Text(
                   '이메일',
                   style: TextStyle(
                     fontSize: 14,
@@ -89,21 +56,49 @@ class FindPasswordPage extends StatelessWidget {
                 const SizedBox(
                   height: 4,
                 ),
-                Form(
-                  key: _userEmailFormKey,
-                  child: DefaultTextField(
-                    type: "email",
-                    hint: "이메일을 입력해 주세요",
-                    textEditingController:
-                        findPasswordProvider.userEmailController,
-                    provider: findPasswordProvider,
-                    onChanged: (value) {
-                      findPasswordProvider.updateController();
-                    },
-                    focusNode: findPasswordProvider.userEmailFocusNode,
-                    validMessage: findPasswordProvider.userEmailMessage,
-                    isValid: findPasswordProvider.userEmailValid,
+                DefaultTextField(
+                  type: 'default',
+                  hint: '메일을 입력해주세요',
+                  textEditingController: findPasswordProvider.emailController,
+                  onChanged: (value) {
+                    findPasswordProvider
+                        .updateController(findPasswordProvider.emailController);
+                  },
+                  provider: findPasswordProvider,
+                  validType: 'email',
+                  focusNode: findPasswordProvider.emailFocusNode,
+                  validFunc: findPasswordProvider.updateEmailValid,
+                  validMessage: findPasswordProvider.emailValidMessage,
+                  isValid: findPasswordProvider.emailValid,
+                ),
+                const SizedBox(height: 24),
+                const Text(
+                  '휴대폰 번호',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
                   ),
+                ),
+                const SizedBox(
+                  height: 4,
+                ),
+                DefaultTextField(
+                  type: 'default',
+                  hint: '01012345678 형식으로 입력해주세요',
+                  textEditingController:
+                      findPasswordProvider.phoneNumberController,
+                  keyboardType: "num",
+                  validType: 'phone',
+                  maxTextLength: 11,
+                  onChanged: (value) {
+                    findPasswordProvider
+                        .updateController(findPasswordProvider.emailController);
+                  },
+                  provider: findPasswordProvider,
+                  focusNode: findPasswordProvider.phoneNumberFocusNode,
+                  validMessage: findPasswordProvider.phoneNumberValidMessage,
+                  validFunc: findPasswordProvider.updatePhoneNumberValid,
+                  isValid: findPasswordProvider.phoneNumberValid,
                 ),
               ],
             ),
@@ -112,14 +107,9 @@ class FindPasswordPage extends StatelessWidget {
           BottomBtn(
             mediaBottom: MediaQuery.of(context).viewInsets.bottom,
             content: '비밀번호 찾기',
-            isEnabled: findPasswordProvider.isValidAllInput,
-            onPressed: () async {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const FindPasswordSuccessPage(),
-                ),
-              );
+            isEnabled: findPasswordProvider.isValidEmailAndPhoneNumber,
+            onPressed: () {
+              context.go('/find-password-success');
             },
           )
         ],
