@@ -63,6 +63,7 @@ class FindPasswordPage extends StatelessWidget {
                   onChanged: (value) {
                     findPasswordProvider
                         .updateController(findPasswordProvider.emailController);
+                    findPasswordProvider.chkValidEmailAndPhoneNumber();
                   },
                   provider: findPasswordProvider,
                   validType: 'email',
@@ -93,6 +94,7 @@ class FindPasswordPage extends StatelessWidget {
                   onChanged: (value) {
                     findPasswordProvider
                         .updateController(findPasswordProvider.emailController);
+                    findPasswordProvider.chkValidEmailAndPhoneNumber();
                   },
                   provider: findPasswordProvider,
                   focusNode: findPasswordProvider.phoneNumberFocusNode,

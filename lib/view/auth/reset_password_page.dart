@@ -54,6 +54,7 @@ class ResetPasswordPage extends StatelessWidget {
                   textOnChanged: (value) {
                     findPasswordProvider.updatePasswordCheckController(
                         findPasswordProvider.passwordController);
+                    findPasswordProvider.chkValidNewPassword();
                   },
                   isObscured: findPasswordProvider.passwordObscure,
                   changeObscured: findPasswordProvider.changePasswordObscure,
@@ -76,6 +77,7 @@ class ResetPasswordPage extends StatelessWidget {
                   textOnChanged: (value) {
                     findPasswordProvider.updatePhoneNumCheckController(
                         findPasswordProvider.passwordCheckController);
+                    findPasswordProvider.chkValidNewPassword();
                   },
                   isObscured: findPasswordProvider.passwordCheckObscure,
                   changeObscured:

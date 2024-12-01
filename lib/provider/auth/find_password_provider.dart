@@ -30,6 +30,9 @@ class FindPasswordProvider extends ChangeNotifier with ClearText {
   final String _userId = '';
   final String _createdAt = '';
 
+  bool _isValidEmailAndPhoneNumber = false;
+  bool _isVaildNewPassword = false;
+
   TextEditingController get emailController => _emailController;
   TextEditingController get phoneNumberController => _phoneNumberController;
   TextEditingController get passwordController => _passwordController;
@@ -50,17 +53,9 @@ class FindPasswordProvider extends ChangeNotifier with ClearText {
   String get passwordValidMessage => _passwordValidMessage;
   String get passwordCheckValidMessage => _passwordCheckValidMessage;
 
-  bool get isValidEmailAndPhoneNumber =>
-      _emailController.text.isNotEmpty &&
-      _phoneNumberController.text.isNotEmpty &&
-      _emailValid &&
-      _phoneNumberValid;
+  bool get isValidEmailAndPhoneNumber => _isValidEmailAndPhoneNumber;
 
-  bool get isVaildNewPassword =>
-      _passwordController.text.isNotEmpty &&
-      _passwordCheckController.text.isNotEmpty &&
-      _passwordValid &&
-      _passwordCheckValid;
+  bool get isVaildNewPassword => _isVaildNewPassword;
 
   String get userId => _userId;
   String get createdAt => _createdAt;
@@ -171,5 +166,32 @@ class FindPasswordProvider extends ChangeNotifier with ClearText {
           : _addListenerPasswordCheck = false;
       notifyListeners();
     });
+  }
+
+  void chkValidEmailAndPhoneNumber() {
+    if (RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
+            .hasMatch(_emailController.text) &&
+        _phoneNumberController.text.length == 11 &&
+        _emailValid &&
+        _phoneNumberValid) {
+      _isValidEmailAndPhoneNumber = true;
+    } else {
+      _isValidEmailAndPhoneNumber = false;
+    }
+    notifyListeners();
+  }
+
+  void chkValidNewPassword() {
+    if (RegExp(r'^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$')
+            .hasMatch(_passwordController.text) &&
+        RegExp(r'^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$')
+            .hasMatch(passwordCheckController.text) &&
+        _passwordValid &&
+        _passwordCheckValid) {
+      _isVaildNewPassword = true;
+    } else {
+      _isVaildNewPassword = false;
+    }
+    notifyListeners();
   }
 }
