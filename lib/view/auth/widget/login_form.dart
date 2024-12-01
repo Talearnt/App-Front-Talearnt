@@ -3,6 +3,7 @@ import 'package:app_front_talearnt/common/widget/obscure_text_field.dart';
 import 'package:app_front_talearnt/common/widget/text_field_label.dart';
 import 'package:app_front_talearnt/provider/auth/login_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../../common/theme.dart';
@@ -22,7 +23,6 @@ class LoginForm extends StatelessWidget {
         const TextFieldLabel(
           content: '아이디',
         ),
-        const SizedBox(height: 4),
         const SizedBox(height: 4),
         DefaultTextField(
           type: 'default',
@@ -118,7 +118,7 @@ class LoginForm extends StatelessWidget {
               ),
               TextButton(
                 onPressed: () {
-                  // 회원가입 동작
+                  context.go('/sign-up');
                 },
                 style: ButtonStyle(
                   padding: WidgetStateProperty.all(EdgeInsets.zero),

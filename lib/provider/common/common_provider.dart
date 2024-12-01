@@ -19,6 +19,10 @@ class CommonProvider with ChangeNotifier {
     });
   }
 
+  // void getFormattedTime(int time){
+  //   int
+  // }
+
   // 타이머 형식화된 문자열 반환 메서드
   String get formattedTime {
     int minutes = _timerSeconds ~/ 60;
@@ -64,7 +68,7 @@ class CommonProvider with ChangeNotifier {
       bool hasFocus, Function(String) callback) {
     if (!hasFocus) {
       RegExp(r'^010\d{8}$').hasMatch(textEditingController.text) == false
-          ? callback('올바른 전화번호를 입력하세요.')
+          ? callback('01012345678 형식으로 입력해주세요.')
           : callback('');
       notifyListeners();
     }
@@ -74,8 +78,27 @@ class CommonProvider with ChangeNotifier {
   void validateName(TextEditingController textEditingController, bool hasFocus,
       Function(String) callback) {
     if (!hasFocus) {
-      RegExp(r'^[가-힣]{2,}$').hasMatch(textEditingController.text) == false
-          ? callback('한글만 가능하며, 최소 2글자 이상 입력해야 합니다.')
+      RegExp(r'^[가-힣]{1,5}$').hasMatch(textEditingController.text) == false
+          ? callback('이름은 최대 5글자, 한글만 가능합니다.')
+          : callback('');
+      notifyListeners();
+    }
+  }
+
+  //비번체크
+  void validatePhoneCheckNum(TextEditingController textEditingController,
+      bool hasFocus, Function(String) callback) {
+    callback(textEditingController.text);
+    notifyListeners();
+  }
+
+  //닉네임체크
+  void validateNickName(TextEditingController textEditingController,
+      bool hasFocus, Function(String) callback) {
+    if (!hasFocus) {
+      RegExp(r'^[가-힣a-zA-Z0-9#]{2,12}$').hasMatch(textEditingController.text) ==
+              false
+          ? callback('한글, 영문, 숫자는 자유롭게 입력 가능하며, 특수문자는 #만 가능해요.')
           : callback('');
       notifyListeners();
     }
