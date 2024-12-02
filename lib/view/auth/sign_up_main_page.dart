@@ -129,7 +129,8 @@ class SignUpMainPage extends StatelessWidget {
                                     signUpProvider.phoneNumFocusNode.hasFocus,
                                     signUpProvider.updatePhoneNumValid);
                                 if (signUpProvider.phoneNumValid) {
-                                  commonProvider.startTimer();
+                                  commonProvider.startTimer(
+                                      signUpProvider.certTimerSeconds);
                                   signUpProvider.updateSendCertNum();
                                 }
                               },

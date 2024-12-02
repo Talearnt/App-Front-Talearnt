@@ -16,12 +16,18 @@ class DefaultTextField extends StatelessWidget {
   final bool isSendAuth;
   final int? maxTextLength;
 
+  //cert일 경우 시간에 대한 정의
+  final ValueNotifier<int>? timeSeconds;
+
   //검증관련
   final String validType;
   final FocusNode? focusNode;
   final Function(String)? validFunc;
   final String validMessage;
   final bool isValid;
+
+  final bool isOtherValid; //결국 여기도 사용하는군
+  final Function()? checkOtherValidFun;
 
   const DefaultTextField({
     super.key,
@@ -39,6 +45,9 @@ class DefaultTextField extends StatelessWidget {
     this.validFunc,
     this.validMessage = '',
     this.isValid = true,
+    this.timeSeconds,
+    this.isOtherValid = false,
+    this.checkOtherValidFun,
   });
 
   @override
@@ -55,6 +64,8 @@ class DefaultTextField extends StatelessWidget {
       validFunc: validFunc,
       validType: validType,
       keyboardType: keyboardType,
+      isOtherValid: isOtherValid,
+      checkOtherValidFun: checkOtherValidFun,
       suffixIcon: _getSuffixIcon(),
     );
   }
@@ -71,8 +82,11 @@ class DefaultTextField extends StatelessWidget {
             child: SvgPicture.asset("assets/icons/text_delete.svg"),
           ),
         if (type == "cert" && isSendAuth)
-          const Row(
-            children: [TimeSet(), SizedBox(width: 8)],
+          Row(
+            children: [
+              TimeSet(timerSeconds: timeSeconds),
+              const SizedBox(width: 8)
+            ],
           ),
       ],
     );

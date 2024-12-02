@@ -5,6 +5,7 @@ import '../clear_text.dart';
 class SignUpProvider extends ChangeNotifier with ClearText {
   int _signUpPage = 0;
   final PageController _pageController = PageController();
+  final ValueNotifier<int> _certTimerSeconds = ValueNotifier<int>(180);
 
   final TextEditingController _nickNameController = TextEditingController();
   final FocusNode _nickNameFocusNode = FocusNode();
@@ -55,6 +56,8 @@ class SignUpProvider extends ChangeNotifier with ClearText {
   bool _sendCertNum = false;
 
   int get signUpPage => _signUpPage;
+
+  ValueNotifier<int> get certTimerSeconds => _certTimerSeconds;
 
   PageController get pageController => _pageController;
 
@@ -236,15 +239,30 @@ class SignUpProvider extends ChangeNotifier with ClearText {
     notifyListeners();
   }
 
+  void checkBeforeEmailValid() {
+    if (_nameController.text.isEmpty) {
+      _nameValid = false;
+      _nameValidMessage = '이름 입력은 필수입니다.';
+    }
+    notifyListeners();
+  }
+
   void checkBeforePasswordValid() {
     if (_emailController.text.isEmpty) {
       _emailValid = false;
-      _emailValidMessage = '이메일을 입력해주세요';
+      _emailValidMessage = '이메일 입력은 필수입니다.';
+    }
+    if (_nameController.text.isEmpty) {
+      _nameValid = false;
+      _nameValidMessage = '이름 입력은 필수입니다.';
     }
     notifyListeners();
   }
 
   void updatePasswordValid(String message) {
+    if (_passwordCheckController.text.isNotEmpty) {
+      updatePasswordCheckValid('');
+    }
     if (message == '') {
       _passwordValid = true;
       _passwordValidMessage = '';
@@ -277,8 +295,8 @@ class SignUpProvider extends ChangeNotifier with ClearText {
     notifyListeners();
   }
 
-  void updatePasswordCheckValid(String passwordCheckText) {
-    if (passwordCheckText == _passwordController.text) {
+  void updatePasswordCheckValid(String value) {
+    if (_passwordCheckController.text == _passwordController.text) {
       _passwordCheckValid = true;
       _passwordCheckValidMessage = '';
     } else {
@@ -346,6 +364,13 @@ class SignUpProvider extends ChangeNotifier with ClearText {
   void resetSignUp() {
     _signUpPage = 0;
     _pageController.initialPage;
+    _certTimerSeconds.value = 180;
+    _nickNameController.clear();
+    _nickNameValid = true;
+    _nickNameValidMessage = '';
+    _nameController.clear();
+    _nameValid = true;
+    _nameValidMessage = '';
     _emailController.clear();
     _emailValid = true;
     _emailValidMessage = '';
@@ -356,6 +381,7 @@ class SignUpProvider extends ChangeNotifier with ClearText {
     _passwordCheckController.clear();
     _passwordCheckObscure = false;
     _phoneNumController.clear();
+    _sendCertNum = false;
     _certNumController.clear();
     _gender = 0;
     _allCheck = false;
@@ -363,8 +389,12 @@ class SignUpProvider extends ChangeNotifier with ClearText {
     _personalInfoCheck = false;
     _marketingCheck = false;
     _termsOfUseCheck = false;
+    _nameFocusNode.unfocus();
+    _nickNameFocusNode.unfocus();
     _emailFocusNode.unfocus();
     _passwordFocusNode.unfocus();
+    _phoneNumFocusNode.unfocus();
+    _certNumFocusNode.unfocus();
     notifyListeners();
   }
 }

@@ -5,7 +5,9 @@ import 'package:provider/provider.dart';
 import '../theme.dart';
 
 class TimeSet extends StatelessWidget {
-  const TimeSet({Key? key}) : super(key: key);
+  final ValueNotifier<int>? timerSeconds;
+
+  const TimeSet({Key? key, required this.timerSeconds}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +17,7 @@ class TimeSet extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          timerProvider.formattedTime,
+          timerProvider.getFormattedTime(timerSeconds),
           style: TextTypes.bodyMedium02(color: Palette.primary01),
         ),
       ],

@@ -3,15 +3,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 class CommonProvider with ChangeNotifier {
-  static const int _initialTimerSeconds = 600;
-  int _timerSeconds = _initialTimerSeconds;
   Timer? _timer;
 
   // 타이머 시작 메서드
-  void startTimer() {
+  void startTimer(ValueNotifier<int> timerSeconds) {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (_timerSeconds > 0) {
-        _timerSeconds--;
+      if (timerSeconds.value > 0) {
+        timerSeconds.value--;
         notifyListeners();
       } else {
         timer.cancel();
@@ -19,21 +17,17 @@ class CommonProvider with ChangeNotifier {
     });
   }
 
-  // void getFormattedTime(int time){
-  //   int
-  // }
-
-  // 타이머 형식화된 문자열 반환 메서드
-  String get formattedTime {
-    int minutes = _timerSeconds ~/ 60;
-    int seconds = _timerSeconds % 60;
+  String getFormattedTime(ValueNotifier<int>? timerSeconds) {
+    int minutes = (timerSeconds?.value ?? 180) ~/ 60;
+    int seconds = (timerSeconds?.value ?? 180) % 60;
+    notifyListeners();
     return '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
   }
 
   // 타이머 초기화 메서드
-  void resetTimer() {
+  void resetTimer(ValueNotifier<int> timerSeconds, int resetTime) {
     _timer?.cancel();
-    _timerSeconds = _initialTimerSeconds;
+    timerSeconds.value = resetTime;
     notifyListeners();
   }
 

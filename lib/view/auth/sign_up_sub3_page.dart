@@ -156,6 +156,8 @@ class SignUpSub3Page extends StatelessWidget {
               validFunc: signUpProvider.updateEmailValid,
               validMessage: signUpProvider.emailValidMessage,
               isValid: signUpProvider.emailValid,
+              isOtherValid: true,
+              checkOtherValidFun: signUpProvider.checkBeforeEmailValid,
             ),
             const SizedBox(height: 24.0),
             const TextFieldLabel(

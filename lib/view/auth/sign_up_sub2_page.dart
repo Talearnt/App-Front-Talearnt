@@ -55,6 +55,7 @@ class SignUpSub2Page extends StatelessWidget {
               const SizedBox(height: 4),
               DefaultTextField(
                 type: 'cert',
+                timeSeconds: signUpProvider.certTimerSeconds,
                 keyboardType: 'num',
                 hint: '인증 번호를 입력해 주세요.',
                 textEditingController: signUpProvider.certNumController,
