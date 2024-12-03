@@ -1,4 +1,5 @@
 import 'package:app_front_talearnt/provider/auth/login_provider.dart';
+import 'package:app_front_talearnt/provider/auth/sign_up_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -29,6 +30,7 @@ class ProviderSetup extends StatelessWidget {
           ),
         ),
         ChangeNotifierProvider<KakaoProvider>(create: (_) => KakaoProvider()),
+        ChangeNotifierProvider<SignUpProvider>(create: (_) => SignUpProvider()),
       ],
       child: child,
     );

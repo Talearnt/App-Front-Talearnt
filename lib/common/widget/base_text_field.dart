@@ -15,6 +15,8 @@ class BaseTextField extends StatelessWidget {
   final String keyboardType;
   final Widget? suffixIcon;
   final bool? obscureText; // nullable로 변경
+  final bool isInfo; // 정보성 문구
+  final String infoMessage;
 
   //검증관련
   final String validType;
@@ -32,6 +34,8 @@ class BaseTextField extends StatelessWidget {
     required this.hint,
     required this.textEditingController,
     required this.onChanged,
+    this.isInfo = false,
+    this.infoMessage = '',
     this.isEnabled = true,
     this.maxTextLength,
     this.keyboardType = 'default',
@@ -75,6 +79,14 @@ class BaseTextField extends StatelessWidget {
               commonProvider.validateName(
                   textEditingController, focusNode!.hasFocus, validFunc!);
               break;
+            case 'passwordCheck':
+              commonProvider.validatePhoneCheckNum(
+                  textEditingController, focusNode!.hasFocus, validFunc!);
+              break;
+            case 'nickName':
+              commonProvider.validateNickName(
+                  textEditingController, focusNode!.hasFocus, validFunc!);
+              break;
             default:
               break;
           }
@@ -96,7 +108,8 @@ class BaseTextField extends StatelessWidget {
               required bool isFocused,
               required int? maxLength}) {
             return null;
-          },//maxLength 설정시 하위에 생기는 숫자 제거
+          },
+          //maxLength 설정시 하위에 생기는 숫자 제거
           style: TextTypes.bodyMedium02(color: Palette.text02),
           enabled: isEnabled,
           keyboardType:
@@ -114,15 +127,14 @@ class BaseTextField extends StatelessWidget {
             suffixIcon: suffixIcon,
           ),
         ),
+        const SizedBox(height: 4),
         Visibility(
-          visible: !isValid && validMessage.isNotEmpty,
-          child: Column(
-            children: [
-              const SizedBox(height: 4),
-              ErrorHelper(type: 'error', content: validMessage)
-            ],
-          ),
+          visible: isInfo,
+          child: ErrorHelper(type: 'error', content: infoMessage),
         ),
+        Visibility(
+            visible: !isValid && validMessage.isNotEmpty,
+            child: ErrorHelper(type: 'error', content: validMessage)),
       ],
     );
   }
