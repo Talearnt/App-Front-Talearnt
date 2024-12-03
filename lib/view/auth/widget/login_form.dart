@@ -1,3 +1,4 @@
+import 'package:app_front_talearnt/common/widget/ToastMessage.dart';
 import 'package:app_front_talearnt/common/widget/default_text_field.dart';
 import 'package:app_front_talearnt/common/widget/obscure_text_field.dart';
 import 'package:app_front_talearnt/common/widget/text_field_label.dart';
@@ -90,7 +91,7 @@ class LoginForm extends StatelessWidget {
                 children: [
                   TextButton(
                     onPressed: () {
-                      // 아이디 찾기 동작
+                      ToastMessage.show(context, '인증이 완료되었습니다.');
                     },
                     style: ButtonStyle(
                       padding: WidgetStateProperty.all(EdgeInsets.zero),

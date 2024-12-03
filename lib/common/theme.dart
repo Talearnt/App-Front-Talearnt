@@ -110,4 +110,5 @@ class Palette {
   static const Color bgUp01 = Color(0xFFF7F8F8);
   static const Color bgUp02 = Color(0xFFECEEEF);
   static const Color bgUp03 = Color(0xFFDEE1E3);
+  static Color bgBlack01 = const Color(0xFF000000).withOpacity(0.7);
 }
