@@ -30,9 +30,11 @@ class Routes {
             },
           ),
           GoRoute(
-            path: '/reset-password',
-            builder: (BuildContext context, GoRouterState state) {
-              return const ResetPasswordPage();
+              path: '/reset-password',
+              builder: (BuildContext context, GoRouterState state) {
+                return const ResetPasswordPage();
+              }),
+          GoRoute(
             path: '/sign-up',
             builder: (BuildContext context, GoRouterState state) {
               return const SignUpMainPage();
