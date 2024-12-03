@@ -24,7 +24,6 @@ class LoginForm extends StatelessWidget {
           content: '아이디',
         ),
         const SizedBox(height: 4),
-        const SizedBox(height: 4),
         DefaultTextField(
           type: 'default',
           hint: '메일을 입력해주세요',
@@ -119,7 +118,7 @@ class LoginForm extends StatelessWidget {
               ),
               TextButton(
                 onPressed: () {
-                  // 회원가입 동작
+                  context.go('/sign-up');
                 },
                 style: ButtonStyle(
                   padding: WidgetStateProperty.all(EdgeInsets.zero),

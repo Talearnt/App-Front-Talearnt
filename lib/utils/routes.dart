@@ -1,10 +1,12 @@
 import 'package:app_front_talearnt/view/auth/find_password_page.dart';
 import 'package:app_front_talearnt/view/auth/find_password_success_page.dart';
 import 'package:app_front_talearnt/view/auth/reset_password_page.dart';
+import 'package:app_front_talearnt/view/auth/sign_up_success_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../view/auth/login_page.dart';
+import '../view/auth/sign_up_main_page.dart';
 
 class Routes {
   static final GoRouter router = GoRouter(
@@ -31,6 +33,15 @@ class Routes {
             path: '/reset-password',
             builder: (BuildContext context, GoRouterState state) {
               return const ResetPasswordPage();
+            path: '/sign-up',
+            builder: (BuildContext context, GoRouterState state) {
+              return const SignUpMainPage();
+            },
+          ),
+          GoRoute(
+            path: '/sign-up-success',
+            builder: (BuildContext context, GoRouterState state) {
+              return const SignUpSuccessPage();
             },
           ),
         ],

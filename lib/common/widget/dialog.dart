@@ -1,12 +1,13 @@
 import 'package:app_front_talearnt/common/theme.dart';
 import 'package:app_front_talearnt/common/widget/button.dart';
-import 'package:flutter/material.dart';
 import 'package:app_front_talearnt/common/widget/time_set.dart';
+import 'package:flutter/material.dart';
 
 class DoubleBtnDialog extends StatelessWidget {
   final String content, closeText;
   final bool timer;
   final Widget button;
+  final ValueNotifier<int>? timeSeconds;
 
   const DoubleBtnDialog({
     super.key,
@@ -14,6 +15,7 @@ class DoubleBtnDialog extends StatelessWidget {
     required this.closeText,
     this.timer = false,
     required this.button,
+    this.timeSeconds,
   });
 
   // showDialog를 포함하는 정적 메서드
@@ -73,7 +75,7 @@ class DoubleBtnDialog extends StatelessWidget {
                     ),
                     SizedBox(
                       height: 24,
-                      child: timer ? const TimeSet() : null,
+                      child: timer ? TimeSet(timerSeconds: timeSeconds) : null,
                     ),
                   ],
                 ),
@@ -113,12 +115,14 @@ class SingleBtnDialog extends StatelessWidget {
   final String content;
   final bool timer;
   final Widget button;
+  final ValueNotifier<int>? timeSeconds;
 
   const SingleBtnDialog({
     super.key,
     required this.content,
     this.timer = false,
     required this.button,
+    this.timeSeconds,
   });
 
   // showDialog를 포함하는 정적 메서드
@@ -176,7 +180,11 @@ class SingleBtnDialog extends StatelessWidget {
                     ),
                     SizedBox(
                       height: 24,
-                      child: timer ? const TimeSet() : null,
+                      child: timer
+                          ? TimeSet(
+                              timerSeconds: timeSeconds,
+                            )
+                          : null,
                     ),
                   ],
                 ),
