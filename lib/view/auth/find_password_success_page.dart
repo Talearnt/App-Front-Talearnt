@@ -2,9 +2,9 @@ import 'package:app_front_talearnt/common/theme.dart';
 import 'package:app_front_talearnt/common/widget/button.dart';
 import 'package:app_front_talearnt/provider/auth/find_password_provider.dart';
 import 'package:app_front_talearnt/common/widget/top_app_bar.dart';
-import 'package:app_front_talearnt/view/auth/login_page.dart';
 import 'package:app_front_talearnt/view/auth/reset_password_page.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
@@ -22,10 +22,7 @@ class FindPasswordSuccessPage extends StatelessWidget {
             'assets/icons/close.svg',
           ),
           onPressed: () {
-            Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (context) => const LoginPage()),
-              (Route<dynamic> route) => false,
-            );
+            context.pop();
           },
         ),
       ),
@@ -107,14 +104,7 @@ class FindPasswordSuccessPage extends StatelessWidget {
                   child: PrimaryM(
                     content: "로그인",
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return const ResetPasswordPage();
-                          },
-                        ),
-                      );
+                      context.go('/reset-password');
                     },
                   ),
                 ),

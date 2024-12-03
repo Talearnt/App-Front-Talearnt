@@ -106,7 +106,7 @@ class LoginForm extends StatelessWidget {
                   ),
                   TextButton(
                     onPressed: () {
-                      context.go('/find-password');
+                      context.push('/find-password');
                     },
                     style: ButtonStyle(
                       padding: WidgetStateProperty.all(EdgeInsets.zero),
