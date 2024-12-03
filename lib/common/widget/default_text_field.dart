@@ -71,20 +71,27 @@ class DefaultTextField extends StatelessWidget {
   }
 
   Widget? _getSuffixIcon() {
+    final showDeleteIcon =
+        textEditingController.text.isNotEmpty && focusNode!.hasFocus;
+    final showTimeSet = type == "cert" && isSendAuth;
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (textEditingController.text.isNotEmpty && focusNode!.hasFocus)
+        if (showDeleteIcon)
           GestureDetector(
             onTap: () {
               provider.clearText(textEditingController);
             },
             child: SvgPicture.asset("assets/icons/text_delete.svg"),
           ),
-        if (type == "cert" && isSendAuth)
+        if (showTimeSet)
           Row(
             children: [
-              TimeSet(timerSeconds: timeSeconds),
+              ValueListenableBuilder<int>(
+                  valueListenable: timeSeconds!, // ValueNotifier를 감시
+                  builder: (context, value, child) {
+                    return TimeSet(timerSeconds: timeSeconds);
+                  }),
               const SizedBox(width: 8)
             ],
           ),

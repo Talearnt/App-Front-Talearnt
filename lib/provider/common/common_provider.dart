@@ -10,7 +10,6 @@ class CommonProvider with ChangeNotifier {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (timerSeconds.value > 0) {
         timerSeconds.value--;
-        notifyListeners();
       } else {
         timer.cancel();
       }
@@ -20,7 +19,6 @@ class CommonProvider with ChangeNotifier {
   String getFormattedTime(ValueNotifier<int>? timerSeconds) {
     int minutes = (timerSeconds?.value ?? 180) ~/ 60;
     int seconds = (timerSeconds?.value ?? 180) % 60;
-    notifyListeners();
     return '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
   }
 
@@ -28,7 +26,6 @@ class CommonProvider with ChangeNotifier {
   void resetTimer(ValueNotifier<int> timerSeconds, int resetTime) {
     _timer?.cancel();
     timerSeconds.value = resetTime;
-    notifyListeners();
   }
 
   // 이메일
