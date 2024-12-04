@@ -84,13 +84,20 @@ class CommonProvider with ChangeNotifier {
   }
 
   //닉네임체크
-  void validateNickName(TextEditingController textEditingController,
+  void validateInfoNickName(TextEditingController textEditingController,
       bool hasFocus, Function(String) callback) {
     if (!hasFocus) {
       RegExp(r'^[가-힣a-zA-Z0-9#]{2,12}$').hasMatch(textEditingController.text) ==
               false
-          ? callback('한글, 영문, 숫자는 자유롭게 입력 가능하며, 특수문자는 #만 가능해요.')
+          ? callback('errorInfo')
           : callback('');
+      notifyListeners();
+    }
+  }
+
+  void setInfoNickName(bool hasFocus, Function(String, String) callback) {
+    if (hasFocus) {
+      callback('2~12자 이내로 입력해 주세요', '한글, 영문, 숫자는 자유롭게 입력 가능하며, 특수문자는 #만 가능해요');
       notifyListeners();
     }
   }

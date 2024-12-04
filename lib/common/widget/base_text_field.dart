@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../provider/common/common_provider.dart';
 import '../theme.dart';
 import 'error_helper.dart';
+import 'info_helper.dart';
 
 class BaseTextField extends StatelessWidget {
   final String hint;
@@ -15,8 +16,6 @@ class BaseTextField extends StatelessWidget {
   final String keyboardType;
   final Widget? suffixIcon;
   final bool? obscureText; // nullable로 변경
-  final bool isInfo; // 정보성 문구
-  final String infoMessage;
 
   //검증관련
   final String validType;
@@ -29,13 +28,19 @@ class BaseTextField extends StatelessWidget {
   final bool isOtherValid; //비밀번호 넣을때 이메일에 대한 선행이 먼저 이뤄져야하는 경우 사용 고민 중..
   final Function()? checkOtherValidFun;
 
+  //helper text 예외 상황.. 이거 그냥 따로 빼는게 나으려나..
+  final bool isInfo;
+  final bool isInfoValid;
+  final String infoMessage;
+  final String infoValidMessage;
+  final String infoType;
+  final Function(String, String)? infoFunc;
+
   const BaseTextField({
     super.key,
     required this.hint,
     required this.textEditingController,
     required this.onChanged,
-    this.isInfo = false,
-    this.infoMessage = '',
     this.isEnabled = true,
     this.maxTextLength,
     this.keyboardType = 'default',
@@ -48,6 +53,12 @@ class BaseTextField extends StatelessWidget {
     this.obscureText,
     this.isOtherValid = false,
     this.checkOtherValidFun,
+    this.isInfo = false,
+    this.isInfoValid = false,
+    this.infoMessage = '',
+    this.infoValidMessage = '',
+    this.infoType = '',
+    this.infoFunc,
   });
 
   @override
@@ -83,9 +94,22 @@ class BaseTextField extends StatelessWidget {
               commonProvider.validatePhoneCheckNum(
                   textEditingController, focusNode!.hasFocus, validFunc!);
               break;
+          }
+        }
+        if (!focusNode!.hasFocus) {
+          switch (validType) {
             case 'nickName':
-              commonProvider.validateNickName(
+              commonProvider.validateInfoNickName(
                   textEditingController, focusNode!.hasFocus, validFunc!);
+              break;
+            default:
+              break;
+          }
+        }
+        if (focusNode!.hasFocus) {
+          switch (validType) {
+            case 'nickName':
+              commonProvider.setInfoNickName(focusNode!.hasFocus, infoFunc!);
               break;
             default:
               break;
@@ -95,6 +119,7 @@ class BaseTextField extends StatelessWidget {
     }
 
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TextField(
           obscureText: obscureText ?? false,
@@ -129,12 +154,17 @@ class BaseTextField extends StatelessWidget {
         ),
         const SizedBox(height: 4),
         Visibility(
-          visible: isInfo,
-          child: ErrorHelper(type: 'error', content: infoMessage),
-        ),
+            visible: isInfo,
+            child: InfoHelper(type: 'info', content: infoMessage)),
         Visibility(
-            visible: !isValid && validMessage.isNotEmpty,
-            child: ErrorHelper(type: 'error', content: validMessage)),
+            visible: isInfo && isInfoValid,
+            child: InfoHelper(type: infoType, content: infoValidMessage)),
+        Visibility(
+          visible: !isValid && validMessage.isNotEmpty,
+          child: Column(
+            children: [ErrorHelper(type: 'error', content: validMessage)],
+          ),
+        ),
       ],
     );
   }

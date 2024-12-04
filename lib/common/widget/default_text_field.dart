@@ -29,6 +29,14 @@ class DefaultTextField extends StatelessWidget {
   final bool isOtherValid; //결국 여기도 사용하는군
   final Function()? checkOtherValidFun;
 
+  //helper text 예외 상황.. 이거 그냥 따로 빼는게 나으려나..
+  final bool isInfo;
+  final bool isInfoValid;
+  final String infoMessage;
+  final String infoValidMessage;
+  final String infoType;
+  final Function(String, String)? infoFunc;
+
   const DefaultTextField({
     super.key,
     required this.type,
@@ -48,6 +56,12 @@ class DefaultTextField extends StatelessWidget {
     this.timeSeconds,
     this.isOtherValid = false,
     this.checkOtherValidFun,
+    this.isInfo = false,
+    this.isInfoValid = false,
+    this.infoMessage = '',
+    this.infoValidMessage = '',
+    this.infoType = '',
+    this.infoFunc,
   });
 
   @override
@@ -67,6 +81,12 @@ class DefaultTextField extends StatelessWidget {
       isOtherValid: isOtherValid,
       checkOtherValidFun: checkOtherValidFun,
       suffixIcon: _getSuffixIcon(),
+      isInfo: isInfo,
+      isInfoValid: isInfoValid,
+      infoMessage: infoMessage,
+      infoValidMessage: infoValidMessage,
+      infoType: infoType,
+      infoFunc: infoFunc,
     );
   }
 
