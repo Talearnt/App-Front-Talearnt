@@ -5,28 +5,38 @@ abstract class ApiConstants {
   static const String refreshTokenUrl = "$baseUrl/v1/auth/login/refresh";
   static const String loginUrl = "$baseUrl/v1/auth/login";
   static const String loginKakaoUrl = "$baseUrl/v1/api/auth/login/kakao";
+  static const String createNickName = "$baseUrl/v1/auth/users/nickname";
 
-  static String getSmsVerifyCodeUrl(String name) {
-    return "$baseUrl/v1/auth/sms/verification-codes?name=$name";
-  } // 인증번호 문자 전송 통합 url (회원가입, 아이디 찾기)
+  static String checkUserIdDuplication(String userId) {
+    return "$baseUrl/v1/auth/users/$userId";
+  } // 아이디 중복
+
+  static String checkNickNameDuplication(String nickName) {
+    return "$baseUrl/v1/auth/users/$nickName";
+  } // 아이디 중복
+
+  static const String smsVerifyCodeUrl =
+      "$baseUrl/v1/auth/sms/verification-codes"; //인증번호 문자 전송 통합 url (회원가입, 아이디 찾기)
 
   static const String smsValidUrl =
       "$baseUrl/v1/auth/sms/validation"; //인증 번호 문자 검증 통합 url
 
   static const String activeAgreeCodeUrl =
       "$baseUrl/v1/admin/agree-codes/active";
+
   static const String setAgreeCodeUrl = "$baseUrl/v1/admin/agree-codes";
 
   static const String addTalentCategories =
       "$baseUrl/v1/admin/keywords/talent-categories";
+
   static const String addBigCategories =
       "$baseUrl/v1/admin/keywords/big-categories";
 
   static String getFineUserPwUrl(String userId) {
-    return "$baseUrl/v1/auth/users/$userId/email";
+    return "$baseUrl/v1/auth/password/$userId/email";
   }
 
   static String getChangeUserPwUrl(String no, String uuid) {
-    return "$baseUrl/v1/auth/users/$no/password/$uuid";
+    return "$baseUrl/v1/auth/$no/password/$uuid";
   }
 }
