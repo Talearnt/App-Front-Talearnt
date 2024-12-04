@@ -21,9 +21,6 @@ class FindIdPage extends StatefulWidget {
 class _FindIdViewState extends State<FindIdPage> {
   final phoneNumberController = TextEditingController();
   final authNumberController = TextEditingController();
-  final _userNameFormKey = GlobalKey<FormState>();
-  final _phoneNumberFormKey = GlobalKey<FormState>();
-  final _certNumFormKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -39,128 +36,98 @@ class _FindIdViewState extends State<FindIdPage> {
         },
       ),
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: 24,
-            ),
-            child: Text(
-              "사용자의 아이디를 찾습니다",
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-          const SizedBox(height: 32),
-          const Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: 24,
-            ),
-            child: Text(
-              '이름',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
-          const SizedBox(
-            height: 4,
-          ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: Form(
-              key: _userNameFormKey,
-              child: DefaultTextField(
-                type: 'default',
-                hint: '이름을 입력해 주세요',
-                textEditingController: findIdprovider.userNameController,
-                maxTextLength: 5,
-                validType: 'name',
-                isEnabled: !findIdprovider.isCertSend,
-                onChanged: (value) {
-                  findIdprovider
-                      .updateController(findIdprovider.userNameController);
-                },
-                provider: findIdprovider,
-                focusNode: findIdprovider.userNameFocusNode,
-                validFunc: findIdprovider.updateUserNameValid,
-                validMessage: findIdprovider.userNameMessage,
-                isValid: findIdprovider.userNameValid,
-              ),
-            ),
-          ),
-          const SizedBox(height: 24),
-          const Padding(
-            padding: EdgeInsets.symmetric(
+            padding: const EdgeInsets.symmetric(
               horizontal: 24,
             ),
-            child: Text(
-              '휴대폰 번호',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
-          const SizedBox(
-            height: 4,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: Form(
-              key: _phoneNumberFormKey,
-              child: DefaultTextField(
-                type: 'default',
-                hint: '01012345678 형식으로 입력해주세요',
-                textEditingController: findIdprovider.phoneNumberController,
-                keyboardType: "num",
-                validType: 'phone',
-                isEnabled: !findIdprovider.isCertSend,
-                maxTextLength: 11,
-                onChanged: (value) {
-                  findIdprovider
-                      .updateController(findIdprovider.phoneNumberController);
-                },
-                provider: findIdprovider,
-                focusNode: findIdprovider.phoneNumberFocusNode,
-                validFunc: findIdprovider.updatePhoneNumberValid,
-                validMessage: findIdprovider.phoneNumberValidMessage,
-                isValid: findIdprovider.phoneNumberValid,
-              ),
-            ),
-          ),
-          const SizedBox(
-            height: 24,
-          ),
-          Visibility(
-            visible: findIdprovider.isCertSend,
-            child: const Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: 24,
-              ),
-              child: Text(
-                '인증번호 확인',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  "사용자의 아이디를 찾습니다",
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-              ),
-            ),
-          ),
-          const SizedBox(
-            height: 4,
-          ),
-          Visibility(
-            visible: findIdprovider.isCertSend,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 24,
-              ),
-              child: Form(
-                  key: _certNumFormKey,
+                const SizedBox(height: 32),
+                const Text(
+                  '이름',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(
+                  height: 4,
+                ),
+                DefaultTextField(
+                  type: 'default',
+                  hint: '이름을 입력해 주세요',
+                  textEditingController: findIdprovider.userNameController,
+                  maxTextLength: 5,
+                  validType: 'name',
+                  isEnabled: !findIdprovider.isCertSend,
+                  onChanged: (value) {
+                    findIdprovider
+                        .updateController(findIdprovider.userNameController);
+                    findIdprovider.chkValidEmailAndPhoneNumber();
+                  },
+                  provider: findIdprovider,
+                  focusNode: findIdprovider.userNameFocusNode,
+                  validFunc: findIdprovider.updateUserNameValid,
+                  validMessage: findIdprovider.userNameMessage,
+                  isValid: findIdprovider.userNameValid,
+                ),
+                const SizedBox(height: 24),
+                const Text(
+                  '휴대폰 번호',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(
+                  height: 4,
+                ),
+                DefaultTextField(
+                  type: 'default',
+                  hint: '01012345678',
+                  textEditingController: findIdprovider.phoneNumberController,
+                  keyboardType: "num",
+                  validType: 'phone',
+                  isEnabled: !findIdprovider.isCertSend,
+                  maxTextLength: 11,
+                  onChanged: (value) {
+                    findIdprovider
+                        .updateController(findIdprovider.phoneNumberController);
+                    findIdprovider.chkValidEmailAndPhoneNumber();
+                  },
+                  provider: findIdprovider,
+                  focusNode: findIdprovider.phoneNumberFocusNode,
+                  validFunc: findIdprovider.updatePhoneNumberValid,
+                  validMessage: findIdprovider.phoneNumberValidMessage,
+                  isValid: findIdprovider.phoneNumberValid,
+                ),
+                const SizedBox(
+                  height: 24,
+                ),
+                Visibility(
+                  visible: findIdprovider.isCertSend,
+                  child: const Text(
+                    '인증번호 확인',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 4,
+                ),
+                Visibility(
+                  visible: findIdprovider.isCertSend,
                   child: Consumer<CommonProvider>(
                     builder: (context, value, child) {
                       return DefaultTextField(
@@ -175,41 +142,42 @@ class _FindIdViewState extends State<FindIdPage> {
                         isSendAuth: findIdprovider.isCertSend,
                         isValid: findIdprovider.certNumberValid,
                         validMessage: findIdprovider.certValidMessage,
+                        timeSeconds: findIdprovider.certNumSecond,
                       );
                     },
-                  )),
-            ),
-          ),
-          const SizedBox(
-            height: 24,
-          ),
-          Visibility(
-            visible: findIdprovider.isCertReSend,
-            child: Consumer<CommonProvider>(
-              builder: (subContext, commonProvider, child) {
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "인증번호가 오지 않는다면?",
-                      style: TextTypes.caption01(
-                        color: Palette.text03,
-                      ),
-                    ),
-                    TextLineS(
-                      content: "재발송",
-                      onPressed: () async {
-                        commonProvider.resetTimer();
-                        commonProvider.startTimer();
-                        await authViewModel.reSendCertNum(
-                            context,
-                            findIdprovider.userNameController.text,
-                            findIdprovider.phoneNumberController.text);
-                      },
-                    ),
-                  ],
-                );
-              },
+                  ),
+                ),
+                const SizedBox(
+                  height: 24,
+                ),
+                Visibility(
+                  visible: findIdprovider.isCertSend,
+                  child: Consumer<CommonProvider>(
+                    builder: (subContext, commonProvider, child) {
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "인증번호가 오지 않는다면?",
+                            style: TextTypes.caption01(
+                              color: Palette.text03,
+                            ),
+                          ),
+                          TextLineS(
+                            content: "재발송",
+                            onPressed: () async {
+                              await authViewModel.reSendCertNum(
+                                  context,
+                                  findIdprovider.userNameController.text,
+                                  findIdprovider.phoneNumberController.text);
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+              ],
             ),
           ),
           const Spacer(),
@@ -239,14 +207,13 @@ class _FindIdViewState extends State<FindIdPage> {
                   : BottomBtn(
                       mediaBottom: MediaQuery.of(context).viewInsets.bottom,
                       content: '인증번호 발송',
-                      isEnabled: findIdprovider.phoneNumberValidAndNotEmpty,
-                      onPressed: findIdprovider.phoneNumberValidAndNotEmpty
+                      isEnabled: findIdprovider.isValidNameAndPhoneNumber,
+                      onPressed: findIdprovider.isValidNameAndPhoneNumber
                           ? () async {
                               await authViewModel.sendCertNum(
                                   context,
                                   findIdprovider.userNameController.text,
                                   findIdprovider.phoneNumberController.text);
-                              commonProvider.startTimer();
                             }
                           : () {},
                     );

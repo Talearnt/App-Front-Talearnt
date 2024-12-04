@@ -31,17 +31,16 @@ class AuthRepository {
   }
 
   Future<Either<Failure, Success>> sendCertNumber(
-      String userName, SendCertNumberParam param) async {
-    final result = await dio.post(
-      ApiConstants.getSmsVerifyCodeUrl(userName),
-      param.toJson(),
-    );
+      SendCertNumberParam body) async {
+    final result =
+        await dio.post(ApiConstants.smsVerifyCodeUrl, body.toJson(), null);
 
     return result.fold(left, (response) => right(Success.fromJson(response)));
   }
 
-  Future<Either<Failure, UserIdInfo>> findUserIdInfo(FindIdParam param) async {
-    final result = await dio.post(ApiConstants.smsValidUrl, param.toJson());
+  Future<Either<Failure, UserIdInfo>> findUserIdInfo(FindIdParam body) async {
+    final result =
+        await dio.post(ApiConstants.smsValidUrl, body.toJson(), null);
     return result.fold(
         left, (response) => right(UserIdInfo.fromJson(response)));
   }

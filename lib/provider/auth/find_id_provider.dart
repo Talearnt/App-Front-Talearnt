@@ -11,17 +11,17 @@ class FindIdProvider extends ChangeNotifier with ClearText {
   final TextEditingController _phoneNumberController = TextEditingController();
   final FocusNode _phoneNumberFocusNode = FocusNode();
   bool _phoneNumberValid = true;
-  bool _phoneNumberValidAndNotEmpty = false;
   String _phoneNumberValidMessage = '';
 
   final TextEditingController _certNumberController = TextEditingController();
   final FocusNode _certFocusNode = FocusNode();
   bool _certNumberValid = true;
   bool _isCertSend = false;
-  bool _isCertReSend = false;
-  final bool _certValidAndNotEmpty = false;
   String _certValidMessage = '';
   int _certNumberCount = 0;
+  ValueNotifier<int> _certNumSecond = ValueNotifier<int>(600);
+
+  bool _isValidNameAndPhoneNumber = false;
 
   String _userId = '';
   String _createdAt = '';
@@ -32,22 +32,22 @@ class FindIdProvider extends ChangeNotifier with ClearText {
 
   bool get userNameValid => _userNameValid;
   bool get phoneNumberValid => _phoneNumberValid;
-  bool get phoneNumberValidAndNotEmpty => _phoneNumberValidAndNotEmpty;
   bool get certNumberValid => _certNumberValid;
 
   String get userNameMessage => _userNameMessage;
   String get phoneNumberValidMessage => _phoneNumberValidMessage;
   String get certValidMessage => _certValidMessage;
 
+  bool get isValidNameAndPhoneNumber => _isValidNameAndPhoneNumber;
+
   TextEditingController get userNameController => _userNameController;
   TextEditingController get phoneNumberController => _phoneNumberController;
   TextEditingController get certNumberController => _certNumberController;
 
   bool get isCertSend => _isCertSend;
-  bool get isCertReSend => _isCertReSend;
-  bool get certValidAndNotEmpty => _certValidAndNotEmpty;
 
   int get certNumberCount => _certNumberCount;
+  ValueNotifier<int> get certNumSecond => _certNumSecond;
 
   String get userId => _userId;
   String get createdAt => _createdAt;
@@ -57,19 +57,25 @@ class FindIdProvider extends ChangeNotifier with ClearText {
     _userNameController.clear();
     _phoneNumberController.clear();
     _certNumberController.clear();
+
     _userNameFocusNode.unfocus();
     _phoneNumberFocusNode.unfocus();
     _certFocusNode.unfocus();
 
     _userNameValid = true;
     _phoneNumberValid = true;
-    _phoneNumberValidAndNotEmpty = false;
+    _certNumberValid = true;
+
+    _isValidNameAndPhoneNumber = false;
+
     _userNameMessage = '';
     _phoneNumberValidMessage = '';
+    _certValidMessage = '';
+
     _isCertSend = false;
-    _isCertReSend = false;
 
     _certNumberCount = 0;
+    _certNumSecond = ValueNotifier<int>(600);
 
     _userId = '';
     _createdAt = '';
@@ -83,15 +89,8 @@ class FindIdProvider extends ChangeNotifier with ClearText {
     notifyListeners();
   }
 
-  void updateController(TextEditingController phoneNumberController) {
-    phoneNumberController.addListener(() {
-      if (phoneNumberValid && phoneNumberController.text.length == 11) {
-        _phoneNumberValidAndNotEmpty = true;
-      }
-      if (phoneNumberController.text.length != 11) {
-        _phoneNumberValidAndNotEmpty = false;
-        _phoneNumberValidMessage = '';
-      }
+  void updateController(TextEditingController textEditingController) {
+    textEditingController.addListener(() {
       notifyListeners();
     });
   }
@@ -118,15 +117,26 @@ class FindIdProvider extends ChangeNotifier with ClearText {
     notifyListeners();
   }
 
+  void chkValidEmailAndPhoneNumber() {
+    if (RegExp(r'^010\d{8}$').hasMatch(phoneNumberController.text) &&
+        _phoneNumberController.text.length == 11 &&
+        _userNameValid &&
+        _phoneNumberValid) {
+      _isValidNameAndPhoneNumber = true;
+    } else {
+      _isValidNameAndPhoneNumber = false;
+    }
+    notifyListeners();
+  }
+
   void sendCertNum() {
     _isCertSend = true;
-    _isCertReSend = true;
+    print(_isCertSend);
     notifyListeners();
   }
 
   void reSendCertNum() {
     _certNumberCount = 0;
-    _isCertReSend = false;
     notifyListeners();
   }
 

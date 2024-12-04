@@ -64,8 +64,9 @@ class AuthViewModel extends ChangeNotifier {
 
   Future<void> sendCertNum(
       BuildContext context, String userName, String phoneNumber) async {
-    SendCertNumberParam param = SendCertNumberParam(phoneNumber: phoneNumber);
-    final result = await authRepository.sendCertNumber(userName, param);
+    SendCertNumberParam body =
+        SendCertNumberParam(phoneNumber: phoneNumber, name: userName);
+    final result = await authRepository.sendCertNumber(body);
 
     result.fold(
       (failure) {
@@ -76,7 +77,7 @@ class AuthViewModel extends ChangeNotifier {
 
         SingleBtnDialog.show(
           context,
-          content: "$msg.",
+          content: msg,
           button: PrimaryM(
             content: '확인',
             onPressed: () {
@@ -95,8 +96,9 @@ class AuthViewModel extends ChangeNotifier {
 
   Future<void> reSendCertNum(
       BuildContext context, String userName, String phoneNumber) async {
-    SendCertNumberParam param = SendCertNumberParam(phoneNumber: phoneNumber);
-    final result = await authRepository.sendCertNumber(userName, param);
+    SendCertNumberParam param =
+        SendCertNumberParam(phoneNumber: phoneNumber, name: userName);
+    final result = await authRepository.sendCertNumber(param);
     result.fold(
       (failure) {
         String msg = "알 수 없는 이유로 인증번호 재발송에 실패하였습니다.다시 시도해 주세요.";
@@ -106,7 +108,7 @@ class AuthViewModel extends ChangeNotifier {
 
         SingleBtnDialog.show(
           context,
-          content: "$msg.",
+          content: msg,
           button: PrimaryM(
             content: '확인',
             onPressed: () {
@@ -141,7 +143,7 @@ class AuthViewModel extends ChangeNotifier {
 
         SingleBtnDialog.show(
           context,
-          content: "$msg.",
+          content: msg,
           button: PrimaryM(
             content: '확인',
             onPressed: () {
