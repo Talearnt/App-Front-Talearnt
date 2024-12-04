@@ -1,5 +1,3 @@
-import 'package:app_front_talearnt/common/widget/button.dart';
-import 'package:app_front_talearnt/common/widget/dialog.dart';
 import 'package:app_front_talearnt/data/model/param/login_param.dart';
 import 'package:app_front_talearnt/provider/auth/find_id_provider.dart';
 import 'package:app_front_talearnt/provider/auth/login_provider.dart';
@@ -7,14 +5,16 @@ import 'package:app_front_talearnt/provider/auth/sign_up_provider.dart';
 import 'package:app_front_talearnt/utils/token_manager.dart';
 import 'package:flutter/material.dart';
 
+import '../common/widget/button.dart';
+import '../common/widget/dialog.dart';
 import '../data/model/param/find_id_param.dart';
 import '../data/model/param/send_cert_number_param.dart';
 import '../data/repositories/auth_repository.dart';
 
 class AuthViewModel extends ChangeNotifier {
   final LoginProvider loginProvider;
-  final FindIdProvider findIdProvider;
   final SignUpProvider signUpProvider;
+  final FindIdProvider findIdProvider;
   final AuthRepository authRepository;
   final TokenManager tokenManager;
 
