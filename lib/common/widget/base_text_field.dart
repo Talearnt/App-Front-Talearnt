@@ -35,6 +35,7 @@ class BaseTextField extends StatelessWidget {
   final String infoValidMessage;
   final String infoType;
   final Function(String, String)? infoFunc;
+  final Function(String?)? onServerCheck;
 
   const BaseTextField({
     super.key,
@@ -59,6 +60,7 @@ class BaseTextField extends StatelessWidget {
     this.infoValidMessage = '',
     this.infoType = '',
     this.infoFunc,
+    this.onServerCheck,
   });
 
   @override
@@ -100,7 +102,7 @@ class BaseTextField extends StatelessWidget {
           switch (validType) {
             case 'nickName':
               commonProvider.validateInfoNickName(
-                  textEditingController, focusNode!.hasFocus, validFunc!);
+                  textEditingController, focusNode!.hasFocus, validFunc!, onServerCheck!);
               break;
             default:
               break;

@@ -13,6 +13,7 @@ class SignUpSub3Page extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final signUpProvider = Provider.of<SignUpProvider>(context);
+    // final authViewModel = Provider.of<AuthViewModel>(context);
 
     return SingleChildScrollView(
       child: Column(
@@ -115,9 +116,15 @@ class SignUpSub3Page extends StatelessWidget {
               provider: signUpProvider,
               validType: 'nickName',
               focusNode: signUpProvider.nickNameFocusNode,
-              validFunc: signUpProvider.updateNickNameValid,
+              validFunc: signUpProvider.updateNickNameInfoValid,
               validMessage: signUpProvider.nickNameValidMessage,
               isValid: signUpProvider.nickNameValid,
+              isInfo: signUpProvider.isNickNameInfo,
+              isInfoValid: signUpProvider.isNickNameInfoValid,
+              infoMessage: signUpProvider.nickNameInfoMessage,
+              infoValidMessage: signUpProvider.nickNameInfoValidMessage,
+              infoType: signUpProvider.nickNameInfoType,
+              infoFunc: signUpProvider.updateNickNameInfo,
             ),
             const SizedBox(height: 24.0),
             const TextFieldLabel(

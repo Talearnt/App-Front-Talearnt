@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import '../../common/widget/bottom_btn.dart';
 import '../../common/widget/top_app_bar.dart';
 import '../../provider/auth/sign_up_provider.dart';
+import '../../view_model/auth_view_model.dart';
 
 class SignUpMainPage extends StatelessWidget {
   const SignUpMainPage({super.key});
@@ -18,6 +19,7 @@ class SignUpMainPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final signUpProvider = Provider.of<SignUpProvider>(context);
     final commonProvider = Provider.of<CommonProvider>(context);
+    final authViewModel = Provider.of<AuthViewModel>(context);
 
     return PopScope(
       canPop: false, // 뒤로가기 허용은 하지 않지만 사용자 정의 동작을 처리
@@ -68,6 +70,9 @@ class SignUpMainPage extends StatelessWidget {
                     physics: const NeverScrollableScrollPhysics(),
                     controller: signUpProvider.pageController,
                     onPageChanged: (int page) {
+                      if (page == 2 && signUpProvider.isFirstVisit) {
+                        authViewModel.createRandomNickName();
+                      }
                       signUpProvider.updateSignUp(page);
                     },
                     children: const [

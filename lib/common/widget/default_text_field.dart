@@ -36,6 +36,7 @@ class DefaultTextField extends StatelessWidget {
   final String infoValidMessage;
   final String infoType;
   final Function(String, String)? infoFunc;
+  final Function(String?)? onServerCheck;
 
   const DefaultTextField({
     super.key,
@@ -62,6 +63,7 @@ class DefaultTextField extends StatelessWidget {
     this.infoValidMessage = '',
     this.infoType = '',
     this.infoFunc,
+    this.onServerCheck,
   });
 
   @override

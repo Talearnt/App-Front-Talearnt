@@ -84,13 +84,20 @@ class CommonProvider with ChangeNotifier {
   }
 
   //닉네임체크
-  void validateInfoNickName(TextEditingController textEditingController,
-      bool hasFocus, Function(String) callback) {
+  void validateInfoNickName(
+      TextEditingController textEditingController,
+      bool hasFocus,
+      Function(String) callback,
+      Function(String?) onServerCheck) async {
+    bool isValid =
+        RegExp(r'^[가-힣a-zA-Z0-9#]{2,12}$').hasMatch(textEditingController.text);
     if (!hasFocus) {
-      RegExp(r'^[가-힣a-zA-Z0-9#]{2,12}$').hasMatch(textEditingController.text) ==
-              false
-          ? callback('errorInfo')
-          : callback('');
+      if (isValid) {
+        callback('');
+        await onServerCheck(textEditingController.text);
+      } else {
+        callback('errorInfo');
+      }
       notifyListeners();
     }
   }

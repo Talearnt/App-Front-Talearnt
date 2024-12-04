@@ -6,11 +6,17 @@ class SignUpProvider extends ChangeNotifier with ClearText {
   int _signUpPage = 0;
   final PageController _pageController = PageController();
   final ValueNotifier<int> _certTimerSeconds = ValueNotifier<int>(180);
+  bool _isFirstVisit = true;
 
   final TextEditingController _nickNameController = TextEditingController();
   final FocusNode _nickNameFocusNode = FocusNode();
   bool _nickNameValid = true;
   String _nickNameValidMessage = '';
+  bool _isNickNameInfoValid = false;
+  String _nickNameInfoValidMessage = '';
+  bool _isNickNameInfo = true;
+  String _nickNameInfoMessage = '랜덤으로 지정된 닉네임입니다. 자유롭게 수정 가능해요';
+  String _nickNameInfoType = 'checkInfo';
 
   final TextEditingController _nameController = TextEditingController();
   final FocusNode _nameFocusNode = FocusNode();
@@ -61,6 +67,8 @@ class SignUpProvider extends ChangeNotifier with ClearText {
 
   PageController get pageController => _pageController;
 
+  bool get isFirstVisit => _isFirstVisit;
+
   bool get isSignUpSub1ButtonEnabled =>
       _requiredTermsOfUseCheck && _personalInfoCheck;
 
@@ -94,6 +102,16 @@ class SignUpProvider extends ChangeNotifier with ClearText {
   bool get nickNameValid => _nickNameValid;
 
   String get nickNameValidMessage => _nickNameValidMessage;
+
+  bool get isNickNameInfoValid => _isNickNameInfoValid;
+
+  String get nickNameInfoValidMessage => _nickNameInfoValidMessage;
+
+  bool get isNickNameInfo => _isNickNameInfo;
+
+  String get nickNameInfoMessage => _nickNameInfoMessage;
+
+  String get nickNameInfoType => _nickNameInfoType;
 
   TextEditingController get emailController => _emailController;
 
@@ -154,6 +172,9 @@ class SignUpProvider extends ChangeNotifier with ClearText {
   }
 
   void updateSignUp(int pageNum) {
+    if (pageNum == 2 && _isFirstVisit) {
+      _isFirstVisit = false;
+    }
     _signUpPage = pageNum;
     notifyListeners(); // 상태 변경 통지
   }
@@ -226,6 +247,11 @@ class SignUpProvider extends ChangeNotifier with ClearText {
         !_termsOfUseCheck) {
       _allCheck = false;
     }
+  }
+
+  void setNickName(String randomNickName) {
+    _nickNameController.text = randomNickName;
+    notifyListeners();
   }
 
   void updateEmailValid(String message) {
@@ -302,6 +328,26 @@ class SignUpProvider extends ChangeNotifier with ClearText {
     } else {
       _passwordCheckValid = false;
       _passwordCheckValidMessage = '비밀번호가 일치하지 않습니다.';
+    }
+    notifyListeners();
+  }
+
+  void updateNickNameInfo(String info, String infoGuide) {
+    _isNickNameInfoValid = true;
+    _nickNameInfoMessage = info;
+    _nickNameInfoValidMessage = infoGuide;
+    notifyListeners();
+  }
+
+  void updateNickNameInfoValid(String type) {
+    if (type == '') {
+      _isNickNameInfo = false;
+      _isNickNameInfoValid = false;
+      _nickNameInfoValidMessage = '';
+    } else {
+      _isNickNameInfo = true;
+      _isNickNameInfoValid = true;
+      _nickNameInfoType = type;
     }
     notifyListeners();
   }
@@ -395,6 +441,7 @@ class SignUpProvider extends ChangeNotifier with ClearText {
     _passwordFocusNode.unfocus();
     _phoneNumFocusNode.unfocus();
     _certNumFocusNode.unfocus();
+    _isFirstVisit = true;
     notifyListeners();
   }
 }

@@ -25,15 +25,16 @@ class ProviderSetup extends StatelessWidget {
         ChangeNotifierProvider<CommonProvider>(create: (_) => CommonProvider()),
         ChangeNotifierProvider<FindPasswordProvider>(
             create: (_) => FindPasswordProvider()),
+        ChangeNotifierProvider<KakaoProvider>(create: (_) => KakaoProvider()),
+        ChangeNotifierProvider<SignUpProvider>(create: (_) => SignUpProvider()),
         ChangeNotifierProvider<AuthViewModel>(
           create: (context) => AuthViewModel(
+            context.read<SignUpProvider>(),
             context.read<LoginProvider>(),
             AuthRepository(),
             TokenManager(Token.empty()),
           ),
         ),
-        ChangeNotifierProvider<KakaoProvider>(create: (_) => KakaoProvider()),
-        ChangeNotifierProvider<SignUpProvider>(create: (_) => SignUpProvider()),
       ],
       child: child,
     );
