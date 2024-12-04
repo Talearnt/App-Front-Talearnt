@@ -10,7 +10,7 @@ class AuthRepository {
   final DioService dio = DioService();
 
   Future<Either<Failure, Token>> login(LoginParam param) async {
-    final result = await dio.post(ApiConstants.loginUrl, param.toJson());
+    final result = await dio.post(ApiConstants.loginUrl, param.toJson(), null);
     return result.fold(left, (response) => right(Token.fromJson(response)));
   }
 }
