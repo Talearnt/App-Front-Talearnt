@@ -90,9 +90,7 @@ class LoginForm extends StatelessWidget {
               Row(
                 children: [
                   TextButton(
-                    onPressed: () {
-                      ToastMessage.show(context, '인증이 완료되었습니다.');
-                    },
+                    onPressed: () {},
                     style: ButtonStyle(
                       padding: WidgetStateProperty.all(EdgeInsets.zero),
                       overlayColor: WidgetStateProperty.all(Colors.transparent),
