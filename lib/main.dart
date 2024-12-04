@@ -1,3 +1,4 @@
+import 'package:app_front_talearnt/common/theme.dart';
 import 'package:app_front_talearnt/provider/provider_set_up.dart';
 import 'package:app_front_talearnt/utils/routes.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
         fontFamily: "Pretendard",
+        scaffoldBackgroundColor: Palette.bgBackGround,
       ),
       routerConfig: Routes.router,
     );
