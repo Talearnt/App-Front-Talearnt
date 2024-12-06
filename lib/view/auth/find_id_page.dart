@@ -5,7 +5,7 @@ import 'package:app_front_talearnt/common/widget/default_text_field.dart';
 import 'package:app_front_talearnt/common/widget/top_app_bar.dart';
 import 'package:app_front_talearnt/provider/auth/find_id_provider.dart';
 import 'package:app_front_talearnt/provider/common/common_provider.dart';
-import 'package:app_front_talearnt/view/auth/find_id_success_page.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -32,7 +32,7 @@ class _FindIdViewState extends State<FindIdPage> {
         content: "아이디 찾기",
         onPressed: () {
           findIdprovider.clearProvider();
-          Navigator.of(context).pop();
+          context.pop();
         },
       ),
       body: Column(
@@ -195,12 +195,7 @@ class _FindIdViewState extends State<FindIdPage> {
                             findIdprovider.certNumberController.text);
 
                         if (findIdprovider.userId.isNotEmpty) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const FindIdSuccessPage(),
-                            ),
-                          );
+                          context.go('/find-id-success');
                         }
                       },
                     )

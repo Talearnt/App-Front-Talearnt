@@ -2,6 +2,7 @@ import 'package:app_front_talearnt/common/theme.dart';
 import 'package:app_front_talearnt/common/widget/button.dart';
 import 'package:app_front_talearnt/common/widget/top_app_bar.dart';
 import 'package:app_front_talearnt/view/auth/login_page.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:provider/provider.dart';
 import 'package:app_front_talearnt/provider/auth/find_id_provider.dart';
@@ -25,10 +26,7 @@ class FindIdSuccessPage extends StatelessWidget {
           ),
           onPressed: () {
             findIdprovider.clearProvider();
-            Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (context) => const LoginPage()),
-              (Route<dynamic> route) => false,
-            );
+            context.pop();
           },
         ),
       ),
@@ -105,14 +103,23 @@ class FindIdSuccessPage extends StatelessWidget {
             const SizedBox(height: 24),
             Row(
               children: [
-                const Expanded(
-                  child: SecondaryMGray(content: "비밀번호 찾기"),
+                Expanded(
+                  child: SecondaryMGray(
+                    content: "비밀번호 찾기",
+                    onPressed: () {
+                      findIdprovider.clearProvider();
+                      context.go('/find-password');
+                    },
+                  ),
                 ),
                 const SizedBox(width: 8),
                 Expanded(
                   child: PrimaryM(
                     content: "로그인",
-                    onPressed: () {},
+                    onPressed: () {
+                      findIdprovider.clearProvider();
+                      context.pop();
+                    },
                   ),
                 ),
               ],
