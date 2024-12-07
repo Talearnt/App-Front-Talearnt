@@ -212,7 +212,6 @@ class _FindIdViewState extends State<FindIdPage> {
                                   context,
                                   findIdprovider.userNameController.text,
                                   findIdprovider.phoneNumberController.text);
-                              commonProvider.startTimer();
                             }
                           : () {},
                     );
