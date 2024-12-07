@@ -50,9 +50,9 @@ class AuthViewModel extends ChangeNotifier {
 
     result.fold(
       (failure) {
-        String msg = "알 수 없는 이유로 인증번호 재발송에 실패하였습니다.다시 시도해 주세요.";
+        String msg = "알 수 없는 이유로\n인증번호 재발송에 실패하였습니다.\n다시 시도해 주세요.";
         if (failure.errorCode == "404-USER-01") {
-          msg = "일치하는 사용자 정보가 없습니다.다시 확인해 주세요.";
+          msg = "일치하는 사용자 정보가 없습니다.\n다시 확인해 주세요.";
         }
 
         SingleBtnDialog.show(
@@ -91,9 +91,9 @@ class AuthViewModel extends ChangeNotifier {
 >>>>>>> 0a45ff0 (feat : Add 아이디 찾기 기능 추가)
     result.fold(
       (failure) {
-        String msg = "알 수 없는 이유로 인증번호 재발송에 실패하였습니다.다시 시도해 주세요.";
+        String msg = "알 수 없는 이유로\n인증번호 재발송에 실패하였습니다.\n다시 시도해 주세요.";
         if (failure.errorCode == "404-USER-01") {
-          msg = "일치하는 사용자 정보가 없습니다.다시 확인해 주세요.";
+          msg = "일치하는 사용자 정보가 없습니다.\n다시 확인해 주세요.";
         }
 
         SingleBtnDialog.show(
@@ -127,11 +127,11 @@ class AuthViewModel extends ChangeNotifier {
     final result = await authRepository.findUserIdInfo(param);
     result.fold(
       (failure) {
-        String msg = "알 수 없는 이유로 인증번호 재발송에 실패하였습니다.다시 시도해 주세요.";
+        String msg = "알 수 없는 이유로\n인증번호 재발송에 실패하였습니다.\n다시 시도해 주세요.";
         if (failure.errorCode == "404-USER-01") {
-          msg = "일치하는 사용자 정보가 없습니다.다시 확인해 주세요.";
+          msg = "일치하는 사용자 정보가 없습니다.\n다시 확인해 주세요.";
         } else if (failure.errorCode == "429-AUTH-09") {
-          msg = "5회 연속 인증에 실패하였습니다.잠시 후 다시 시도해 주세요.";
+          msg = "5회 연속 인증에 실패하였습니다.\n잠시 후 다시 시도해 주세요.";
         } else if (failure.errorCode == "400-AUTH-05") {
           findIdProvider.failedValidChkCertNum();
           return;
