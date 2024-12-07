@@ -15,9 +15,10 @@ class FindPasswordPage extends StatelessWidget {
     final findPasswordProvider = Provider.of<FindPasswordProvider>(context);
     return Scaffold(
       appBar: TopAppBar(
-        content: "아이디 찾기",
+        content: "비밀번호 찾기",
         onPressed: () {
-          Navigator.of(context).pop();
+          findPasswordProvider.clearProvider();
+          context.pop();
         },
       ),
       backgroundColor: Palette.bgBackGround,
@@ -101,6 +102,9 @@ class FindPasswordPage extends StatelessWidget {
                   validMessage: findPasswordProvider.phoneNumberValidMessage,
                   validFunc: findPasswordProvider.updatePhoneNumberValid,
                   isValid: findPasswordProvider.phoneNumberValid,
+                  isOtherValid: true,
+                  checkOtherValidFun:
+                      findPasswordProvider.focusPhoneNumberAndEmailEmpty,
                 ),
               ],
             ),
