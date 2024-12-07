@@ -125,8 +125,11 @@ class FindIdProvider extends ChangeNotifier with ClearText {
   void chkValidEmailAndPhoneNumber() {
     if (RegExp(r'^010\d{8}$').hasMatch(phoneNumberController.text) &&
         _phoneNumberController.text.length == 11 &&
-        _userNameValid &&
-        _phoneNumberValid) {
+        RegExp(r'^[가-힣]{1,5}$').hasMatch(userNameController.text)) {
+      _userNameValid = true;
+      _userNameMessage = '';
+      _phoneNumberValid = true;
+      _phoneNumberValidMessage = '';
       _isValidNameAndPhoneNumber = true;
     } else {
       _isValidNameAndPhoneNumber = false;
