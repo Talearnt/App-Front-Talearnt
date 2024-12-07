@@ -22,6 +22,7 @@ class FindPasswordSuccessPage extends StatelessWidget {
             'assets/icons/close.svg',
           ),
           onPressed: () {
+            findPasswordProvider.clearProvider();
             context.pop();
           },
         ),
@@ -36,25 +37,13 @@ class FindPasswordSuccessPage extends StatelessWidget {
           children: [
             const SizedBox(height: 8),
             Text(
-              '아이디 찾기 완료',
+              '비밀번호 재설정 링크 발송 완료',
               style: TextTypes.heading(color: Palette.text01),
             ),
             const SizedBox(height: 8),
-            Row(
-              children: [
-                Text(
-                  "아이디가 ",
-                  style: TextTypes.bodyMedium02(color: Palette.text02),
-                ),
-                Text(
-                  "휴대폰 번호로 발송",
-                  style: TextTypes.bodyMedium02(color: Palette.error02),
-                ),
-                Text(
-                  "되었습니다.",
-                  style: TextTypes.bodyMedium02(color: Palette.text02),
-                ),
-              ],
+            Text(
+              "인증 메일을 통해 비밀번호 재설정 후 로그인해 주세요",
+              style: TextTypes.bodyMedium02(color: Palette.text02),
             ),
             const SizedBox(height: 48),
             Container(
@@ -81,14 +70,14 @@ class FindPasswordSuccessPage extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      "${findPasswordProvider.userId.isNotEmpty ? findPasswordProvider.userId.replaceRange(findPasswordProvider.userId.indexOf('@') - 3, findPasswordProvider.userId.indexOf('@'), '***') : ""} 입니다.",
+                      "",
                       style: TextTypes.bodyLarge02(
                         color: Palette.text01,
                       ),
                     ),
                     const SizedBox(height: 12),
                     Text(
-                      "${findPasswordProvider.createdAt}에 발송",
+                      "",
                       style: TextTypes.caption02(
                         color: Palette.text03,
                       ),
