@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'dart:async';
 import '../clear_text.dart';
 
 class FindIdProvider extends ChangeNotifier with ClearText {
@@ -20,6 +20,7 @@ class FindIdProvider extends ChangeNotifier with ClearText {
   String _certValidMessage = '';
   int _certNumberCount = 0;
   ValueNotifier<int> _certNumSecond = ValueNotifier<int>(600);
+  Timer? _timer;
 
   bool _isValidNameAndPhoneNumber = false;
 
@@ -135,7 +136,6 @@ class FindIdProvider extends ChangeNotifier with ClearText {
 
   void sendCertNum() {
     _isCertSend = true;
-    print(_isCertSend);
     notifyListeners();
   }
 
@@ -159,5 +159,25 @@ class FindIdProvider extends ChangeNotifier with ClearText {
     _certNumberValid = false;
     _certValidMessage = "인증번호가 일치하지 않습니다 ($certNumberCount/5)";
     notifyListeners();
+  }
+
+  void startCountdown() {
+    Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (_certNumSecond.value > 0) {
+        _certNumSecond.value -= 1;
+      } else {
+        timer.cancel();
+      }
+    });
+  }
+
+  void stopTimer() {
+    _timer?.cancel();
+    _timer = null;
+  }
+
+  void resetTimer() {
+    stopTimer();
+    _certNumSecond = ValueNotifier<int>(600);
   }
 }

@@ -109,6 +109,8 @@ class _FindIdViewState extends State<FindIdPage> {
                   validFunc: findIdprovider.updatePhoneNumberValid,
                   validMessage: findIdprovider.phoneNumberValidMessage,
                   isValid: findIdprovider.phoneNumberValid,
+                  isInfo: findIdprovider.phoneNumberFocusNode.hasFocus,
+                  infoMessage: "01012345678 형식으로 입력해 주세요",
                 ),
                 const SizedBox(
                   height: 24,
@@ -195,6 +197,7 @@ class _FindIdViewState extends State<FindIdPage> {
                             findIdprovider.certNumberController.text);
 
                         if (findIdprovider.userId.isNotEmpty) {
+                          findIdprovider.resetTimer();
                           context.go('/find-id-success');
                         }
                       },
