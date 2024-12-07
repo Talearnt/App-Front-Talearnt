@@ -2,6 +2,7 @@ import 'package:app_front_talearnt/common/theme.dart';
 import 'package:app_front_talearnt/common/widget/bottom_btn.dart';
 import 'package:app_front_talearnt/common/widget/default_text_field.dart';
 import 'package:app_front_talearnt/common/widget/top_app_bar.dart';
+import 'package:app_front_talearnt/view_model/auth_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:app_front_talearnt/provider/auth/find_password_provider.dart';
@@ -13,6 +14,7 @@ class FindPasswordPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final findPasswordProvider = Provider.of<FindPasswordProvider>(context);
+    final authViewModel = Provider.of<AuthViewModel>(context);
     return Scaffold(
       appBar: TopAppBar(
         content: "비밀번호 찾기",
@@ -114,8 +116,15 @@ class FindPasswordPage extends StatelessWidget {
             mediaBottom: MediaQuery.of(context).viewInsets.bottom,
             content: '비밀번호 찾기',
             isEnabled: findPasswordProvider.isValidEmailAndPhoneNumber,
-            onPressed: () {
-              context.go('/find-password-success');
+            onPressed: () async {
+              await authViewModel.sendResetPasswordEmail(
+                  context,
+                  findPasswordProvider.emailController.text,
+                  findPasswordProvider.phoneNumberController.text);
+
+              if (findPasswordProvider.userId.isNotEmpty) {
+                context.go('/find-password-success');
+              }
             },
           )
         ],
