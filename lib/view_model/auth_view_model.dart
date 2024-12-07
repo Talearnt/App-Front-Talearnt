@@ -74,6 +74,7 @@ class AuthViewModel extends ChangeNotifier {
       },
       (res) {
         findIdProvider.sendCertNum();
+        findIdProvider.startCountdown();
       },
     );
   }
@@ -114,6 +115,8 @@ class AuthViewModel extends ChangeNotifier {
       },
       (token) {
         findIdProvider.reSendCertNum();
+        findIdProvider.resetTimer();
+        findIdProvider.startCountdown();
       },
     );
   }
