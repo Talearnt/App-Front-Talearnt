@@ -11,16 +11,8 @@ import 'package:provider/provider.dart';
 
 import '../../../view_model/auth_view_model.dart';
 
-class FindIdPage extends StatefulWidget {
+class FindIdPage extends StatelessWidget {
   const FindIdPage({super.key});
-
-  @override
-  State<FindIdPage> createState() => _FindIdViewState();
-}
-
-class _FindIdViewState extends State<FindIdPage> {
-  final phoneNumberController = TextEditingController();
-  final authNumberController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
