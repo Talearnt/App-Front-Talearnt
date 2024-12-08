@@ -30,10 +30,23 @@ class AuthViewModel extends ChangeNotifier {
   Future<void> createRandomNickName() async {
     final result = await authRepository.createRandomNickName();
     result.fold(
-      (failure) => loginProvider.updateLoginFormFail(failure.errorMessage),
+      (failure) => {}, //dialog 띄워줘야됨
       (nickName) {
         signUpProvider.setNickName(nickName);
       },
     );
+  }
+
+  Future<void> checkNickNameDuplication(String? nickName) async {
+    if (signUpProvider.changeNickName) {
+      signUpProvider.updateNickNameChange(false);
+      final result = await authRepository.checkNickNameDuplication(nickName!);
+      result.fold(
+        (failure) => {}, //여기도 dialog 띄우기
+        (isNickNameDuplication) {
+          signUpProvider.checkNickNameDuplication(isNickNameDuplication);
+        },
+      );
+    }
   }
 }

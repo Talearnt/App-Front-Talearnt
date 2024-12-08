@@ -69,8 +69,8 @@ class CommonProvider with ChangeNotifier {
   void validateName(TextEditingController textEditingController, bool hasFocus,
       Function(String) callback) {
     if (!hasFocus) {
-      RegExp(r'^[가-힣]{1,5}$').hasMatch(textEditingController.text) == false
-          ? callback('이름은 최대 5글자, 한글만 가능합니다.')
+      RegExp(r'^[가-힣]{2,5}$').hasMatch(textEditingController.text) == false
+          ? callback('이름은 최소 2글자에서 최대 5글자까지, 한글만 입력 가능합니다.')
           : callback('');
       notifyListeners();
     }

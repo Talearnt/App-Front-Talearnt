@@ -115,6 +115,7 @@ class SignUpMainPage extends StatelessWidget {
                               onPressed: () {
                                 //인증검증
                                 //인증 완료되면 다음 페이지로 넘어감
+                                signUpProvider.finishCheckCertNum();
                                 signUpProvider.pageController.nextPage(
                                   duration: const Duration(milliseconds: 300),
                                   curve: Curves.ease,

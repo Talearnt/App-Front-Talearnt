@@ -30,6 +30,7 @@ class SignUpSub2Page extends StatelessWidget {
           type: 'default',
           keyboardType: 'num',
           hint: '01012345678',
+          isEnabled: signUpProvider.isPhoneNumEnabled,
           textEditingController: signUpProvider.phoneNumController,
           onChanged: (value) {
             signUpProvider.updatePhoneNumController();
@@ -58,6 +59,7 @@ class SignUpSub2Page extends StatelessWidget {
                 timeSeconds: signUpProvider.certTimerSeconds,
                 keyboardType: 'num',
                 hint: '인증 번호를 입력해 주세요.',
+                isEnabled: signUpProvider.isCertNumEnabled,
                 textEditingController: signUpProvider.certNumController,
                 onChanged: (value) {
                   signUpProvider
