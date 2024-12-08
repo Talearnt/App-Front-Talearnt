@@ -4,7 +4,7 @@ import 'package:app_front_talearnt/data/model/respone/token.dart';
 import 'package:app_front_talearnt/data/services/dio_service.dart';
 import 'package:app_front_talearnt/data/model/param/find_id_param.dart';
 import 'package:app_front_talearnt/data/model/param/send_cert_number_param.dart';
-import 'package:app_front_talearnt/data/model/respone/userIdInfo.dart';
+import 'package:app_front_talearnt/data/model/respone/user_id_info.dart';
 import 'package:dartz/dartz.dart';
 
 import '../../utils/api_constants.dart';
