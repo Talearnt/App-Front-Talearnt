@@ -32,7 +32,6 @@ class AuthViewModel extends ChangeNotifier {
     this.findPasswordProvider,
   );
 
-  // API 데이터 요청을 시뮬레이션하는 메서드
   Future<void> login(String email, String pw) async {
     LoginParam param = LoginParam(userId: email, pw: pw);
     final result = await authRepository.login(param);
