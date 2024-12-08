@@ -1,107 +1,90 @@
-import 'package:app_front_talearnt/common/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:app_front_talearnt/common/theme.dart';
 
 class ToastMessage {
-  static void show(BuildContext context, String message) {
-    final overlay = Overlay.of(context);
-    late OverlayEntry overlayEntry;
-
-    overlayEntry = OverlayEntry(
-      builder: (context) => _ToastWidget(
-        message: message,
-        onFadeOutComplete: () {
-          overlayEntry.remove();
-        },
+  static Widget _buildFirstToast(String message, BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 24.0),
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 14.0),
+      decoration: BoxDecoration(
+        color: Palette.bgBlack01,
+        borderRadius: BorderRadius.circular(8.0),
       ),
-    );
-
-    overlay.insert(overlayEntry);
-  }
-}
-
-class _ToastWidget extends StatefulWidget {
-  final String message;
-  final VoidCallback onFadeOutComplete;
-
-  const _ToastWidget({
-    Key? key,
-    required this.message,
-    required this.onFadeOutComplete,
-  }) : super(key: key);
-
-  @override
-  State<_ToastWidget> createState() => _ToastWidgetState();
-}
-
-class _ToastWidgetState extends State<_ToastWidget>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _fadeAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 300),
-      reverseDuration: const Duration(milliseconds: 300),
-      vsync: this,
-    );
-    _fadeAnimation = CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeInOut,
-    );
-
-    _controller.forward();
-
-    Future.delayed(Duration(milliseconds: (1.5 * 1000).toInt()), () {
-      _controller.reverse().then((_) {
-        widget.onFadeOutComplete();
-      });
-    });
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Positioned(
-      bottom: 46.0,
-      left: 24.0,
-      right: 24.0,
-      child: FadeTransition(
-        opacity: _fadeAnimation,
-        child: Material(
-          color: Colors.transparent,
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
-            decoration: BoxDecoration(
-              color: Palette.bgBlack01,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                SvgPicture.asset(
-                  'assets/icons/finish.svg',
-                ),
-                const SizedBox(
-                  width: 8,
-                ),
-                Text(
-                  widget.message,
-                  style: TextTypes.caption01(color: Palette.bgBackGround),
-                  textAlign: TextAlign.center,
-                ),
-              ],
+      width: MediaQuery.of(context).size.width,
+      child: Row(
+        children: [
+          SvgPicture.asset('assets/icons/finish.svg'),
+          const SizedBox(
+            width: 8,
+          ),
+          Text(
+            message,
+            textAlign: TextAlign.center,
+            style: TextTypes.caption01(
+              color: Palette.bgBackGround,
             ),
           ),
+        ],
+      ),
+    );
+  }
+
+  static Widget _buildSecondToast(String message) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 48.0, vertical: 14.0),
+      decoration: BoxDecoration(
+        color: Palette.bgBlack01,
+        borderRadius: BorderRadius.circular(100.0),
+      ),
+      child: Text(
+        message,
+        style: TextTypes.caption01(
+          color: Palette.bgBackGround,
         ),
       ),
     );
+  }
+
+  static void show({
+    required BuildContext context,
+    required String message,
+    required int type,
+    required double bottom, // 기존 하단 위치 값
+  }) {
+    final mediaBottom = MediaQuery.of(context).viewInsets.bottom; // 키보드 높이
+
+    // 키보드가 올라오면 `bottom`을 키보드 높이에 맞게 조정
+    final adjustedBottom = bottom + mediaBottom;
+
+    final overlay = Overlay.of(context);
+
+    final entry = OverlayEntry(
+      builder: (context) {
+        return Stack(
+          children: [
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding:
+                    EdgeInsets.only(bottom: adjustedBottom), // 수정된 bottom 값 사용
+                child: Material(
+                  color: Colors.transparent,
+                  child: type == 1
+                      ? _buildFirstToast(message, context)
+                      : _buildSecondToast(message),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+
+    overlay.insert(entry);
+
+    Future.delayed(const Duration(seconds: 2), () {
+      entry.remove();
+    });
   }
 }
