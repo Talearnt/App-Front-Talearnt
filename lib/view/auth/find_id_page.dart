@@ -5,8 +5,8 @@ import 'package:app_front_talearnt/common/widget/default_text_field.dart';
 import 'package:app_front_talearnt/common/widget/top_app_bar.dart';
 import 'package:app_front_talearnt/provider/auth/find_id_provider.dart';
 import 'package:app_front_talearnt/provider/common/common_provider.dart';
-import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../../view_model/auth_view_model.dart';
@@ -128,7 +128,7 @@ class FindIdPage extends StatelessWidget {
                         type: 'cert',
                         hint: '인증번호를 입력해주세요.',
                         textEditingController:
-                        findIdprovider.certNumberController,
+                            findIdprovider.certNumberController,
                         keyboardType: "num",
                         onChanged: (value) {},
                         provider: findIdprovider,
@@ -180,41 +180,35 @@ class FindIdPage extends StatelessWidget {
             builder: (subContext, commonProvider, child) {
               return findIdprovider.isCertSend
                   ? BottomBtn(
-                mediaBottom: MediaQuery
-                    .of(context)
-                    .viewInsets
-                    .bottom,
-                content: '인증번호',
-                isEnabled: true,
-                onPressed: () async {
-                  await authViewModel.findUserIdInfo(
-                      context,
-                      findIdprovider.phoneNumberController.text,
-                      findIdprovider.certNumberController.text);
+                      mediaBottom: MediaQuery.of(context).viewInsets.bottom,
+                      content: '인증번호',
+                      isEnabled: true,
+                      onPressed: () async {
+                        await authViewModel.findUserIdInfo(
+                            context,
+                            findIdprovider.phoneNumberController.text,
+                            findIdprovider.certNumberController.text);
 
-                  if (findIdprovider.userId.isNotEmpty) {
-                    findIdprovider.resetTimer();
-                    context.go('/find-id-success');
-                  }
-                },
-              )
+                        if (findIdprovider.userId.isNotEmpty) {
+                          findIdprovider.resetTimer();
+                          context.go('/find-id-success');
+                        }
+                      },
+                    )
                   : BottomBtn(
-                mediaBottom: MediaQuery
-                    .of(context)
-                    .viewInsets
-                    .bottom,
-                content: '인증번호 발송',
-                isEnabled: findIdprovider.isValidNameAndPhoneNumber,
-                onPressed: findIdprovider.isValidNameAndPhoneNumber
-                    ? () async {
-                  await authViewModel.sendCertNum(
-                      context,
+                      mediaBottom: MediaQuery.of(context).viewInsets.bottom,
+                      content: '인증번호 발송',
+                      isEnabled: findIdprovider.isValidNameAndPhoneNumber,
+                      onPressed: findIdprovider.isValidNameAndPhoneNumber
+                          ? () async {
+                              await authViewModel.sendCertNum(
+                                  context,
                                   'findId',
-                      findIdprovider.userNameController.text,
-                      findIdprovider.phoneNumberController.text);
-                }
-                    : () {},
-              );
+                                  findIdprovider.userNameController.text,
+                                  findIdprovider.phoneNumberController.text);
+                            }
+                          : () {},
+                    );
             },
           )
         ],

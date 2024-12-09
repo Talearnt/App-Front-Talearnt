@@ -1,3 +1,4 @@
+import 'package:app_front_talearnt/data/model/param/agree_req_dto.dart';
 import 'package:app_front_talearnt/data/model/param/login_param.dart';
 import 'package:app_front_talearnt/data/model/param/send_cert_number_param.dart';
 import 'package:app_front_talearnt/data/model/param/send_reset_password_mail_param.dart';
@@ -10,7 +11,6 @@ import 'package:flutter/material.dart';
 
 import '../common/widget/button.dart';
 import '../common/widget/dialog.dart';
-import '../data/model/param/agree_req_dto.dart';
 import '../data/model/param/sign_up_param.dart';
 import '../data/model/param/sms_validation_param.dart';
 import '../data/repositories/auth_repository.dart';
