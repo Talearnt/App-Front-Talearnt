@@ -160,13 +160,14 @@ class SignUpSub3Page extends StatelessWidget {
                 signUpProvider.updateController(signUpProvider.emailController);
               },
               provider: signUpProvider,
-              validType: 'email',
+              validType: 'signUpEmail',
               focusNode: signUpProvider.emailFocusNode,
               validFunc: signUpProvider.updateEmailValid,
               validMessage: signUpProvider.emailValidMessage,
               isValid: signUpProvider.emailValid,
               isOtherValid: true,
               checkOtherValidFun: signUpProvider.checkBeforeEmailValid,
+              onServerCheck: authViewModel.checkEmailDuplication,
             ),
             const SizedBox(height: 24.0),
             const TextFieldLabel(

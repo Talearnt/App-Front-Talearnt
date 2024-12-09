@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../common/theme.dart';
+import '../../common/widget/button.dart';
 import '../../common/widget/default_text_field.dart';
 import '../../common/widget/text_field_label.dart';
+import '../../view_model/auth_view_model.dart';
 
 class SignUpSub2Page extends StatelessWidget {
   const SignUpSub2Page({super.key});
@@ -12,6 +14,7 @@ class SignUpSub2Page extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final signUpProvider = Provider.of<SignUpProvider>(context);
+    final authViewModel = Provider.of<AuthViewModel>(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -33,7 +36,7 @@ class SignUpSub2Page extends StatelessWidget {
           isEnabled: signUpProvider.isPhoneNumEnabled,
           textEditingController: signUpProvider.phoneNumController,
           onChanged: (value) {
-            signUpProvider.updatePhoneNumController();
+            signUpProvider.updateController(signUpProvider.phoneNumController);
           },
           provider: signUpProvider,
           maxTextLength: 11,
@@ -69,6 +72,8 @@ class SignUpSub2Page extends StatelessWidget {
                 focusNode: signUpProvider.certNumFocusNode,
                 maxTextLength: 4,
                 isSendAuth: signUpProvider.sendCertNum,
+                isValid: signUpProvider.cerNumValid,
+                validMessage: signUpProvider.cerNumValidMessage,
               ),
               const SizedBox(
                 height: 24,
@@ -85,12 +90,12 @@ class SignUpSub2Page extends StatelessWidget {
                   children: [
                     Text('인증번호가 오지 않는다면? ',
                         style: TextTypes.caption01(color: Palette.text03)),
-                    Text(
-                      '재전송',
-                      style: TextTypes.caption01(color: Palette.text03)
-                          .copyWith(
-                              decoration: TextDecoration.underline,
-                              decorationColor: Palette.text03),
+                    TextLineS(
+                      content: '재전송',
+                      onPressed: () async {
+                        await authViewModel.reSendCertNum(context, 'signUp',
+                            null, signUpProvider.phoneNumController.text);
+                      },
                     )
                   ],
                 ),

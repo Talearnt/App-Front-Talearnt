@@ -98,6 +98,10 @@ class BaseTextFieldState extends State<BaseTextField> {
             commonProvider.validateEmailText(widget.textEditingController,
                 focusNode.hasFocus, widget.validFunc!);
             break;
+          case 'signUpEmail':
+            commonProvider.validateSignUpEmailText(widget.textEditingController,
+                focusNode.hasFocus, widget.validFunc!, widget.onServerCheck!);
+            break;
           case 'password':
             commonProvider.validatePasswordText(widget.textEditingController,
                 focusNode.hasFocus, widget.validFunc!);

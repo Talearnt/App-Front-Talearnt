@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../clear_text.dart';
@@ -6,6 +8,7 @@ class SignUpProvider extends ChangeNotifier with ClearText {
   int _signUpPage = 0;
   final PageController _pageController = PageController();
   final ValueNotifier<int> _certTimerSeconds = ValueNotifier<int>(180);
+  Timer? _timer;
   bool _isFirstVisit = true;
 
   final TextEditingController _nickNameController = TextEditingController();
@@ -27,6 +30,7 @@ class SignUpProvider extends ChangeNotifier with ClearText {
 
   final TextEditingController _emailController = TextEditingController();
   final FocusNode _emailFocusNode = FocusNode();
+  bool _checkEmailDuplication = false; //중복체크 false - 중복아님
   bool _emailValid = true;
   String _emailValidMessage = '';
 
@@ -52,6 +56,10 @@ class SignUpProvider extends ChangeNotifier with ClearText {
   final TextEditingController _certNumController = TextEditingController();
   final FocusNode _certNumFocusNode = FocusNode();
   bool _isCertNumEnabled = true;
+  int _certNumCount = 0;
+  bool _cerNumValid = true;
+  String _cerNumValidMessage = '';
+  bool _checkSmsValidation = false;
 
   int _gender = 0;
   bool _allCheck = false;
@@ -60,7 +68,6 @@ class SignUpProvider extends ChangeNotifier with ClearText {
   bool _marketingCheck = false;
   bool _termsOfUseCheck = false;
 
-  bool _isSignUpSub2ButtonEnabled = false;
   bool _isSignUpSub2NextButtonEnabled = false;
 
   bool _sendCertNum = false;
@@ -68,6 +75,8 @@ class SignUpProvider extends ChangeNotifier with ClearText {
   int get signUpPage => _signUpPage;
 
   ValueNotifier<int> get certTimerSeconds => _certTimerSeconds;
+
+  Timer? get timer => _timer;
 
   PageController get pageController => _pageController;
 
@@ -90,7 +99,9 @@ class SignUpProvider extends ChangeNotifier with ClearText {
       _addListenerPasswordCheck;
 
   bool get isSignUpSub2ButtonEnabled =>
-      _isSignUpSub2ButtonEnabled && _phoneNumController.text.isNotEmpty;
+      _phoneNumValid &&
+      _phoneNumController.text.isNotEmpty &&
+      _phoneNumController.text.length == 11;
 
   bool get isSignUpSub2NextButtonEnabled => _isSignUpSub2NextButtonEnabled;
 
@@ -167,6 +178,14 @@ class SignUpProvider extends ChangeNotifier with ClearText {
   FocusNode get certNumFocusNode => _certNumFocusNode;
 
   bool get isCertNumEnabled => _isCertNumEnabled;
+
+  bool get cerNumValid => _cerNumValid;
+
+  String get cerNumValidMessage => _cerNumValidMessage;
+
+  int get certNumCount => _certNumCount;
+
+  bool get checkSmsValidation => _checkSmsValidation;
 
   int get gender => _gender;
 
@@ -283,6 +302,19 @@ class SignUpProvider extends ChangeNotifier with ClearText {
     } else {
       _nickNameValid = true;
       _nickNameValidMessage = "";
+    }
+
+    notifyListeners();
+  }
+
+  void checkEmailDuplication(bool isUserIdDuplication) {
+    _checkEmailDuplication = isUserIdDuplication;
+    if (_checkEmailDuplication) {
+      _emailValid = false;
+      _emailValidMessage = "이미 가입된 이메일 주소입니다. 다시 확인해 주세요";
+    } else {
+      _emailValid = true;
+      _emailValidMessage = "";
     }
 
     notifyListeners();
@@ -429,16 +461,6 @@ class SignUpProvider extends ChangeNotifier with ClearText {
     notifyListeners();
   }
 
-  void updatePhoneNumController() {
-    if (_phoneNumController.text.isNotEmpty &&
-        _phoneNumController.text.length == 11) {
-      _isSignUpSub2ButtonEnabled = true;
-    } else {
-      _isSignUpSub2ButtonEnabled = false;
-    }
-    notifyListeners();
-  }
-
   void updateSendCertNum() {
     _sendCertNum = true;
     notifyListeners();
@@ -467,6 +489,45 @@ class SignUpProvider extends ChangeNotifier with ClearText {
     _isPhoneNumEnabled = false;
     _isCertNumEnabled = false;
     notifyListeners();
+  }
+
+  void updateSmsValidation(bool result) {
+    _checkSmsValidation = result;
+    notifyListeners();
+  }
+
+  void failedValidChkCertNum() {
+    _certNumCount++;
+    _cerNumValid = false;
+    _cerNumValidMessage = "인증번호가 일치하지 않습니다 ($certNumCount/5)";
+    notifyListeners();
+  }
+
+  void reSendCertNum() {
+    _certNumCount = 0;
+    _cerNumValid = true;
+    _cerNumValidMessage = '';
+    notifyListeners();
+  }
+
+  void startTimer() {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (_certTimerSeconds.value > 0) {
+        _certTimerSeconds.value -= 1;
+      } else {
+        timer.cancel();
+      }
+    });
+  }
+
+  void resetTimer(int timeSeconds) {
+    stopTimer();
+    _certTimerSeconds.value = timeSeconds;
+  }
+
+  void stopTimer() {
+    _timer?.cancel();
+    _timer = null;
   }
 
   void resetSignUp() {
@@ -504,10 +565,14 @@ class SignUpProvider extends ChangeNotifier with ClearText {
     _emailFocusNode.unfocus();
     _passwordFocusNode.unfocus();
     _phoneNumFocusNode.unfocus();
-    _certNumFocusNode.unfocus();
-    _isFirstVisit = true;
     _isPhoneNumEnabled = true;
+    _isFirstVisit = true;
+    _certNumFocusNode.unfocus();
     _isCertNumEnabled = true;
+    _certNumCount = 0;
+    _cerNumValid = true;
+    _cerNumValidMessage = '';
+    _checkSmsValidation = false;
     notifyListeners();
   }
 }
