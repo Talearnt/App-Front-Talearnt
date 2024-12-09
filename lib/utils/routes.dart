@@ -1,3 +1,5 @@
+import 'package:app_front_talearnt/view/auth/find_id_page.dart';
+import 'package:app_front_talearnt/view/auth/find_id_success_page.dart';
 import 'package:app_front_talearnt/view/auth/find_password_page.dart';
 import 'package:app_front_talearnt/view/auth/find_password_success_page.dart';
 import 'package:app_front_talearnt/view/auth/reset_password_page.dart';
@@ -17,6 +19,18 @@ class Routes {
           return const LoginPage();
         },
         routes: <RouteBase>[
+          GoRoute(
+            path: '/find-id',
+            builder: (BuildContext context, GoRouterState state) {
+              return const FindIdPage();
+            },
+          ),
+          GoRoute(
+            path: '/find-id-success',
+            builder: (BuildContext context, GoRouterState state) {
+              return const FindIdSuccessPage();
+            },
+          ),
           GoRoute(
             path: '/find-password',
             builder: (BuildContext context, GoRouterState state) {

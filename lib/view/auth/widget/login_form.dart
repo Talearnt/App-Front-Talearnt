@@ -89,7 +89,9 @@ class LoginForm extends StatelessWidget {
               Row(
                 children: [
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      context.push('/find-id');
+                    },
                     style: ButtonStyle(
                       padding: WidgetStateProperty.all(EdgeInsets.zero),
                       overlayColor: WidgetStateProperty.all(Colors.transparent),
