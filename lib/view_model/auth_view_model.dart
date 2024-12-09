@@ -2,14 +2,12 @@ import 'package:app_front_talearnt/common/widget/button.dart';
 import 'package:app_front_talearnt/common/widget/dialog.dart';
 import 'package:app_front_talearnt/data/model/param/login_param.dart';
 import 'package:app_front_talearnt/data/model/param/send_reset_password_mail_param.dart';
-import 'package:app_front_talearnt/data/model/respone/send_mail_info.dart';
 import 'package:app_front_talearnt/provider/auth/login_provider.dart';
 import 'package:app_front_talearnt/provider/auth/find_password_provider.dart';
 import 'package:app_front_talearnt/data/model/param/send_cert_number_param.dart';
 import 'package:app_front_talearnt/data/model/param/find_id_param.dart';
 import 'package:app_front_talearnt/provider/auth/find_id_provider.dart';
 import 'package:app_front_talearnt/utils/token_manager.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 import '../data/repositories/auth_repository.dart';
@@ -21,13 +19,8 @@ class AuthViewModel extends ChangeNotifier {
   final TokenManager tokenManager;
   final FindPasswordProvider findPasswordProvider;
 
-  AuthViewModel(
-    this.loginProvider,
-    this.authRepository,
-    this.tokenManager,
-    this.findIdProvider,
-    this.findPasswordProvider
-  );
+  AuthViewModel(this.loginProvider, this.authRepository, this.tokenManager,
+      this.findIdProvider, this.findPasswordProvider);
 
   // API 데이터 요청을 시뮬레이션하는 메서드
   Future<void> login(String email, String pw) async {
@@ -47,6 +40,12 @@ class AuthViewModel extends ChangeNotifier {
     SendResetPasswordMailParam body =
         SendResetPasswordMailParam(phoneNumber: phoneNumber);
     final result = await authRepository.sendResetPasswordMail(body, email);
+
+    (sendMailInfo) {
+      findPasswordProvider.setFindedUserIdInfo(
+          sendMailInfo.userId, sendMailInfo.createdAt);
+    };
+  }
 
   Future<void> sendCertNum(
       BuildContext context, String userName, String phoneNumber) async {
@@ -70,13 +69,6 @@ class AuthViewModel extends ChangeNotifier {
               Navigator.of(context).pop();
             },
           ),
-          timer: false,
-        );
-        return;
-      },
-      (sendMailInfo) {
-        findPasswordProvider.setFindedUserIdInfo(
-            sendMailInfo.userId, sendMailInfo.createdAt);
           timer: false, // 타이머 여부 설정
         );
         return; // 다이얼로그를 띄운 후 종료

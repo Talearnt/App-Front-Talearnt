@@ -26,7 +26,8 @@ class AuthRepository {
         ApiConstants.getFineUserPwUrl(email), body.toJson(), null);
     return result.fold(
         left, (response) => right(SendMailInfo.fromJson(response)));
-    
+  }
+
   Future<Either<Failure, Success>> sendCertNumber(
       SendCertNumberParam body) async {
     final result =
