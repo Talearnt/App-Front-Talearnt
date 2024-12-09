@@ -1,4 +1,8 @@
+import 'package:app_front_talearnt/common/widget/button.dart';
+import 'package:app_front_talearnt/common/widget/dialog.dart';
 import 'package:app_front_talearnt/data/model/param/login_param.dart';
+import 'package:app_front_talearnt/data/model/param/send_cert_number_param.dart';
+import 'package:app_front_talearnt/data/model/param/send_reset_password_mail_param.dart';
 import 'package:app_front_talearnt/provider/auth/find_id_provider.dart';
 import 'package:app_front_talearnt/provider/auth/find_password_provider.dart';
 import 'package:app_front_talearnt/provider/auth/login_provider.dart';
@@ -6,11 +10,7 @@ import 'package:app_front_talearnt/provider/auth/sign_up_provider.dart';
 import 'package:app_front_talearnt/utils/token_manager.dart';
 import 'package:flutter/material.dart';
 
-import '../common/widget/button.dart';
-import '../common/widget/dialog.dart';
 import '../data/model/param/agree_req_dto.dart';
-import '../data/model/param/send_cert_number_param.dart';
-import '../data/model/param/send_reset_password_mail_param.dart';
 import '../data/model/param/sign_up_param.dart';
 import '../data/model/param/sms_validation_param.dart';
 import '../data/repositories/auth_repository.dart';
@@ -274,6 +274,18 @@ class AuthViewModel extends ChangeNotifier {
             userIdInfo.userId, userIdInfo.createdAt);
       },
     );
+  }
+
+  Future<void> sendResetPasswordEmail(
+      BuildContext context, String email, String phoneNumber) async {
+    SendResetPasswordMailParam body =
+        SendResetPasswordMailParam(phoneNumber: phoneNumber);
+    final result = await authRepository.sendResetPasswordMail(body, email);
+
+    (sendMailInfo) {
+      findPasswordProvider.setFindedUserIdInfo(
+          sendMailInfo.userId, sendMailInfo.createdAt);
+    };
   }
 
   String getGender(int gender) {
