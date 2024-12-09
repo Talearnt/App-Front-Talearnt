@@ -5,7 +5,13 @@ import 'package:app_front_talearnt/common/widget/top_app_bar.dart';
 import 'package:app_front_talearnt/provider/auth/find_password_provider.dart';
 import 'package:app_front_talearnt/view_model/auth_view_model.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_routride
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+
+class FindPasswordPage extends StatelessWidget {
+  const FindPasswordPage({super.key});
+
+  @override
   Widget build(BuildContext context) {
     final findPasswordProvider = Provider.of<FindPasswordProvider>(context);
     final authViewModel = Provider.of<AuthViewModel>(context);

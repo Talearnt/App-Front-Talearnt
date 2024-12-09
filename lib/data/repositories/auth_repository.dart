@@ -6,7 +6,6 @@ import 'package:app_front_talearnt/data/model/respone/failure.dart';
 import 'package:app_front_talearnt/data/model/respone/send_mail_info.dart';
 import 'package:app_front_talearnt/data/model/respone/success.dart';
 import 'package:app_front_talearnt/data/model/respone/token.dart';
-import 'package:app_front_talearnt/data/model/respone/userIdInfo.dart';
 import 'package:app_front_talearnt/data/model/respone/user_id_info.dart';
 import 'package:dartz/dartz.dart';
 

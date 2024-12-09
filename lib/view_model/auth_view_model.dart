@@ -276,18 +276,6 @@ class AuthViewModel extends ChangeNotifier {
     );
   }
 
-  Future<void> sendResetPasswordEmail(
-      BuildContext context, String email, String phoneNumber) async {
-    SendResetPasswordMailParam body =
-        SendResetPasswordMailParam(phoneNumber: phoneNumber);
-    final result = await authRepository.sendResetPasswordMail(body, email);
-
-    (sendMailInfo) {
-      findPasswordProvider.setFindedUserIdInfo(
-          sendMailInfo.userId, sendMailInfo.createdAt);
-    };
-  }
-
   String getGender(int gender) {
     if (gender == 0) {
       return '남자';
