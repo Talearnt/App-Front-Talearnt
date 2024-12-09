@@ -1,12 +1,12 @@
 import 'package:app_front_talearnt/common/widget/default_text_field.dart';
 import 'package:app_front_talearnt/common/widget/obscure_text_field.dart';
 import 'package:app_front_talearnt/common/widget/text_field_label.dart';
-import 'package:app_front_talearnt/provider/auth/login_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../../common/theme.dart';
+import '../../../provider/auth/login_provider.dart';
 import '../../../view_model/auth_view_model.dart';
 
 class LoginForm extends StatelessWidget {

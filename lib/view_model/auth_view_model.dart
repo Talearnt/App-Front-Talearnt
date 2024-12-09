@@ -1,6 +1,6 @@
-import 'package:app_front_talearnt/data/model/param/agree_req_dto.dart';
 import 'package:app_front_talearnt/data/model/param/login_param.dart';
 import 'package:app_front_talearnt/provider/auth/find_id_provider.dart';
+import 'package:app_front_talearnt/provider/auth/find_password_provider.dart';
 import 'package:app_front_talearnt/provider/auth/login_provider.dart';
 import 'package:app_front_talearnt/provider/auth/sign_up_provider.dart';
 import 'package:app_front_talearnt/utils/token_manager.dart';
@@ -8,7 +8,9 @@ import 'package:flutter/material.dart';
 
 import '../common/widget/button.dart';
 import '../common/widget/dialog.dart';
+import '../data/model/param/agree_req_dto.dart';
 import '../data/model/param/send_cert_number_param.dart';
+import '../data/model/param/send_reset_password_mail_param.dart';
 import '../data/model/param/sign_up_param.dart';
 import '../data/model/param/sms_validation_param.dart';
 import '../data/repositories/auth_repository.dart';
@@ -19,6 +21,7 @@ class AuthViewModel extends ChangeNotifier {
   final FindIdProvider findIdProvider;
   final AuthRepository authRepository;
   final TokenManager tokenManager;
+  final FindPasswordProvider findPasswordProvider;
 
   AuthViewModel(
     this.loginProvider,
@@ -26,6 +29,7 @@ class AuthViewModel extends ChangeNotifier {
     this.authRepository,
     this.tokenManager,
     this.findIdProvider,
+    this.findPasswordProvider,
   );
 
   Future<void> login(String email, String pw) async {
@@ -69,6 +73,39 @@ class AuthViewModel extends ChangeNotifier {
         (isUserIdDuplication) {
       signUpProvider.checkEmailDuplication(isUserIdDuplication);
     });
+  }
+
+  Future<void> sendResetPasswordEmail(
+      BuildContext context, String email, String phoneNumber) async {
+    SendResetPasswordMailParam body =
+        SendResetPasswordMailParam(phoneNumber: phoneNumber);
+    final result = await authRepository.sendResetPasswordMail(body, email);
+
+    result.fold(
+      (failure) {
+        String msg = "알 수 없는 이유로\n인증번호 재발송에 실패하였습니다.\n다시 시도해 주세요.";
+        if (failure.errorCode == "404-USER-01") {
+          msg = "일치하는 사용자 정보가 없습니다.\n다시 확인해 주세요.";
+        }
+
+        SingleBtnDialog.show(
+          context,
+          content: msg,
+          button: PrimaryM(
+            content: '확인',
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          timer: false,
+        );
+        return;
+      },
+      (sendMailInfo) {
+        findPasswordProvider.setFindedUserIdInfo(
+            sendMailInfo.userId, sendMailInfo.createdAt);
+      },
+    );
   }
 
   Future<void> sendCertNum(BuildContext context, String type, String? userName,

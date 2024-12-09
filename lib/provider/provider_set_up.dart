@@ -29,6 +29,8 @@ class ProviderSetup extends StatelessWidget {
         ChangeNotifierProvider<KakaoProvider>(create: (_) => KakaoProvider()),
         ChangeNotifierProvider<SignUpProvider>(create: (_) => SignUpProvider()),
         ChangeNotifierProvider<FindIdProvider>(create: (_) => FindIdProvider()),
+        ChangeNotifierProvider<FindPasswordProvider>(
+            create: (_) => FindPasswordProvider()),
         ChangeNotifierProvider<AuthViewModel>(
           create: (context) => AuthViewModel(
             context.read<LoginProvider>(),
@@ -36,6 +38,7 @@ class ProviderSetup extends StatelessWidget {
             AuthRepository(),
             TokenManager(Token.empty()),
             context.read<FindIdProvider>(),
+            context.read<FindPasswordProvider>(),
           ),
         ),
       ],

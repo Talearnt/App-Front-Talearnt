@@ -1,11 +1,10 @@
 import 'package:app_front_talearnt/common/theme.dart';
 import 'package:app_front_talearnt/common/widget/button.dart';
-import 'package:app_front_talearnt/provider/auth/find_password_provider.dart';
 import 'package:app_front_talearnt/common/widget/top_app_bar.dart';
-import 'package:app_front_talearnt/view/auth/reset_password_page.dart';
+import 'package:app_front_talearnt/provider/auth/find_password_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class FindPasswordSuccessPage extends StatelessWidget {
@@ -70,14 +69,14 @@ class FindPasswordSuccessPage extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      "",
+                      "${findPasswordProvider.userId.isNotEmpty ? findPasswordProvider.userId.replaceRange(findPasswordProvider.userId.indexOf('@') - 3, findPasswordProvider.userId.indexOf('@'), '***') : ""} 입니다.",
                       style: TextTypes.bodyLarge02(
                         color: Palette.text01,
                       ),
                     ),
                     const SizedBox(height: 12),
                     Text(
-                      "",
+                      "${findPasswordProvider.createdAt} 발송",
                       style: TextTypes.caption02(
                         color: Palette.text03,
                       ),
@@ -93,7 +92,7 @@ class FindPasswordSuccessPage extends StatelessWidget {
                   child: PrimaryM(
                     content: "로그인",
                     onPressed: () {
-                      context.go('/reset-password');
+                      context.pop();
                     },
                   ),
                 ),

@@ -30,24 +30,41 @@ class FindPasswordProvider extends ChangeNotifier with ClearText {
   bool _isValidEmailAndPhoneNumber = false;
   bool _isVaildNewPassword = false;
 
+  String _userId = '';
+  String _createdAt = '';
+
   TextEditingController get emailController => _emailController;
+
   TextEditingController get phoneNumberController => _phoneNumberController;
+
   TextEditingController get passwordController => _passwordController;
+
   TextEditingController get passwordCheckController => _passwordCheckController;
 
   FocusNode get emailFocusNode => _emailFocusNode;
+
   FocusNode get phoneNumberFocusNode => _phoneNumberFocusNode;
+
   FocusNode get passwordFocusNode => _passwordFocusNode;
+
   FocusNode get passwordCheckFocusNode => _passwordCheckFocusNode;
 
   bool get emailValid => _emailValid;
+
   bool get phoneNumberValid => _phoneNumberValid;
+
   bool get passwordValid => _passwordValid;
+
   bool get passwordCheckValid => _passwordCheckValid;
 
+  bool get addListenerPasswordCheck => _addListenerPasswordCheck;
+
   String get emailValidMessage => _emailValidMessage;
+
   String get phoneNumberValidMessage => _phoneNumberValidMessage;
+
   String get passwordValidMessage => _passwordValidMessage;
+
   String get passwordCheckValidMessage => _passwordCheckValidMessage;
 
   bool get isValidEmailAndPhoneNumber => _isValidEmailAndPhoneNumber;
@@ -55,9 +72,13 @@ class FindPasswordProvider extends ChangeNotifier with ClearText {
   bool get isVaildNewPassword => _isVaildNewPassword;
 
   bool get passwordObscure => _passwordObscure;
+
   bool get passwordCheckObscure => _passwordCheckObscure;
 
-  @override
+  String get userId => _userId;
+
+  String get createdAt => _createdAt;
+
   void clearProvider() {
     _emailController.clear();
     _phoneNumberController.clear();
@@ -83,6 +104,9 @@ class FindPasswordProvider extends ChangeNotifier with ClearText {
     _phoneNumberValidMessage = '';
     _passwordValidMessage = '';
     _passwordCheckValidMessage = '';
+
+    _userId = '';
+    _createdAt = '';
   }
 
   @override
@@ -225,5 +249,11 @@ class FindPasswordProvider extends ChangeNotifier with ClearText {
       _emailValid = true;
       _emailValidMessage = "";
     }
+  }
+
+  void setFindedUserIdInfo(String userId, String createdAt) {
+    _userId = userId;
+    _createdAt = createdAt;
+    notifyListeners();
   }
 }
