@@ -30,6 +30,9 @@ class FindPasswordProvider extends ChangeNotifier with ClearText {
   bool _isValidEmailAndPhoneNumber = false;
   bool _isVaildNewPassword = false;
 
+  String _userId = '';
+  String _createdAt = '';
+
   TextEditingController get emailController => _emailController;
   TextEditingController get phoneNumberController => _phoneNumberController;
   TextEditingController get passwordController => _passwordController;
@@ -57,6 +60,9 @@ class FindPasswordProvider extends ChangeNotifier with ClearText {
   bool get passwordObscure => _passwordObscure;
   bool get passwordCheckObscure => _passwordCheckObscure;
 
+  String get userId => _userId;
+  String get createdAt => _createdAt;
+
   @override
   void clearProvider() {
     _emailController.clear();
@@ -83,6 +89,9 @@ class FindPasswordProvider extends ChangeNotifier with ClearText {
     _phoneNumberValidMessage = '';
     _passwordValidMessage = '';
     _passwordCheckValidMessage = '';
+
+    _userId = '';
+    _createdAt = '';
   }
 
   @override
@@ -193,9 +202,12 @@ class FindPasswordProvider extends ChangeNotifier with ClearText {
   void chkValidEmailAndPhoneNumber() {
     if (RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
             .hasMatch(_emailController.text) &&
-        _phoneNumberController.text.length == 11 &&
-        _emailValid &&
-        _phoneNumberValid) {
+        RegExp(r'^010\d{8}$').hasMatch(_phoneNumberController.text) &&
+        _phoneNumberController.text.length == 11) {
+      _emailValid = true;
+      _emailValidMessage = '';
+      _phoneNumberValid = true;
+      _phoneNumberValidMessage = '';
       _isValidEmailAndPhoneNumber = true;
     } else {
       _isValidEmailAndPhoneNumber = false;
@@ -221,9 +233,12 @@ class FindPasswordProvider extends ChangeNotifier with ClearText {
     if (phoneNumberFocusNode.hasFocus && emailController.text.isEmpty) {
       _emailValid = false;
       _emailValidMessage = "이메일 입력은 필수입니다.";
-    } else {
-      _emailValid = true;
-      _emailValidMessage = "";
     }
+  }
+
+  void setFindedUserIdInfo(String userId, String createdAt) {
+    _userId = userId;
+    _createdAt = createdAt;
+    notifyListeners();
   }
 }

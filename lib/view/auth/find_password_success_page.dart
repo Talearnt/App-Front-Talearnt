@@ -70,14 +70,14 @@ class FindPasswordSuccessPage extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      "",
+                      "${findPasswordProvider.userId.isNotEmpty ? findPasswordProvider.userId.replaceRange(findPasswordProvider.userId.indexOf('@') - 3, findPasswordProvider.userId.indexOf('@'), '***') : ""} 입니다.",
                       style: TextTypes.bodyLarge02(
                         color: Palette.text01,
                       ),
                     ),
                     const SizedBox(height: 12),
                     Text(
-                      "",
+                      "${findPasswordProvider.createdAt} 발송",
                       style: TextTypes.caption02(
                         color: Palette.text03,
                       ),
@@ -93,7 +93,7 @@ class FindPasswordSuccessPage extends StatelessWidget {
                   child: PrimaryM(
                     content: "로그인",
                     onPressed: () {
-                      context.go('/reset-password');
+                      context.pop();
                     },
                   ),
                 ),
