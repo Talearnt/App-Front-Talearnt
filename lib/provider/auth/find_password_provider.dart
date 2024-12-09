@@ -33,6 +33,8 @@ class FindPasswordProvider extends ChangeNotifier with ClearText {
   String _userId = '';
   String _createdAt = '';
 
+  bool _loadFindPasswordSuccessPage = false;
+
   TextEditingController get emailController => _emailController;
   TextEditingController get phoneNumberController => _phoneNumberController;
   TextEditingController get passwordController => _passwordController;
@@ -63,6 +65,8 @@ class FindPasswordProvider extends ChangeNotifier with ClearText {
   String get userId => _userId;
   String get createdAt => _createdAt;
 
+  bool get loadFindPasswordSuccessPage => _loadFindPasswordSuccessPage;
+
   @override
   void clearProvider() {
     _emailController.clear();
@@ -92,6 +96,10 @@ class FindPasswordProvider extends ChangeNotifier with ClearText {
 
     _userId = '';
     _createdAt = '';
+
+    _loadFindPasswordSuccessPage = false;
+
+    notifyListeners();
   }
 
   @override
@@ -240,5 +248,9 @@ class FindPasswordProvider extends ChangeNotifier with ClearText {
     _userId = userId;
     _createdAt = createdAt;
     notifyListeners();
+  }
+
+  void afterLoad() {
+    _loadFindPasswordSuccessPage = true;
   }
 }

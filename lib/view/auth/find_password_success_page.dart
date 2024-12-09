@@ -1,5 +1,6 @@
 import 'package:app_front_talearnt/common/theme.dart';
 import 'package:app_front_talearnt/common/widget/button.dart';
+import 'package:app_front_talearnt/common/widget/toast_message.dart';
 import 'package:app_front_talearnt/provider/auth/find_password_provider.dart';
 import 'package:app_front_talearnt/common/widget/top_app_bar.dart';
 import 'package:app_front_talearnt/view/auth/reset_password_page.dart';
@@ -14,6 +15,16 @@ class FindPasswordSuccessPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final findPasswordProvider = Provider.of<FindPasswordProvider>(context);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!findPasswordProvider.loadFindPasswordSuccessPage) {
+        ToastMessage.show(
+            context: context,
+            message: '이메일  인증이 완료되었습니다.',
+            type: 1,
+            bottom: 46);
+        findPasswordProvider.afterLoad();
+      }
+    });
     return Scaffold(
       appBar: TopAppBar(
         leftIcon: false,

@@ -1,5 +1,6 @@
 import 'package:app_front_talearnt/common/widget/button.dart';
 import 'package:app_front_talearnt/common/widget/dialog.dart';
+import 'package:app_front_talearnt/common/widget/toast_message.dart';
 import 'package:app_front_talearnt/data/model/param/login_param.dart';
 import 'package:app_front_talearnt/data/model/param/send_reset_password_mail_param.dart';
 import 'package:app_front_talearnt/provider/auth/login_provider.dart';
@@ -41,10 +42,31 @@ class AuthViewModel extends ChangeNotifier {
         SendResetPasswordMailParam(phoneNumber: phoneNumber);
     final result = await authRepository.sendResetPasswordMail(body, email);
 
-    (sendMailInfo) {
-      findPasswordProvider.setFindedUserIdInfo(
-          sendMailInfo.userId, sendMailInfo.createdAt);
-    };
+    result.fold(
+      (failure) {
+        String msg = "알 수 없는 이유로\n인증번호 재발송에 실패하였습니다.\n다시 시도해 주세요.";
+        if (failure.errorCode == "404-USER-01") {
+          msg = "일치하는 사용자 정보가 없습니다.\n다시 확인해 주세요.";
+        }
+
+        SingleBtnDialog.show(
+          context,
+          content: msg,
+          button: PrimaryM(
+            content: '확인',
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          timer: false, // 타이머 여부 설정
+        );
+        return; // 다이얼로그를 띄운 후 종료
+      },
+      (sendMailInfo) {
+        findPasswordProvider.setFindedUserIdInfo(
+            sendMailInfo.userId, sendMailInfo.createdAt);
+      },
+    );
   }
 
   Future<void> sendCertNum(
@@ -109,6 +131,8 @@ class AuthViewModel extends ChangeNotifier {
         findIdProvider.reSendCertNum();
         findIdProvider.resetTimer();
         findIdProvider.startCountdown();
+        ToastMessage.show(
+            context: context, message: '인증번호를 재요청 하였습니다.', type: 2, bottom: 12);
       },
     );
   }

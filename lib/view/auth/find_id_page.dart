@@ -2,6 +2,7 @@ import 'package:app_front_talearnt/common/theme.dart';
 import 'package:app_front_talearnt/common/widget/bottom_btn.dart';
 import 'package:app_front_talearnt/common/widget/button.dart';
 import 'package:app_front_talearnt/common/widget/default_text_field.dart';
+import 'package:app_front_talearnt/common/widget/toast_message.dart';
 import 'package:app_front_talearnt/common/widget/top_app_bar.dart';
 import 'package:app_front_talearnt/provider/auth/find_id_provider.dart';
 import 'package:app_front_talearnt/provider/common/common_provider.dart';
@@ -180,7 +181,7 @@ class FindIdPage extends StatelessWidget {
               return findIdprovider.isCertSend
                   ? BottomBtn(
                       mediaBottom: MediaQuery.of(context).viewInsets.bottom,
-                      content: '인증번호',
+                      content: '인증하기',
                       isEnabled: true,
                       onPressed: () async {
                         await authViewModel.findUserIdInfo(

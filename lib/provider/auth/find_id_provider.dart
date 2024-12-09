@@ -27,6 +27,8 @@ class FindIdProvider extends ChangeNotifier with ClearText {
   String _userId = '';
   String _createdAt = '';
 
+  bool _loadFindIdSuccessPage = false;
+
   FocusNode get userNameFocusNode => _userNameFocusNode;
   FocusNode get phoneNumberFocusNode => _phoneNumberFocusNode;
   FocusNode get certFocusNode => _certFocusNode;
@@ -52,6 +54,8 @@ class FindIdProvider extends ChangeNotifier with ClearText {
 
   String get userId => _userId;
   String get createdAt => _createdAt;
+
+  bool get loadFindIdSuccessPage => _loadFindIdSuccessPage;
 
   @override
   void clearProvider() {
@@ -84,6 +88,8 @@ class FindIdProvider extends ChangeNotifier with ClearText {
 
     _userId = '';
     _createdAt = '';
+
+    _loadFindIdSuccessPage = false;
 
     notifyListeners();
   }
@@ -182,5 +188,9 @@ class FindIdProvider extends ChangeNotifier with ClearText {
   void resetTimer() {
     stopTimer();
     _certNumSecond = ValueNotifier<int>(600);
+  }
+
+  void afterLoad() {
+    _loadFindIdSuccessPage = true;
   }
 }
