@@ -5,8 +5,8 @@ import 'package:app_front_talearnt/common/widget/default_text_field.dart';
 import 'package:app_front_talearnt/common/widget/top_app_bar.dart';
 import 'package:app_front_talearnt/provider/auth/find_id_provider.dart';
 import 'package:app_front_talearnt/provider/common/common_provider.dart';
-import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../../view_model/auth_view_model.dart';
@@ -162,6 +162,7 @@ class FindIdPage extends StatelessWidget {
                             onPressed: () async {
                               await authViewModel.reSendCertNum(
                                   context,
+                                  'findId',
                                   findIdprovider.userNameController.text,
                                   findIdprovider.phoneNumberController.text);
                             },
@@ -202,6 +203,7 @@ class FindIdPage extends StatelessWidget {
                           ? () async {
                               await authViewModel.sendCertNum(
                                   context,
+                                  'findId',
                                   findIdprovider.userNameController.text,
                                   findIdprovider.phoneNumberController.text);
                             }

@@ -1,31 +1,10 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 
 class CommonProvider with ChangeNotifier {
-  Timer? _timer;
-
-  // 타이머 시작 메서드
-  void startTimer(ValueNotifier<int> timerSeconds) {
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (timerSeconds.value > 0) {
-        timerSeconds.value--;
-      } else {
-        timer.cancel();
-      }
-    });
-  }
-
   String getFormattedTime(ValueNotifier<int>? timerSeconds) {
     int minutes = (timerSeconds?.value ?? 180) ~/ 60;
     int seconds = (timerSeconds?.value ?? 180) % 60;
     return '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
-  }
-
-  // 타이머 초기화 메서드
-  void resetTimer(ValueNotifier<int> timerSeconds, int resetTime) {
-    _timer?.cancel();
-    timerSeconds.value = resetTime;
   }
 
   // 이메일
@@ -37,6 +16,25 @@ class CommonProvider with ChangeNotifier {
               false
           ? callback('올바른 이메일을 입력하세요.')
           : callback('');
+      notifyListeners();
+    }
+  }
+
+  // 회원가입할때 이메일
+  void validateSignUpEmailText(
+      TextEditingController textEditingController,
+      bool hasFocus,
+      Function(String) callback,
+      Function(String?) onServerCheck) async {
+    bool isValid = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
+        .hasMatch(textEditingController.text);
+    if (!hasFocus) {
+      if (isValid) {
+        callback('');
+        await onServerCheck(textEditingController.text);
+      } else {
+        callback('올바른 이메일을 입력하세요.');
+      }
       notifyListeners();
     }
   }
@@ -69,8 +67,8 @@ class CommonProvider with ChangeNotifier {
   void validateName(TextEditingController textEditingController, bool hasFocus,
       Function(String) callback) {
     if (!hasFocus) {
-      RegExp(r'^[가-힣]{1,5}$').hasMatch(textEditingController.text) == false
-          ? callback('이름은 최대 5글자, 한글만 가능합니다.')
+      RegExp(r'^[가-힣]{2,5}$').hasMatch(textEditingController.text) == false
+          ? callback('이름은 최소 2글자에서 최대 5글자까지, 한글만 입력 가능합니다.')
           : callback('');
       notifyListeners();
     }
@@ -84,13 +82,20 @@ class CommonProvider with ChangeNotifier {
   }
 
   //닉네임체크
-  void validateInfoNickName(TextEditingController textEditingController,
-      bool hasFocus, Function(String) callback) {
+  void validateInfoNickName(
+      TextEditingController textEditingController,
+      bool hasFocus,
+      Function(String) callback,
+      Function(String?) onServerCheck) async {
+    bool isValid =
+        RegExp(r'^[가-힣a-zA-Z0-9#]{2,12}$').hasMatch(textEditingController.text);
     if (!hasFocus) {
-      RegExp(r'^[가-힣a-zA-Z0-9#]{2,12}$').hasMatch(textEditingController.text) ==
-              false
-          ? callback('errorInfo')
-          : callback('');
+      if (isValid) {
+        callback('');
+        await onServerCheck(textEditingController.text);
+      } else {
+        callback('errorInfo');
+      }
       notifyListeners();
     }
   }
@@ -106,11 +111,5 @@ class CommonProvider with ChangeNotifier {
   void checkBeforeValid(Function() callback) {
     callback();
     notifyListeners();
-  }
-
-  @override
-  void dispose() {
-    _timer?.cancel();
-    super.dispose();
   }
 }

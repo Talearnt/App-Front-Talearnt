@@ -34,23 +34,36 @@ class FindPasswordProvider extends ChangeNotifier with ClearText {
   String _createdAt = '';
 
   TextEditingController get emailController => _emailController;
+
   TextEditingController get phoneNumberController => _phoneNumberController;
   TextEditingController get passwordController => _passwordController;
+
   TextEditingController get passwordCheckController => _passwordCheckController;
 
   FocusNode get emailFocusNode => _emailFocusNode;
+
   FocusNode get phoneNumberFocusNode => _phoneNumberFocusNode;
+
   FocusNode get passwordFocusNode => _passwordFocusNode;
+
   FocusNode get passwordCheckFocusNode => _passwordCheckFocusNode;
 
   bool get emailValid => _emailValid;
+
   bool get phoneNumberValid => _phoneNumberValid;
+
   bool get passwordValid => _passwordValid;
+
   bool get passwordCheckValid => _passwordCheckValid;
 
+  bool get addListenerPasswordCheck => _addListenerPasswordCheck;
+
   String get emailValidMessage => _emailValidMessage;
+
   String get phoneNumberValidMessage => _phoneNumberValidMessage;
+
   String get passwordValidMessage => _passwordValidMessage;
+
   String get passwordCheckValidMessage => _passwordCheckValidMessage;
 
   bool get isValidEmailAndPhoneNumber => _isValidEmailAndPhoneNumber;
@@ -61,6 +74,7 @@ class FindPasswordProvider extends ChangeNotifier with ClearText {
   bool get passwordCheckObscure => _passwordCheckObscure;
 
   String get userId => _userId;
+
   String get createdAt => _createdAt;
 
   @override
@@ -233,6 +247,9 @@ class FindPasswordProvider extends ChangeNotifier with ClearText {
     if (phoneNumberFocusNode.hasFocus && emailController.text.isEmpty) {
       _emailValid = false;
       _emailValidMessage = "이메일 입력은 필수입니다.";
+    } else {
+      _emailValid = true;
+      _emailValidMessage = "";
     }
   }
 

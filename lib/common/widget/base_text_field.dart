@@ -7,7 +7,7 @@ import '../theme.dart';
 import 'error_helper.dart';
 import 'info_helper.dart';
 
-class BaseTextField extends StatelessWidget {
+class BaseTextField extends StatefulWidget {
   final String hint;
   final TextEditingController textEditingController;
   final Function(String) onChanged;
@@ -35,6 +35,7 @@ class BaseTextField extends StatelessWidget {
   final String infoValidMessage;
   final String infoType;
   final Function(String, String)? infoFunc;
+  final Future<void> Function(String?)? onServerCheck;
 
   const BaseTextField({
     super.key,
@@ -59,74 +60,96 @@ class BaseTextField extends StatelessWidget {
     this.infoValidMessage = '',
     this.infoType = '',
     this.infoFunc,
+    this.onServerCheck,
   });
 
   @override
-  Widget build(BuildContext context) {
-    final CommonProvider commonProvider = Provider.of<CommonProvider>(context);
+  BaseTextFieldState createState() => BaseTextFieldState();
+}
 
-    if (focusNode != null) {
-      focusNode?.addListener(() {
-        if (isOtherValid) {
-          commonProvider.checkBeforeValid(checkOtherValidFun!);
-        }
-        if (!focusNode!.hasFocus &&
-            (textEditingController.text.isNotEmpty ||
-                textEditingController.text != '')) {
-          switch (validType) {
-            case 'email':
-              commonProvider.validateEmailText(
-                  textEditingController, focusNode!.hasFocus, validFunc!);
-              break;
-            case 'password':
-              commonProvider.validatePasswordText(
-                  textEditingController, focusNode!.hasFocus, validFunc!);
-              break;
-            case 'phone':
-              commonProvider.validatePhoneNum(
-                  textEditingController, focusNode!.hasFocus, validFunc!);
-              break;
-            case 'name':
-              commonProvider.validateName(
-                  textEditingController, focusNode!.hasFocus, validFunc!);
-              break;
-            case 'passwordCheck':
-              commonProvider.validatePhoneCheckNum(
-                  textEditingController, focusNode!.hasFocus, validFunc!);
-              break;
-          }
-        }
-        if (!focusNode!.hasFocus) {
-          switch (validType) {
-            case 'nickName':
-              commonProvider.validateInfoNickName(
-                  textEditingController, focusNode!.hasFocus, validFunc!);
-              break;
-            default:
-              break;
-          }
-        }
-        if (focusNode!.hasFocus) {
-          switch (validType) {
-            case 'nickName':
-              commonProvider.setInfoNickName(focusNode!.hasFocus, infoFunc!);
-              break;
-            default:
-              break;
-          }
-        }
-      });
+class BaseTextFieldState extends State<BaseTextField> {
+  late FocusNode focusNode;
+
+  @override
+  void initState() {
+    super.initState();
+    focusNode = widget.focusNode ?? FocusNode();
+    focusNode.addListener(_handleFocusChange);
+  }
+
+  @override
+  void dispose() {
+    focusNode.removeListener(_handleFocusChange);
+    super.dispose();
+  }
+
+  void _handleFocusChange() {
+    final commonProvider = Provider.of<CommonProvider>(context, listen: false);
+
+    if (widget.isOtherValid) {
+      commonProvider.checkBeforeValid(widget.checkOtherValidFun!);
     }
 
+    if (!focusNode.hasFocus) {
+      if (widget.textEditingController.text.isNotEmpty ||
+          widget.textEditingController.text != '') {
+        switch (widget.validType) {
+          case 'email':
+            commonProvider.validateEmailText(widget.textEditingController,
+                focusNode.hasFocus, widget.validFunc!);
+            break;
+          case 'signUpEmail':
+            commonProvider.validateSignUpEmailText(widget.textEditingController,
+                focusNode.hasFocus, widget.validFunc!, widget.onServerCheck!);
+            break;
+          case 'password':
+            commonProvider.validatePasswordText(widget.textEditingController,
+                focusNode.hasFocus, widget.validFunc!);
+            break;
+          case 'phone':
+            commonProvider.validatePhoneNum(widget.textEditingController,
+                focusNode.hasFocus, widget.validFunc!);
+            break;
+          case 'name':
+            commonProvider.validateName(widget.textEditingController,
+                focusNode.hasFocus, widget.validFunc!);
+            break;
+          case 'passwordCheck':
+            commonProvider.validatePhoneCheckNum(widget.textEditingController,
+                focusNode.hasFocus, widget.validFunc!);
+            break;
+          case 'nickName':
+            commonProvider.validateInfoNickName(widget.textEditingController,
+                focusNode.hasFocus, widget.validFunc!, widget.onServerCheck!);
+            break;
+          default:
+            break;
+        }
+      }
+    }
+
+    if (focusNode.hasFocus) {
+      switch (widget.validType) {
+        case 'nickName':
+          commonProvider.setInfoNickName(focusNode.hasFocus, widget.infoFunc!);
+          break;
+        default:
+          break;
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TextField(
-          obscureText: obscureText ?? false,
+          obscureText: widget.obscureText ?? false,
           focusNode: focusNode,
-          controller: textEditingController,
-          onChanged: onChanged,
-          maxLength: maxTextLength,
+          controller: widget.textEditingController,
+          onChanged: widget.onChanged,
+          maxLength: widget.maxTextLength,
           maxLengthEnforcement: MaxLengthEnforcement.enforced,
           buildCounter: (context,
               {required int currentLength,
@@ -134,35 +157,45 @@ class BaseTextField extends StatelessWidget {
               required int? maxLength}) {
             return null;
           },
-          //maxLength 설정시 하위에 생기는 숫자 제거
-          style: TextTypes.bodyMedium02(color: Palette.text02),
-          enabled: isEnabled,
-          keyboardType:
-              keyboardType == 'num' ? TextInputType.number : TextInputType.text,
-          inputFormatters: keyboardType == 'num'
+          style: widget.isEnabled
+              ? TextTypes.bodyMedium02(color: Palette.text02)
+              : TextTypes.bodyMedium02(color: Palette.text04),
+          enabled: widget.isEnabled,
+          keyboardType: widget.keyboardType == 'num'
+              ? TextInputType.number
+              : TextInputType.text,
+          inputFormatters: widget.keyboardType == 'num'
               ? [FilteringTextInputFormatter.digitsOnly]
               : [],
           decoration: InputDecoration(
-            hintText: hint,
+            hintText: widget.hint,
             hintStyle: const TextStyle(color: Palette.text04),
             border: _getBorder(),
             enabledBorder: _getBorder(),
             focusedBorder: _getFocusedBorder(),
-            fillColor: isEnabled ? Colors.transparent : Palette.bgUp02,
-            suffixIcon: suffixIcon,
+            disabledBorder: _getDisabledBorder(),
+            filled: true,
+            fillColor: widget.isEnabled ? Colors.transparent : Palette.bgUp01,
+            hoverColor: Colors.transparent,
+            suffixIcon: widget.suffixIcon,
           ),
         ),
         const SizedBox(height: 4),
         Visibility(
-            visible: isInfo,
-            child: InfoHelper(type: 'info', content: infoMessage)),
+          visible: widget.isInfo,
+          child: InfoHelper(type: 'info', content: widget.infoMessage),
+        ),
         Visibility(
-            visible: isInfo && isInfoValid,
-            child: InfoHelper(type: infoType, content: infoValidMessage)),
+          visible: widget.isInfo && widget.isInfoValid,
+          child: InfoHelper(
+              type: widget.infoType, content: widget.infoValidMessage),
+        ),
         Visibility(
-          visible: !isValid && validMessage.isNotEmpty,
+          visible: !widget.isValid && widget.validMessage.isNotEmpty,
           child: Column(
-            children: [ErrorHelper(type: 'error', content: validMessage)],
+            children: [
+              ErrorHelper(type: 'error', content: widget.validMessage)
+            ],
           ),
         ),
       ],
@@ -170,7 +203,7 @@ class BaseTextField extends StatelessWidget {
   }
 
   OutlineInputBorder _getBorder() {
-    return !isValid
+    return !widget.isValid
         ? OutlineInputBorder(
             borderRadius: BorderRadius.circular(8.0),
             borderSide: const BorderSide(color: Palette.error02))
@@ -181,7 +214,7 @@ class BaseTextField extends StatelessWidget {
   }
 
   OutlineInputBorder _getFocusedBorder() {
-    return !isValid
+    return !widget.isValid
         ? OutlineInputBorder(
             borderRadius: BorderRadius.circular(8.0),
             borderSide: const BorderSide(color: Palette.error02))
@@ -189,5 +222,12 @@ class BaseTextField extends StatelessWidget {
             borderRadius: BorderRadius.circular(8.0),
             borderSide: const BorderSide(color: Palette.primary01),
           );
+  }
+
+  OutlineInputBorder _getDisabledBorder() {
+    return OutlineInputBorder(
+      borderRadius: BorderRadius.circular(8.0),
+      borderSide: const BorderSide(color: Palette.line01),
+    );
   }
 }
