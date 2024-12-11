@@ -5,8 +5,11 @@ abstract class ApiConstants {
   static const String refreshTokenUrl = "$baseUrl/v1/auth/login/refresh";
   static const String loginUrl = "$baseUrl/v1/auth/login";
   static const String loginKakaoUrl = "$baseUrl/v1/api/auth/login/kakao";
-  static const String nicknameServiceUrl = "$baseUrl/v1/auth/users/nickname";
-  static const String checkUserIdDuplication = "$baseUrl/v1/auth/users/id";
+  static const String createRandomNickNameUrl =
+      "$baseUrl/v1/auth/users/nickname/random";
+  static const String checkNickNameAvailableUrl =
+      "$baseUrl/v1/auth/users/nickname/availability";
+  static const String checkUserIdDuplicationUrl = "$baseUrl/v1/auth/users/id";
 
   static const String smsVerifyCodeUrl =
       "$baseUrl/v1/auth/sms/verification-codes"; //인증번호 문자 전송 통합 url (회원가입, 아이디 찾기)

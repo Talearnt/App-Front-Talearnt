@@ -22,20 +22,21 @@ class AuthRepository {
   }
 
   Future<Either<Failure, String>> createRandomNickName() async {
-    final result = await dio.get(ApiConstants.nicknameServiceUrl, null, null);
+    final result =
+        await dio.get(ApiConstants.createRandomNickNameUrl, null, null);
     return result.fold(left, (response) => right(response["data"]));
   }
 
   Future<Either<Failure, bool>> checkNickNameDuplication(
       String nickName) async {
-    final result = await dio
-        .get(ApiConstants.nicknameServiceUrl, null, {"nickname": nickName});
+    final result = await dio.get(
+        ApiConstants.checkNickNameAvailableUrl, null, {"nickname": nickName});
     return result.fold(left, (response) => right(response["data"]));
   }
 
   Future<Either<Failure, bool>> checkEmailDuplication(String email) async {
     final result = await dio
-        .get(ApiConstants.checkUserIdDuplication, null, {"userId": email});
+        .get(ApiConstants.checkUserIdDuplicationUrl, null, {"userId": email});
     return result.fold(left, (response) => right(response["data"]));
   }
 
