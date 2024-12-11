@@ -1,5 +1,7 @@
-import 'package:flutter/material.dart';
 import 'dart:async';
+
+import 'package:flutter/material.dart';
+
 import '../clear_text.dart';
 
 class FindIdProvider extends ChangeNotifier with ClearText {
@@ -30,34 +32,46 @@ class FindIdProvider extends ChangeNotifier with ClearText {
   bool _loadFindIdSuccessPage = false;
 
   FocusNode get userNameFocusNode => _userNameFocusNode;
+
   FocusNode get phoneNumberFocusNode => _phoneNumberFocusNode;
+
   FocusNode get certFocusNode => _certFocusNode;
 
   bool get userNameValid => _userNameValid;
+
   bool get phoneNumberValid => _phoneNumberValid;
+
   bool get certNumberValid => _certNumberValid;
 
   String get userNameMessage => _userNameMessage;
+
   String get phoneNumberValidMessage => _phoneNumberValidMessage;
+
   String get certValidMessage => _certValidMessage;
 
-  bool get isValidNameAndPhoneNumber => _isValidNameAndPhoneNumber;
+  bool get isValidNameAndPhoneNumber =>
+      _isValidNameAndPhoneNumber &&
+      _userNameController.text.isNotEmpty &&
+      _phoneNumberController.text.isNotEmpty;
 
   TextEditingController get userNameController => _userNameController;
+
   TextEditingController get phoneNumberController => _phoneNumberController;
+
   TextEditingController get certNumberController => _certNumberController;
 
   bool get isCertSend => _isCertSend;
 
   int get certNumberCount => _certNumberCount;
+
   ValueNotifier<int> get certNumSecond => _certNumSecond;
 
   String get userId => _userId;
+
   String get createdAt => _createdAt;
 
   bool get loadFindIdSuccessPage => _loadFindIdSuccessPage;
 
-  @override
   void clearProvider() {
     _userNameController.clear();
     _phoneNumberController.clear();

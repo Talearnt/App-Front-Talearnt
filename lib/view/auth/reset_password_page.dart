@@ -3,8 +3,8 @@ import 'package:app_front_talearnt/common/widget/bottom_btn.dart';
 import 'package:app_front_talearnt/common/widget/obscure_text_field.dart';
 import 'package:app_front_talearnt/common/widget/top_app_bar.dart';
 import 'package:app_front_talearnt/provider/auth/find_password_provider.dart';
-import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class ResetPasswordPage extends StatelessWidget {
@@ -95,7 +95,7 @@ class ResetPasswordPage extends StatelessWidget {
           BottomBtn(
             mediaBottom: MediaQuery.of(context).viewInsets.bottom,
             content: '확인',
-            isEnabled: findPasswordProvider.isVaildNewPassword,
+            isEnabled: findPasswordProvider.isValidNewPassword,
             onPressed: () {
               context.pop();
             },

@@ -28,7 +28,7 @@ class FindPasswordProvider extends ChangeNotifier with ClearText {
   String _passwordCheckValidMessage = '';
 
   bool _isValidEmailAndPhoneNumber = false;
-  bool _isVaildNewPassword = false;
+  bool _isValidNewPassword = false;
 
   String _userId = '';
   String _createdAt = '';
@@ -36,38 +36,56 @@ class FindPasswordProvider extends ChangeNotifier with ClearText {
   bool _loadFindPasswordSuccessPage = false;
 
   TextEditingController get emailController => _emailController;
+
   TextEditingController get phoneNumberController => _phoneNumberController;
+
   TextEditingController get passwordController => _passwordController;
+
   TextEditingController get passwordCheckController => _passwordCheckController;
 
   FocusNode get emailFocusNode => _emailFocusNode;
+
   FocusNode get phoneNumberFocusNode => _phoneNumberFocusNode;
+
   FocusNode get passwordFocusNode => _passwordFocusNode;
+
   FocusNode get passwordCheckFocusNode => _passwordCheckFocusNode;
 
   bool get emailValid => _emailValid;
+
   bool get phoneNumberValid => _phoneNumberValid;
+
   bool get passwordValid => _passwordValid;
+
   bool get passwordCheckValid => _passwordCheckValid;
 
+  bool get addListenerPasswordCheck => _addListenerPasswordCheck;
+
   String get emailValidMessage => _emailValidMessage;
+
   String get phoneNumberValidMessage => _phoneNumberValidMessage;
+
   String get passwordValidMessage => _passwordValidMessage;
+
   String get passwordCheckValidMessage => _passwordCheckValidMessage;
 
-  bool get isValidEmailAndPhoneNumber => _isValidEmailAndPhoneNumber;
+  bool get isValidEmailAndPhoneNumber =>
+      _isValidEmailAndPhoneNumber &&
+      _emailController.text.isNotEmpty &&
+      _phoneNumberController.text.isNotEmpty;
 
-  bool get isVaildNewPassword => _isVaildNewPassword;
+  bool get isValidNewPassword => _isValidNewPassword;
 
   bool get passwordObscure => _passwordObscure;
+
   bool get passwordCheckObscure => _passwordCheckObscure;
 
   String get userId => _userId;
+
   String get createdAt => _createdAt;
 
   bool get loadFindPasswordSuccessPage => _loadFindPasswordSuccessPage;
 
-  @override
   void clearProvider() {
     _emailController.clear();
     _phoneNumberController.clear();
@@ -87,7 +105,7 @@ class FindPasswordProvider extends ChangeNotifier with ClearText {
     _passwordCheckValid = true;
     _addListenerPasswordCheck = false;
     _isValidEmailAndPhoneNumber = false;
-    _isVaildNewPassword = false;
+    _isValidNewPassword = false;
 
     _emailValidMessage = '';
     _phoneNumberValidMessage = '';
@@ -230,9 +248,9 @@ class FindPasswordProvider extends ChangeNotifier with ClearText {
             .hasMatch(passwordCheckController.text) &&
         _passwordValid &&
         _passwordCheckValid) {
-      _isVaildNewPassword = true;
+      _isValidNewPassword = true;
     } else {
-      _isVaildNewPassword = false;
+      _isValidNewPassword = false;
     }
     notifyListeners();
   }
