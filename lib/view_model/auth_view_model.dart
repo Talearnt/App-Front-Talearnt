@@ -9,11 +9,11 @@ import 'package:app_front_talearnt/provider/auth/sign_up_provider.dart';
 import 'package:app_front_talearnt/utils/token_manager.dart';
 import 'package:flutter/material.dart';
 
-import '../common/widget/button.dart';
-import '../common/widget/dialog.dart';
+import '../common/common_navigator.dart';
 import '../data/model/param/sign_up_param.dart';
 import '../data/model/param/sms_validation_param.dart';
 import '../data/repositories/auth_repository.dart';
+import '../utils/error_message.dart';
 
 class AuthViewModel extends ChangeNotifier {
   final LoginProvider loginProvider;
@@ -22,6 +22,7 @@ class AuthViewModel extends ChangeNotifier {
   final AuthRepository authRepository;
   final TokenManager tokenManager;
   final FindPasswordProvider findPasswordProvider;
+  final CommonNavigator commonNavigator;
 
   AuthViewModel(
     this.loginProvider,
@@ -30,6 +31,7 @@ class AuthViewModel extends ChangeNotifier {
     this.tokenManager,
     this.findIdProvider,
     this.findPasswordProvider,
+    this.commonNavigator,
   );
 
   Future<void> login(String email, String pw) async {
@@ -37,6 +39,7 @@ class AuthViewModel extends ChangeNotifier {
     final result = await authRepository.login(param);
     result.fold(
       (failure) => loginProvider.updateLoginFormFail(failure.errorMessage),
+      // 이후 수정 들어갈 수 도 있다.
       (token) {
         tokenManager.saveToken(token);
         loginProvider.updateLoginFormSuccess();
@@ -47,7 +50,9 @@ class AuthViewModel extends ChangeNotifier {
   Future<void> createRandomNickName() async {
     final result = await authRepository.createRandomNickName();
     result.fold(
-      (failure) => {}, //dialog 띄워줘야됨
+      (failure) => commonNavigator.showSingleDialog(
+        content: ErrorMessages.getMessage(failure.errorCode),
+      ),
       (nickName) {
         signUpProvider.setNickName(nickName);
       },
@@ -59,7 +64,9 @@ class AuthViewModel extends ChangeNotifier {
       signUpProvider.updateNickNameChange(false);
       final result = await authRepository.checkNickNameDuplication(nickName!);
       result.fold(
-        (failure) => {}, //여기도 dialog 띄우기
+        (failure) => commonNavigator.showSingleDialog(
+          content: ErrorMessages.getMessage(failure.errorCode),
+        ),
         (isNickNameDuplication) {
           signUpProvider.checkNickNameDuplication(isNickNameDuplication);
         },
@@ -69,8 +76,10 @@ class AuthViewModel extends ChangeNotifier {
 
   Future<void> checkEmailDuplication(String? email) async {
     final result = await authRepository.checkEmailDuplication(email!);
-    result.fold((failure) => {}, //여기도 dialog 띄우기
-        (isUserIdDuplication) {
+    result.fold(
+        (failure) => commonNavigator.showSingleDialog(
+              content: ErrorMessages.getMessage(failure.errorCode),
+            ), (isUserIdDuplication) {
       signUpProvider.checkEmailDuplication(isUserIdDuplication);
     });
   }
@@ -82,25 +91,10 @@ class AuthViewModel extends ChangeNotifier {
     final result = await authRepository.sendResetPasswordMail(body, email);
 
     result.fold(
-      (failure) {
-        String msg = "알 수 없는 이유로\n인증번호 재발송에 실패하였습니다.\n다시 시도해 주세요.";
-        if (failure.errorCode == "404-USER-01") {
-          msg = "일치하는 사용자 정보가 없습니다.\n다시 확인해 주세요.";
-        }
-
-        SingleBtnDialog.show(
-          context,
-          content: msg,
-          button: PrimaryM(
-            content: '확인',
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-          timer: false,
-        );
-        return;
-      },
+      (failure) => commonNavigator.showSingleDialog(
+        content: ErrorMessages.getMessage(failure.errorCode,
+            unknown: "알 수 없는 이유로\n인증번호 재발송에 실패하였습니다.\n다시 시도해 주세요."),
+      ),
       (sendMailInfo) {
         findPasswordProvider.setFindedUserIdInfo(
             sendMailInfo.userId, sendMailInfo.createdAt);
@@ -115,25 +109,10 @@ class AuthViewModel extends ChangeNotifier {
     final result = await authRepository.sendCertNumber(body);
 
     result.fold(
-      (failure) {
-        String msg = "알 수 없는 이유로\n인증번호 재발송에 실패하였습니다.\n다시 시도해 주세요.";
-        if (failure.errorCode == "404-USER-01") {
-          msg = "일치하는 사용자 정보가 없습니다.\n다시 확인해 주세요.";
-        }
-
-        SingleBtnDialog.show(
-          context,
-          content: msg,
-          button: PrimaryM(
-            content: '확인',
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-          timer: false, // 타이머 여부 설정
-        );
-        return; // 다이얼로그를 띄운 후 종료
-      },
+      (failure) => commonNavigator.showSingleDialog(
+        content: ErrorMessages.getMessage(failure.errorCode,
+            unknown: "알 수 없는 이유로\n인증번호 재발송에 실패하였습니다.\n다시 시도해 주세요."),
+      ),
       (res) {
         if (type == 'findId') {
           findIdProvider.sendCertNum();
@@ -152,25 +131,10 @@ class AuthViewModel extends ChangeNotifier {
         type: type, phoneNumber: phoneNumber, name: userName);
     final result = await authRepository.sendCertNumber(param);
     result.fold(
-      (failure) {
-        String msg = "알 수 없는 이유로\n인증번호 재발송에 실패하였습니다.\n다시 시도해 주세요.";
-        if (failure.errorCode == "404-USER-01") {
-          msg = "일치하는 사용자 정보가 없습니다.\n다시 확인해 주세요.";
-        }
-
-        SingleBtnDialog.show(
-          context,
-          content: msg,
-          button: PrimaryM(
-            content: '확인',
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-          timer: false, // 타이머 여부 설정
-        );
-        return; // 다이얼로그를 띄운 후 종료
-      },
+      (failure) => commonNavigator.showSingleDialog(
+        content: ErrorMessages.getMessage(failure.errorCode,
+            unknown: "알 수 없는 이유로\n인증번호 재발송에 실패하였습니다.\n다시 시도해 주세요."),
+      ),
       (result) {
         if (type == 'findId') {
           findIdProvider.reSendCertNum();
@@ -192,28 +156,14 @@ class AuthViewModel extends ChangeNotifier {
     final result = await authRepository.checkSmsValidation(param);
     result.fold(
       (failure) {
-        String msg = "알 수 없는 이유로\n인증번호 재발송에 실패하였습니다.\n다시 시도해 주세요.";
-        if (failure.errorCode == "404-USER-01") {
-          msg = "일치하는 사용자 정보가 없습니다.\n다시 확인해 주세요.";
-        } else if (failure.errorCode == "429-AUTH-09") {
-          msg = "5회 연속 인증에 실패하였습니다.\n잠시 후 다시 시도해 주세요.";
-        } else if (failure.errorCode == "400-AUTH-05") {
+        if (failure.errorCode == "400-AUTH-05") {
           signUpProvider.failedValidChkCertNum();
           return;
         }
-
-        SingleBtnDialog.show(
-          context,
-          content: msg,
-          button: PrimaryM(
-            content: '확인',
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-          timer: false, // 타이머 여부 설정
+        commonNavigator.showSingleDialog(
+          content: ErrorMessages.getMessage(failure.errorCode,
+              unknown: '알 수 없는 이유로\n인증번호 재발송에 실패하였습니다.\n다시 시도해 주세요.'),
         );
-        return; // 다이얼로그를 띄운 후 종료
       },
       (result) {
         signUpProvider.updateSmsValidation(result);
@@ -234,7 +184,10 @@ class AuthViewModel extends ChangeNotifier {
         agreeReqDTOS: [AgreeReqDTO(agreeCodeId: 1, agree: true)]);
     final result = await authRepository.signUp(param);
     result.fold(
-      (failure) => {}, //dialog 띄워줘야됨
+      (failure) => commonNavigator.showSingleDialog(
+          content: ErrorMessages.getMessage(
+        failure.errorCode,
+      )), //dialog 띄워줘야됨
       (result) {},
     );
   }
@@ -246,26 +199,14 @@ class AuthViewModel extends ChangeNotifier {
     final result = await authRepository.checkSmsValidation(param);
     result.fold(
       (failure) {
-        String msg = "알 수 없는 이유로\n인증번호 재발송에 실패하였습니다.\n다시 시도해 주세요.";
-        if (failure.errorCode == "404-USER-01") {
-          msg = "일치하는 사용자 정보가 없습니다.\n다시 확인해 주세요.";
-        } else if (failure.errorCode == "429-AUTH-09") {
-          msg = "5회 연속 인증에 실패하였습니다.\n잠시 후 다시 시도해 주세요.";
-        } else if (failure.errorCode == "400-AUTH-05") {
+        if (failure.errorCode == "400-AUTH-05") {
           findIdProvider.failedValidChkCertNum();
           return;
         }
 
-        SingleBtnDialog.show(
-          context,
-          content: msg,
-          button: PrimaryM(
-            content: '확인',
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-          timer: false, // 타이머 여부 설정
+        commonNavigator.showSingleDialog(
+          content: ErrorMessages.getMessage(failure.errorCode,
+              unknown: '알 수 없는 이유로\n인증번호 재발송에 실패하였습니다.\n다시 시도해 주세요.'),
         );
         return; // 다이얼로그를 띄운 후 종료
       },

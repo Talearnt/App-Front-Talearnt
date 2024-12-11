@@ -2,6 +2,7 @@ import 'package:app_front_talearnt/common/theme.dart';
 import 'package:app_front_talearnt/common/widget/button.dart';
 import 'package:app_front_talearnt/common/widget/time_set.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class DoubleBtnDialog extends StatelessWidget {
   final String content, closeText;
@@ -114,14 +115,14 @@ class DoubleBtnDialog extends StatelessWidget {
 class SingleBtnDialog extends StatelessWidget {
   final String content;
   final bool timer;
-  final Widget button;
+  final Widget? button;
   final ValueNotifier<int>? timeSeconds;
 
   const SingleBtnDialog({
     super.key,
     required this.content,
     this.timer = false,
-    required this.button,
+    this.button,
     this.timeSeconds,
   });
 
@@ -129,9 +130,16 @@ class SingleBtnDialog extends StatelessWidget {
   static void show(
     BuildContext context, {
     required String content,
-    required Widget button,
+    Widget? button,
     bool timer = false,
   }) {
+    button ??= PrimaryM(
+      content: '확인',
+      onPressed: () {
+        context.pop();
+      },
+    );
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -196,7 +204,7 @@ class SingleBtnDialog extends StatelessWidget {
                 ),
                 child: Row(
                   children: [
-                    Expanded(child: button),
+                    Expanded(child: button!),
                   ],
                 ),
               ),

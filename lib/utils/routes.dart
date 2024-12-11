@@ -1,3 +1,4 @@
+import 'package:app_front_talearnt/main.dart';
 import 'package:app_front_talearnt/view/auth/find_id_page.dart';
 import 'package:app_front_talearnt/view/auth/find_id_success_page.dart';
 import 'package:app_front_talearnt/view/auth/find_password_page.dart';
@@ -12,6 +13,7 @@ import '../view/auth/sign_up_main_page.dart';
 
 class Routes {
   static final GoRouter router = GoRouter(
+    navigatorKey: navigatorKey,
     routes: <RouteBase>[
       GoRoute(
         path: '/',
