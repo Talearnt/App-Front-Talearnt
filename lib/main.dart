@@ -3,6 +3,8 @@ import 'package:app_front_talearnt/provider/provider_set_up.dart';
 import 'package:app_front_talearnt/utils/routes.dart';
 import 'package:flutter/material.dart';
 
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 void main() {
   runApp(const ProviderSetup(
     child: MyApp(),
