@@ -1,5 +1,4 @@
 import 'package:app_front_talearnt/common/theme.dart';
-import 'package:app_front_talearnt/provider/common/common_provider.dart';
 import 'package:app_front_talearnt/view/auth/sign_up_sub1_page.dart';
 import 'package:app_front_talearnt/view/auth/sign_up_sub2_page.dart';
 import 'package:app_front_talearnt/view/auth/sign_up_sub3_page.dart';
@@ -10,6 +9,7 @@ import 'package:provider/provider.dart';
 import '../../common/widget/bottom_btn.dart';
 import '../../common/widget/top_app_bar.dart';
 import '../../provider/auth/sign_up_provider.dart';
+import '../../view_model/auth_view_model.dart';
 
 class SignUpMainPage extends StatelessWidget {
   const SignUpMainPage({super.key});
@@ -17,7 +17,7 @@ class SignUpMainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final signUpProvider = Provider.of<SignUpProvider>(context);
-    final commonProvider = Provider.of<CommonProvider>(context);
+    final authViewModel = Provider.of<AuthViewModel>(context);
 
     return PopScope(
       canPop: false, // 뒤로가기 허용은 하지 않지만 사용자 정의 동작을 처리
@@ -68,6 +68,9 @@ class SignUpMainPage extends StatelessWidget {
                     physics: const NeverScrollableScrollPhysics(),
                     controller: signUpProvider.pageController,
                     onPageChanged: (int page) {
+                      if (page == 2 && signUpProvider.isFirstVisit) {
+                        authViewModel.createRandomNickName();
+                      }
                       signUpProvider.updateSignUp(page);
                     },
                     children: const [
@@ -97,7 +100,18 @@ class SignUpMainPage extends StatelessWidget {
                           content: '다음',
                           isEnabled: signUpProvider.isSignUpSub3ButtonEnabled,
                           onPressed: () async {
-                            context.go('/sign-up-success');
+                            await authViewModel
+                                .signUp(
+                                    signUpProvider.emailController.text,
+                                    signUpProvider.passwordController.text,
+                                    signUpProvider.nameController.text,
+                                    signUpProvider.nickNameController.text,
+                                    signUpProvider.gender,
+                                    signUpProvider.phoneNumController.text)
+                                .then((_) {
+                              //이거 이후에 수정 예정
+                              context.go('/sign-up-success');
+                            });
                           },
                         )
                       : signUpProvider.sendCertNum
@@ -107,13 +121,19 @@ class SignUpMainPage extends StatelessWidget {
                               content: '인증하기',
                               isEnabled:
                                   signUpProvider.isSignUpSub2NextButtonEnabled,
-                              onPressed: () {
-                                //인증검증
+                              onPressed: () async {
+                                await authViewModel.signUpCheckSmsValidation(
+                                    context,
+                                    signUpProvider.phoneNumController.text,
+                                    signUpProvider.certNumController.text);
                                 //인증 완료되면 다음 페이지로 넘어감
-                                signUpProvider.pageController.nextPage(
-                                  duration: const Duration(milliseconds: 300),
-                                  curve: Curves.ease,
-                                );
+                                if (signUpProvider.checkSmsValidation) {
+                                  signUpProvider.finishCheckCertNum();
+                                  signUpProvider.pageController.nextPage(
+                                    duration: const Duration(milliseconds: 300),
+                                    curve: Curves.ease,
+                                  );
+                                }
                               },
                             )
                           : BottomBtn(
@@ -122,18 +142,17 @@ class SignUpMainPage extends StatelessWidget {
                               content: '인증번호 발송',
                               isEnabled:
                                   signUpProvider.isSignUpSub2ButtonEnabled,
-                              onPressed: () {
-                                //1차로 인증하기으로 활성화
-                                commonProvider.validatePhoneNum(
-                                    signUpProvider.phoneNumController,
-                                    signUpProvider.phoneNumFocusNode.hasFocus,
-                                    signUpProvider.updatePhoneNumValid);
-                                if (signUpProvider.phoneNumValid) {
-                                  commonProvider.startTimer(
-                                      signUpProvider.certTimerSeconds);
-                                  signUpProvider.updateSendCertNum();
-                                }
-                              },
+                              onPressed:
+                                  signUpProvider.isSignUpSub2ButtonEnabled
+                                      ? () async {
+                                          await authViewModel.sendCertNum(
+                                              context,
+                                              'signUp',
+                                              null,
+                                              signUpProvider
+                                                  .phoneNumController.text);
+                                        }
+                                      : () {},
                             ),
             ],
           ),

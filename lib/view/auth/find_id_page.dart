@@ -162,6 +162,7 @@ class FindIdPage extends StatelessWidget {
                             onPressed: () async {
                               await authViewModel.reSendCertNum(
                                   context,
+                                  'findId',
                                   findIdProvider.userNameController.text,
                                   findIdProvider.phoneNumberController.text);
                             },
@@ -202,6 +203,7 @@ class FindIdPage extends StatelessWidget {
                           ? () async {
                               await authViewModel.sendCertNum(
                                   context,
+                                  'findId',
                                   findIdProvider.userNameController.text,
                                   findIdProvider.phoneNumberController.text);
                             }

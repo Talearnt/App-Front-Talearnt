@@ -259,6 +259,9 @@ class FindPasswordProvider extends ChangeNotifier with ClearText {
     if (phoneNumberFocusNode.hasFocus && emailController.text.isEmpty) {
       _emailValid = false;
       _emailValidMessage = "이메일 입력은 필수입니다.";
+    } else {
+      _emailValid = true;
+      _emailValidMessage = "";
     }
   }
 

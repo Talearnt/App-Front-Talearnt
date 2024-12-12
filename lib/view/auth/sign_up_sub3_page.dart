@@ -6,6 +6,7 @@ import '../../common/theme.dart';
 import '../../common/widget/default_text_field.dart';
 import '../../common/widget/obscure_text_field.dart';
 import '../../common/widget/text_field_label.dart';
+import '../../view_model/auth_view_model.dart';
 
 class SignUpSub3Page extends StatelessWidget {
   const SignUpSub3Page({super.key});
@@ -13,6 +14,7 @@ class SignUpSub3Page extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final signUpProvider = Provider.of<SignUpProvider>(context);
+    final authViewModel = Provider.of<AuthViewModel>(context);
 
     return SingleChildScrollView(
       child: Column(
@@ -109,15 +111,22 @@ class SignUpSub3Page extends StatelessWidget {
               hint: '닉네임을 입력해주세요',
               textEditingController: signUpProvider.nickNameController,
               onChanged: (value) {
-                signUpProvider
-                    .updateController(signUpProvider.nickNameController);
+                signUpProvider.updateNickNameController(
+                    signUpProvider.nickNameController);
               },
               provider: signUpProvider,
               validType: 'nickName',
               focusNode: signUpProvider.nickNameFocusNode,
-              validFunc: signUpProvider.updateNickNameValid,
+              validFunc: signUpProvider.updateNickNameInfoValid,
               validMessage: signUpProvider.nickNameValidMessage,
               isValid: signUpProvider.nickNameValid,
+              isInfo: signUpProvider.isNickNameInfo,
+              isInfoValid: signUpProvider.isNickNameInfoValid,
+              infoMessage: signUpProvider.nickNameInfoMessage,
+              infoValidMessage: signUpProvider.nickNameInfoValidMessage,
+              infoType: signUpProvider.nickNameInfoType,
+              infoFunc: signUpProvider.updateNickNameInfo,
+              onServerCheck: authViewModel.checkNickNameDuplication,
             ),
             const SizedBox(height: 24.0),
             const TextFieldLabel(
@@ -151,13 +160,14 @@ class SignUpSub3Page extends StatelessWidget {
                 signUpProvider.updateController(signUpProvider.emailController);
               },
               provider: signUpProvider,
-              validType: 'email',
+              validType: 'signUpEmail',
               focusNode: signUpProvider.emailFocusNode,
               validFunc: signUpProvider.updateEmailValid,
               validMessage: signUpProvider.emailValidMessage,
               isValid: signUpProvider.emailValid,
               isOtherValid: true,
               checkOtherValidFun: signUpProvider.checkBeforeEmailValid,
+              onServerCheck: authViewModel.checkEmailDuplication,
             ),
             const SizedBox(height: 24.0),
             const TextFieldLabel(
@@ -201,6 +211,8 @@ class SignUpSub3Page extends StatelessWidget {
               validFunc: signUpProvider.updatePasswordCheckValid,
               validMessage: signUpProvider.passwordCheckValidMessage,
               isValid: signUpProvider.passwordCheckValid,
+              isOtherValid: true,
+              checkOtherValidFun: signUpProvider.checkBeforePasswordCheckValid,
             ),
           ]),
     );

@@ -28,7 +28,6 @@ class ErrorHelper extends StatelessWidget {
           width: 14,
           height: 14,
           child: SvgPicture.asset(
-
             iconPath,
             width: 12,
             height: 12,
@@ -37,7 +36,9 @@ class ErrorHelper extends StatelessWidget {
         const SizedBox(
           width: 4,
         ),
-        Text(content, style: textStyle)
+        Flexible(
+          child: Text(content, style: textStyle),
+        )
       ],
     );
   }

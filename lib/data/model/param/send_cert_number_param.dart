@@ -1,14 +1,16 @@
 class SendCertNumberParam {
-  final String phoneNumber, name;
+  final String type, phoneNumber;
+  final String? name;
 
   SendCertNumberParam({
+    required this.type,
     required this.phoneNumber,
     required this.name,
   });
 
   Map<String, dynamic> toJson() {
     return {
-      'type': 'findId',
+      'type': type,
       'phone': phoneNumber,
       'name': name,
     };

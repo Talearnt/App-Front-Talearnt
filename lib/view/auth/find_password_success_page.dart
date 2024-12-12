@@ -3,11 +3,13 @@ import 'package:app_front_talearnt/common/widget/button.dart';
 import 'package:app_front_talearnt/common/widget/toast_message.dart';
 import 'package:app_front_talearnt/provider/auth/find_password_provider.dart';
 import 'package:app_front_talearnt/common/widget/top_app_bar.dart';
-import 'package:app_front_talearnt/view/auth/reset_password_page.dart';
+import 'package:app_front_talearnt/provider/auth/find_password_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+
+import '../../common/widget/toast_message.dart';
 
 class FindPasswordSuccessPage extends StatelessWidget {
   const FindPasswordSuccessPage({super.key});
