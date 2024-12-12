@@ -1,3 +1,4 @@
+import 'package:app_front_talearnt/common/widget/dialog.dart';
 import 'package:app_front_talearnt/data/model/param/agree_req_dto.dart';
 import 'package:app_front_talearnt/data/model/param/login_param.dart';
 import 'package:app_front_talearnt/data/model/param/send_cert_number_param.dart';
@@ -6,6 +7,7 @@ import 'package:app_front_talearnt/provider/auth/find_id_provider.dart';
 import 'package:app_front_talearnt/provider/auth/find_password_provider.dart';
 import 'package:app_front_talearnt/provider/auth/login_provider.dart';
 import 'package:app_front_talearnt/provider/auth/sign_up_provider.dart';
+import 'package:app_front_talearnt/provider/auth/storage_provider.dart';
 import 'package:app_front_talearnt/utils/token_manager.dart';
 import 'package:flutter/material.dart';
 
@@ -23,6 +25,7 @@ class AuthViewModel extends ChangeNotifier {
   final TokenManager tokenManager;
   final FindPasswordProvider findPasswordProvider;
   final CommonNavigator commonNavigator;
+  final StorageProvider storageProvider;
 
   AuthViewModel(
     this.loginProvider,
@@ -32,6 +35,7 @@ class AuthViewModel extends ChangeNotifier {
     this.findIdProvider,
     this.findPasswordProvider,
     this.commonNavigator,
+    this.storageProvider,
   );
 
   Future<void> login(String email, String pw) async {
@@ -109,14 +113,30 @@ class AuthViewModel extends ChangeNotifier {
     final result = await authRepository.sendCertNumber(body);
 
     result.fold(
-      (failure) => commonNavigator.showSingleDialog(
-        content: ErrorMessages.getMessage(failure.errorCode,
-            unknown: "알 수 없는 이유로\n인증번호 재발송에 실패하였습니다.\n다시 시도해 주세요."),
-      ),
+      (failure) {
+        if (failure.errorCode == "429-AUTH-12") {
+          storageProvider.startCooldown();
+          SingleBtnDialog.show(
+            context,
+            content: ErrorMessages.getMessage(failure.errorCode,
+                unknown: "알 수 없는 이유로\n인증번호 재발송에 실패하였습니다.\n다시 시도해 주세요."),
+            timer: true,
+            timeSeconds: storageProvider.certNumResendCooldown,
+          );
+
+          return;
+        }
+
+        commonNavigator.showSingleDialog(
+          content: ErrorMessages.getMessage(failure.errorCode,
+              unknown: "알 수 없는 이유로\n인증번호 재발송에 실패하였습니다.\n다시 시도해 주세요."),
+        );
+        return;
+      },
       (res) {
         if (type == 'findId') {
           findIdProvider.sendCertNum();
-          findIdProvider.startCountdown();
+          findIdProvider.startCountdown(commonNavigator.context);
         } else {
           signUpProvider.startTimer();
           signUpProvider.updateSendCertNum();
@@ -139,7 +159,7 @@ class AuthViewModel extends ChangeNotifier {
         if (type == 'findId') {
           findIdProvider.reSendCertNum();
           findIdProvider.resetTimer();
-          findIdProvider.startCountdown();
+          findIdProvider.startCountdown(commonNavigator.context);
         } else {
           signUpProvider.reSendCertNum();
           signUpProvider.resetTimer(180);
@@ -197,10 +217,17 @@ class AuthViewModel extends ChangeNotifier {
     SmsValidationParam param = SmsValidationParam(
         type: 'findId', phoneNumber: phoneNumber, certNum: certNum);
     final result = await authRepository.checkSmsValidation(param);
+
     result.fold(
       (failure) {
         if (failure.errorCode == "400-AUTH-05") {
           findIdProvider.failedValidChkCertNum();
+
+          if (findIdProvider.certNumberCount == 5) {
+            commonNavigator.showSingleDialog(
+              content: '5회 연속 인증에 실패하였습니다.\n인증번호를 재요청해 주세요.',
+            );
+          }
           return;
         }
 
