@@ -2,6 +2,7 @@ import 'package:app_front_talearnt/common/theme.dart';
 import 'package:app_front_talearnt/provider/auth/kakao_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../common/widget/bottom_btn.dart';
@@ -22,8 +23,8 @@ class KakaoSignUpPage extends StatelessWidget {
       onPopInvokedWithResult: (bool didPop, Object? result) async {
         if (!didPop) {
           if (context.mounted) {
-            //아마 초기화 함수 만들어야될듯
-            Navigator.pop(context); // 화면 종료
+            kakaoProvider.resetKakao();
+            context.pop();
           }
         }
       },
@@ -67,18 +68,14 @@ class KakaoSignUpPage extends StatelessWidget {
                         children: [
                           Expanded(
                             child: ElevatedButton(
-                              onPressed: () {
-                                kakaoProvider.changeGender(0);
-                              },
+                              onPressed: null,
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.transparent,
-                                foregroundColor: kakaoProvider.gender == 0
-                                    ? Palette.primary01
-                                    : Palette.line01,
-                                side: BorderSide(
-                                    color: kakaoProvider.gender == 0
-                                        ? Palette.primary01
-                                        : Palette.line01),
+                                disabledBackgroundColor:
+                                    kakaoProvider.gender == 0
+                                        ? Palette.bgUp01
+                                        : Colors.transparent,
+                                disabledForegroundColor: Palette.line01,
+                                side: const BorderSide(color: Palette.line01),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8.0),
                                 ),
@@ -86,46 +83,62 @@ class KakaoSignUpPage extends StatelessWidget {
                                 shadowColor: Colors
                                     .transparent, // hover 시 주변 뿌옇게 되는 효과 제거
                               ),
-                              child: const Padding(
-                                padding: EdgeInsets.all(11.5),
-                                child: Text(
-                                  '남자',
-                                  style: TextStyle(fontSize: 16),
-                                ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(11.5),
+                                child: Text('남자',
+                                    style: TextTypes.bodyMedium02(
+                                        color: Palette.text04)),
                               ),
                             ),
                           ),
                           const SizedBox(width: 8.0),
                           Expanded(
                             child: ElevatedButton(
-                              onPressed: () {
-                                kakaoProvider.changeGender(1);
-                              },
+                              onPressed: null,
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.transparent,
-                                foregroundColor: kakaoProvider.gender == 1
-                                    ? Palette.primary01
-                                    : Palette.line01,
-                                side: BorderSide(
-                                    color: kakaoProvider.gender == 1
-                                        ? Palette.primary01
-                                        : Palette.line01),
+                                disabledBackgroundColor:
+                                    kakaoProvider.gender == 1
+                                        ? Palette.bgUp01
+                                        : Colors.transparent,
+                                disabledForegroundColor: Palette.line01,
+                                side: const BorderSide(color: Palette.line01),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8.0),
                                 ),
                                 elevation: 0,
                                 shadowColor: Colors.transparent,
                               ),
-                              child: const Padding(
-                                padding: EdgeInsets.all(11.5),
+                              child: Padding(
+                                padding: const EdgeInsets.all(11.5),
                                 child: Text(
                                   '여자',
-                                  style: TextStyle(fontSize: 16),
+                                  style: TextTypes.bodyMedium02(
+                                      color: Palette.text04),
                                 ),
                               ),
                             ),
                           ),
                         ],
+                      ),
+                      const SizedBox(height: 24.0),
+                      const TextFieldLabel(
+                        content: '닉네임',
+                      ),
+                      const SizedBox(height: 4),
+                      DefaultTextField(
+                        type: 'default',
+                        hint: '닉네임을 입력해주세요',
+                        textEditingController: kakaoProvider.nickNameController,
+                        onChanged: (value) {
+                          kakaoProvider.updateNickNameController(
+                              kakaoProvider.nickNameController);
+                        },
+                        provider: kakaoProvider,
+                        validType: 'nickName',
+                        focusNode: kakaoProvider.nickNameFocusNode,
+                        validFunc: kakaoProvider.updateNickNameValid,
+                        validMessage: kakaoProvider.nickNameValidMessage,
+                        isValid: kakaoProvider.nickNameValid,
                       ),
                       const SizedBox(height: 24.0),
                       const TextFieldLabel(
@@ -386,7 +399,7 @@ class KakaoSignUpPage extends StatelessWidget {
             BottomBtn(
               mediaBottom: MediaQuery.of(context).viewInsets.bottom,
               content: '가입하기',
-              ///////isEnabled: kakaoProvider.,
+              isEnabled: kakaoProvider.isEnabledKakaoSignup,
               onPressed: () async {},
             )
           ],

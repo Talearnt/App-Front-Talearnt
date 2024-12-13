@@ -7,6 +7,12 @@ class KakaoProvider extends ChangeNotifier with ClearText {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneNumController = TextEditingController();
 
+  final TextEditingController _nickNameController = TextEditingController();
+  final FocusNode _nickNameFocusNode = FocusNode();
+  bool _nickNameValid = true;
+  String _nickNameValidMessage = '';
+  bool _checkNickNameDupli = false;
+
   bool _allCheck = false;
   bool _requiredTermsOfUseCheck = false;
   bool _personalInfoCheck = false;
@@ -21,6 +27,16 @@ class KakaoProvider extends ChangeNotifier with ClearText {
 
   TextEditingController get phoneNumController => _phoneNumController;
 
+  TextEditingController get nickNameController => _nickNameController;
+
+  FocusNode get nickNameFocusNode => _nickNameFocusNode;
+
+  bool get nickNameValid => _nickNameValid;
+
+  String get nickNameValidMessage => _nickNameValidMessage;
+
+  bool get checkNickNameDupli => _checkNickNameDupli;
+
   bool get allCheck => _allCheck;
 
   bool get requiredTermsOfUseCheck => _requiredTermsOfUseCheck;
@@ -30,6 +46,9 @@ class KakaoProvider extends ChangeNotifier with ClearText {
   bool get marketingCheck => _marketingCheck;
 
   bool get termsOfUseCheck => _termsOfUseCheck;
+
+  bool get isEnabledKakaoSignup =>
+      requiredTermsOfUseCheck && personalInfoCheck && checkNickNameDupli;
 
   @override
   void clearText(TextEditingController controller) {
@@ -43,8 +62,23 @@ class KakaoProvider extends ChangeNotifier with ClearText {
     });
   }
 
-  void changeGender(int newGender) {
-    _gender = newGender;
+  void updateNickNameController(TextEditingController textEditingController) {
+    textEditingController.addListener(() {
+      notifyListeners();
+    });
+  }
+
+  void updateNickNameValid(String message) {
+    if (message == '') {
+      _nickNameValid = true;
+      _nickNameValidMessage = '';
+      //여기서 viewModel 불러야됨
+      _checkNickNameDupli = true;
+    } else {
+      _nickNameValid = false;
+      _nickNameValidMessage = message;
+      _checkNickNameDupli = false;
+    }
     notifyListeners();
   }
 
@@ -100,5 +134,22 @@ class KakaoProvider extends ChangeNotifier with ClearText {
         !_termsOfUseCheck) {
       _allCheck = false;
     }
+  }
+
+  void resetKakao() {
+    _gender = 0;
+    _nameController.clear();
+    _emailController.clear();
+    _phoneNumController.clear();
+    _nickNameController.clear();
+    _nickNameFocusNode.unfocus();
+    _nickNameValid = true;
+    _nickNameValidMessage = '';
+
+    _allCheck = false;
+    _requiredTermsOfUseCheck = false;
+    _personalInfoCheck = false;
+    _marketingCheck = false;
+    _termsOfUseCheck = false;
   }
 }
