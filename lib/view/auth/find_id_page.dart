@@ -2,8 +2,10 @@ import 'package:app_front_talearnt/common/theme.dart';
 import 'package:app_front_talearnt/common/widget/bottom_btn.dart';
 import 'package:app_front_talearnt/common/widget/button.dart';
 import 'package:app_front_talearnt/common/widget/default_text_field.dart';
+import 'package:app_front_talearnt/common/widget/time_set.dart';
 import 'package:app_front_talearnt/common/widget/top_app_bar.dart';
 import 'package:app_front_talearnt/provider/auth/find_id_provider.dart';
+import 'package:app_front_talearnt/provider/auth/storage_provider.dart';
 import 'package:app_front_talearnt/provider/common/common_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -18,6 +20,8 @@ class FindIdPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final findIdProvider = Provider.of<FindIdProvider>(context);
     final authViewModel = Provider.of<AuthViewModel>(context);
+    final storageProvider = Provider.of<StorageProvider>(context);
+    final commonProvider = Provider.of<CommonProvider>(context);
     return Scaffold(
       backgroundColor: Palette.bgBackGround,
       appBar: TopAppBar(
@@ -60,7 +64,7 @@ class FindIdPage extends StatelessWidget {
                   textEditingController: findIdProvider.userNameController,
                   maxTextLength: 5,
                   validType: 'name',
-                  isEnabled: !findIdProvider.isCertSend,
+                  isEnabled: findIdProvider.textInputEnabled,
                   onChanged: (value) {
                     findIdProvider
                         .updateController(findIdProvider.userNameController);
@@ -89,7 +93,7 @@ class FindIdPage extends StatelessWidget {
                   textEditingController: findIdProvider.phoneNumberController,
                   keyboardType: "num",
                   validType: 'phone',
-                  isEnabled: !findIdProvider.isCertSend,
+                  isEnabled: findIdProvider.textInputEnabled,
                   maxTextLength: 11,
                   onChanged: (value) {
                     findIdProvider
@@ -101,7 +105,8 @@ class FindIdPage extends StatelessWidget {
                   validFunc: findIdProvider.updatePhoneNumberValid,
                   validMessage: findIdProvider.phoneNumberValidMessage,
                   isValid: findIdProvider.phoneNumberValid,
-                  isInfo: findIdProvider.phoneNumberFocusNode.hasFocus,
+                  isInfo: findIdProvider.phoneNumberValid &&
+                      findIdProvider.phoneNumberFocusNode.hasFocus,
                   infoMessage: "01012345678 형식으로 입력해 주세요",
                 ),
                 const SizedBox(
@@ -178,37 +183,49 @@ class FindIdPage extends StatelessWidget {
           const Spacer(),
           Consumer<CommonProvider>(
             builder: (subContext, commonProvider, child) {
-              return findIdProvider.isCertSend
-                  ? BottomBtn(
-                      mediaBottom: MediaQuery.of(context).viewInsets.bottom,
-                      content: '인증하기',
-                      isEnabled: true,
-                      onPressed: () async {
-                        await authViewModel.findUserIdInfo(
-                            context,
-                            findIdProvider.phoneNumberController.text,
-                            findIdProvider.certNumberController.text);
+              if (storageProvider.isCooldown) {
+                return BottomBtn(
+                  mediaBottom: MediaQuery.of(context).viewInsets.bottom,
+                  content:
+                      '인증번호 요청 ${commonProvider.getFormattedTime(storageProvider.certNumResendCooldown)}',
+                  isEnabled: false,
+                  onPressed: () {
+                    storageProvider.startTimer();
+                  },
+                );
+              } else {
+                return findIdProvider.isCertSend
+                    ? BottomBtn(
+                        mediaBottom: MediaQuery.of(context).viewInsets.bottom,
+                        content: '인증하기',
+                        isEnabled: true,
+                        onPressed: () async {
+                          await authViewModel.findUserIdInfo(
+                              context,
+                              findIdProvider.phoneNumberController.text,
+                              findIdProvider.certNumberController.text);
 
-                        if (findIdProvider.userId.isNotEmpty) {
-                          findIdProvider.resetTimer();
-                          context.go('/find-id-success');
-                        }
-                      },
-                    )
-                  : BottomBtn(
-                      mediaBottom: MediaQuery.of(context).viewInsets.bottom,
-                      content: '인증번호 발송',
-                      isEnabled: findIdProvider.isValidNameAndPhoneNumber,
-                      onPressed: findIdProvider.isValidNameAndPhoneNumber
-                          ? () async {
-                              await authViewModel.sendCertNum(
-                                  context,
-                                  'findId',
-                                  findIdProvider.userNameController.text,
-                                  findIdProvider.phoneNumberController.text);
-                            }
-                          : () {},
-                    );
+                          if (findIdProvider.userId.isNotEmpty) {
+                            findIdProvider.resetTimer();
+                            context.go('/find-id-success');
+                          }
+                        },
+                      )
+                    : BottomBtn(
+                        mediaBottom: MediaQuery.of(context).viewInsets.bottom,
+                        content: '인증번호 발송',
+                        isEnabled: findIdProvider.isValidNameAndPhoneNumber,
+                        onPressed: findIdProvider.isValidNameAndPhoneNumber
+                            ? () async {
+                                await authViewModel.sendCertNum(
+                                    context,
+                                    'findId',
+                                    findIdProvider.userNameController.text,
+                                    findIdProvider.phoneNumberController.text);
+                              }
+                            : () {},
+                      );
+              }
             },
           )
         ],

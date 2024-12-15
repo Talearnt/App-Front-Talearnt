@@ -1,5 +1,10 @@
 import 'dart:async';
 
+import 'package:app_front_talearnt/common/common_navigator.dart';
+import 'package:app_front_talearnt/common/widget/button.dart';
+import 'package:app_front_talearnt/common/widget/dialog.dart';
+import 'package:app_front_talearnt/utils/error_message.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 
 import '../clear_text.dart';
@@ -30,6 +35,8 @@ class FindIdProvider extends ChangeNotifier with ClearText {
   String _createdAt = '';
 
   bool _loadFindIdSuccessPage = false;
+
+  bool _textInputEnabled = true;
 
   FocusNode get userNameFocusNode => _userNameFocusNode;
 
@@ -72,6 +79,8 @@ class FindIdProvider extends ChangeNotifier with ClearText {
 
   bool get loadFindIdSuccessPage => _loadFindIdSuccessPage;
 
+  bool get textInputEnabled => _textInputEnabled;
+
   void clearProvider() {
     _userNameController.clear();
     _phoneNumberController.clear();
@@ -104,6 +113,8 @@ class FindIdProvider extends ChangeNotifier with ClearText {
     _createdAt = '';
 
     _loadFindIdSuccessPage = false;
+
+    _textInputEnabled = true;
 
     notifyListeners();
   }
@@ -158,6 +169,7 @@ class FindIdProvider extends ChangeNotifier with ClearText {
   }
 
   void sendCertNum() {
+    _textInputEnabled = false;
     _isCertSend = true;
     notifyListeners();
   }
@@ -184,11 +196,21 @@ class FindIdProvider extends ChangeNotifier with ClearText {
     notifyListeners();
   }
 
-  void startCountdown() {
+  void startCountdown(BuildContext context) {
     Timer.periodic(const Duration(seconds: 1), (timer) {
       if (_certNumSecond.value > 0) {
         _certNumSecond.value -= 1;
       } else {
+        SingleBtnDialog.show(context,
+            content: '인증번호 시간 초과\n다시 시도해 주세요.',
+            timer: false,
+            button: PrimaryM(
+              content: '확인',
+              onPressed: () {
+                overValidTime();
+                context.pop();
+              },
+            ));
         timer.cancel();
       }
     });
@@ -206,5 +228,12 @@ class FindIdProvider extends ChangeNotifier with ClearText {
 
   void afterLoad() {
     _loadFindIdSuccessPage = true;
+  }
+
+  void overValidTime() {
+    _textInputEnabled = true;
+    _isCertSend = false;
+    resetTimer();
+    notifyListeners();
   }
 }

@@ -31,20 +31,22 @@ class ProviderSetup extends StatelessWidget {
         ChangeNotifierProvider<SignUpProvider>(create: (_) => SignUpProvider()),
         ChangeNotifierProvider<FindIdProvider>(create: (_) => FindIdProvider()),
         Provider<CommonNavigator>(create: (_) => CommonNavigator(navigatorKey)),
+        ChangeNotifierProvider<StorageProvider>(
+            create: (_) => StorageProvider()),
         ChangeNotifierProvider<FindPasswordProvider>(
             create: (_) => FindPasswordProvider()),
         ChangeNotifierProvider<AuthViewModel>(
           create: (context) => AuthViewModel(
-              context.read<LoginProvider>(),
-              context.read<SignUpProvider>(),
-              AuthRepository(),
-              TokenManager(Token.empty()),
-              context.read<FindIdProvider>(),
-              context.read<FindPasswordProvider>(),
-              CommonNavigator(navigatorKey)),
+            context.read<LoginProvider>(),
+            context.read<SignUpProvider>(),
+            AuthRepository(),
+            TokenManager(Token.empty()),
+            context.read<FindIdProvider>(),
+            context.read<FindPasswordProvider>(),
+            CommonNavigator(navigatorKey),
+            context.read<StorageProvider>(),
+          ),
         ),
-        ChangeNotifierProvider<StorageProvider>(
-            create: (_) => StorageProvider()),
       ],
       child: child,
     );

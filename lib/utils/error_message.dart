@@ -12,6 +12,7 @@ class ErrorMessages {
     "404-AUTH-10": "10분이 지나 회원의 비밀번호를 변경할 수 없습니다. 다시 시도해주세요.",
     "400-AUTH-11":
         "이미 다른 SNS 혹은 TALEARNT 계정으로 가입된 아이디입니다. 다른 방법으로 로그인을 시도해주세요.",
+    "429-AUTH-12": "많은 요청이 왔습니다. 10분 후에 다시 시도해주세요.",
   };
 
   static const Map<String, String> messageErrorMessages = {
