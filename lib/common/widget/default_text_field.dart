@@ -15,6 +15,7 @@ class DefaultTextField extends StatelessWidget {
   final bool isEnabled;
   final bool isSendAuth;
   final int? maxTextLength;
+  final String helperType;
 
   //cert일 경우 시간에 대한 정의
   final ValueNotifier<int>? timeSeconds;
@@ -50,6 +51,7 @@ class DefaultTextField extends StatelessWidget {
     this.isEnabled = true,
     this.isSendAuth = false,
     this.maxTextLength,
+    this.helperType = 'error',
     this.validType = 'default',
     this.focusNode,
     this.validFunc,
@@ -92,6 +94,7 @@ class DefaultTextField extends StatelessWidget {
       infoType: infoType,
       infoFunc: infoFunc,
       onServerCheck: onServerCheck,
+      helperType: helperType,
     );
   }
 
