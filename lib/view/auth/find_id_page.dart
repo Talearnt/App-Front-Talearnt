@@ -2,7 +2,6 @@ import 'package:app_front_talearnt/common/theme.dart';
 import 'package:app_front_talearnt/common/widget/bottom_btn.dart';
 import 'package:app_front_talearnt/common/widget/button.dart';
 import 'package:app_front_talearnt/common/widget/default_text_field.dart';
-import 'package:app_front_talearnt/common/widget/time_set.dart';
 import 'package:app_front_talearnt/common/widget/top_app_bar.dart';
 import 'package:app_front_talearnt/provider/auth/find_id_provider.dart';
 import 'package:app_front_talearnt/provider/auth/storage_provider.dart';
@@ -21,7 +20,6 @@ class FindIdPage extends StatelessWidget {
     final findIdProvider = Provider.of<FindIdProvider>(context);
     final authViewModel = Provider.of<AuthViewModel>(context);
     final storageProvider = Provider.of<StorageProvider>(context);
-    final commonProvider = Provider.of<CommonProvider>(context);
     return Scaffold(
       backgroundColor: Palette.bgBackGround,
       appBar: TopAppBar(

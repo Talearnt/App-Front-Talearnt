@@ -1,5 +1,8 @@
 import 'dart:async';
 
+import 'package:app_front_talearnt/common/widget/button.dart';
+import 'package:app_front_talearnt/common/widget/dialog.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 
 import '../clear_text.dart';
@@ -510,11 +513,21 @@ class SignUpProvider extends ChangeNotifier with ClearText {
     notifyListeners();
   }
 
-  void startTimer() {
+  void startTimer(BuildContext context) {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (_certTimerSeconds.value > 0) {
         _certTimerSeconds.value -= 1;
       } else {
+        SingleBtnDialog.show(context,
+            content: '인증번호 시간 초과\n다시 시도해 주세요.',
+            timer: false,
+            button: PrimaryM(
+              content: '확인',
+              onPressed: () {
+                overValidTime();
+                context.pop();
+              },
+            ));
         timer.cancel();
       }
     });
@@ -573,6 +586,18 @@ class SignUpProvider extends ChangeNotifier with ClearText {
     _cerNumValid = true;
     _cerNumValidMessage = '';
     _checkSmsValidation = false;
+    notifyListeners();
+  }
+
+  void authFailed() {
+    _sendCertNum = false;
+    resetTimer(180);
+    notifyListeners();
+  }
+
+  void overValidTime() {
+    _sendCertNum = false;
+    resetTimer(180);
     notifyListeners();
   }
 }

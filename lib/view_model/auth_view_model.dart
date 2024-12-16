@@ -136,9 +136,10 @@ class AuthViewModel extends ChangeNotifier {
       (res) {
         if (type == 'findId') {
           findIdProvider.sendCertNum();
+          findIdProvider.resetTimer();
           findIdProvider.startCountdown(commonNavigator.context);
         } else {
-          signUpProvider.startTimer();
+          signUpProvider.startTimer(commonNavigator.context);
           signUpProvider.updateSendCertNum();
         }
       },
@@ -163,7 +164,7 @@ class AuthViewModel extends ChangeNotifier {
         } else {
           signUpProvider.reSendCertNum();
           signUpProvider.resetTimer(180);
-          signUpProvider.startTimer();
+          signUpProvider.startTimer(commonNavigator.context);
         }
       },
     );
@@ -178,6 +179,13 @@ class AuthViewModel extends ChangeNotifier {
       (failure) {
         if (failure.errorCode == "400-AUTH-05") {
           signUpProvider.failedValidChkCertNum();
+
+          if (signUpProvider.certNumCount == 5) {
+            commonNavigator.showSingleDialog(
+              content: '5회 연속 인증에 실패하였습니다.\n인증번호를 재요청해 주세요.',
+            );
+            signUpProvider.authFailed();
+          }
           return;
         }
         commonNavigator.showSingleDialog(
@@ -227,6 +235,7 @@ class AuthViewModel extends ChangeNotifier {
             commonNavigator.showSingleDialog(
               content: '5회 연속 인증에 실패하였습니다.\n인증번호를 재요청해 주세요.',
             );
+            findIdProvider.authFailed();
           }
           return;
         }
