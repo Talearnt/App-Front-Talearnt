@@ -132,6 +132,7 @@ class SingleBtnDialog extends StatelessWidget {
     required String content,
     Widget? button,
     bool timer = false,
+    ValueNotifier<int>? timeSeconds,
   }) {
     button ??= PrimaryM(
       content: '확인',
@@ -146,6 +147,7 @@ class SingleBtnDialog extends StatelessWidget {
         return SingleBtnDialog(
           content: content,
           timer: timer,
+          timeSeconds: timeSeconds,
           button: button,
         );
       },
@@ -189,9 +191,12 @@ class SingleBtnDialog extends StatelessWidget {
                     SizedBox(
                       height: 24,
                       child: timer
-                          ? TimeSet(
-                              timerSeconds: timeSeconds,
-                            )
+                          ? ValueListenableBuilder<int>(
+                              valueListenable:
+                                  timeSeconds!, // ValueNotifier를 감시
+                              builder: (context, value, child) {
+                                return TimeSet(timerSeconds: timeSeconds);
+                              })
                           : null,
                     ),
                   ],

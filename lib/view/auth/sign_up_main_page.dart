@@ -1,4 +1,6 @@
 import 'package:app_front_talearnt/common/theme.dart';
+import 'package:app_front_talearnt/provider/auth/storage_provider.dart';
+import 'package:app_front_talearnt/provider/common/common_provider.dart';
 import 'package:app_front_talearnt/view/auth/sign_up_sub1_page.dart';
 import 'package:app_front_talearnt/view/auth/sign_up_sub2_page.dart';
 import 'package:app_front_talearnt/view/auth/sign_up_sub3_page.dart';
@@ -18,6 +20,8 @@ class SignUpMainPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final signUpProvider = Provider.of<SignUpProvider>(context);
     final authViewModel = Provider.of<AuthViewModel>(context);
+    final storageProvider = Provider.of<StorageProvider>(context);
+    final commonProvider = Provider.of<CommonProvider>(context);
 
     return PopScope(
       canPop: false, // 뒤로가기 허용은 하지 않지만 사용자 정의 동작을 처리
@@ -114,46 +118,61 @@ class SignUpMainPage extends StatelessWidget {
                             });
                           },
                         )
-                      : signUpProvider.sendCertNum
+                      : storageProvider.isCooldown
                           ? BottomBtn(
                               mediaBottom:
                                   MediaQuery.of(context).viewInsets.bottom,
-                              content: '인증하기',
-                              isEnabled:
-                                  signUpProvider.isSignUpSub2NextButtonEnabled,
-                              onPressed: () async {
-                                await authViewModel.signUpCheckSmsValidation(
-                                    context,
-                                    signUpProvider.phoneNumController.text,
-                                    signUpProvider.certNumController.text);
-                                //인증 완료되면 다음 페이지로 넘어감
-                                if (signUpProvider.checkSmsValidation) {
-                                  signUpProvider.finishCheckCertNum();
-                                  signUpProvider.pageController.nextPage(
-                                    duration: const Duration(milliseconds: 300),
-                                    curve: Curves.ease,
-                                  );
-                                }
+                              content:
+                                  '인증번호 요청 ${commonProvider.getFormattedTime(storageProvider.certNumResendCooldown)}',
+                              isEnabled: false,
+                              onPressed: () {
+                                storageProvider.startTimer();
                               },
                             )
-                          : BottomBtn(
-                              mediaBottom:
-                                  MediaQuery.of(context).viewInsets.bottom,
-                              content: '인증번호 발송',
-                              isEnabled:
-                                  signUpProvider.isSignUpSub2ButtonEnabled,
-                              onPressed:
-                                  signUpProvider.isSignUpSub2ButtonEnabled
-                                      ? () async {
-                                          await authViewModel.sendCertNum(
-                                              context,
-                                              'signUp',
-                                              null,
-                                              signUpProvider
-                                                  .phoneNumController.text);
-                                        }
-                                      : () {},
-                            ),
+                          : signUpProvider.sendCertNum
+                              ? BottomBtn(
+                                  mediaBottom:
+                                      MediaQuery.of(context).viewInsets.bottom,
+                                  content: '인증하기',
+                                  isEnabled: signUpProvider
+                                      .isSignUpSub2NextButtonEnabled,
+                                  onPressed: () async {
+                                    await authViewModel
+                                        .signUpCheckSmsValidation(
+                                            context,
+                                            signUpProvider
+                                                .phoneNumController.text,
+                                            signUpProvider
+                                                .certNumController.text);
+                                    //인증 완료되면 다음 페이지로 넘어감
+                                    if (signUpProvider.checkSmsValidation) {
+                                      signUpProvider.finishCheckCertNum();
+                                      signUpProvider.pageController.nextPage(
+                                        duration:
+                                            const Duration(milliseconds: 300),
+                                        curve: Curves.ease,
+                                      );
+                                    }
+                                  },
+                                )
+                              : BottomBtn(
+                                  mediaBottom:
+                                      MediaQuery.of(context).viewInsets.bottom,
+                                  content: '인증번호 요청',
+                                  isEnabled:
+                                      signUpProvider.isSignUpSub2ButtonEnabled,
+                                  onPressed:
+                                      signUpProvider.isSignUpSub2ButtonEnabled
+                                          ? () async {
+                                              await authViewModel.sendCertNum(
+                                                  context,
+                                                  'signUp',
+                                                  null,
+                                                  signUpProvider
+                                                      .phoneNumController.text);
+                                            }
+                                          : () {},
+                                ),
             ],
           ),
         ),

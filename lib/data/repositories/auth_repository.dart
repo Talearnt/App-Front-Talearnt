@@ -64,7 +64,7 @@ class AuthRepository {
       (response) {
         final data = response["data"];
         if (data is Map<String, dynamic>) {
-          return right(UserIdInfo.fromJson(data));
+          return right(UserIdInfo.fromJson(response));
         }
         if (data is bool) {
           return right(data); // UserIdInfo에 맞는 데이터 생성

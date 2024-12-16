@@ -1,7 +1,7 @@
 import 'package:app_front_talearnt/common/theme.dart';
 import 'package:app_front_talearnt/common/widget/button.dart';
+import 'package:app_front_talearnt/common/widget/toast_message.dart';
 import 'package:app_front_talearnt/common/widget/top_app_bar.dart';
-import 'package:app_front_talearnt/view/auth/login_page.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:provider/provider.dart';
@@ -16,6 +16,13 @@ class FindIdSuccessPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final findIdprovider = Provider.of<FindIdProvider>(context);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!findIdprovider.loadFindIdSuccessPage) {
+        ToastMessage.show(
+            context: context, message: '인증이 완료되었습니다.', type: 1, bottom: 46);
+        findIdprovider.afterLoad();
+      }
+    });
     return Scaffold(
       backgroundColor: Palette.bgBackGround,
       appBar: TopAppBar(

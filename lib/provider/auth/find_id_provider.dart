@@ -1,5 +1,12 @@
-import 'package:flutter/material.dart';
 import 'dart:async';
+
+import 'package:app_front_talearnt/common/common_navigator.dart';
+import 'package:app_front_talearnt/common/widget/button.dart';
+import 'package:app_front_talearnt/common/widget/dialog.dart';
+import 'package:app_front_talearnt/utils/error_message.dart';
+import 'package:go_router/go_router.dart';
+import 'package:flutter/material.dart';
+
 import '../clear_text.dart';
 
 class FindIdProvider extends ChangeNotifier with ClearText {
@@ -19,7 +26,7 @@ class FindIdProvider extends ChangeNotifier with ClearText {
   bool _isCertSend = false;
   String _certValidMessage = '';
   int _certNumberCount = 0;
-  ValueNotifier<int> _certNumSecond = ValueNotifier<int>(600);
+  ValueNotifier<int> _certNumSecond = ValueNotifier<int>(180);
   Timer? _timer;
 
   bool _isValidNameAndPhoneNumber = false;
@@ -27,33 +34,53 @@ class FindIdProvider extends ChangeNotifier with ClearText {
   String _userId = '';
   String _createdAt = '';
 
+  bool _loadFindIdSuccessPage = false;
+
+  bool _textInputEnabled = true;
+
   FocusNode get userNameFocusNode => _userNameFocusNode;
+
   FocusNode get phoneNumberFocusNode => _phoneNumberFocusNode;
+
   FocusNode get certFocusNode => _certFocusNode;
 
   bool get userNameValid => _userNameValid;
+
   bool get phoneNumberValid => _phoneNumberValid;
+
   bool get certNumberValid => _certNumberValid;
 
   String get userNameMessage => _userNameMessage;
+
   String get phoneNumberValidMessage => _phoneNumberValidMessage;
+
   String get certValidMessage => _certValidMessage;
 
-  bool get isValidNameAndPhoneNumber => _isValidNameAndPhoneNumber;
+  bool get isValidNameAndPhoneNumber =>
+      _isValidNameAndPhoneNumber &&
+      _userNameController.text.isNotEmpty &&
+      _phoneNumberController.text.isNotEmpty;
 
   TextEditingController get userNameController => _userNameController;
+
   TextEditingController get phoneNumberController => _phoneNumberController;
+
   TextEditingController get certNumberController => _certNumberController;
 
   bool get isCertSend => _isCertSend;
 
   int get certNumberCount => _certNumberCount;
+
   ValueNotifier<int> get certNumSecond => _certNumSecond;
 
   String get userId => _userId;
+
   String get createdAt => _createdAt;
 
-  @override
+  bool get loadFindIdSuccessPage => _loadFindIdSuccessPage;
+
+  bool get textInputEnabled => _textInputEnabled;
+
   void clearProvider() {
     _userNameController.clear();
     _phoneNumberController.clear();
@@ -75,7 +102,7 @@ class FindIdProvider extends ChangeNotifier with ClearText {
     _isCertSend = false;
 
     _certNumberCount = 0;
-    _certNumSecond = ValueNotifier<int>(600);
+    _certNumSecond = ValueNotifier<int>(180);
 
     _userId = '';
     _createdAt = '';
@@ -84,6 +111,10 @@ class FindIdProvider extends ChangeNotifier with ClearText {
 
     _userId = '';
     _createdAt = '';
+
+    _loadFindIdSuccessPage = false;
+
+    _textInputEnabled = true;
 
     notifyListeners();
   }
@@ -138,6 +169,7 @@ class FindIdProvider extends ChangeNotifier with ClearText {
   }
 
   void sendCertNum() {
+    _textInputEnabled = false;
     _isCertSend = true;
     notifyListeners();
   }
@@ -164,11 +196,21 @@ class FindIdProvider extends ChangeNotifier with ClearText {
     notifyListeners();
   }
 
-  void startCountdown() {
+  void startCountdown(BuildContext context) {
     Timer.periodic(const Duration(seconds: 1), (timer) {
       if (_certNumSecond.value > 0) {
         _certNumSecond.value -= 1;
       } else {
+        SingleBtnDialog.show(context,
+            content: '인증번호 시간 초과\n다시 시도해 주세요.',
+            timer: false,
+            button: PrimaryM(
+              content: '확인',
+              onPressed: () {
+                overValidTime();
+                context.pop();
+              },
+            ));
         timer.cancel();
       }
     });
@@ -181,6 +223,24 @@ class FindIdProvider extends ChangeNotifier with ClearText {
 
   void resetTimer() {
     stopTimer();
-    _certNumSecond = ValueNotifier<int>(600);
+    _certNumSecond = ValueNotifier<int>(180);
+  }
+
+  void afterLoad() {
+    _loadFindIdSuccessPage = true;
+  }
+
+  void overValidTime() {
+    _textInputEnabled = true;
+    _isCertSend = false;
+    resetTimer();
+    notifyListeners();
+  }
+
+  void authFailed() {
+    _textInputEnabled = true;
+    _isCertSend = false;
+    resetTimer();
+    notifyListeners();
   }
 }

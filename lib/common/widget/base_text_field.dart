@@ -16,6 +16,7 @@ class BaseTextField extends StatefulWidget {
   final String keyboardType;
   final Widget? suffixIcon;
   final bool? obscureText; // nullable로 변경
+  final String helperType;
 
   //검증관련
   final String validType;
@@ -52,6 +53,7 @@ class BaseTextField extends StatefulWidget {
     this.isValid = true,
     this.validFunc,
     this.obscureText,
+    this.helperType = 'error',
     this.isOtherValid = false,
     this.checkOtherValidFun,
     this.isInfo = false,
@@ -153,8 +155,8 @@ class BaseTextFieldState extends State<BaseTextField> {
           maxLengthEnforcement: MaxLengthEnforcement.enforced,
           buildCounter: (context,
               {required int currentLength,
-              required bool isFocused,
-              required int? maxLength}) {
+                required bool isFocused,
+                required int? maxLength}) {
             return null;
           },
           style: widget.isEnabled
@@ -194,7 +196,7 @@ class BaseTextFieldState extends State<BaseTextField> {
           visible: !widget.isValid && widget.validMessage.isNotEmpty,
           child: Column(
             children: [
-              ErrorHelper(type: 'error', content: widget.validMessage)
+              ErrorHelper(type: widget.helperType, content: widget.validMessage)
             ],
           ),
         ),
@@ -203,25 +205,27 @@ class BaseTextFieldState extends State<BaseTextField> {
   }
 
   OutlineInputBorder _getBorder() {
-    return !widget.isValid
-        ? OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8.0),
-            borderSide: const BorderSide(color: Palette.error02))
-        : OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8.0),
-            borderSide: const BorderSide(color: Palette.line01),
-          );
+    return OutlineInputBorder(
+      borderRadius: BorderRadius.circular(8.0),
+      borderSide: BorderSide(
+        color: !widget.isValid
+            ? (widget.helperType == 'error' ? Palette.error02 : Palette.line01)
+            : Palette.line01,
+      ),
+    );
   }
 
   OutlineInputBorder _getFocusedBorder() {
-    return !widget.isValid
-        ? OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8.0),
-            borderSide: const BorderSide(color: Palette.error02))
-        : OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8.0),
-            borderSide: const BorderSide(color: Palette.primary01),
-          );
+    return OutlineInputBorder(
+      borderRadius: BorderRadius.circular(8.0),
+      borderSide: BorderSide(
+        color: !widget.isValid
+            ? (widget.helperType == 'error'
+            ? Palette.error02
+            : Palette.primary01)
+            : Palette.primary01,
+      ),
+    );
   }
 
   OutlineInputBorder _getDisabledBorder() {

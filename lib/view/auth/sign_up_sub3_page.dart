@@ -111,15 +111,15 @@ class SignUpSub3Page extends StatelessWidget {
               hint: '닉네임을 입력해주세요',
               textEditingController: signUpProvider.nickNameController,
               onChanged: (value) {
-                signUpProvider.updateNickNameController(
-                    signUpProvider.nickNameController);
+                signUpProvider
+                    .updateController(signUpProvider.nickNameController);
               },
               provider: signUpProvider,
               validType: 'nickName',
               focusNode: signUpProvider.nickNameFocusNode,
               validFunc: signUpProvider.updateNickNameInfoValid,
               validMessage: signUpProvider.nickNameValidMessage,
-              isValid: signUpProvider.nickNameValid,
+              isValid: signUpProvider.nickNameHelper,
               isInfo: signUpProvider.isNickNameInfo,
               isInfoValid: signUpProvider.isNickNameInfoValid,
               infoMessage: signUpProvider.nickNameInfoMessage,
@@ -127,6 +127,7 @@ class SignUpSub3Page extends StatelessWidget {
               infoType: signUpProvider.nickNameInfoType,
               infoFunc: signUpProvider.updateNickNameInfo,
               onServerCheck: authViewModel.checkNickNameDuplication,
+              helperType: signUpProvider.nickNameHelperType,
             ),
             const SizedBox(height: 24.0),
             const TextFieldLabel(
@@ -164,10 +165,11 @@ class SignUpSub3Page extends StatelessWidget {
               focusNode: signUpProvider.emailFocusNode,
               validFunc: signUpProvider.updateEmailValid,
               validMessage: signUpProvider.emailValidMessage,
-              isValid: signUpProvider.emailValid,
+              isValid: signUpProvider.emailHelper,
               isOtherValid: true,
               checkOtherValidFun: signUpProvider.checkBeforeEmailValid,
               onServerCheck: authViewModel.checkEmailDuplication,
+              helperType: signUpProvider.emailHelperType,
             ),
             const SizedBox(height: 24.0),
             const TextFieldLabel(

@@ -28,14 +28,17 @@ class FindPasswordProvider extends ChangeNotifier with ClearText {
   String _passwordCheckValidMessage = '';
 
   bool _isValidEmailAndPhoneNumber = false;
-  bool _isVaildNewPassword = false;
+  bool _isValidNewPassword = false;
 
   String _userId = '';
   String _createdAt = '';
 
+  bool _loadFindPasswordSuccessPage = false;
+
   TextEditingController get emailController => _emailController;
 
   TextEditingController get phoneNumberController => _phoneNumberController;
+
   TextEditingController get passwordController => _passwordController;
 
   TextEditingController get passwordCheckController => _passwordCheckController;
@@ -66,18 +69,23 @@ class FindPasswordProvider extends ChangeNotifier with ClearText {
 
   String get passwordCheckValidMessage => _passwordCheckValidMessage;
 
-  bool get isValidEmailAndPhoneNumber => _isValidEmailAndPhoneNumber;
+  bool get isValidEmailAndPhoneNumber =>
+      _isValidEmailAndPhoneNumber &&
+      _emailController.text.isNotEmpty &&
+      _phoneNumberController.text.isNotEmpty;
 
-  bool get isVaildNewPassword => _isVaildNewPassword;
+  bool get isValidNewPassword => _isValidNewPassword;
 
   bool get passwordObscure => _passwordObscure;
+
   bool get passwordCheckObscure => _passwordCheckObscure;
 
   String get userId => _userId;
 
   String get createdAt => _createdAt;
 
-  @override
+  bool get loadFindPasswordSuccessPage => _loadFindPasswordSuccessPage;
+
   void clearProvider() {
     _emailController.clear();
     _phoneNumberController.clear();
@@ -97,7 +105,7 @@ class FindPasswordProvider extends ChangeNotifier with ClearText {
     _passwordCheckValid = true;
     _addListenerPasswordCheck = false;
     _isValidEmailAndPhoneNumber = false;
-    _isVaildNewPassword = false;
+    _isValidNewPassword = false;
 
     _emailValidMessage = '';
     _phoneNumberValidMessage = '';
@@ -106,6 +114,10 @@ class FindPasswordProvider extends ChangeNotifier with ClearText {
 
     _userId = '';
     _createdAt = '';
+
+    _loadFindPasswordSuccessPage = false;
+
+    notifyListeners();
   }
 
   @override
@@ -236,9 +248,9 @@ class FindPasswordProvider extends ChangeNotifier with ClearText {
             .hasMatch(passwordCheckController.text) &&
         _passwordValid &&
         _passwordCheckValid) {
-      _isVaildNewPassword = true;
+      _isValidNewPassword = true;
     } else {
-      _isVaildNewPassword = false;
+      _isValidNewPassword = false;
     }
     notifyListeners();
   }
@@ -257,5 +269,9 @@ class FindPasswordProvider extends ChangeNotifier with ClearText {
     _userId = userId;
     _createdAt = createdAt;
     notifyListeners();
+  }
+
+  void afterLoad() {
+    _loadFindPasswordSuccessPage = true;
   }
 }
