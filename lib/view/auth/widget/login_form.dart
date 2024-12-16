@@ -21,7 +21,7 @@ class LoginForm extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         const TextFieldLabel(
-          content: '아이디',
+          content: '아이디(이메일)',
         ),
         const SizedBox(height: 4),
         DefaultTextField(
