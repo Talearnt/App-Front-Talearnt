@@ -17,16 +17,7 @@ abstract class ApiConstants {
   static const String smsValidUrl =
       "$baseUrl/v1/auth/sms/validation"; //인증 번호 문자 검증 통합 url
 
-  static const String activeAgreeCodeUrl =
-      "$baseUrl/v1/admin/agree-codes/active";
-
-  static const String setAgreeCodeUrl = "$baseUrl/v1/admin/agree-codes";
-
-  static const String addTalentCategories =
-      "$baseUrl/v1/admin/keywords/talent-categories";
-
-  static const String addBigCategories =
-      "$baseUrl/v1/admin/keywords/big-categories";
+  static const String getTalentCategories = "$baseUrl/v1/keywords";
 
   static String getFineUserPwUrl(String userId) {
     return "$baseUrl/v1/auth/password/$userId/email";
