@@ -4,8 +4,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 
-class MatchWrite extends StatelessWidget {
-  const MatchWrite({super.key});
+class MatchWrite1Page extends StatelessWidget {
+  const MatchWrite1Page({super.key});
 
   @override
   Widget build(BuildContext context) {
