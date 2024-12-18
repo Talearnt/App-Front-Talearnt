@@ -9,9 +9,11 @@ import 'package:provider/provider.dart';
 
 import '../data/model/respone/token.dart';
 import '../data/repositories/auth_repository.dart';
+import '../data/repositories/talearnt_board_repository.dart';
 import '../main.dart';
 import '../utils/token_manager.dart';
 import '../view_model/auth_view_model.dart';
+import '../view_model/talearnt_board_view_model.dart';
 import 'auth/kakao_provider.dart';
 import 'common/common_provider.dart';
 
@@ -45,6 +47,12 @@ class ProviderSetup extends StatelessWidget {
             context.read<FindPasswordProvider>(),
             CommonNavigator(navigatorKey),
             context.read<StorageProvider>(),
+          ),
+        ),
+        ChangeNotifierProvider<TalearntBoardViewModel>(
+          create: (context) => TalearntBoardViewModel(
+            CommonNavigator(navigatorKey),
+            TalearntBoardRepository(),
           ),
         ),
       ],
