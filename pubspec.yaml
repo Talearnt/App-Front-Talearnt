@@ -40,7 +40,11 @@ dependencies:
   flutter_svg: ^2.0.14
   dartz: ^0.10.1 #결과값에 따라 넘기는 데이터가 다르게
   go_router: ^14.6.1
+<<<<<<< HEAD
   shared_preferences: ^2.3.3
+=======
+  flutter_quill: ^10.8.5
+>>>>>>> ac58c07 (feat : Add 아이콘 추가)
 
 dev_dependencies:
   flutter_test:
@@ -69,11 +73,14 @@ flutter:
     - assets/icons/success_helper.svg
     - assets/icons/add_square.svg
     - assets/icons/back_arrow.svg
+    - assets/icons/back_typo.svg
     - assets/icons/bell_off.svg
     - assets/icons/bell_on.svg
     - assets/icons/bookmark_default.svg
     - assets/icons/bookmark_hover.svg
     - assets/icons/bookmark_pressed.svg
+    - assets/icons/center_before.svg
+    - assets/icons/center_after.svg
     - assets/icons/check_off_primary.svg
     - assets/icons/check_off_second.svg
     - assets/icons/check_on_primary.svg
@@ -91,7 +98,11 @@ flutter:
     - assets/icons/eye_close.svg
     - assets/icons/eye_open.svg
     - assets/icons/finish.svg
+    - assets/icons/image_after.svg
+    - assets/icons/image_before.svg
     - assets/icons/kebab_menu.svg
+    - assets/icons/link_after.svg
+    - assets/icons/link_before.svg
     - assets/icons/next_arrow.svg
     - assets/icons/reset.svg
     - assets/icons/search.svg
@@ -105,6 +116,7 @@ flutter:
     - assets/icons/default_logo.svg
     - assets/icons/no_rabbit_logo.svg
     - assets/img/success_sign_up_logo.svg
+    - assets/icons/typo.svg
     - assets/icons/field_check.svg
     - assets/icons/field_check_again_fail.svg
     - assets/icons/field_check_again_success.svg
