@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import '../../../common/theme.dart';
 import '../../../provider/auth/login_provider.dart';
 import '../../../view_model/auth_view_model.dart';
+import '../../../view_model/talearnt_board_view_model.dart';
 
 class LoginForm extends StatelessWidget {
   const LoginForm({super.key});
@@ -16,6 +17,7 @@ class LoginForm extends StatelessWidget {
   Widget build(BuildContext context) {
     final loginProvider = Provider.of<LoginProvider>(context);
     final authViewModel = Provider.of<AuthViewModel>(context);
+    final talearntBoardViewModel = Provider.of<TalearntBoardViewModel>(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -60,10 +62,12 @@ class LoginForm extends StatelessWidget {
         const SizedBox(height: 24.0),
         ElevatedButton(
           onPressed: () async {
-            if (loginProvider.checkLoginValidity()) {
-              await authViewModel.login(loginProvider.emailController.text,
-                  loginProvider.passwordController.text);
-            }
+            // if (loginProvider.checkLoginValidity()) {
+            //   await authViewModel.login(loginProvider.emailController.text,
+            //       loginProvider.passwordController.text);
+            // }
+            await talearntBoardViewModel.getKeywords();
+            context.go('/set-keyword');
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xFF1B76FF),

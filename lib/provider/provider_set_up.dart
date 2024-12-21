@@ -4,6 +4,7 @@ import 'package:app_front_talearnt/provider/auth/find_password_provider.dart';
 import 'package:app_front_talearnt/provider/auth/login_provider.dart';
 import 'package:app_front_talearnt/provider/auth/sign_up_provider.dart';
 import 'package:app_front_talearnt/provider/auth/storage_provider.dart';
+import 'package:app_front_talearnt/provider/talearnt_board/keyword_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -49,10 +50,13 @@ class ProviderSetup extends StatelessWidget {
             context.read<StorageProvider>(),
           ),
         ),
+        ChangeNotifierProvider<KeywordProvider>(
+            create: (_) => KeywordProvider()),
         ChangeNotifierProvider<TalearntBoardViewModel>(
           create: (context) => TalearntBoardViewModel(
             CommonNavigator(navigatorKey),
             TalearntBoardRepository(),
+            context.read<KeywordProvider>(),
           ),
         ),
       ],

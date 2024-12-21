@@ -10,6 +10,8 @@ import 'package:go_router/go_router.dart';
 
 import '../view/auth/login_page.dart';
 import '../view/auth/sign_up_main_page.dart';
+import '../view/talearnt_board/set_talent_keyword_success_page.dart';
+import '../view/talearnt_board/set_talent_main_page.dart';
 
 class Routes {
   static final GoRouter router = GoRouter(
@@ -60,6 +62,18 @@ class Routes {
             path: '/sign-up-success',
             builder: (BuildContext context, GoRouterState state) {
               return const SignUpSuccessPage();
+            },
+          ),
+          GoRoute(
+            path: '/set-keyword',
+            builder: (BuildContext context, GoRouterState state) {
+              return const SetTalentMainPage();
+            },
+          ),
+          GoRoute(
+            path: '/set-keyword-success',
+            builder: (BuildContext context, GoRouterState state) {
+              return const SetTalentKeywordSuccessPage();
             },
           ),
         ],

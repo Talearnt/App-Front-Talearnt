@@ -9,7 +9,7 @@ import 'package:app_front_talearnt/data/model/respone/user_id_info.dart';
 import 'package:app_front_talearnt/data/services/dio_service.dart';
 import 'package:dartz/dartz.dart';
 
-import '../../utils/api_constants.dart';
+import '../../constants/api_constants.dart';
 import '../model/param/login_param.dart';
 import '../model/param/sign_up_param.dart';
 

@@ -111,6 +111,7 @@ flutter:
     - assets/icons/field_check_fail.svg
     - assets/icons/field_check_disabled.svg
     - assets/icons/field_check_success.svg
+    - assets/icons/set_talent_keyword_success_logo.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

@@ -506,12 +506,14 @@ class TextBtnS extends StatelessWidget {
 class TextBtnM extends StatelessWidget {
   final String content;
   final VoidCallback? onPressed;
+  final TextStyle? btnStyle;
 
-  const TextBtnM({
+  TextBtnM({
     super.key,
     required this.content,
     this.onPressed,
-  });
+    TextStyle? btnStyle,
+  }) : btnStyle = btnStyle ?? TextTypes.bodyMedium01(color: Palette.text02);
 
   @override
   Widget build(BuildContext context) {
@@ -524,12 +526,7 @@ class TextBtnM extends StatelessWidget {
         ),
         minimumSize: Size.zero,
       ),
-      child: Text(
-        content,
-        style: TextTypes.bodyMedium01(
-          color: Palette.text02,
-        ),
-      ),
+      child: Text(content, style: btnStyle),
     );
   }
 }
