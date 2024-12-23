@@ -24,7 +24,7 @@ class MatchWrite2Page extends StatelessWidget {
         onPressed: () {
           context.pop();
         },
-        second: const TextBtnM(content: '미리보기'),
+        second: TextBtnM(content: '미리보기'),
         first: const PrimaryS(content: '등록'),
       ),
       bottomNavigationBar: AnimatedPadding(

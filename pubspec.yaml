@@ -40,11 +40,8 @@ dependencies:
   flutter_svg: ^2.0.14
   dartz: ^0.10.1 #결과값에 따라 넘기는 데이터가 다르게
   go_router: ^14.6.1
-<<<<<<< HEAD
   shared_preferences: ^2.3.3
-=======
   flutter_quill: ^10.8.5
->>>>>>> ac58c07 (feat : Add 아이콘 추가)
 
 dev_dependencies:
   flutter_test:
