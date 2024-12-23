@@ -21,8 +21,8 @@ class MatchWrite1Page extends StatelessWidget {
         decoration: const BoxDecoration(
           border: Border(
             top: BorderSide(
-              color: Palette.line01, // 테두리 색상
-              width: 1.0, // 테두리 두께
+              color: Palette.line01,
+              width: 1.0,
             ),
           ),
         ),
