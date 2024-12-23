@@ -51,12 +51,12 @@ class SetTalentMainPage extends StatelessWidget {
                   curve: Curves.ease,
                 );
                 keywordProvider.beforeSelectedGiveTalentKeywordCodes();
+                keywordProvider.beforeSelectedInterestTalentKeywordCodes();
               } else {
                 keywordProvider.pageController.previousPage(
                   duration: const Duration(milliseconds: 300),
                   curve: Curves.ease,
                 );
-                keywordProvider.beforeSelectedInterestTalentKeywordCodes();
               }
             }),
         body: Center(
@@ -115,7 +115,7 @@ class SetTalentMainPage extends StatelessWidget {
                       : BottomBtn(
                           mediaBottom: MediaQuery.of(context).viewInsets.bottom,
                           content: '등록하기',
-                          isEnabled: keywordProvider.isGiveTalentButtonEnabled,
+                          isEnabled: keywordProvider.isConfirmButtonEnabled,
                           onPressed: () async {
                             context.go('/set-keyword-success');
                           },

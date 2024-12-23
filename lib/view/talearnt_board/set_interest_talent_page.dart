@@ -1,4 +1,5 @@
 import 'package:app_front_talearnt/view/talearnt_board/widget/bottom_selected_chip_list.dart';
+import 'package:app_front_talearnt/view/talearnt_board/widget/keyword_tab_dot.dart';
 import 'package:app_front_talearnt/view/talearnt_board/widget/talearnt_chip_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -52,8 +53,7 @@ class SetInterestTalentPage extends StatelessWidget {
                     }
                   }
                 }
-                setKeywordProvider
-                    .updateSelectedInterestTalentKeywordCodes(labelCode);
+                setKeywordProvider.updateSearchInterestTalent(labelCode);
               },
               decoration: InputDecoration(
                 hintStyle: TextTypes.caption01(color: Palette.text04),
@@ -81,34 +81,53 @@ class SetInterestTalentPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 24),
-            TabBar(
-              controller: setKeywordProvider.interestTalentTabController,
-              tabAlignment: TabAlignment.start,
-              isScrollable: true,
-              indicatorSize: TabBarIndicatorSize.tab,
-              indicatorColor: Palette.text01,
-              indicatorWeight: 1.0,
-              indicatorPadding: EdgeInsets.zero,
-              dividerColor: Palette.bgUp02,
-              dividerHeight: 2.0,
-              labelColor: Palette.text01,
-              labelStyle: TextTypes.bodyLarge02(color: Palette.text01),
-              unselectedLabelStyle:
-                  TextTypes.bodyLarge02(color: Palette.text02),
-              padding: EdgeInsets.zero,
-              tabs: [
-                for (var tabText in GlobalValueConstants.keywordCategoris)
-                  Container(
-                    alignment: Alignment.center,
-                    child: Tab(
-                      child: Text(tabText.name),
-                    ),
-                  ),
-              ],
-            )
+            setKeywordProvider.isInterestTalentSearch
+                ? Container()
+                : TabBar(
+                    controller: setKeywordProvider.interestTalentTabController,
+                    tabAlignment: TabAlignment.start,
+                    isScrollable: true,
+                    indicatorSize: TabBarIndicatorSize.tab,
+                    indicatorColor: Palette.text01,
+                    indicatorWeight: 1.0,
+                    indicatorPadding: EdgeInsets.zero,
+                    dividerColor: Palette.bgUp02,
+                    dividerHeight: 2.0,
+                    labelColor: Palette.text01,
+                    labelStyle: TextTypes.bodyLarge02(color: Palette.text01),
+                    unselectedLabelStyle:
+                        TextTypes.bodyLarge02(color: Palette.text02),
+                    padding: EdgeInsets.zero,
+                    tabs: [
+                      for (var tabText in GlobalValueConstants.keywordCategoris)
+                        Container(
+                          alignment: Alignment.center,
+                          child: Tab(
+                            child: Stack(
+                              clipBehavior: Clip.none,
+                              alignment: Alignment.center,
+                              children: [
+                                Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 7),
+                                    child: Text(tabText.name)),
+                                if (tabText.talentKeywords.any(
+                                  (talent) => setKeywordProvider
+                                      .interestTalentKeywordCodes
+                                      .contains(talent.code),
+                                ))
+                                  const KeywordTabDot()
+                              ],
+                            ),
+                          ),
+                        ),
+                    ],
+                  )
           ],
         ),
-        const SizedBox(height: 20),
+        setKeywordProvider.isInterestTalentSearch
+            ? Container()
+            : const SizedBox(height: 20),
         Expanded(
           child: setKeywordProvider.isInterestTalentSearch
               ? SingleChildScrollView(

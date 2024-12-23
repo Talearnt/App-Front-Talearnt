@@ -1,4 +1,5 @@
 import 'package:app_front_talearnt/view/talearnt_board/widget/bottom_selected_chip_list.dart';
+import 'package:app_front_talearnt/view/talearnt_board/widget/keyword_tab_dot.dart';
 import 'package:app_front_talearnt/view/talearnt_board/widget/talearnt_chip_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -102,7 +103,22 @@ class SetGiveTalentPage extends StatelessWidget {
                         Container(
                           alignment: Alignment.center,
                           child: Tab(
-                            child: Text(tabText.name),
+                            child: Stack(
+                              clipBehavior: Clip.none,
+                              alignment: Alignment.center,
+                              children: [
+                                Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 7),
+                                    child: Text(tabText.name)),
+                                if (tabText.talentKeywords.any(
+                                  (talent) => setKeywordProvider
+                                      .giveTalentKeywordCodes
+                                      .contains(talent.code),
+                                ))
+                                  const KeywordTabDot()
+                              ],
+                            ),
                           ),
                         ),
                     ],

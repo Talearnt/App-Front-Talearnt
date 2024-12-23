@@ -78,6 +78,10 @@ class KeywordProvider extends ChangeNotifier {
   bool get isInterestTalentSearch =>
       _interestTalentSearchController.text.isNotEmpty;
 
+  bool get isConfirmButtonEnabled =>
+      _selectedGiveTalentKeywordCodes.isNotEmpty &&
+      _selectedInterestTalentKeywordCodes.isNotEmpty;
+
   void _onChanged() {
     notifyListeners(); // Focus 상태 변경 시 UI 갱신
   }
@@ -147,14 +151,11 @@ class KeywordProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setSelectedGiveTalentKeywordCodes() {
-    _selectedGiveTalentKeywordCodes = _giveTalentKeywordCodes.toList();
-    notifyListeners();
-  }
-
   void updateSelectedGiveTalentKeywordCodes(List<int> keywordTalent) {
     _selectedGiveTalentKeywordCodes.clear();
-    _selectedGiveTalentKeywordCodes.addAll(keywordTalent);
+    if (keywordTalent.isNotEmpty) {
+      _selectedGiveTalentKeywordCodes.addAll(keywordTalent);
+    }
     notifyListeners();
   }
 
@@ -163,14 +164,11 @@ class KeywordProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setSelectedInterestTalentKeywordCodes() {
-    _selectedInterestTalentKeywordCodes = _interestTalentKeywordCodes.toList();
-    notifyListeners();
-  }
-
   void updateSelectedInterestTalentKeywordCodes(List<int> keywordTalent) {
     _selectedInterestTalentKeywordCodes.clear();
-    _selectedInterestTalentKeywordCodes.addAll(keywordTalent);
+    if (keywordTalent.isNotEmpty) {
+      _selectedInterestTalentKeywordCodes.addAll(keywordTalent);
+    }
     notifyListeners();
   }
 
@@ -201,8 +199,18 @@ class KeywordProvider extends ChangeNotifier {
     _setTalentPage = 0;
     _pageController.initialPage;
     _tickerProvider.dispose();
+    _giveTalentTabController.index = 0;
+    _interestTalentTabController.index = 0;
     _giveTalentKeywordCodes = [];
     _interestTalentKeywordCodes = [];
+    _selectedGiveTalentKeywordCodes = [];
+    _searchedGiveTalentKeywordCodes = [];
+    _selectedInterestTalentKeywordCodes = [];
+    _searchedInterestTalentKeywordCodes = [];
+    _giveTalentFocusNode.unfocus();
+    _interestTalentFocusNode.unfocus();
+    _giveTalentSearchController.clear();
+    _interestTalentSearchController.clear();
   }
 
   @override
