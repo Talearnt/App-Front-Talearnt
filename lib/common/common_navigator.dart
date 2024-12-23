@@ -25,16 +25,20 @@ class CommonNavigator {
 
   void showDoubleDialog({
     required String content,
-    required String closeText,
-    required Widget button,
+    required String leftText,
+    required String rightText,
+    VoidCallback? leftFun,
+    VoidCallback? rightFun,
     bool timer = false,
     ValueNotifier<int>? timeSeconds,
   }) {
     DoubleBtnDialog.show(
       context,
       content: content,
-      closeText: closeText,
-      button: button,
+      leftText: leftText,
+      rightText: rightText,
+      leftFun: leftFun,
+      rightFun: rightFun,
       timer: timer,
     );
   }

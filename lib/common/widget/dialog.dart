@@ -5,17 +5,20 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class DoubleBtnDialog extends StatelessWidget {
-  final String content, closeText;
+  final String content, leftText, rightText;
   final bool timer;
-  final Widget button;
+  final VoidCallback leftFun;
+  final VoidCallback rightFun;
   final ValueNotifier<int>? timeSeconds;
 
   const DoubleBtnDialog({
     super.key,
     required this.content,
-    required this.closeText,
+    required this.leftText,
+    required this.rightText,
+    required this.leftFun,
+    required this.rightFun,
     this.timer = false,
-    required this.button,
     this.timeSeconds,
   });
 
@@ -23,8 +26,10 @@ class DoubleBtnDialog extends StatelessWidget {
   static void show(
     BuildContext context, {
     required String content,
-    required String closeText,
-    required Widget button,
+    required String leftText,
+    required String rightText,
+    VoidCallback? leftFun,
+    VoidCallback? rightFun,
     bool timer = false,
   }) {
     showDialog(
@@ -32,9 +37,17 @@ class DoubleBtnDialog extends StatelessWidget {
       builder: (BuildContext context) {
         return DoubleBtnDialog(
           content: content,
-          closeText: closeText,
+          leftText: leftText,
+          rightText: rightText,
+          leftFun: leftFun ??
+              () {
+                context.pop();
+              },
+          rightFun: rightFun ??
+              () {
+                context.pop();
+              },
           timer: timer,
-          button: button,
         );
       },
     );
@@ -91,16 +104,18 @@ class DoubleBtnDialog extends StatelessWidget {
                   children: [
                     Expanded(
                       child: SecondaryMGray(
-                        content: closeText,
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
+                        content: leftText,
+                        onPressed: leftFun,
                       ),
                     ),
                     const SizedBox(
                       width: 8,
                     ),
-                    Expanded(child: button),
+                    Expanded(
+                        child: PrimaryM(
+                      content: rightText,
+                      onPressed: rightFun,
+                    )),
                   ],
                 ),
               ),
