@@ -4,36 +4,96 @@ import '../../data/model/respone/keyword_category.dart';
 import 'custom_ticker_provider.dart';
 
 class KeywordProvider extends ChangeNotifier {
+  KeywordProvider() : _tickerProvider = CustomTickerProvider() {
+    _giveTalentTabController = TabController(length: 0, vsync: _tickerProvider);
+    _interestTalentTabController =
+        TabController(length: 0, vsync: _tickerProvider);
+    _giveTalentFocusNode.addListener(_onChanged);
+    _interestTalentFocusNode.addListener(_onChanged);
+    _giveTalentSearchController.addListener(_onChanged);
+    _interestTalentSearchController.addListener(_onChanged);
+  }
+
   int _setTalentPage = 0;
   final PageController _pageController = PageController();
 
-  late TabController _keywordTabController;
+  late TabController _giveTalentTabController;
+  late TabController _interestTalentTabController;
   final CustomTickerProvider _tickerProvider;
-  List<int> _giveTalentKeywordCodes = [];
-  List<int> _selectedGiveTalentKeywordCodes = [];
+  List<int> _giveTalentKeywordCodes = []; //처음 선택되는 keyword
+  List<int> _selectedGiveTalentKeywordCodes = []; // 키워드 확인 화면에서 사용되는 keyword
+  List<int> _searchedGiveTalentKeywordCodes = []; // 검색용 keyword
   List<int> _interestTalentKeywordCodes = [];
   List<int> _selectedInterestTalentKeywordCodes = [];
+  List<int> _searchedInterestTalentKeywordCodes = [];
+  final FocusNode _giveTalentFocusNode = FocusNode();
+  final FocusNode _interestTalentFocusNode = FocusNode();
+
+  final TextEditingController _giveTalentSearchController =
+      TextEditingController();
+  final TextEditingController _interestTalentSearchController =
+      TextEditingController();
 
   int get setTalentPage => _setTalentPage;
 
   PageController get pageController => _pageController;
 
-  TabController get keywordTabController => _keywordTabController;
+  TabController get giveTalentTabController => _giveTalentTabController;
+
+  TabController get interestTalentTabController => _interestTalentTabController;
 
   List<int> get giveTalentKeywordCodes => _giveTalentKeywordCodes;
 
   List<int> get selectedGiveTalentKeywordCodes =>
       _selectedGiveTalentKeywordCodes;
 
-  bool get isGiveTalentButtonEnabled => true;
+  List<int> get searchedGiveTalentKeywordCodes =>
+      _searchedGiveTalentKeywordCodes;
+
+  bool get isGiveTalentButtonEnabled => giveTalentKeywordCodes.isNotEmpty;
 
   List<int> get interestTalentKeywordCodes => _interestTalentKeywordCodes;
 
   List<int> get selectedInterestTalentKeywordCodes =>
       _selectedInterestTalentKeywordCodes;
 
-  KeywordProvider() : _tickerProvider = CustomTickerProvider() {
-    _keywordTabController = TabController(length: 0, vsync: _tickerProvider);
+  List<int> get searchedInterestTalentKeywordCodes =>
+      _searchedInterestTalentKeywordCodes;
+
+  bool get isInterestTalentButtonEnabled =>
+      interestTalentKeywordCodes.isNotEmpty;
+
+  FocusNode get giveTalentFocusNode => _giveTalentFocusNode;
+
+  FocusNode get interestTalentFocusNode => _interestTalentFocusNode;
+
+  TextEditingController get giveTalentSearchController =>
+      _giveTalentSearchController;
+
+  TextEditingController get interestTalentSearchController =>
+      _interestTalentSearchController;
+
+  bool get isGiveTalentSearch => _giveTalentSearchController.text.isNotEmpty;
+
+  bool get isInterestTalentSearch =>
+      _interestTalentSearchController.text.isNotEmpty;
+
+  void _onChanged() {
+    notifyListeners(); // Focus 상태 변경 시 UI 갱신
+  }
+
+  void updateSearchGiveTalent(List<int> searchedGiveTalent) {
+    _searchedGiveTalentKeywordCodes.clear();
+    if (searchedGiveTalent.isNotEmpty) {
+      _searchedGiveTalentKeywordCodes.addAll(searchedGiveTalent);
+    }
+  }
+
+  void updateSearchInterestTalent(List<int> searchedGiveTalent) {
+    _searchedInterestTalentKeywordCodes.clear();
+    if (searchedGiveTalent.isNotEmpty) {
+      _searchedInterestTalentKeywordCodes.addAll(searchedGiveTalent);
+    }
   }
 
   void updatePage(int pageNum) {
@@ -46,9 +106,22 @@ class KeywordProvider extends ChangeNotifier {
   }
 
   void initTabController(List<KeywordCategory> keywordCategories) {
-    _keywordTabController.dispose();
-    _keywordTabController =
+    _giveTalentTabController.dispose();
+    _interestTalentTabController.dispose();
+    _giveTalentTabController =
         TabController(length: keywordCategories.length, vsync: _tickerProvider);
+    _interestTalentTabController =
+        TabController(length: keywordCategories.length, vsync: _tickerProvider);
+    notifyListeners();
+  }
+
+  void resetGiveTabIndex() {
+    _giveTalentTabController.index = 0;
+    notifyListeners();
+  }
+
+  void resetInterestTabIndex() {
+    _interestTalentTabController.index = 0;
     notifyListeners();
   }
 
@@ -106,6 +179,24 @@ class KeywordProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void updateSelectedSearchGiveTalentKeywordCodes(
+      int index, List<int> keywordTalent) {
+    _giveTalentKeywordCodes.clear();
+    _giveTalentKeywordCodes.addAll(keywordTalent);
+    _giveTalentSearchController.clear();
+    _giveTalentTabController.index = index;
+    notifyListeners();
+  }
+
+  void updateSelectedSearchInterestTalentKeywordCodes(
+      int index, List<int> keywordTalent) {
+    _interestTalentKeywordCodes.clear();
+    _interestTalentKeywordCodes.addAll(keywordTalent);
+    _interestTalentSearchController.clear();
+    _interestTalentTabController.index = index;
+    notifyListeners();
+  }
+
   void reset() {
     _setTalentPage = 0;
     _pageController.initialPage;
@@ -116,7 +207,8 @@ class KeywordProvider extends ChangeNotifier {
 
   @override
   void dispose() {
-    _keywordTabController.dispose();
+    _giveTalentTabController.dispose();
+    _interestTalentTabController.dispose();
     _tickerProvider.dispose();
     super.dispose();
   }

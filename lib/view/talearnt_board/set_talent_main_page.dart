@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import '../../common/common_navigator.dart';
 import '../../common/widget/bottom_btn.dart';
 import '../../common/widget/top_app_bar.dart';
 import '../../provider/talearnt_board/keyword_provider.dart';
@@ -16,9 +17,10 @@ class SetTalentMainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final keywordProvider = Provider.of<KeywordProvider>(context);
+    final commonNavigator = Provider.of<CommonNavigator>(context);
 
     return PopScope(
-      canPop: false, // 뒤로가기 허용은 하지 않지만 사용자 정의 동작을 처리
+      canPop: false,
       onPopInvokedWithResult: (bool didPop, Object? result) async {
         if (!didPop) {
           // 뒤로가기가 처리되지 않았을 때
@@ -34,8 +36,15 @@ class SetTalentMainPage extends StatelessWidget {
             content: '',
             onPressed: () {
               if (keywordProvider.setTalentPage == 0) {
-                keywordProvider.reset(); // 초기화 작업 수행
-                context.pop();
+                commonNavigator.showDoubleDialog(
+                  content: "로그아웃 후\n다른 아이디로 로그인 하시겠어요?",
+                  leftText: '로그아웃',
+                  rightText: '키워드 설정',
+                  leftFun: () {
+                    context.pop();
+                    context.go('/');
+                  },
+                );
               } else if (keywordProvider.setTalentPage == 2) {
                 keywordProvider.pageController.previousPage(
                   duration: const Duration(milliseconds: 300),
@@ -47,6 +56,7 @@ class SetTalentMainPage extends StatelessWidget {
                   duration: const Duration(milliseconds: 300),
                   curve: Curves.ease,
                 );
+                keywordProvider.beforeSelectedInterestTalentKeywordCodes();
               }
             }),
         body: Center(
@@ -77,7 +87,7 @@ class SetTalentMainPage extends StatelessWidget {
                       mediaBottom: MediaQuery.of(context).viewInsets.bottom,
                       content: '다음',
                       isEnabled: keywordProvider.isGiveTalentButtonEnabled,
-                      onPressed: () async {
+                      onPressed: () {
                         keywordProvider.updateSelectedGiveTalentKeywordCodes(
                             keywordProvider.giveTalentKeywordCodes);
                         keywordProvider.pageController.nextPage(
@@ -90,7 +100,8 @@ class SetTalentMainPage extends StatelessWidget {
                       ? BottomBtn(
                           mediaBottom: MediaQuery.of(context).viewInsets.bottom,
                           content: '다음',
-                          isEnabled: keywordProvider.isGiveTalentButtonEnabled,
+                          isEnabled:
+                              keywordProvider.isInterestTalentButtonEnabled,
                           onPressed: () async {
                             keywordProvider
                                 .updateSelectedInterestTalentKeywordCodes(
@@ -103,7 +114,7 @@ class SetTalentMainPage extends StatelessWidget {
                         )
                       : BottomBtn(
                           mediaBottom: MediaQuery.of(context).viewInsets.bottom,
-                          content: '다음',
+                          content: '등록하기',
                           isEnabled: keywordProvider.isGiveTalentButtonEnabled,
                           onPressed: () async {
                             context.go('/set-keyword-success');
