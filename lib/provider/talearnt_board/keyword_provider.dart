@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../data/model/respone/keyword_category.dart';
-import 'custom_ticker_provider.dart';
+import '../common/custom_ticker_provider.dart';
 
 class KeywordProvider extends ChangeNotifier {
   KeywordProvider() : _tickerProvider = CustomTickerProvider() {

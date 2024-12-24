@@ -1,6 +1,7 @@
 import 'package:app_front_talearnt/common/widget/default_text_field.dart';
 import 'package:app_front_talearnt/common/widget/obscure_text_field.dart';
 import 'package:app_front_talearnt/common/widget/text_field_label.dart';
+import 'package:app_front_talearnt/provider/common/common_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -18,6 +19,7 @@ class LoginForm extends StatelessWidget {
     final loginProvider = Provider.of<LoginProvider>(context);
     final authViewModel = Provider.of<AuthViewModel>(context);
     final talearntBoardViewModel = Provider.of<TalearntBoardViewModel>(context);
+    final commonProvider = Provider.of<CommonProvider>(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -62,10 +64,30 @@ class LoginForm extends StatelessWidget {
         const SizedBox(height: 24.0),
         ElevatedButton(
           onPressed: () async {
-            // if (loginProvider.checkLoginValidity()) {
-            //   await authViewModel.login(loginProvider.emailController.text,
-            //       loginProvider.passwordController.text);
-            // }
+            if (loginProvider.checkLoginValidity()) {
+              commonProvider.changeIsLoading(true);
+              await authViewModel
+                  .login(loginProvider.emailController.text,
+                      loginProvider.passwordController.text)
+                  .whenComplete(() => commonProvider.changeIsLoading(false));
+            }
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xFF1B76FF),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+          ),
+          child: const Padding(
+            padding: EdgeInsets.all(11.5),
+            child: Text(
+              '로그인',
+              style: TextStyle(fontSize: 18, color: Color(0xFFFFFFFF)),
+            ),
+          ),
+        ),
+        ElevatedButton(
+          onPressed: () async {
             await talearntBoardViewModel.getKeywords();
             context.go('/set-keyword');
           },
@@ -78,7 +100,7 @@ class LoginForm extends StatelessWidget {
           child: const Padding(
             padding: EdgeInsets.all(11.5),
             child: Text(
-              '로그인',
+              '키워드 설정 임시 버튼',
               style: TextStyle(fontSize: 18, color: Color(0xFFFFFFFF)),
             ),
           ),
