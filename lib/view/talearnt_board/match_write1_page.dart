@@ -1,16 +1,23 @@
 import 'package:app_front_talearnt/common/theme.dart';
 import 'package:app_front_talearnt/common/widget/button.dart';
 import 'package:app_front_talearnt/common/widget/top_app_bar.dart';
+import 'package:app_front_talearnt/constants/global_value_constants.dart';
+import 'package:app_front_talearnt/provider/auth/match_write_provider.dart';
+import 'package:app_front_talearnt/view/talearnt_board/match_write1_bottom_sheet.dart';
 import 'package:app_front_talearnt/view/talearnt_board/match_write2_page.dart';
+import 'package:app_front_talearnt/view_model/talearnt_board_view_model.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class MatchWrite1Page extends StatelessWidget {
   const MatchWrite1Page({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final matchWriteProvider = Provider.of<MatchWriteProvider>(context);
+    final talearntBoardViewModel = Provider.of<TalearntBoardViewModel>(context);
     return Scaffold(
       appBar: TopAppBar(
         onPressed: () {
@@ -140,44 +147,90 @@ class MatchWrite1Page extends StatelessWidget {
                     const SizedBox(
                       height: 16,
                     ),
-                    IconButton(
-                      icon: SvgPicture.asset(
-                        'assets/icons/add_square.svg',
-                        width: 36,
-                        height: 36,
-                      ),
-                      onPressed: () {
-                        showModalBottomSheet(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return Container(
-                              height: 600,
-                              width: double.infinity,
-                              padding: const EdgeInsets.only(
-                                top: 28,
-                                left: 24,
-                                right: 24,
-                              ),
-                              decoration: const BoxDecoration(
-                                color: Palette.bgBackGround,
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(24),
-                                  topRight: Radius.circular(24),
+                    Wrap(
+                      children: [
+                        ...matchWriteProvider.interestTalentKeywordCodes
+                            .map((item) {
+                          String labelText = '';
+                          for (var category
+                              in GlobalValueConstants.keywordCategoris) {
+                            if (category.talentKeywords
+                                .any((talent) => talent.code == item)) {
+                              var data = category.talentKeywords
+                                  .firstWhere((talent) => talent.code == item);
+                              labelText = data.name;
+                              break;
+                            }
+                          }
+                          return Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 0, 12, 16),
+                            child: ChoiceChip(
+                              showCheckmark: false,
+                              shape: RoundedRectangleBorder(
+                                side: BorderSide(
+                                  color: matchWriteProvider
+                                          .selectedInterestTalentKeywordCodes
+                                          .contains(item)
+                                      ? Palette.primary01
+                                      : Palette.line01,
+                                  width: 1,
                                 ),
+                                borderRadius: BorderRadius.circular(8.0),
                               ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    '받고 싶은 상대의 재능',
-                                    style: TextTypes.bodySemi01(),
+                              backgroundColor: Palette.bgBackGround,
+                              label: Text(labelText),
+                              labelStyle: TextStyle(
+                                color: matchWriteProvider
+                                        .selectedInterestTalentKeywordCodes
+                                        .contains(item)
+                                    ? Palette.primary01
+                                    : Palette.text04,
+                              ),
+                              selected: matchWriteProvider
+                                  .selectedInterestTalentKeywordCodes
+                                  .contains(item),
+                              selectedColor: Palette.bgBackGround,
+                              onSelected: (selected) {
+                                final updatedFilter = matchWriteProvider
+                                    .selectedInterestTalentKeywordCodes
+                                    .toList();
+                                updatedFilter.contains(item)
+                                    ? updatedFilter.removeWhere(
+                                        (keyword) => keyword == item)
+                                    : updatedFilter.add(item);
+                                matchWriteProvider
+                                    .updateSelectedInterestTalentKeywordCodes
+                                    .call(updatedFilter);
+                              },
+                            ),
+                          );
+                        }).toList(),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 12, bottom: 16),
+                          child: IconButton(
+                            icon: SvgPicture.asset(
+                              'assets/icons/add_square.svg',
+                              width: 36,
+                              height: 36,
+                            ),
+                            onPressed: () async {
+                              await talearntBoardViewModel.getKeywords();
+                              showModalBottomSheet(
+                                context: context,
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.vertical(
+                                    top: Radius.circular(24),
                                   ),
-                                ],
-                              ),
-                            );
-                          },
-                        );
-                      },
+                                ),
+                                clipBehavior: Clip.antiAlias,
+                                builder: (BuildContext context) {
+                                  return const MatchWrite1BottomSheet();
+                                },
+                              );
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(
                       height: 24,

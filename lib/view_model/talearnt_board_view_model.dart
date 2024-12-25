@@ -1,3 +1,4 @@
+import 'package:app_front_talearnt/provider/auth/match_write_provider.dart';
 import 'package:flutter/material.dart';
 
 import '../common/common_navigator.dart';
@@ -10,11 +11,13 @@ class TalearntBoardViewModel extends ChangeNotifier {
   final CommonNavigator commonNavigator;
   final TalearntBoardRepository talearntBoardRepository;
   final KeywordProvider keywordProvider;
+  final MatchWriteProvider matchWriteProvider;
 
   TalearntBoardViewModel(
     this.commonNavigator,
     this.talearntBoardRepository,
     this.keywordProvider,
+    this.matchWriteProvider,
   );
 
   Future<void> getKeywords() async {
@@ -24,6 +27,7 @@ class TalearntBoardViewModel extends ChangeNotifier {
             content: ErrorMessages.getMessage(failure.errorCode)), (keywords) {
       GlobalValueConstants.keywordCategoris = keywords;
       keywordProvider.initTabController(keywords);
+      matchWriteProvider.initTabController(keywords);
     });
   }
 }

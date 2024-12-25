@@ -53,15 +53,16 @@ class ProviderSetup extends StatelessWidget {
         ),
         ChangeNotifierProvider<KeywordProvider>(
             create: (_) => KeywordProvider()),
+        ChangeNotifierProvider<MatchWriteProvider>(
+            create: (_) => MatchWriteProvider()),
         ChangeNotifierProvider<TalearntBoardViewModel>(
           create: (context) => TalearntBoardViewModel(
             CommonNavigator(navigatorKey),
             TalearntBoardRepository(),
             context.read<KeywordProvider>(),
+            context.read<MatchWriteProvider>(),
           ),
         ),
-        ChangeNotifierProvider<MatchWriteProvider>(
-            create: (_) => MatchWriteProvider()),
       ],
       child: child,
     );
