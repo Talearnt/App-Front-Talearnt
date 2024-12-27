@@ -8,7 +8,9 @@ import 'package:provider/provider.dart';
 import '../../common/common_navigator.dart';
 import '../../common/widget/bottom_btn.dart';
 import '../../common/widget/top_app_bar.dart';
+import '../../provider/common/common_provider.dart';
 import '../../provider/talearnt_board/keyword_provider.dart';
+import '../../view_model/talent_board_view_model.dart';
 import 'confirmation_talent_page.dart';
 
 class SetTalentMainPage extends StatelessWidget {
@@ -18,6 +20,8 @@ class SetTalentMainPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final keywordProvider = Provider.of<KeywordProvider>(context);
     final commonNavigator = Provider.of<CommonNavigator>(context);
+    final talentBoardViewModel = Provider.of<TalentBoardViewModel>(context);
+    final commonProvider = Provider.of<CommonProvider>(context);
 
     return PopScope(
       canPop: false,
@@ -117,7 +121,15 @@ class SetTalentMainPage extends StatelessWidget {
                           content: '등록하기',
                           isEnabled: keywordProvider.isConfirmButtonEnabled,
                           onPressed: () async {
-                            context.go('/set-keyword-success');
+                            commonProvider.changeIsLoading(true);
+                            talentBoardViewModel
+                                .setMyKeywords(
+                                    keywordProvider
+                                        .selectedGiveTalentKeywordCodes,
+                                    keywordProvider
+                                        .selectedInterestTalentKeywordCodes)
+                                .whenComplete(() =>
+                                    commonProvider.changeIsLoading(false));
                           },
                         )
             ],
