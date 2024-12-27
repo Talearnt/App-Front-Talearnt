@@ -10,13 +10,13 @@ import 'package:provider/provider.dart';
 
 import '../data/model/respone/token.dart';
 import '../data/repositories/auth_repository.dart';
-import '../data/repositories/talearnt_board_repository.dart';
+import '../data/repositories/talent_board_repository.dart';
 import '../data/services/authorization_interceptor.dart';
 import '../data/services/dio_service.dart';
 import '../main.dart';
 import '../utils/token_manager.dart';
 import '../view_model/auth_view_model.dart';
-import '../view_model/talearnt_board_view_model.dart';
+import '../view_model/talent_board_view_model.dart';
 import 'auth/kakao_provider.dart';
 import 'common/common_provider.dart';
 
@@ -71,10 +71,10 @@ class ProviderSetup extends StatelessWidget {
         ),
         ChangeNotifierProvider<KeywordProvider>(
             create: (_) => KeywordProvider()),
-        ChangeNotifierProvider<TalearntBoardViewModel>(
-          create: (context) => TalearntBoardViewModel(
+        ChangeNotifierProvider<TalentBoardViewModel>(
+          create: (context) => TalentBoardViewModel(
             CommonNavigator(navigatorKey),
-            TalearntBoardRepository(context.read<DioService>()),
+            TalentBoardRepository(context.read<DioService>()),
             context.read<KeywordProvider>(),
           ),
         ),
