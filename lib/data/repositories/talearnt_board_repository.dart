@@ -6,7 +6,9 @@ import 'package:dartz/dartz.dart';
 import '../../constants/api_constants.dart';
 
 class TalearntBoardRepository {
-  final DioService dio = DioService();
+  final DioService dio;
+
+  TalearntBoardRepository(this.dio);
 
   Future<Either<Failure, List<KeywordCategory>>> getKeywords() async {
     final result = await dio.get(ApiConstants.getTalentCategories, null, null);

@@ -11,6 +11,8 @@ import 'package:provider/provider.dart';
 import '../data/model/respone/token.dart';
 import '../data/repositories/auth_repository.dart';
 import '../data/repositories/talearnt_board_repository.dart';
+import '../data/services/authorization_interceptor.dart';
+import '../data/services/dio_service.dart';
 import '../main.dart';
 import '../utils/token_manager.dart';
 import '../view_model/auth_view_model.dart';
@@ -28,7 +30,24 @@ class ProviderSetup extends StatelessWidget {
     // Provider.debugCheckInvalidValueType = null;
     return MultiProvider(
       providers: [
+        Provider<TokenManager>(
+          create: (_) => TokenManager(Token.empty()),
+        ),
         ChangeNotifierProvider<LoginProvider>(create: (_) => LoginProvider()),
+        Provider<AuthorizationInterceptor>(
+          create: (context) => AuthorizationInterceptor(
+            tokenManager: context.read<TokenManager>(),
+            loginProvider: context.read<LoginProvider>(),
+          ),
+        ),
+
+        // DioService Provider
+        Provider<DioService>(
+          create: (context) => DioService(
+            context.read<TokenManager>(),
+            interceptor: context.read<AuthorizationInterceptor>(),
+          ),
+        ),
         ChangeNotifierProvider<CommonProvider>(create: (_) => CommonProvider()),
         ChangeNotifierProvider<KakaoProvider>(create: (_) => KakaoProvider()),
         ChangeNotifierProvider<SignUpProvider>(create: (_) => SignUpProvider()),
@@ -42,8 +61,8 @@ class ProviderSetup extends StatelessWidget {
           create: (context) => AuthViewModel(
             context.read<LoginProvider>(),
             context.read<SignUpProvider>(),
-            AuthRepository(),
-            TokenManager(Token.empty()),
+            AuthRepository(context.read<DioService>()),
+            context.read<TokenManager>(),
             context.read<FindIdProvider>(),
             context.read<FindPasswordProvider>(),
             CommonNavigator(navigatorKey),
@@ -55,7 +74,7 @@ class ProviderSetup extends StatelessWidget {
         ChangeNotifierProvider<TalearntBoardViewModel>(
           create: (context) => TalearntBoardViewModel(
             CommonNavigator(navigatorKey),
-            TalearntBoardRepository(),
+            TalearntBoardRepository(context.read<DioService>()),
             context.read<KeywordProvider>(),
           ),
         ),

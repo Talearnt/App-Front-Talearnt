@@ -70,6 +70,7 @@ class LoginForm extends StatelessWidget {
                   .login(loginProvider.emailController.text,
                       loginProvider.passwordController.text)
                   .whenComplete(() => commonProvider.changeIsLoading(false));
+              await talearntBoardViewModel.getKeywords();
             }
           },
           style: ElevatedButton.styleFrom(

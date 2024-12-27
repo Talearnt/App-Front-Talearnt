@@ -24,6 +24,7 @@ class TalearntBoardViewModel extends ChangeNotifier {
             content: ErrorMessages.getMessage(failure.errorCode)), (keywords) {
       GlobalValueConstants.keywordCategoris = keywords;
       keywordProvider.initTabController(keywords);
+      commonNavigator.goRoute('/set-keyword');
     });
   }
 }

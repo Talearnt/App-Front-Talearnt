@@ -14,7 +14,9 @@ import '../model/param/login_param.dart';
 import '../model/param/sign_up_param.dart';
 
 class AuthRepository {
-  final DioService dio = DioService();
+  final DioService dio;
+
+  AuthRepository(this.dio);
 
   Future<Either<Failure, Token>> login(LoginParam param) async {
     final result = await dio.post(ApiConstants.loginUrl, param.toJson(), null);
