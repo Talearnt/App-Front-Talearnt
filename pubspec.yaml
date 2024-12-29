@@ -101,10 +101,13 @@ flutter:
     - assets/icons/image_before.svg
     - assets/icons/italics_after.svg
     - assets/icons/italics_before.svg
+    - assets/icons/justify_before.svg
     - assets/icons/kebab_menu.svg
+    - assets/icons/left_before.svg
     - assets/icons/link_after.svg
     - assets/icons/link_before.svg
     - assets/icons/next_arrow.svg
+    - assets/img/profile.svg
     - assets/icons/reset.svg
     - assets/icons/search.svg
     - assets/icons/search_small.svg
@@ -116,6 +119,7 @@ flutter:
     - assets/icons/sns_kakao.svg
     - assets/icons/default_logo.svg
     - assets/icons/no_rabbit_logo.svg
+    - assets/icons/right_before.svg
     - assets/img/success_sign_up_logo.svg
     - assets/icons/typo.svg
     - assets/icons/underline_after.svg
