@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 import '../../../common/theme.dart';
 import '../../../provider/auth/login_provider.dart';
 import '../../../view_model/auth_view_model.dart';
-import '../../../view_model/talearnt_board_view_model.dart';
+import '../../../view_model/talent_board_view_model.dart';
 
 class LoginForm extends StatelessWidget {
   const LoginForm({super.key});
@@ -18,7 +18,7 @@ class LoginForm extends StatelessWidget {
   Widget build(BuildContext context) {
     final loginProvider = Provider.of<LoginProvider>(context);
     final authViewModel = Provider.of<AuthViewModel>(context);
-    final talearntBoardViewModel = Provider.of<TalearntBoardViewModel>(context);
+    final talentBoardViewModel = Provider.of<TalentBoardViewModel>(context);
     final commonProvider = Provider.of<CommonProvider>(context);
 
     return Column(
@@ -88,8 +88,7 @@ class LoginForm extends StatelessWidget {
         ),
         ElevatedButton(
           onPressed: () async {
-            await talearntBoardViewModel.getKeywords();
-            context.go('/set-keyword');
+            await talentBoardViewModel.getKeywords();
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xFF1B76FF),
