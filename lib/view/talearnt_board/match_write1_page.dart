@@ -4,7 +4,6 @@ import 'package:app_front_talearnt/common/widget/top_app_bar.dart';
 import 'package:app_front_talearnt/constants/global_value_constants.dart';
 import 'package:app_front_talearnt/provider/auth/match_write_provider.dart';
 import 'package:app_front_talearnt/view/talearnt_board/match_write1_bottom_sheet.dart';
-import 'package:app_front_talearnt/view/talearnt_board/match_write2_page.dart';
 import 'package:app_front_talearnt/view_model/talearnt_board_view_model.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
@@ -41,21 +40,23 @@ class MatchWrite1Page extends StatelessWidget {
             ),
             child: Row(
               children: [
-                const TextWithIcon(
-                    content: '초기화', icon: Icons.refresh_outlined),
+                TextWithIcon(
+                  content: '초기화',
+                  icon: Icons.refresh_outlined,
+                  onPressed: () {
+                    matchWriteProvider.reset();
+                  },
+                ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: PrimaryM(
                     content: '다음',
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return const MatchWrite2Page();
-                          },
-                        ),
-                      );
+                    onPressed: () async {
+                      matchWriteProvider.checkChipsSelected();
+
+                      matchWriteProvider.isChipsSelected
+                          ? context.go('/match_write2')
+                          : null;
                     },
                   ),
                 ),
@@ -103,19 +104,32 @@ class MatchWrite1Page extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text.rich(
-                      TextSpan(
-                        children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text.rich(
                           TextSpan(
-                            text: '주고 싶은 나의 재능',
-                            style: TextTypes.bodySemi02(color: Palette.text01),
+                            children: [
+                              TextSpan(
+                                text: '주고 싶은 나의 재능',
+                                style:
+                                    TextTypes.bodySemi02(color: Palette.text01),
+                              ),
+                              TextSpan(
+                                text: '(최소 1개)',
+                                style:
+                                    TextTypes.bodySemi02(color: Palette.text02),
+                              ),
+                            ],
                           ),
-                          TextSpan(
-                            text: '(최소 1개)',
-                            style: TextTypes.bodySemi02(color: Palette.text02),
+                        ),
+                        Text(
+                          matchWriteProvider.giveTalentRequiredMessage,
+                          style: TextTypes.caption01(
+                            color: Palette.error01,
                           ),
-                        ],
-                      ),
+                        )
+                      ],
                     ),
                     const SizedBox(
                       height: 16,
@@ -130,19 +144,32 @@ class MatchWrite1Page extends StatelessWidget {
                     const SizedBox(
                       height: 24,
                     ),
-                    Text.rich(
-                      TextSpan(
-                        children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text.rich(
                           TextSpan(
-                            text: '받고 싶은 나의 재능',
-                            style: TextTypes.bodySemi02(color: Palette.text01),
+                            children: [
+                              TextSpan(
+                                text: '받고 싶은 나의 재능',
+                                style:
+                                    TextTypes.bodySemi02(color: Palette.text01),
+                              ),
+                              TextSpan(
+                                text: '(최소 1개)',
+                                style:
+                                    TextTypes.bodySemi02(color: Palette.text02),
+                              ),
+                            ],
                           ),
-                          TextSpan(
-                            text: '(최소 1개)',
-                            style: TextTypes.bodySemi02(color: Palette.text02),
+                        ),
+                        Text(
+                          matchWriteProvider.interestTalentRequiredMessage,
+                          style: TextTypes.caption01(
+                            color: Palette.error01,
                           ),
-                        ],
-                      ),
+                        )
+                      ],
                     ),
                     const SizedBox(
                       height: 16,
@@ -232,61 +259,130 @@ class MatchWrite1Page extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const SizedBox(
-                      height: 24,
-                    ),
-                    Text(
-                      '진행 기간',
-                      style: TextTypes.bodySemi02(
-                        color: Palette.text01,
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          '진행 기간',
+                          style: TextTypes.bodySemi02(
+                            color: Palette.text01,
+                          ),
+                        ),
+                        Text(
+                          matchWriteProvider.durationRequiredMessage,
+                          style: TextTypes.caption01(
+                            color: Palette.error01,
+                          ),
+                        )
+                      ],
                     ),
                     const SizedBox(
                       height: 16,
                     ),
-                    const Wrap(
+                    Wrap(
                       spacing: 12.0,
                       runSpacing: 12.0,
                       children: [
-                        // chips 들어갈 예정
+                        ...matchWriteProvider.duration.map((item) {
+                          String labelText = item;
+                          return ChoiceChip(
+                            showCheckmark: false,
+                            shape: RoundedRectangleBorder(
+                              side: BorderSide(
+                                color:
+                                    matchWriteProvider.selectedDuration == item
+                                        ? Palette.primary01
+                                        : Palette.line01,
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            backgroundColor: Palette.bgBackGround,
+                            label: Text(labelText),
+                            labelStyle: TextStyle(
+                              color: matchWriteProvider.selectedDuration == item
+                                  ? Palette.primary01
+                                  : Palette.text04,
+                            ),
+                            selected:
+                                matchWriteProvider.selectedDuration == item,
+                            selectedColor: Palette.bgBackGround,
+                            onSelected: (selected) {
+                              final updatedFilter =
+                                  matchWriteProvider.selectedDuration;
+                              updatedFilter == item
+                                  ? matchWriteProvider.removeSelectedDuration()
+                                  : matchWriteProvider
+                                      .updateSelectedDuration(item);
+                            },
+                          );
+                        }).toList(),
                       ],
                     ),
                     const SizedBox(
                       height: 24,
                     ),
-                    Text(
-                      '진행 방식',
-                      style: TextTypes.bodySemi02(
-                        color: Palette.text01,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    const Wrap(
-                      spacing: 12.0,
-                      runSpacing: 12.0,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        // chips 들어갈 예정
+                        Text(
+                          '진행 방식',
+                          style: TextTypes.bodySemi02(
+                            color: Palette.text01,
+                          ),
+                        ),
+                        Text(
+                          matchWriteProvider.exchangeTypeRequiredMesage,
+                          style: TextTypes.caption01(
+                            color: Palette.error01,
+                          ),
+                        )
                       ],
                     ),
                     const SizedBox(
-                      height: 24,
-                    ),
-                    Text(
-                      '인증 배지 여부',
-                      style: TextTypes.bodySemi02(
-                        color: Palette.text01,
-                      ),
-                    ),
-                    const SizedBox(
                       height: 16,
                     ),
-                    const Wrap(
+                    Wrap(
                       spacing: 12.0,
                       runSpacing: 12.0,
                       children: [
-                        // chips 들어갈 예정
+                        ...matchWriteProvider.exchangeType.map((item) {
+                          String labelText = item;
+                          return ChoiceChip(
+                            showCheckmark: false,
+                            shape: RoundedRectangleBorder(
+                              side: BorderSide(
+                                color:
+                                    matchWriteProvider.selectedExchangeType ==
+                                            item
+                                        ? Palette.primary01
+                                        : Palette.line01,
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            backgroundColor: Palette.bgBackGround,
+                            label: Text(labelText),
+                            labelStyle: TextStyle(
+                              color: matchWriteProvider.selectedExchangeType ==
+                                      item
+                                  ? Palette.primary01
+                                  : Palette.text04,
+                            ),
+                            selected:
+                                matchWriteProvider.selectedExchangeType == item,
+                            selectedColor: Palette.bgBackGround,
+                            onSelected: (selected) {
+                              final updatedFilter =
+                                  matchWriteProvider.selectedExchangeType;
+                              updatedFilter == item
+                                  ? matchWriteProvider
+                                      .removeSelectedExchangeType()
+                                  : matchWriteProvider
+                                      .updateSelectedExhangeType(item);
+                            },
+                          );
+                        }).toList(),
                       ],
                     ),
                   ],

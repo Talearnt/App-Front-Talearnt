@@ -34,6 +34,17 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
   final FocusNode _giveTalentFocusNode = FocusNode();
   final FocusNode _interestTalentFocusNode = FocusNode();
 
+  final List<String> _duration = ['기간 미정', '1개월', '2개월', '3개월', '3개월 이상'];
+  final List<String> _exchangeType = ['온라인', '오프라인', '온/오프라인'];
+
+  String _selectedDuration = "";
+  String _selectedExchangeType = "";
+
+  String _giveTalentRequiredMessage = "";
+  String _interestTalentRequiredMessage = "";
+  String _durationRequiredMessage = "";
+  String _exchangeTypeRequiredMesage = "";
+
   TextEditingController get titlerController => _titlerController;
   QuillController get contentController => _contentController;
 
@@ -46,11 +57,28 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
   bool _isItalic = false;
   bool _isUnderline = false;
 
+  String _alignType = "left";
+
+  bool _isChipsSelected = false;
+  bool _isTitleAndBoardEmpty = false;
+
+  String _boardToastMessage = "";
+
   bool get onToolBar => _onToolBar;
 
   bool get isBold => _isBold;
   bool get isItalic => _isItalic;
   bool get isUnderline => _isUnderline;
+
+  String get alignType => _alignType;
+
+  String get giveTalentRequiredMessage => _giveTalentRequiredMessage;
+  String get interestTalentRequiredMessage => _interestTalentRequiredMessage;
+  String get durationRequiredMessage => _durationRequiredMessage;
+  String get exchangeTypeRequiredMesage => _exchangeTypeRequiredMesage;
+
+  bool get isChipsSelected => _isChipsSelected;
+  bool get isTitleAndBoardEmpty => _isTitleAndBoardEmpty;
 
   TabController get giveTalentTabController => _giveTalentTabController;
   TabController get interestTalentTabController => _interestTalentTabController;
@@ -64,6 +92,39 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
       _selectedInterestTalentKeywordCodes;
   List<int> get searchedInterestTalentKeywordCodes =>
       _searchedInterestTalentKeywordCodes;
+  List<String> get duration => _duration;
+  List<String> get exchangeType => _exchangeType;
+  String get selectedDuration => _selectedDuration;
+  String get selectedExchangeType => _selectedExchangeType;
+
+  String get boardToastMessage => _boardToastMessage;
+
+  void clearProvider() {
+    _titlerController.clear();
+    _contentController.clear();
+
+    _titleFocusNode.unfocus();
+    _contentFocusNode.unfocus();
+
+    reset();
+    notifyListeners();
+  }
+
+  void reset() {
+    _tickerProvider.dispose();
+    _giveTalentTabController.index = 0;
+    _interestTalentTabController.index = 0;
+    _giveTalentFocusNode.unfocus();
+    _interestTalentFocusNode.unfocus();
+    _giveTalentKeywordCodes.clear();
+    _interestTalentKeywordCodes.clear();
+    _selectedGiveTalentKeywordCodes.clear();
+    _selectedInterestTalentKeywordCodes.clear();
+    _selectedDuration = "";
+    _selectedExchangeType = "";
+
+    notifyListeners();
+  }
 
   void initTabController(List<KeywordCategory> keywordCategories) {
     _giveTalentTabController.dispose();
@@ -79,23 +140,13 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
     notifyListeners(); // Focus 상태 변경 시 UI 갱신
   }
 
-  void clearProvider() {
-    _titlerController.clear();
-    _contentController.clear();
-
-    _titleFocusNode.unfocus();
-    _contentFocusNode.unfocus();
-
-    notifyListeners();
-  }
-
   @override
   void clearText(TextEditingController controller) {
     controller.clear();
     notifyListeners();
   }
 
-  void toggleButton(type) {
+  void toggleButton(type, [String? direct]) {
     if (type == "bold") {
       _isBold = !_isBold;
     }
@@ -104,6 +155,9 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
     }
     if (type == "underline") {
       _isUnderline = !_isUnderline;
+    }
+    if (type == "align") {
+      _alignType = direct!;
     }
     notifyListeners();
   }
@@ -149,5 +203,73 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
       _selectedInterestTalentKeywordCodes.addAll(keywordTalent);
     }
     notifyListeners();
+  }
+
+  void updateSelectedDuration(String keywordTalent) {
+    _selectedDuration = "";
+    if (keywordTalent.isNotEmpty) {
+      _selectedDuration = keywordTalent;
+    }
+    notifyListeners();
+  }
+
+  void removeSelectedDuration() {
+    _selectedDuration = "";
+    notifyListeners();
+  }
+
+  void updateSelectedExhangeType(String keywordTalent) {
+    _selectedExchangeType = "";
+    if (keywordTalent.isNotEmpty) {
+      _selectedExchangeType = keywordTalent;
+    }
+    notifyListeners();
+  }
+
+  void removeSelectedExchangeType() {
+    _selectedExchangeType = "";
+    notifyListeners();
+  }
+
+  void checkChipsSelected() {
+    _isChipsSelected = true;
+
+    if (_selectedGiveTalentKeywordCodes.isEmpty) {
+      _giveTalentRequiredMessage = "*필수";
+      //_isChipsSelected = false;
+    }
+
+    if (_selectedInterestTalentKeywordCodes.isEmpty) {
+      _interestTalentRequiredMessage = "*필수";
+      _isChipsSelected = false;
+    }
+
+    if (_selectedDuration == "") {
+      _durationRequiredMessage = "*필수";
+      _isChipsSelected = false;
+    }
+
+    if (_selectedExchangeType == "") {
+      _exchangeTypeRequiredMesage = "*필수";
+      _isChipsSelected = false;
+    }
+
+    notifyListeners();
+  }
+
+  void checkTitleAndBoard() {
+    if (_titlerController.text.isEmpty) {
+      _boardToastMessage = "제목을 입력해 주세요";
+      _isTitleAndBoardEmpty = false;
+      return;
+    }
+
+    if (_contentController.document.length - 1 == 0) {
+      _boardToastMessage = "내용을 입력해 주세요";
+      _isTitleAndBoardEmpty = false;
+      return;
+    }
+
+    _isTitleAndBoardEmpty = true;
   }
 }

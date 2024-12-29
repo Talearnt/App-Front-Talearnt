@@ -1,5 +1,6 @@
 import 'package:app_front_talearnt/common/theme.dart';
 import 'package:app_front_talearnt/common/widget/button.dart';
+import 'package:app_front_talearnt/common/widget/toast_message.dart';
 import 'package:app_front_talearnt/common/widget/top_app_bar.dart';
 import 'package:app_front_talearnt/provider/auth/match_write_provider.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,6 @@ class MatchWrite2Page extends StatelessWidget {
   Widget build(BuildContext context) {
     final matchWriteProvider = Provider.of<MatchWriteProvider>(context);
 
-    // QuillEditor와 QuillToolbar에 필요한 ScrollController
     ScrollController scrollController = ScrollController();
 
     return Scaffold(
@@ -24,7 +24,20 @@ class MatchWrite2Page extends StatelessWidget {
         onPressed: () {
           context.pop();
         },
-        second: TextBtnM(content: '미리보기'),
+        second: TextBtnM(
+          content: '미리보기',
+          onPressed: () {
+            matchWriteProvider.checkTitleAndBoard();
+
+            matchWriteProvider.isTitleAndBoardEmpty
+                ? context.push('/match_preview')
+                : ToastMessage.show(
+                    context: context,
+                    message: matchWriteProvider.boardToastMessage,
+                    type: 2,
+                    bottom: 50);
+          },
+        ),
         first: const PrimaryS(content: '등록'),
       ),
       bottomNavigationBar: AnimatedPadding(
@@ -74,28 +87,98 @@ class MatchWrite2Page extends StatelessWidget {
                                     .formatSelection(
                                     Attribute.bold,
                                   );
+                            matchWriteProvider.toggleButton("bold");
                           },
                         ),
                         IconButton(
-                          icon: SvgPicture.asset(
-                            'assets/icons/italics_before.svg',
-                          ),
+                          icon: matchWriteProvider.isItalic
+                              ? SvgPicture.asset(
+                                  'assets/icons/italics_after.svg',
+                                )
+                              : SvgPicture.asset(
+                                  'assets/icons/italics_before.svg',
+                                ),
                           onPressed: () {
-                            matchWriteProvider.contentController
-                                .formatSelection(
-                              Attribute.italic,
-                            );
+                            matchWriteProvider.isItalic
+                                ? matchWriteProvider.contentController
+                                    .formatSelection(
+                                    Attribute.clone(Attribute.italic, null),
+                                  )
+                                : matchWriteProvider.contentController
+                                    .formatSelection(
+                                    Attribute.italic,
+                                  );
+                            matchWriteProvider.toggleButton("italic");
                           },
                         ),
                         IconButton(
-                          icon: SvgPicture.asset(
-                            'assets/icons/underline_before.svg',
-                          ),
+                          icon: matchWriteProvider.isUnderline
+                              ? SvgPicture.asset(
+                                  'assets/icons/underline_after.svg',
+                                )
+                              : SvgPicture.asset(
+                                  'assets/icons/underline_before.svg',
+                                ),
                           onPressed: () {
-                            matchWriteProvider.contentController
-                                .formatSelection(
-                              Attribute.underline,
-                            );
+                            matchWriteProvider.isUnderline
+                                ? matchWriteProvider.contentController
+                                    .formatSelection(
+                                    Attribute.clone(Attribute.underline, null),
+                                  )
+                                : matchWriteProvider.contentController
+                                    .formatSelection(
+                                    Attribute.underline,
+                                  );
+                            matchWriteProvider.toggleButton("underline");
+                          },
+                        ),
+                        IconButton(
+                          icon: matchWriteProvider.alignType == "left"
+                              ? SvgPicture.asset(
+                                  'assets/icons/left_before.svg',
+                                )
+                              : matchWriteProvider.alignType == "center"
+                                  ? SvgPicture.asset(
+                                      'assets/icons/center_before.svg',
+                                    )
+                                  : matchWriteProvider.alignType == "right"
+                                      ? SvgPicture.asset(
+                                          'assets/icons/right_before.svg',
+                                        )
+                                      : SvgPicture.asset(
+                                          'assets/icons/justify_before.svg',
+                                        ),
+                          onPressed: () {
+                            if (matchWriteProvider.alignType == "left") {
+                              matchWriteProvider.contentController
+                                  .formatSelection(
+                                Attribute.centerAlignment,
+                              );
+                              matchWriteProvider.toggleButton(
+                                  "align", "center");
+                            } else if (matchWriteProvider.alignType ==
+                                "center") {
+                              matchWriteProvider.contentController
+                                  .formatSelection(
+                                Attribute.rightAlignment,
+                              );
+                              matchWriteProvider.toggleButton("align", "right");
+                            } else if (matchWriteProvider.alignType ==
+                                "right") {
+                              matchWriteProvider.contentController
+                                  .formatSelection(
+                                Attribute.justifyAlignment,
+                              );
+                              matchWriteProvider.toggleButton(
+                                  "align", "justify");
+                            } else if (matchWriteProvider.alignType ==
+                                "justify") {
+                              matchWriteProvider.contentController
+                                  .formatSelection(
+                                Attribute.leftAlignment,
+                              );
+                              matchWriteProvider.toggleButton("align", "left");
+                            }
                           },
                         ),
                       ],
@@ -129,7 +212,7 @@ class MatchWrite2Page extends StatelessWidget {
                           width: 10,
                         ),
                         SvgPicture.asset(
-                          'assets/icons/center_before.svg',
+                          'assets/icons/left_before.svg',
                         ),
                         Expanded(
                           child: Align(
