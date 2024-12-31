@@ -9,7 +9,7 @@ class MyTalentKeywordsParam {
   Map<String, dynamic> toJson() {
     return {
       'giveTalents': giveTalents,
-      'interestTalents': interestTalents,
+      'receiveTalents': interestTalents,
     };
   }
 }
