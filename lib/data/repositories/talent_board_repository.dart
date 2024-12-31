@@ -8,7 +8,9 @@ import '../../constants/api_constants.dart';
 import '../model/param/my_talent_keywords_param.dart';
 
 class TalentBoardRepository {
-  final DioService dio = DioService();
+  final DioService dio;
+
+  TalentBoardRepository(this.dio);
 
   Future<Either<Failure, List<KeywordCategory>>> getKeywords() async {
     final result = await dio.get(ApiConstants.getTalentCategories, null, null);
