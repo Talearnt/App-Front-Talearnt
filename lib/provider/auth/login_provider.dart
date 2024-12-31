@@ -92,8 +92,7 @@ class LoginProvider extends ChangeNotifier with ClearText {
   bool checkLoginValidity() {
     if (_emailController.text.isEmpty) {
       _emailValid = false;
-      _emailValidMessage = '이메일을 입력해 주세'
-          '요!';
+      _emailValidMessage = '이메일을 입력해 주세요!';
       notifyListeners();
       return false;
     }
