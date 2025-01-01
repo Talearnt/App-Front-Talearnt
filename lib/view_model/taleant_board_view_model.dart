@@ -1,9 +1,9 @@
-import 'package:app_front_talearnt/provider/auth/match_write_provider.dart';
+import 'package:app_front_talearnt/provider/talearnt_board/match_write_provider.dart';
 import 'package:flutter/material.dart';
 
 import '../common/common_navigator.dart';
 import '../constants/global_value_constants.dart';
-import '../data/repositories/talearnt_board_repository.dart';
+import '../data/repositories/taleant_board_repository.dart';
 import '../provider/talearnt_board/keyword_provider.dart';
 import '../utils/error_message.dart';
 
