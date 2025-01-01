@@ -21,6 +21,7 @@ class TopAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      scrolledUnderElevation: 0,
       backgroundColor: Palette.bgBackGround,
       centerTitle: true,
       leading: leftIcon
