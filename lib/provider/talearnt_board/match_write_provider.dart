@@ -56,6 +56,8 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
   bool _isBold = false;
   bool _isItalic = false;
   bool _isUnderline = false;
+  bool _isUl = false;
+  bool _isOl = false;
 
   String _alignType = "left";
 
@@ -69,6 +71,8 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
   bool get isBold => _isBold;
   bool get isItalic => _isItalic;
   bool get isUnderline => _isUnderline;
+  bool get isUl => _isUl;
+  bool get isOl => _isOl;
 
   String get alignType => _alignType;
 
@@ -106,12 +110,29 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
     _titleFocusNode.unfocus();
     _contentFocusNode.unfocus();
 
+    _searchedGiveTalentKeywordCodes.clear();
+    _searchedInterestTalentKeywordCodes.clear();
+
+    _giveTalentRequiredMessage = "";
+    _interestTalentRequiredMessage = "";
+    _durationRequiredMessage = "";
+    _exchangeTypeRequiredMesage = "";
+
+    _isBold = false;
+    _isItalic = false;
+    _isUnderline = false;
+    _isUl = false;
+    _isOl = false;
+    _alignType = "left";
+    _isChipsSelected = false;
+    _isTitleAndBoardEmpty = false;
+    _boardToastMessage = "";
+
     reset();
     notifyListeners();
   }
 
   void reset() {
-    _tickerProvider.dispose();
     _giveTalentTabController.index = 0;
     _interestTalentTabController.index = 0;
     _giveTalentFocusNode.unfocus();
@@ -122,6 +143,7 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
     _selectedInterestTalentKeywordCodes.clear();
     _selectedDuration = "";
     _selectedExchangeType = "";
+    _tickerProvider.dispose();
 
     notifyListeners();
   }
@@ -155,6 +177,12 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
     }
     if (type == "underline") {
       _isUnderline = !_isUnderline;
+    }
+    if (type == "ul") {
+      _isUl = !_isUl;
+    }
+    if (type == "ol") {
+      _isOl = !_isOl;
     }
     if (type == "align") {
       _alignType = direct!;

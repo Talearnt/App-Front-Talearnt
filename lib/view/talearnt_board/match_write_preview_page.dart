@@ -4,9 +4,10 @@ import 'package:app_front_talearnt/common/widget/state_badge.dart';
 import 'package:app_front_talearnt/common/widget/button.dart';
 import 'package:app_front_talearnt/common/widget/top_app_bar.dart';
 import 'package:app_front_talearnt/constants/global_value_constants.dart';
-import 'package:app_front_talearnt/provider/auth/match_write_provider.dart';
+import 'package:app_front_talearnt/provider/talearnt_board/match_write_provider.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -18,6 +19,8 @@ class MatchWritePreviewPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final matchWriteProvider = Provider.of<MatchWriteProvider>(context);
     String today = DateFormat('yyyy.MM.dd').format(DateTime.now());
+
+    ScrollController scrollController = ScrollController();
 
     return Scaffold(
       appBar: TopAppBar(
@@ -239,10 +242,14 @@ class MatchWritePreviewPage extends StatelessWidget {
                 const SizedBox(
                   height: 16,
                 ),
-                Text(
-                  matchWriteProvider.contentController.document.toPlainText(),
-                  style: TextTypes.bodyLarge02(
-                    color: Palette.text02,
+                QuillEditor.basic(
+                  controller: matchWriteProvider.contentController,
+                  configurations: const QuillEditorConfigurations(
+                    showCursor: false,
+                    readOnlyMouseCursor: MouseCursor.uncontrolled,
+                    enableAlwaysIndentOnTab: false,
+                    enableInteractiveSelection: false,
+                    enableScribble: false,
                   ),
                 )
               ],

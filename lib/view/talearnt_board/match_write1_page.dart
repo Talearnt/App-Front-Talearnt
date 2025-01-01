@@ -2,9 +2,9 @@ import 'package:app_front_talearnt/common/theme.dart';
 import 'package:app_front_talearnt/common/widget/button.dart';
 import 'package:app_front_talearnt/common/widget/top_app_bar.dart';
 import 'package:app_front_talearnt/constants/global_value_constants.dart';
-import 'package:app_front_talearnt/provider/auth/match_write_provider.dart';
+import 'package:app_front_talearnt/provider/talearnt_board/match_write_provider.dart';
 import 'package:app_front_talearnt/view/talearnt_board/match_write1_bottom_sheet.dart';
-import 'package:app_front_talearnt/view_model/talearnt_board_view_model.dart';
+import 'package:app_front_talearnt/view_model/taleant_board_view_model.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +21,7 @@ class MatchWrite1Page extends StatelessWidget {
       appBar: TopAppBar(
         onPressed: () {
           context.pop();
+          matchWriteProvider.clearProvider();
         },
       ),
       bottomNavigationBar: Container(

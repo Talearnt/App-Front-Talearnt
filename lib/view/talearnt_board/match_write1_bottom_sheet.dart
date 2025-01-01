@@ -2,7 +2,7 @@ import 'package:app_front_talearnt/common/theme.dart';
 import 'package:app_front_talearnt/common/widget/button.dart';
 import 'package:app_front_talearnt/common/widget/toast_message.dart';
 import 'package:app_front_talearnt/constants/global_value_constants.dart';
-import 'package:app_front_talearnt/provider/auth/match_write_provider.dart';
+import 'package:app_front_talearnt/provider/talearnt_board/match_write_provider.dart';
 import 'package:app_front_talearnt/view/talearnt_board/widget/bottom_selected_chip_list.dart';
 import 'package:app_front_talearnt/view/talearnt_board/widget/keyword_tab_dot.dart';
 import 'package:app_front_talearnt/view/talearnt_board/widget/talearnt_chip_list.dart';
