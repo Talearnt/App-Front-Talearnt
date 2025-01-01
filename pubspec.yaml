@@ -106,6 +106,10 @@ flutter:
     - assets/icons/left_before.svg
     - assets/icons/link_after.svg
     - assets/icons/link_before.svg
+    - assets/icons/list_after.svg
+    - assets/icons/list_before.svg
+    - assets/icons/listnumber_after.svg
+    - assets/icons/listnumber_before.svg
     - assets/icons/next_arrow.svg
     - assets/img/profile.svg
     - assets/icons/reset.svg
