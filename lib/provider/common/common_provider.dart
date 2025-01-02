@@ -1,6 +1,27 @@
 import 'package:flutter/material.dart';
 
+import 'custom_ticker_provider.dart';
+
 class CommonProvider with ChangeNotifier {
+  CommonProvider() : _tickerProvider = CustomTickerProvider() {
+    _animationController = AnimationController(
+      vsync: _tickerProvider, duration: const Duration(seconds: 1), // 1초 동안 회전
+    )..repeat();
+  }
+
+  bool _isLoadingPage = false;
+  final CustomTickerProvider _tickerProvider;
+  late AnimationController _animationController;
+
+  bool get isLoadingPage => _isLoadingPage;
+
+  AnimationController get animationController => _animationController;
+
+  void changeIsLoading(bool loadingType) {
+    _isLoadingPage = loadingType;
+    notifyListeners();
+  }
+
   String getFormattedTime(ValueNotifier<int>? timerSeconds) {
     int minutes = (timerSeconds?.value ?? 180) ~/ 60;
     int seconds = (timerSeconds?.value ?? 180) % 60;

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../clear_text.dart';
 
 class LoginProvider extends ChangeNotifier with ClearText {
+  bool _isLoggedIn = false;
   final TextEditingController _emailController = TextEditingController();
   final FocusNode _emailFocusNode = FocusNode();
   bool _emailValid = true;
@@ -13,6 +14,8 @@ class LoginProvider extends ChangeNotifier with ClearText {
   final FocusNode _passwordFocusNode = FocusNode();
   bool _passwordValid = true;
   String _passwordValidMessage = '';
+
+  bool get isLoggedIn => _isLoggedIn;
 
   TextEditingController get emailController => _emailController;
 
@@ -60,6 +63,7 @@ class LoginProvider extends ChangeNotifier with ClearText {
     _emailValid = true;
     _passwordValid = true;
     _passwordValidMessage = '';
+    _isLoggedIn = true;
     notifyListeners();
   }
 
@@ -85,19 +89,23 @@ class LoginProvider extends ChangeNotifier with ClearText {
     notifyListeners();
   }
 
-  bool checkLoginValidity(){
-    if(_emailController.text.isEmpty){
+  bool checkLoginValidity() {
+    if (_emailController.text.isEmpty) {
       _emailValid = false;
       _emailValidMessage = '이메일을 입력해 주세요!';
       notifyListeners();
       return false;
     }
-    if(_passwordController.text.isEmpty){
+    if (_passwordController.text.isEmpty) {
       _passwordValid = false;
       _passwordValidMessage = '비밀번호를 입력해 주세요!';
       notifyListeners();
       return false;
     }
     return true;
+  }
+
+  void logout() {
+    _isLoggedIn = false;
   }
 }

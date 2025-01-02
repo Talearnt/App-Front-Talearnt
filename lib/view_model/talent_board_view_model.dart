@@ -28,6 +28,19 @@ class TalearntBoardViewModel extends ChangeNotifier {
       GlobalValueConstants.keywordCategoris = keywords;
       keywordProvider.initTabController(keywords);
       matchWriteProvider.initTabController(keywords);
+      commonNavigator.goRoute('/set-keyword');
+    });
+  }
+
+  Future<void> setMyKeywords(
+      List<int> giveTalent, List<int> interestTalent) async {
+    MyTalentKeywordsParam param = MyTalentKeywordsParam(
+        giveTalents: giveTalent, interestTalents: interestTalent);
+    final result = await talentBoardRepository.setMyKeywords(param);
+    result.fold(
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)), (result) {
+      commonNavigator.goRoute('/set-keyword-success');
     });
   }
 }

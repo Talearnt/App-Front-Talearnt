@@ -18,6 +18,7 @@ abstract class ApiConstants {
       "$baseUrl/v1/auth/sms/validation"; //인증 번호 문자 검증 통합 url
 
   static const String getTalentCategories = "$baseUrl/v1/keywords";
+  static const String setMyTalentKeywordsUrl = "$baseUrl/v1/users/my-talents";
 
   static String getFineUserPwUrl(String userId) {
     return "$baseUrl/v1/auth/password/$userId/email";

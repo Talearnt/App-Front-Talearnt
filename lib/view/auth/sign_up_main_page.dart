@@ -101,9 +101,10 @@ class SignUpMainPage extends StatelessWidget {
                   : signUpProvider.signUpPage == 2
                       ? BottomBtn(
                           mediaBottom: MediaQuery.of(context).viewInsets.bottom,
-                          content: '다음',
+                          content: '가입하기',
                           isEnabled: signUpProvider.isSignUpSub3ButtonEnabled,
                           onPressed: () async {
+                            commonProvider.changeIsLoading(true);
                             await authViewModel
                                 .signUp(
                                     signUpProvider.emailController.text,
@@ -112,8 +113,9 @@ class SignUpMainPage extends StatelessWidget {
                                     signUpProvider.nickNameController.text,
                                     signUpProvider.gender,
                                     signUpProvider.phoneNumController.text)
+                                .whenComplete(
+                                    () => commonProvider.changeIsLoading(false))
                                 .then((_) {
-                              //이거 이후에 수정 예정
                               context.go('/sign-up-success');
                             });
                           },
@@ -137,13 +139,17 @@ class SignUpMainPage extends StatelessWidget {
                                   isEnabled: signUpProvider
                                       .isSignUpSub2NextButtonEnabled,
                                   onPressed: () async {
+                                    commonProvider.changeIsLoading(true);
                                     await authViewModel
                                         .signUpCheckSmsValidation(
                                             context,
                                             signUpProvider
                                                 .phoneNumController.text,
                                             signUpProvider
-                                                .certNumController.text);
+                                                .certNumController.text)
+                                        .whenComplete(() => commonProvider
+                                            .changeIsLoading(false));
+
                                     //인증 완료되면 다음 페이지로 넘어감
                                     if (signUpProvider.checkSmsValidation) {
                                       signUpProvider.finishCheckCertNum();
@@ -161,17 +167,21 @@ class SignUpMainPage extends StatelessWidget {
                                   content: '인증번호 요청',
                                   isEnabled:
                                       signUpProvider.isSignUpSub2ButtonEnabled,
-                                  onPressed:
-                                      signUpProvider.isSignUpSub2ButtonEnabled
-                                          ? () async {
-                                              await authViewModel.sendCertNum(
+                                  onPressed: signUpProvider
+                                          .isSignUpSub2ButtonEnabled
+                                      ? () async {
+                                          commonProvider.changeIsLoading(true);
+                                          await authViewModel
+                                              .sendCertNum(
                                                   context,
                                                   'signUp',
                                                   null,
                                                   signUpProvider
-                                                      .phoneNumController.text);
-                                            }
-                                          : () {},
+                                                      .phoneNumController.text)
+                                              .whenComplete(() => commonProvider
+                                                  .changeIsLoading(false));
+                                        }
+                                      : () {},
                                 ),
             ],
           ),
