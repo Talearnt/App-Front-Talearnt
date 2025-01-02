@@ -16,7 +16,7 @@ class MatchWrite1Page extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final matchWriteProvider = Provider.of<MatchWriteProvider>(context);
-    final talearntBoardViewModel = Provider.of<TalearntBoardViewModel>(context);
+    final talearntBoardViewModel = Provider.of<TalentBoardViewModel>(context);
     return Scaffold(
       appBar: TopAppBar(
         onPressed: () {

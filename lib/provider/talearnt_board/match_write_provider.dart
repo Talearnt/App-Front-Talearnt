@@ -1,5 +1,5 @@
 import 'package:app_front_talearnt/data/model/respone/keyword_category.dart';
-import 'package:app_front_talearnt/provider/talearnt_board/custom_ticker_provider.dart';
+import 'package:app_front_talearnt/provider/common/custom_ticker_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 
