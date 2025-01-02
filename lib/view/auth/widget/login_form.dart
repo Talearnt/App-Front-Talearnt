@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 import '../../../common/theme.dart';
 import '../../../provider/auth/login_provider.dart';
 import '../../../view_model/auth_view_model.dart';
-import '../../../view_model/taleant_board_view_model.dart';
+import '../../../view_model/talent_board_view_model.dart';
 
 class LoginForm extends StatelessWidget {
   const LoginForm({super.key});
