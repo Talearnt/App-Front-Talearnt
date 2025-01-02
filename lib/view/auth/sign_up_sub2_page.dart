@@ -99,8 +99,12 @@ class SignUpSub2Page extends StatelessWidget {
                         TextLineS(
                           content: '재전송',
                           onPressed: () async {
-                            await authViewModel.reSendCertNum(context, 'signUp',
-                                null, signUpProvider.phoneNumController.text);
+                            commonProvider.changeIsLoading(true);
+                            await authViewModel
+                                .reSendCertNum(context, 'signUp', null,
+                                    signUpProvider.phoneNumController.text)
+                                .whenComplete(() =>
+                                    commonProvider.changeIsLoading(false));
                           },
                         )
                       ],

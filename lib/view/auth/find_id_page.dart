@@ -148,12 +148,16 @@ class FindIdPage extends StatelessWidget {
                           TextLineS(
                             content: "재발송",
                             onPressed: () async {
-                              await authViewModel.reSendCertNum(
-                                context,
-                                'findId',
-                                findIdProvider.userNameController.text,
-                                findIdProvider.phoneNumberController.text,
-                              );
+                              commonProvider.changeIsLoading(true);
+                              await authViewModel
+                                  .reSendCertNum(
+                                    context,
+                                    'findId',
+                                    findIdProvider.userNameController.text,
+                                    findIdProvider.phoneNumberController.text,
+                                  )
+                                  .whenComplete(() =>
+                                      commonProvider.changeIsLoading(false));
                             },
                           ),
                         ],
@@ -205,12 +209,18 @@ class FindIdPage extends StatelessWidget {
                             isEnabled: findIdProvider.isValidNameAndPhoneNumber,
                             onPressed: findIdProvider.isValidNameAndPhoneNumber
                                 ? () async {
-                                    await authViewModel.sendCertNum(
-                                      context,
-                                      'findId',
-                                      findIdProvider.userNameController.text,
-                                      findIdProvider.phoneNumberController.text,
-                                    );
+                                    commonProvider.changeIsLoading(true);
+                                    await authViewModel
+                                        .sendCertNum(
+                                          context,
+                                          'findId',
+                                          findIdProvider
+                                              .userNameController.text,
+                                          findIdProvider
+                                              .phoneNumberController.text,
+                                        )
+                                        .whenComplete(() => commonProvider
+                                            .changeIsLoading(false));
                                   }
                                 : () {},
                           );

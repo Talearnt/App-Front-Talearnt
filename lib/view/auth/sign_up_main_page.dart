@@ -167,17 +167,21 @@ class SignUpMainPage extends StatelessWidget {
                                   content: '인증번호 요청',
                                   isEnabled:
                                       signUpProvider.isSignUpSub2ButtonEnabled,
-                                  onPressed:
-                                      signUpProvider.isSignUpSub2ButtonEnabled
-                                          ? () async {
-                                              await authViewModel.sendCertNum(
+                                  onPressed: signUpProvider
+                                          .isSignUpSub2ButtonEnabled
+                                      ? () async {
+                                          commonProvider.changeIsLoading(true);
+                                          await authViewModel
+                                              .sendCertNum(
                                                   context,
                                                   'signUp',
                                                   null,
                                                   signUpProvider
-                                                      .phoneNumController.text);
-                                            }
-                                          : () {},
+                                                      .phoneNumController.text)
+                                              .whenComplete(() => commonProvider
+                                                  .changeIsLoading(false));
+                                        }
+                                      : () {},
                                 ),
             ],
           ),
