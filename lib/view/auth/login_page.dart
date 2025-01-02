@@ -1,5 +1,6 @@
 import 'package:app_front_talearnt/view/auth/widget/login_form.dart';
 import 'package:app_front_talearnt/view/auth/widget/simple_login_form.dart';
+import 'package:app_front_talearnt/view/talearnt_board/match_write1_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -19,7 +20,15 @@ class LoginPage extends StatelessWidget {
           backgroundColor: Colors.transparent,
           surfaceTintColor: Colors.transparent,
           actions: [
-            IconButton(onPressed: () {}, icon: const Icon(Icons.close))
+            IconButton(
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (context) {
+                      return const MatchWrite1Page();
+                    },
+                  ));
+                },
+                icon: const Icon(Icons.close))
           ]),
       body: Stack(
         children: [

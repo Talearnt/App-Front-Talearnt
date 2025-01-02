@@ -5,6 +5,9 @@ import 'package:app_front_talearnt/view/auth/find_password_page.dart';
 import 'package:app_front_talearnt/view/auth/find_password_success_page.dart';
 import 'package:app_front_talearnt/view/auth/reset_password_page.dart';
 import 'package:app_front_talearnt/view/auth/sign_up_success_page.dart';
+import 'package:app_front_talearnt/view/talearnt_board/match_write1_page.dart';
+import 'package:app_front_talearnt/view/talearnt_board/match_write2_page.dart';
+import 'package:app_front_talearnt/view/talearnt_board/match_write_preview_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -74,6 +77,24 @@ class Routes {
             path: '/set-keyword-success',
             builder: (BuildContext context, GoRouterState state) {
               return const SetTalentKeywordSuccessPage();
+            },
+          ),
+          GoRoute(
+            path: '/match_write1',
+            builder: (BuildContext context, GoRouterState state) {
+              return const MatchWrite1Page();
+            },
+          ),
+          GoRoute(
+            path: '/match_write2',
+            builder: (BuildContext context, GoRouterState state) {
+              return const MatchWrite2Page();
+            },
+          ),
+          GoRoute(
+            path: '/match_preview',
+            builder: (BuildContext context, GoRouterState state) {
+              return const MatchWritePreviewPage();
             },
           ),
         ],

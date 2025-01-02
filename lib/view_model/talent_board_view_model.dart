@@ -1,30 +1,33 @@
+import 'package:app_front_talearnt/provider/talearnt_board/match_write_provider.dart';
 import 'package:flutter/material.dart';
 
 import '../common/common_navigator.dart';
 import '../constants/global_value_constants.dart';
-import '../data/model/param/my_talent_keywords_param.dart';
-import '../data/repositories/talent_board_repository.dart';
+import '../data/repositories/taleant_board_repository.dart';
 import '../provider/talearnt_board/keyword_provider.dart';
 import '../utils/error_message.dart';
 
-class TalentBoardViewModel extends ChangeNotifier {
+class TalearntBoardViewModel extends ChangeNotifier {
   final CommonNavigator commonNavigator;
-  final TalentBoardRepository talentBoardRepository;
+  final TalearntBoardRepository talearntBoardRepository;
   final KeywordProvider keywordProvider;
+  final MatchWriteProvider matchWriteProvider;
 
-  TalentBoardViewModel(
+  TalearntBoardViewModel(
     this.commonNavigator,
-    this.talentBoardRepository,
+    this.talearntBoardRepository,
     this.keywordProvider,
+    this.matchWriteProvider,
   );
 
   Future<void> getKeywords() async {
-    final result = await talentBoardRepository.getKeywords();
+    final result = await talearntBoardRepository.getKeywords();
     result.fold(
         (failure) => commonNavigator.showSingleDialog(
             content: ErrorMessages.getMessage(failure.errorCode)), (keywords) {
       GlobalValueConstants.keywordCategoris = keywords;
       keywordProvider.initTabController(keywords);
+      matchWriteProvider.initTabController(keywords);
       commonNavigator.goRoute('/set-keyword');
     });
   }

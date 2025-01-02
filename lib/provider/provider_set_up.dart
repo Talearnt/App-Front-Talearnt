@@ -2,6 +2,7 @@ import 'package:app_front_talearnt/common/common_navigator.dart';
 import 'package:app_front_talearnt/provider/auth/find_id_provider.dart';
 import 'package:app_front_talearnt/provider/auth/find_password_provider.dart';
 import 'package:app_front_talearnt/provider/auth/login_provider.dart';
+import 'package:app_front_talearnt/provider/talearnt_board/match_write_provider.dart';
 import 'package:app_front_talearnt/provider/auth/sign_up_provider.dart';
 import 'package:app_front_talearnt/provider/auth/storage_provider.dart';
 import 'package:app_front_talearnt/provider/talearnt_board/keyword_provider.dart';
@@ -71,11 +72,14 @@ class ProviderSetup extends StatelessWidget {
         ),
         ChangeNotifierProvider<KeywordProvider>(
             create: (_) => KeywordProvider()),
-        ChangeNotifierProvider<TalentBoardViewModel>(
-          create: (context) => TalentBoardViewModel(
+        ChangeNotifierProvider<MatchWriteProvider>(
+            create: (_) => MatchWriteProvider()),
+        ChangeNotifierProvider<TalearntBoardViewModel>(
+          create: (context) => TalearntBoardViewModel(
             CommonNavigator(navigatorKey),
             TalentBoardRepository(context.read<DioService>()),
             context.read<KeywordProvider>(),
+            context.read<MatchWriteProvider>(),
           ),
         ),
       ],
