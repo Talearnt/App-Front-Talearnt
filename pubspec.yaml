@@ -116,6 +116,7 @@ flutter:
     - assets/icons/search.svg
     - assets/icons/search_small.svg
     - assets/icons/share.svg
+    - assets/img/splash_logo.svg
     - assets/icons/text_delete.svg
     - assets/icons/text_edit.svg
     - assets/icons/symbol_64_64.svg
