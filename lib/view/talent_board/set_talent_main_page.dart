@@ -1,6 +1,6 @@
 import 'package:app_front_talearnt/common/theme.dart';
-import 'package:app_front_talearnt/view/talearnt_board/set_give_talent_page.dart';
-import 'package:app_front_talearnt/view/talearnt_board/set_interest_talent_page.dart';
+import 'package:app_front_talearnt/view/talent_board/set_give_talent_page.dart';
+import 'package:app_front_talearnt/view/talent_board/set_interest_talent_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -9,7 +9,7 @@ import '../../common/common_navigator.dart';
 import '../../common/widget/bottom_btn.dart';
 import '../../common/widget/top_app_bar.dart';
 import '../../provider/common/common_provider.dart';
-import '../../provider/talearnt_board/keyword_provider.dart';
+import '../../provider/talent_board/keyword_provider.dart';
 import '../../view_model/talent_board_view_model.dart';
 import 'confirmation_talent_page.dart';
 

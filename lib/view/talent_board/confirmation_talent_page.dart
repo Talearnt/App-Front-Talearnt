@@ -6,7 +6,7 @@ import '../../common/widget/keyword_label.dart';
 import '../../common/widget/loading.dart';
 import '../../constants/global_value_constants.dart';
 import '../../provider/common/common_provider.dart';
-import '../../provider/talearnt_board/keyword_provider.dart';
+import '../../provider/talent_board/keyword_provider.dart';
 
 class ConfirmationTalentPage extends StatelessWidget {
   const ConfirmationTalentPage({super.key});

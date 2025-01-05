@@ -2,10 +2,10 @@ import 'package:app_front_talearnt/common/common_navigator.dart';
 import 'package:app_front_talearnt/provider/auth/find_id_provider.dart';
 import 'package:app_front_talearnt/provider/auth/find_password_provider.dart';
 import 'package:app_front_talearnt/provider/auth/login_provider.dart';
-import 'package:app_front_talearnt/provider/talearnt_board/match_write_provider.dart';
 import 'package:app_front_talearnt/provider/auth/sign_up_provider.dart';
 import 'package:app_front_talearnt/provider/auth/storage_provider.dart';
-import 'package:app_front_talearnt/provider/talearnt_board/keyword_provider.dart';
+import 'package:app_front_talearnt/provider/talent_board/keyword_provider.dart';
+import 'package:app_front_talearnt/provider/talent_board/match_write_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

@@ -5,16 +5,16 @@ import 'package:app_front_talearnt/view/auth/find_password_page.dart';
 import 'package:app_front_talearnt/view/auth/find_password_success_page.dart';
 import 'package:app_front_talearnt/view/auth/reset_password_page.dart';
 import 'package:app_front_talearnt/view/auth/sign_up_success_page.dart';
-import 'package:app_front_talearnt/view/talearnt_board/match_write1_page.dart';
-import 'package:app_front_talearnt/view/talearnt_board/match_write2_page.dart';
-import 'package:app_front_talearnt/view/talearnt_board/match_write_preview_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../view/auth/login_page.dart';
 import '../view/auth/sign_up_main_page.dart';
-import '../view/talearnt_board/set_talent_keyword_success_page.dart';
-import '../view/talearnt_board/set_talent_main_page.dart';
+import '../view/talent_board/match_write1_page.dart';
+import '../view/talent_board/match_write2_page.dart';
+import '../view/talent_board/match_write_preview_page.dart';
+import '../view/talent_board/set_talent_keyword_success_page.dart';
+import '../view/talent_board/set_talent_main_page.dart';
 
 class Routes {
   static final GoRouter router = GoRouter(

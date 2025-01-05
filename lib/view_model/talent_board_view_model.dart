@@ -1,11 +1,11 @@
 import 'package:app_front_talearnt/data/model/param/my_talent_keywords_param.dart';
-import 'package:app_front_talearnt/provider/talearnt_board/match_write_provider.dart';
 import 'package:flutter/material.dart';
 
 import '../common/common_navigator.dart';
 import '../constants/global_value_constants.dart';
 import '../data/repositories/talent_board_repository.dart';
-import '../provider/talearnt_board/keyword_provider.dart';
+import '../provider/talent_board/keyword_provider.dart';
+import '../provider/talent_board/match_write_provider.dart';
 import '../utils/error_message.dart';
 
 class TalentBoardViewModel extends ChangeNotifier {
