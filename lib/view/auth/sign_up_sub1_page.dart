@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../common/theme.dart';
+import '../../common/widget/button.dart';
 import '../../provider/auth/sign_up_provider.dart';
 
 class SignUpSub1Page extends StatelessWidget {
@@ -56,72 +58,80 @@ class SignUpSub1Page extends StatelessWidget {
           const SizedBox(
             height: 14,
           ),
-          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Row(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    signUpProvider.updateRequiredTermsOfUseCheck();
-                  },
-                  child: SizedBox(
-                    width: 24,
-                    height: 24,
-                    child: signUpProvider.requiredTermsOfUseCheck
-                        ? SvgPicture.asset("assets/icons/check_on_second.svg")
-                        : SvgPicture.asset("assets/icons/check_off_second.svg"),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      signUpProvider.updateRequiredTermsOfUseCheck();
+                    },
+                    child: SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: signUpProvider.requiredTermsOfUseCheck
+                          ? SvgPicture.asset("assets/icons/check_on_second.svg")
+                          : SvgPicture.asset(
+                              "assets/icons/check_off_second.svg"),
+                    ),
                   ),
-                ),
-                Text(
-                  '[필수]',
-                  style: TextTypes.bodyMedium02(color: Palette.error01),
-                ),
-                Text(
-                  ' 이용약관 동의',
-                  style: TextTypes.bodyMedium02(color: Palette.text01),
-                  softWrap: true,
-                )
-              ],
-            ),
-            Text('보기',
-                style: TextTypes.caption01(color: Palette.text03).copyWith(
-                    decoration: TextDecoration.underline,
-                    decorationColor: Palette.text03))
-          ]),
+                  Text(
+                    '[필수]',
+                    style: TextTypes.bodyMedium02(color: Palette.error01),
+                  ),
+                  Text(
+                    ' 이용약관 동의',
+                    style: TextTypes.bodyMedium02(color: Palette.text01),
+                    softWrap: true,
+                  )
+                ],
+              ),
+              TextLineXs(
+                content: '보기',
+                onPressed: () => context.push('/terms-agree-required'),
+              ),
+            ],
+          ),
           const SizedBox(
             height: 8,
           ),
-          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Row(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    signUpProvider.updatePersonalInfoCheck();
-                  },
-                  child: SizedBox(
-                    width: 24,
-                    height: 24,
-                    child: signUpProvider.personalInfoCheck
-                        ? SvgPicture.asset("assets/icons/check_on_second.svg")
-                        : SvgPicture.asset("assets/icons/check_off_second.svg"),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      signUpProvider.updatePersonalInfoCheck();
+                    },
+                    child: SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: signUpProvider.personalInfoCheck
+                          ? SvgPicture.asset("assets/icons/check_on_second.svg")
+                          : SvgPicture.asset(
+                              "assets/icons/check_off_second.svg"),
+                    ),
                   ),
-                ),
-                Text(
-                  '[필수]',
-                  style: TextTypes.bodyMedium02(color: Palette.error01),
-                ),
-                Text(
-                  ' 개인 정보 수집 및 이용 동의',
-                  style: TextTypes.bodyMedium02(color: Palette.text01),
-                  softWrap: true,
-                  overflow: TextOverflow.visible,
-                )
-              ],
-            ),
-            Text('보기',
-                style: TextTypes.caption01(color: Palette.text03).copyWith(
-                    decoration: TextDecoration.underline,
-                    decorationColor: Palette.text03))
-          ]),
+                  Text(
+                    '[필수]',
+                    style: TextTypes.bodyMedium02(color: Palette.error01),
+                  ),
+                  Text(
+                    ' 개인 정보 수집 및 이용 동의',
+                    style: TextTypes.bodyMedium02(color: Palette.text01),
+                    softWrap: true,
+                    overflow: TextOverflow.visible,
+                  )
+                ],
+              ),
+              TextLineXs(
+                content: '보기',
+                onPressed: () => context.push('/privacy-agree-required'),
+              ),
+            ],
+          ),
           const SizedBox(
             height: 8,
           ),
@@ -163,12 +173,10 @@ class SignUpSub1Page extends StatelessWidget {
                   ],
                 ),
               ),
-              Text(
-                '보기',
-                style: TextTypes.caption01(color: Palette.text03).copyWith(
-                    decoration: TextDecoration.underline,
-                    decorationColor: Palette.text03),
-              )
+              TextLineXs(
+                content: '보기',
+                onPressed: () => context.push('/privacy-agree-optional'),
+              ),
             ],
           ),
           const SizedBox(
@@ -197,18 +205,16 @@ class SignUpSub1Page extends StatelessWidget {
                     style: TextTypes.bodyMedium02(color: Palette.text01),
                   ),
                   Text(
-                    ' 이용 약관 동의',
+                    ' 이용약관 동의',
                     style: TextTypes.bodyMedium02(color: Palette.text01),
                     softWrap: true,
                     overflow: TextOverflow.visible,
                   )
                 ],
               ),
-              Text(
-                '보기',
-                style: TextTypes.caption01(color: Palette.text03).copyWith(
-                    decoration: TextDecoration.underline,
-                    decorationColor: Palette.text03),
+              TextLineXs(
+                content: '보기',
+                onPressed: () => context.push('/terms-agree-optional'),
               ),
             ],
           )
