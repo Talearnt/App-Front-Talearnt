@@ -1,7 +1,12 @@
+import 'dart:io';
+
 import 'package:app_front_talearnt/data/model/respone/keyword_category.dart';
 import 'package:app_front_talearnt/provider/common/custom_ticker_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
+import 'package:flutter_quill/quill_delta.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
 
 import '../clear_text.dart';
 
@@ -44,6 +49,8 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
   String _interestTalentRequiredMessage = "";
   String _durationRequiredMessage = "";
   String _exchangeTypeRequiredMesage = "";
+
+  final ImagePicker _picker = ImagePicker();
 
   TextEditingController get titlerController => _titlerController;
   QuillController get contentController => _contentController;
@@ -102,6 +109,8 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
   String get selectedExchangeType => _selectedExchangeType;
 
   String get boardToastMessage => _boardToastMessage;
+
+  ImagePicker get picker => _picker;
 
   void clearProvider() {
     _titlerController.clear();
@@ -299,5 +308,31 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
     }
 
     _isTitleAndBoardEmpty = true;
+  }
+
+  Future<void> pickImageAndInsert() async {
+    final XFile? pickedFile =
+        await _picker.pickImage(source: ImageSource.gallery); // 갤러리에서 이미지 선택
+
+    if (pickedFile != null) {
+      final File image = File(pickedFile.path);
+
+      // 이미지 경로를 BlockEmbed로 변환하여 삽입
+      final imageEmbed =
+          BlockEmbed.image('file://${image.path}'); // 'file://' 경로를 추가해야 합니다.
+
+      // 현재 문서에 이미지 삽입
+      final delta = contentController.document.toDelta();
+      delta.insert('\n', null); // 줄바꿈 추가 (선택 사항)
+      delta.insert(imageEmbed); // 이미지 삽입
+
+      // 현재 문서의 길이를 기준으로 인덱스 지정
+      contentController.replaceText(
+        1, // 문서 끝에 삽입
+        0, // 기존 텍스트는 삭제하지 않음
+        delta,
+        TextSelection.collapsed(offset: delta.length),
+      );
+    }
   }
 }

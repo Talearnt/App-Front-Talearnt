@@ -7,8 +7,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_quill/flutter_quill.dart';
-
 import '../../provider/talent_board/match_write_provider.dart';
+import 'package:image_picker/image_picker.dart';
 
 class MatchWrite2Page extends StatelessWidget {
   const MatchWrite2Page({super.key});
@@ -237,8 +237,13 @@ class MatchWrite2Page extends StatelessWidget {
                         const SizedBox(
                           width: 20,
                         ),
-                        SvgPicture.asset(
-                          'assets/icons/image_before.svg',
+                        IconButton(
+                          onPressed: () {
+                            matchWriteProvider.pickImageAndInsert();
+                          },
+                          icon: SvgPicture.asset(
+                            'assets/icons/image_before.svg',
+                          ),
                         ),
                         const SizedBox(
                           width: 10,
