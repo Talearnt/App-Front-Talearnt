@@ -5,7 +5,6 @@ import 'package:app_front_talearnt/view/auth/find_password_page.dart';
 import 'package:app_front_talearnt/view/auth/find_password_success_page.dart';
 import 'package:app_front_talearnt/view/auth/reset_password_page.dart';
 import 'package:app_front_talearnt/view/auth/sign_up_success_page.dart';
-import 'package:app_front_talearnt/view/splash_page.dart';
 import 'package:app_front_talearnt/view/talearnt_board/match_write1_page.dart';
 import 'package:app_front_talearnt/view/talearnt_board/match_write2_page.dart';
 import 'package:app_front_talearnt/view/talearnt_board/match_write_preview_page.dart';
@@ -24,15 +23,9 @@ class Routes {
       GoRoute(
         path: '/',
         builder: (BuildContext context, GoRouterState state) {
-          return const SplashPage();
+          return const LoginPage();
         },
         routes: <RouteBase>[
-          GoRoute(
-            path: '/login',
-            builder: (BuildContext context, GoRouterState state) {
-              return const LoginPage();
-            },
-          ),
           GoRoute(
             path: '/find-id',
             builder: (BuildContext context, GoRouterState state) {
