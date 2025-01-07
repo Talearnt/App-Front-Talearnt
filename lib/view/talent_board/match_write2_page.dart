@@ -3,12 +3,13 @@ import 'package:app_front_talearnt/common/widget/button.dart';
 import 'package:app_front_talearnt/common/widget/toast_message.dart';
 import 'package:app_front_talearnt/common/widget/top_app_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_quill/flutter_quill.dart';
+import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_quill/flutter_quill.dart';
+
 import '../../provider/talent_board/match_write_provider.dart';
-import 'package:image_picker/image_picker.dart';
 
 class MatchWrite2Page extends StatelessWidget {
   const MatchWrite2Page({super.key});
@@ -361,6 +362,7 @@ class MatchWrite2Page extends StatelessWidget {
                 focusNode: matchWriteProvider.contentFocusNode,
                 scrollController: scrollController,
                 configurations: QuillEditorConfigurations(
+                  embedBuilders: FlutterQuillEmbeds.editorBuilders(),
                   placeholder: "내용을 입력해주세요",
                   expands: true,
                   customStyles: DefaultStyles(

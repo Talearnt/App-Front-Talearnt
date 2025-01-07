@@ -4,9 +4,8 @@ import 'package:app_front_talearnt/data/model/respone/keyword_category.dart';
 import 'package:app_front_talearnt/provider/common/custom_ticker_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
-import 'package:flutter_quill/quill_delta.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../clear_text.dart';
 
@@ -53,9 +52,11 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
   final ImagePicker _picker = ImagePicker();
 
   TextEditingController get titlerController => _titlerController;
+
   QuillController get contentController => _contentController;
 
   FocusNode get titleFocusNode => _titleFocusNode;
+
   FocusNode get contentFocusNode => _contentFocusNode;
 
   bool _onToolBar = false;
@@ -76,36 +77,55 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
   bool get onToolBar => _onToolBar;
 
   bool get isBold => _isBold;
+
   bool get isItalic => _isItalic;
+
   bool get isUnderline => _isUnderline;
+
   bool get isUl => _isUl;
+
   bool get isOl => _isOl;
 
   String get alignType => _alignType;
 
   String get giveTalentRequiredMessage => _giveTalentRequiredMessage;
+
   String get interestTalentRequiredMessage => _interestTalentRequiredMessage;
+
   String get durationRequiredMessage => _durationRequiredMessage;
+
   String get exchangeTypeRequiredMesage => _exchangeTypeRequiredMesage;
 
   bool get isChipsSelected => _isChipsSelected;
+
   bool get isTitleAndBoardEmpty => _isTitleAndBoardEmpty;
 
   TabController get giveTalentTabController => _giveTalentTabController;
+
   TabController get interestTalentTabController => _interestTalentTabController;
+
   List<int> get giveTalentKeywordCodes => _giveTalentKeywordCodes;
+
   List<int> get selectedGiveTalentKeywordCodes =>
       _selectedGiveTalentKeywordCodes;
+
   List<int> get searchedGiveTalentKeywordCodes =>
       _searchedGiveTalentKeywordCodes;
+
   List<int> get interestTalentKeywordCodes => _interestTalentKeywordCodes;
+
   List<int> get selectedInterestTalentKeywordCodes =>
       _selectedInterestTalentKeywordCodes;
+
   List<int> get searchedInterestTalentKeywordCodes =>
       _searchedInterestTalentKeywordCodes;
+
   List<String> get duration => _duration;
+
   List<String> get exchangeType => _exchangeType;
+
   String get selectedDuration => _selectedDuration;
+
   String get selectedExchangeType => _selectedExchangeType;
 
   String get boardToastMessage => _boardToastMessage;
@@ -318,13 +338,14 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
       final File image = File(pickedFile.path);
 
       // 이미지 경로를 BlockEmbed로 변환하여 삽입
-      final imageEmbed =
-          BlockEmbed.image('file://${image.path}'); // 'file://' 경로를 추가해야 합니다.
+      // final imageEmbed =
+      //     BlockEmbed.image('file://${image.path}'); // 'file://' 경로를 추가해야 합니다.
 
-      // 현재 문서에 이미지 삽입
+      contentController.insertImageBlock(imageSource: image.path);
+      // // 현재 문서에 이미지 삽입
       final delta = contentController.document.toDelta();
       delta.insert('\n', null); // 줄바꿈 추가 (선택 사항)
-      delta.insert(imageEmbed); // 이미지 삽입
+      // delta.insert(imageEmbed); // 이미지 삽입
 
       // 현재 문서의 길이를 기준으로 인덱스 지정
       contentController.replaceText(
