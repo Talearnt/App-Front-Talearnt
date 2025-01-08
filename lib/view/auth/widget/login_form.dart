@@ -87,24 +87,6 @@ class LoginForm extends StatelessWidget {
             ),
           ),
         ),
-        ElevatedButton(
-          onPressed: () async {
-            await talentBoardViewModel.getKeywords();
-          },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFF1B76FF),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-          ),
-          child: const Padding(
-            padding: EdgeInsets.all(11.5),
-            child: Text(
-              '키워드 설정 임시 버튼',
-              style: TextStyle(fontSize: 18, color: Color(0xFFFFFFFF)),
-            ),
-          ),
-        ),
         const SizedBox(height: 12.0),
         SizedBox(
           height: 18,
