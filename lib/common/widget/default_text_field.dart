@@ -99,6 +99,7 @@ class DefaultTextField extends StatelessWidget {
   }
 
   Widget? _getSuffixIcon() {
+    if (!isEnabled) return null;
     final showDeleteIcon =
         textEditingController.text.isNotEmpty && focusNode!.hasFocus;
     final showTimeSet = type == "cert" && isSendAuth;

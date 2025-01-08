@@ -5,6 +5,7 @@ import 'package:app_front_talearnt/data/model/param/send_cert_number_param.dart'
 import 'package:app_front_talearnt/data/model/param/send_reset_password_mail_param.dart';
 import 'package:app_front_talearnt/provider/auth/find_id_provider.dart';
 import 'package:app_front_talearnt/provider/auth/find_password_provider.dart';
+import 'package:app_front_talearnt/provider/auth/kakao_provider.dart';
 import 'package:app_front_talearnt/provider/auth/login_provider.dart';
 import 'package:app_front_talearnt/provider/auth/sign_up_provider.dart';
 import 'package:app_front_talearnt/provider/auth/storage_provider.dart';
@@ -12,6 +13,7 @@ import 'package:app_front_talearnt/utils/token_manager.dart';
 import 'package:flutter/material.dart';
 
 import '../common/common_navigator.dart';
+import '../data/model/param/kakao_sign_up_param.dart';
 import '../data/model/param/sign_up_param.dart';
 import '../data/model/param/sms_validation_param.dart';
 import '../data/repositories/auth_repository.dart';
@@ -26,6 +28,7 @@ class AuthViewModel extends ChangeNotifier {
   final FindPasswordProvider findPasswordProvider;
   final CommonNavigator commonNavigator;
   final StorageProvider storageProvider;
+  final KakaoProvider kakaoProvider;
 
   AuthViewModel(
     this.loginProvider,
@@ -36,6 +39,7 @@ class AuthViewModel extends ChangeNotifier {
     this.findPasswordProvider,
     this.commonNavigator,
     this.storageProvider,
+    this.kakaoProvider,
   );
 
   Future<void> login(String email, String pw) async {
@@ -51,14 +55,18 @@ class AuthViewModel extends ChangeNotifier {
     );
   }
 
-  Future<void> createRandomNickName() async {
+  Future<void> createRandomNickName(String pageType) async {
     final result = await authRepository.createRandomNickName();
     result.fold(
       (failure) => commonNavigator.showSingleDialog(
         content: ErrorMessages.getMessage(failure.errorCode),
       ),
       (nickName) {
-        signUpProvider.setNickName(nickName);
+        if (pageType == 'signUp') {
+          signUpProvider.setNickName(nickName);
+        } else if (pageType == 'kakao') {
+          kakaoProvider.setNickName(nickName);
+        }
       },
     );
   }
@@ -250,6 +258,40 @@ class AuthViewModel extends ChangeNotifier {
         findIdProvider.setFindedUserIdInfo(
             userIdInfo.userId, userIdInfo.createdAt);
       },
+    );
+  }
+
+  Future<void> kakaoLogin() async {
+    final result = await authRepository.kakaoLogin();
+    result.fold(
+      (failure) => commonNavigator.showSingleDialog(
+          content: ErrorMessages.getMessage(failure.errorCode,
+              unknown: failure.errorMessage)), //dialog 띄워줘야됨
+      (userInfo) async {
+        kakaoProvider.setKakaoUserInfo(userInfo);
+        await createRandomNickName('kakao');
+        commonNavigator.goRoute("/kakao-sign-up");
+      },
+    );
+  }
+
+  Future<void> kakaoSignUp(String email, String name, String nickname,
+      int gender, String phone) async {
+    String sex = getGender(gender);
+    KakaoSignUpParam param = KakaoSignUpParam(
+        userId: email,
+        name: name,
+        nickname: nickname,
+        gender: sex,
+        phone: phone,
+        agreeReqDTOS: [AgreeReqDTO(agreeCodeId: 1, agree: true)]);
+    final result = await authRepository.kakaoSignUp(param);
+    result.fold(
+      (failure) => commonNavigator.showSingleDialog(
+          content: ErrorMessages.getMessage(
+        failure.errorCode,
+      )), //dialog 띄워줘야됨
+      (result) {},
     );
   }
 

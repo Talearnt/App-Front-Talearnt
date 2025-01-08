@@ -546,6 +546,7 @@ class TextLineXs extends StatelessWidget {
     return TextButton(
       onPressed: onPressed ?? () {},
       style: ButtonStyle(
+        padding: WidgetStateProperty.all(EdgeInsets.zero),
         overlayColor: WidgetStateProperty.all(Colors.transparent),
       ),
       child: Text(

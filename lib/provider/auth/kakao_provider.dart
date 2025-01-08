@@ -1,6 +1,8 @@
 import 'package:app_front_talearnt/provider/clear_text.dart';
 import 'package:flutter/material.dart';
 
+import '../../data/model/respone/kakao_sign_up_user_info.dart';
+
 class KakaoProvider extends ChangeNotifier with ClearText {
   int _gender = 0;
   final TextEditingController _nameController = TextEditingController();
@@ -9,9 +11,15 @@ class KakaoProvider extends ChangeNotifier with ClearText {
 
   final TextEditingController _nickNameController = TextEditingController();
   final FocusNode _nickNameFocusNode = FocusNode();
+  bool _checkNickNameDuplication = false; //중복체크 false - 중복아님
+  bool _changeNickName = false; //닉네임 변경했는지
   bool _nickNameValid = true;
   String _nickNameValidMessage = '';
-  bool _checkNickNameDupli = false;
+  bool _isNickNameInfoValid = false;
+  String _nickNameInfoValidMessage = '';
+  bool _isNickNameInfo = true;
+  String _nickNameInfoMessage = '랜덤으로 지정된 닉네임입니다. 자유롭게 수정 가능해요';
+  String _nickNameInfoType = 'checkInfo';
 
   bool _allCheck = false;
   bool _requiredTermsOfUseCheck = false;
@@ -35,7 +43,19 @@ class KakaoProvider extends ChangeNotifier with ClearText {
 
   String get nickNameValidMessage => _nickNameValidMessage;
 
-  bool get checkNickNameDupli => _checkNickNameDupli;
+  bool get isNickNameInfoValid => _isNickNameInfoValid;
+
+  bool get changeNickName => _changeNickName;
+
+  String get nickNameInfoValidMessage => _nickNameInfoValidMessage;
+
+  bool get isNickNameInfo => _isNickNameInfo;
+
+  String get nickNameInfoMessage => _nickNameInfoMessage;
+
+  String get nickNameInfoType => _nickNameInfoType;
+
+  bool get checkNickNameDuplication => _checkNickNameDuplication;
 
   bool get allCheck => _allCheck;
 
@@ -48,7 +68,7 @@ class KakaoProvider extends ChangeNotifier with ClearText {
   bool get termsOfUseCheck => _termsOfUseCheck;
 
   bool get isEnabledKakaoSignup =>
-      requiredTermsOfUseCheck && personalInfoCheck && checkNickNameDupli;
+      requiredTermsOfUseCheck && personalInfoCheck && checkNickNameDuplication;
 
   @override
   void clearText(TextEditingController controller) {
@@ -72,12 +92,11 @@ class KakaoProvider extends ChangeNotifier with ClearText {
     if (message == '') {
       _nickNameValid = true;
       _nickNameValidMessage = '';
-      //여기서 viewModel 불러야됨
-      _checkNickNameDupli = true;
+      _checkNickNameDuplication = true;
     } else {
       _nickNameValid = false;
       _nickNameValidMessage = message;
-      _checkNickNameDupli = false;
+      _checkNickNameDuplication = false;
     }
     notifyListeners();
   }
@@ -134,6 +153,40 @@ class KakaoProvider extends ChangeNotifier with ClearText {
         !_termsOfUseCheck) {
       _allCheck = false;
     }
+  }
+
+  void updateNickNameInfoValid(String type) {
+    if (type == '') {
+      _isNickNameInfo = false;
+      _isNickNameInfoValid = false;
+      _nickNameInfoValidMessage = '';
+      _changeNickName = true;
+    } else {
+      _isNickNameInfo = true;
+      _isNickNameInfoValid = true;
+      _nickNameInfoType = type;
+    }
+    notifyListeners();
+  }
+
+  void updateNickNameInfo(String info, String infoGuide) {
+    _isNickNameInfoValid = true;
+    _nickNameInfoMessage = info;
+    _nickNameInfoValidMessage = infoGuide;
+    notifyListeners();
+  }
+
+  void setNickName(String randomNickName) {
+    _nickNameController.text = randomNickName;
+    notifyListeners();
+  }
+
+  void setKakaoUserInfo(KakaoSignUpUserInfo userInfo) {
+    _gender = userInfo.gender;
+    _nameController.text = userInfo.name;
+    _phoneNumController.text = userInfo.phone;
+    _emailController.text = userInfo.userId;
+    notifyListeners();
   }
 
   void resetKakao() {

@@ -73,7 +73,7 @@ class SignUpMainPage extends StatelessWidget {
                     controller: signUpProvider.pageController,
                     onPageChanged: (int page) {
                       if (page == 2 && signUpProvider.isFirstVisit) {
-                        authViewModel.createRandomNickName();
+                        authViewModel.createRandomNickName('signUp');
                       }
                       signUpProvider.updateSignUp(page);
                     },

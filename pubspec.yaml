@@ -42,6 +42,8 @@ dependencies:
   go_router: ^14.6.1
   shared_preferences: ^2.3.3
   flutter_quill: ^10.8.5
+  kakao_flutter_sdk_user: ^1.9.5 # 카카오 로그인 API 패키지
+  flutter_dotenv: ^5.2.1
 
 dev_dependencies:
   flutter_test:
@@ -138,6 +140,7 @@ flutter:
     - assets/icons/set_talent_keyword_success_logo.svg
     - assets/icons/search_small_disabled.svg
     - assets/icons/loading_animation.svg
+    - assets/.env
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

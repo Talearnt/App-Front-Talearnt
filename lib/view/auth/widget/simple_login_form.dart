@@ -1,14 +1,16 @@
-import 'package:app_front_talearnt/view/auth/kakao_sign_up_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 
 import '../../../common/theme.dart';
+import '../../../view_model/auth_view_model.dart';
 
 class SimpleLoginForm extends StatelessWidget {
   const SimpleLoginForm({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final authViewModel = Provider.of<AuthViewModel>(context);
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -34,12 +36,7 @@ class SimpleLoginForm extends StatelessWidget {
             const SizedBox(width: 16.0),
             InkWell(
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const KakaoSignUpPage(),
-                  ),
-                );
+                authViewModel.kakaoLogin();
               },
               borderRadius: BorderRadius.circular(24.0),
               // 클릭 효과를 CircleAvatar와 일치시키기 위해

@@ -10,6 +10,8 @@ import '../../common/widget/button.dart';
 import '../../common/widget/default_text_field.dart';
 import '../../common/widget/text_field_label.dart';
 import '../../common/widget/top_app_bar.dart';
+import '../../provider/common/common_provider.dart';
+import '../../view_model/auth_view_model.dart';
 
 class KakaoSignUpPage extends StatelessWidget {
   const KakaoSignUpPage({super.key});
@@ -17,6 +19,8 @@ class KakaoSignUpPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final kakaoProvider = Provider.of<KakaoProvider>(context);
+    final authViewModel = Provider.of<AuthViewModel>(context);
+    final commonProvider = Provider.of<CommonProvider>(context);
 
     return PopScope(
       canPop: false, // 뒤로가기 허용은 하지 않지만 사용자 정의 동작을 처리
@@ -136,9 +140,17 @@ class KakaoSignUpPage extends StatelessWidget {
                         provider: kakaoProvider,
                         validType: 'nickName',
                         focusNode: kakaoProvider.nickNameFocusNode,
-                        validFunc: kakaoProvider.updateNickNameValid,
+                        validFunc: kakaoProvider.updateNickNameInfoValid,
                         validMessage: kakaoProvider.nickNameValidMessage,
                         isValid: kakaoProvider.nickNameValid,
+                        isInfo: kakaoProvider.isNickNameInfo,
+                        isInfoValid: kakaoProvider.isNickNameInfoValid,
+                        infoMessage: kakaoProvider.nickNameInfoMessage,
+                        infoValidMessage:
+                            kakaoProvider.nickNameInfoValidMessage,
+                        infoType: kakaoProvider.nickNameInfoType,
+                        infoFunc: kakaoProvider.updateNickNameInfo,
+                        onServerCheck: authViewModel.checkNickNameDuplication,
                       ),
                       const SizedBox(height: 24.0),
                       const TextFieldLabel(
@@ -150,10 +162,7 @@ class KakaoSignUpPage extends StatelessWidget {
                         type: 'default',
                         hint: '이름을 입력해주세요.',
                         textEditingController: kakaoProvider.nameController,
-                        onChanged: (value) {
-                          kakaoProvider
-                              .updateController(kakaoProvider.nameController);
-                        },
+                        onChanged: (value) {},
                         provider: kakaoProvider,
                       ),
                       const SizedBox(height: 24.0),
@@ -166,10 +175,7 @@ class KakaoSignUpPage extends StatelessWidget {
                         type: 'default',
                         hint: '메일을 입력해주세요',
                         textEditingController: kakaoProvider.emailController,
-                        onChanged: (value) {
-                          kakaoProvider
-                              .updateController(kakaoProvider.emailController);
-                        },
+                        onChanged: (value) {},
                         provider: kakaoProvider,
                       ),
                       const SizedBox(height: 24.0),
@@ -183,10 +189,7 @@ class KakaoSignUpPage extends StatelessWidget {
                         keyboardType: 'num',
                         hint: '01012345678',
                         textEditingController: kakaoProvider.phoneNumController,
-                        onChanged: (value) {
-                          kakaoProvider.updateController(
-                              kakaoProvider.phoneNumController);
-                        },
+                        onChanged: (value) {},
                         provider: kakaoProvider,
                       ),
                       const SizedBox(
@@ -255,10 +258,13 @@ class KakaoSignUpPage extends StatelessWidget {
                               )
                             ],
                           ),
-                          TextLineXs(
-                            content: '보기',
-                            onPressed: () =>
-                                context.push('/terms-agree-required'),
+                          SizedBox(
+                            height: 24,
+                            child: TextLineXs(
+                              content: '보기',
+                              onPressed: () =>
+                                  context.push('/terms-agree-required'),
+                            ),
                           ),
                         ],
                       ),
@@ -298,10 +304,13 @@ class KakaoSignUpPage extends StatelessWidget {
                               )
                             ],
                           ),
-                          TextLineXs(
-                            content: '보기',
-                            onPressed: () =>
-                                context.push('/privacy-agree-required'),
+                          SizedBox(
+                            height: 24,
+                            child: TextLineXs(
+                              content: '보기',
+                              onPressed: () =>
+                                  context.push('/privacy-agree-required'),
+                            ),
                           ),
                         ],
                       ),
@@ -347,10 +356,13 @@ class KakaoSignUpPage extends StatelessWidget {
                               ],
                             ),
                           ),
-                          TextLineXs(
-                            content: '보기',
-                            onPressed: () =>
-                                context.push('/privacy-agree-optional'),
+                          SizedBox(
+                            height: 24,
+                            child: TextLineXs(
+                              content: '보기',
+                              onPressed: () =>
+                                  context.push('/privacy-agree-optional'),
+                            ),
                           ),
                         ],
                       ),
@@ -390,10 +402,13 @@ class KakaoSignUpPage extends StatelessWidget {
                               )
                             ],
                           ),
-                          TextLineXs(
-                            content: '보기',
-                            onPressed: () =>
-                                context.push('/terms-agree-optional'),
+                          SizedBox(
+                            height: 24,
+                            child: TextLineXs(
+                              content: '보기',
+                              onPressed: () =>
+                                  context.push('/terms-agree-optional'),
+                            ),
                           ),
                         ],
                       ),
@@ -409,7 +424,20 @@ class KakaoSignUpPage extends StatelessWidget {
               mediaBottom: MediaQuery.of(context).viewInsets.bottom,
               content: '가입하기',
               isEnabled: kakaoProvider.isEnabledKakaoSignup,
-              onPressed: () async {},
+              onPressed: () async {
+                commonProvider.changeIsLoading(true);
+                await authViewModel
+                    .kakaoSignUp(
+                        kakaoProvider.emailController.text,
+                        kakaoProvider.nameController.text,
+                        kakaoProvider.nickNameController.text,
+                        kakaoProvider.gender,
+                        kakaoProvider.phoneNumController.text)
+                    .whenComplete(() => commonProvider.changeIsLoading(false))
+                    .then((_) {
+                  context.go('/');
+                });
+              },
             )
           ],
         ),

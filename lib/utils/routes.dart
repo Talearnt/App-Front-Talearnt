@@ -12,6 +12,7 @@ import '../view/auth/agreement/privacy_agreement_optional.dart';
 import '../view/auth/agreement/privacy_agreement_required.dart';
 import '../view/auth/agreement/terms_agreement_optional.dart';
 import '../view/auth/agreement/terms_agreement_required.dart';
+import '../view/auth/kakao_sign_up_page.dart';
 import '../view/auth/login_page.dart';
 import '../view/auth/sign_up_main_page.dart';
 import '../view/talent_board/match_write1_page.dart';
@@ -123,6 +124,12 @@ class Routes {
             path: '/terms-agree-optional',
             builder: (BuildContext context, GoRouterState state) {
               return const TermsAgreementOptional();
+            },
+          ),
+          GoRoute(
+            path: '/kakao-sign-up',
+            builder: (BuildContext context, GoRouterState state) {
+              return const KakaoSignUpPage();
             },
           ),
         ],
