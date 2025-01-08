@@ -1,8 +1,13 @@
+import 'dart:io';
+
+import 'package:app_front_talearnt/data/model/param/s3_controller_param.dart';
 import 'package:app_front_talearnt/data/model/respone/failure.dart';
 import 'package:app_front_talearnt/data/model/respone/keyword_category.dart';
+import 'package:app_front_talearnt/data/model/respone/s3_upload_url.dart';
 import 'package:app_front_talearnt/data/model/respone/success.dart';
 import 'package:app_front_talearnt/data/services/dio_service.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter/material.dart';
 
 import '../../constants/api_constants.dart';
 import '../model/param/my_talent_keywords_param.dart';
@@ -26,5 +31,13 @@ class TalentBoardRepository {
     final result = await dio.post(
         ApiConstants.setMyTalentKeywordsUrl, body.toJson(), null);
     return result.fold(left, (response) => right(Success.fromJson(response)));
+  }
+
+  Future<Either<Failure, S3UploadUrl>> getImageUploadUrl(
+      S3ControllerParam body) async {
+    final result =
+        await dio.post(ApiConstants.getUploadImagesUrl, body.toJson(), null);
+    return result.fold(
+        left, (response) => right(S3UploadUrl.fromJson(response)));
   }
 }

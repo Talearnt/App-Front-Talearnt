@@ -2,6 +2,7 @@ import 'package:app_front_talearnt/common/theme.dart';
 import 'package:app_front_talearnt/common/widget/button.dart';
 import 'package:app_front_talearnt/common/widget/toast_message.dart';
 import 'package:app_front_talearnt/common/widget/top_app_bar.dart';
+import 'package:app_front_talearnt/view_model/talent_board_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
@@ -10,6 +11,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../provider/talent_board/match_write_provider.dart';
+import '../../provider/talent_board/keyword_provider.dart';
 
 class MatchWrite2Page extends StatelessWidget {
   const MatchWrite2Page({super.key});
@@ -17,6 +19,7 @@ class MatchWrite2Page extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final matchWriteProvider = Provider.of<MatchWriteProvider>(context);
+    final talentBoardViewModel = Provider.of<TalentBoardViewModel>(context);
 
     ScrollController scrollController = ScrollController();
 
@@ -239,8 +242,11 @@ class MatchWrite2Page extends StatelessWidget {
                           width: 20,
                         ),
                         IconButton(
-                          onPressed: () {
-                            matchWriteProvider.pickImageAndInsert();
+                          onPressed: () async {
+                            await matchWriteProvider.pickImagesAndInsert();
+
+                            await talentBoardViewModel.getImageUploadUrl(
+                                matchWriteProvider.uploadImageInfos);
                           },
                           icon: SvgPicture.asset(
                             'assets/icons/image_before.svg',

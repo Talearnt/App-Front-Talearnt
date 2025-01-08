@@ -20,6 +20,8 @@ abstract class ApiConstants {
   static const String getTalentCategories = "$baseUrl/v1/keywords";
   static const String setMyTalentKeywordsUrl = "$baseUrl/v1/users/my-talents";
 
+  static const String getUploadImagesUrl = "$baseUrl/v1/uploads";
+
   static String getFineUserPwUrl(String userId) {
     return "$baseUrl/v1/auth/password/$userId/email";
   }

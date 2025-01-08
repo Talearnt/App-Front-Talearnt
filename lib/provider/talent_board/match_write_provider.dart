@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:app_front_talearnt/data/model/param/s3_controller_param.dart';
 import 'package:app_front_talearnt/data/model/respone/keyword_category.dart';
 import 'package:app_front_talearnt/provider/common/custom_ticker_provider.dart';
 import 'package:flutter/material.dart';
@@ -71,7 +74,11 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
 
   String _boardToastMessage = "";
 
-  final List<String> _uploadImageNames = [];
+  final List<S3FileParam> _uploadImageInfos = [];
+
+  List<String> _imageUploadUrls = [];
+
+  final List<File> _imageUploadData = [];
 
   bool get onToolBar => _onToolBar;
 
@@ -131,7 +138,11 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
 
   ImagePicker get picker => _picker;
 
-  List<String> get uploadImageNames => _uploadImageNames;
+  List<S3FileParam> get uploadImageInfos => _uploadImageInfos;
+
+  List<String> get imageUploadUrls => _imageUploadUrls;
+
+  List<File> get imageUploadData => _imageUploadData;
 
   void clearProvider() {
     _titlerController.clear();
@@ -336,12 +347,33 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
 
     if (pickedFiles.isNotEmpty) {
       for (final pickedFile in pickedFiles) {
-        _uploadImageNames.add(pickedFile.name);
+        final File image = File(pickedFile.path);
+        final int sizeInBytes = await image.length(); // 파일 크기 (바이트 단위)
+        final double sizeInKB = sizeInBytes / 1024; // KB로 변환
+        final double sizeInMB = sizeInKB / 1024; // MB로 변환
 
-        //final File image = File(pickedFile.path);
+        if (sizeInMB > 5) {
+          print('File ${pickedFile.name} is too large.');
+          continue;
+        }
+
+        uploadImageInfos.add(S3FileParam(
+            fileName: pickedFile.name,
+            fileType: "images",
+            fileSize: sizeInBytes));
+
+        imageUploadData.add(image);
 
         //contentController.insertImageBlock(imageSource: image.path);
       }
     }
+  }
+
+  void setImageUploadUrl(List<String> data) {
+    _imageUploadUrls = (data);
+  }
+
+  void viewUploadImges() {
+    _uploadImageInfos.clear();
   }
 }
