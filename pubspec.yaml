@@ -42,6 +42,7 @@ dependencies:
   go_router: ^14.6.1
   shared_preferences: ^2.3.3
   flutter_quill: ^10.8.5
+  animated_splash_screen: ^1.3.0
 
 dev_dependencies:
   flutter_test:
@@ -116,6 +117,7 @@ flutter:
     - assets/icons/search.svg
     - assets/icons/search_small.svg
     - assets/icons/share.svg
+    - assets/img/splash_logo.svg
     - assets/icons/text_delete.svg
     - assets/icons/text_edit.svg
     - assets/icons/symbol_64_64.svg
