@@ -3,9 +3,12 @@ import 'dart:io';
 import 'package:app_front_talearnt/data/model/param/s3_controller_param.dart';
 import 'package:app_front_talearnt/data/model/respone/keyword_category.dart';
 import 'package:app_front_talearnt/provider/common/custom_ticker_provider.dart';
+import 'package:app_front_talearnt/view/talent_board/match_write2_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
+import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as path;
 
 import '../clear_text.dart';
 
@@ -28,10 +31,9 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
   late TabController _giveTalentTabController;
   late TabController _interestTalentTabController;
   final CustomTickerProvider _tickerProvider;
-  final List<int> _giveTalentKeywordCodes = []; //처음 선택되는 keyword
-  final List<int> _selectedGiveTalentKeywordCodes =
-      []; // 키워드 확인 화면에서 사용되는 keyword
-  final List<int> _searchedGiveTalentKeywordCodes = []; // 검색용 keyword
+  final List<int> _giveTalentKeywordCodes = [];
+  final List<int> _selectedGiveTalentKeywordCodes = [];
+  final List<int> _searchedGiveTalentKeywordCodes = [];
   final List<int> _interestTalentKeywordCodes = [];
   final List<int> _selectedInterestTalentKeywordCodes = [];
   final List<int> _searchedInterestTalentKeywordCodes = [];
@@ -79,6 +81,8 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
   List<String> _imageUploadUrls = [];
 
   final List<File> _imageUploadData = [];
+
+  bool _isS3Upload = false;
 
   bool get onToolBar => _onToolBar;
 
@@ -143,6 +147,8 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
   List<String> get imageUploadUrls => _imageUploadUrls;
 
   List<File> get imageUploadData => _imageUploadData;
+
+  bool get isS3Upload => _isS3Upload;
 
   void clearProvider() {
     _titlerController.clear();
@@ -358,8 +364,9 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
         }
 
         uploadImageInfos.add(S3FileParam(
-            fileName: pickedFile.name,
-            fileType: "images",
+            fileName: path.basename(pickedFile.path),
+            fileType:
+                "image/${path.extension(pickedFile.path).replaceAll(".", "")}",
             fileSize: sizeInBytes));
 
         imageUploadData.add(image);
@@ -371,9 +378,15 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
 
   void setImageUploadUrl(List<String> data) {
     _imageUploadUrls = (data);
+    _isS3Upload = true;
   }
 
   void viewUploadImges() {
+    for (int idx = 0; idx < _imageUploadUrls.length; idx++) {
+      contentController.insertImageBlock(imageSource: _imageUploadUrls[idx]);
+    }
+
+    _isS3Upload = false;
     _uploadImageInfos.clear();
   }
 }

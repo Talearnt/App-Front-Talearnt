@@ -35,10 +35,13 @@ class ProviderSetup extends StatelessWidget {
           create: (_) => TokenManager(Token.empty()),
         ),
         ChangeNotifierProvider<LoginProvider>(create: (_) => LoginProvider()),
+        ChangeNotifierProvider<MatchWriteProvider>(
+            create: (_) => MatchWriteProvider()),
         Provider<AuthorizationInterceptor>(
           create: (context) => AuthorizationInterceptor(
             tokenManager: context.read<TokenManager>(),
             loginProvider: context.read<LoginProvider>(),
+            matchWriteProvider: context.read<MatchWriteProvider>(),
           ),
         ),
 
@@ -72,8 +75,7 @@ class ProviderSetup extends StatelessWidget {
         ),
         ChangeNotifierProvider<KeywordProvider>(
             create: (_) => KeywordProvider()),
-        ChangeNotifierProvider<MatchWriteProvider>(
-            create: (_) => MatchWriteProvider()),
+
         ChangeNotifierProvider<TalentBoardViewModel>(
           create: (context) => TalentBoardViewModel(
             CommonNavigator(navigatorKey),

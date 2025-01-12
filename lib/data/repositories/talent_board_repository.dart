@@ -40,4 +40,16 @@ class TalentBoardRepository {
     return result.fold(
         left, (response) => right(S3UploadUrl.fromJson(response)));
   }
+
+  Future<Either<Failure, dynamic>> uploadImage(String imageUploadUrl,
+      File image, int fileSize, String contentType) async {
+    final result = await dio.put(
+      imageUploadUrl,
+      image.openRead(),
+      size: fileSize,
+      contentType: contentType,
+    );
+
+    return result.fold(left, (response) => right(true));
+  }
 }

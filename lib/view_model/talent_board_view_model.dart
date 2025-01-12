@@ -57,6 +57,18 @@ class TalentBoardViewModel extends ChangeNotifier {
         (failure) => commonNavigator.showSingleDialog(
             content: ErrorMessages.getMessage(failure.errorCode)), (result) {
       matchWriteProvider.setImageUploadUrl(result.data);
+    });
+  }
+
+  Future<void> uploadImage(String imageUploadUrl, File image, int fileSize,
+      String contentType) async {
+    final result = await talentBoardRepository.uploadImage(
+        imageUploadUrl, image, fileSize, contentType);
+
+    result.fold(
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)), (result) {
+      print("result : $result");
       matchWriteProvider.viewUploadImges();
     });
   }

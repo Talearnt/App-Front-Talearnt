@@ -247,6 +247,19 @@ class MatchWrite2Page extends StatelessWidget {
 
                             await talentBoardViewModel.getImageUploadUrl(
                                 matchWriteProvider.uploadImageInfos);
+
+                            for (int idx = 0;
+                                idx < matchWriteProvider.imageUploadUrls.length;
+                                idx++) {
+                              talentBoardViewModel.uploadImage(
+                                matchWriteProvider.imageUploadUrls[idx],
+                                matchWriteProvider.imageUploadData[idx],
+                                matchWriteProvider
+                                    .uploadImageInfos[idx].fileSize,
+                                matchWriteProvider
+                                    .uploadImageInfos[idx].fileType,
+                              );
+                            }
                           },
                           icon: SvgPicture.asset(
                             'assets/icons/image_before.svg',

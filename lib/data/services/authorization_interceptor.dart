@@ -1,4 +1,5 @@
 import 'package:app_front_talearnt/provider/auth/login_provider.dart';
+import 'package:app_front_talearnt/provider/talent_board/match_write_provider.dart';
 import 'package:dio/dio.dart';
 
 import '../../utils/token_manager.dart';
@@ -6,12 +7,15 @@ import '../../utils/token_manager.dart';
 class AuthorizationInterceptor extends InterceptorsWrapper {
   final TokenManager _tokenManager;
   final LoginProvider _loginProvider;
+  final MatchWriteProvider _matchWriteProvider;
 
   AuthorizationInterceptor({
     required TokenManager tokenManager,
     required LoginProvider loginProvider,
+    required MatchWriteProvider matchWriteProvider,
   })  : _tokenManager = tokenManager,
-        _loginProvider = loginProvider;
+        _loginProvider = loginProvider,
+        _matchWriteProvider = matchWriteProvider;
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
@@ -19,7 +23,11 @@ class AuthorizationInterceptor extends InterceptorsWrapper {
       options.headers['authorization'] =
           'Bearer ${_tokenManager.token!.accessToken}';
     }
-    options.headers['content-type'] = 'application/json';
+
+    if (!_matchWriteProvider.isS3Upload) {
+      options.headers['content-type'] = 'application/json';
+    }
+
     handler.next(options);
   }
 }
