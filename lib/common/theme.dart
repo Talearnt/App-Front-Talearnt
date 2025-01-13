@@ -91,9 +91,13 @@ class TextTypes {
 
 class Palette {
   static const Color bgBackGround = Color(0xFFFFFFFF);
+  static Color bgToast01 = const Color(0xFF000000).withOpacity(0.7);
+  static Color bgToast02 = const Color(0xFF000000).withOpacity(0.8);
+  static const Color onToast = Color(0xFFFFFFFF);
   static const Color primary01 = Color(0xFF1B76FF);
   static const Color primaryBG01 = Color(0xFFE5F0FF);
   static const Color primaryBG02 = Color(0xFF4D94FF);
+  static const Color onPrimary = Color(0xFFFFFFFF);
   static const Color error01 = Color(0xFFFF2727);
   static const Color error02 = Color(0xFFF50000);
   static const Color error03 = Color(0xFFFF5C5C);
@@ -103,12 +107,13 @@ class Palette {
   static const Color text02 = Color(0xFF414A4E);
   static const Color text03 = Color(0xFF98A3A9);
   static const Color text04 = Color(0xFFA6B0B5);
-  static const Color icon01 = Color(0xFF414A4E); //text02랑 같음 구분을 위해 그냥 씀
-  static const Color icon02 = Color(0xFFC1C8CC);
-  static const Color icon03 = Color(0xFFDEE1E3);
+  static const Color icon01 = Color(0xFF414A4E);
+  static const Color icon02 = Color(0xFFA6B0B5);
+  static const Color icon03 = Color(0xFFC1C8CC);
+  static const Color icon04 = Color(0xFFDEE1E3);
   static const Color line01 = Color(0xFFD0D5D8);
+  static const Color line02 = Color(0xFFECEEEF);
   static const Color bgUp01 = Color(0xFFF7F8F8);
   static const Color bgUp02 = Color(0xFFECEEEF);
   static const Color bgUp03 = Color(0xFFDEE1E3);
-  static Color bgBlack01 = const Color(0xFF000000).withOpacity(0.7);
 }
