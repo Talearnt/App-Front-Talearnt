@@ -114,6 +114,8 @@ class FindIdProvider extends ChangeNotifier with ClearText {
 
     _textInputEnabled = true;
 
+    resetTimer();
+
     notifyListeners();
   }
 
