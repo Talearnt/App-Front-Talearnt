@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 
-import '../../data/model/respone/keyword_category.dart';
+import '../../constants/global_value_constants.dart';
 import '../common/custom_ticker_provider.dart';
 
 class KeywordProvider extends ChangeNotifier {
   KeywordProvider() : _tickerProvider = CustomTickerProvider() {
-    _giveTalentTabController = TabController(length: 0, vsync: _tickerProvider);
-    _interestTalentTabController =
-        TabController(length: 0, vsync: _tickerProvider);
+    _giveTalentTabController = TabController(
+        length: GlobalValueConstants.keywordCategoris.length,
+        vsync: _tickerProvider);
+    _interestTalentTabController = TabController(
+        length: GlobalValueConstants.keywordCategoris.length,
+        vsync: _tickerProvider);
     _giveTalentFocusNode.addListener(_onChanged);
     _interestTalentFocusNode.addListener(_onChanged);
     _giveTalentSearchController.addListener(_onChanged);
@@ -109,15 +112,15 @@ class KeywordProvider extends ChangeNotifier {
     return (_setTalentPage + 1) / 3;
   }
 
-  void initTabController(List<KeywordCategory> keywordCategories) {
-    _giveTalentTabController.dispose();
-    _interestTalentTabController.dispose();
-    _giveTalentTabController =
-        TabController(length: keywordCategories.length, vsync: _tickerProvider);
-    _interestTalentTabController =
-        TabController(length: keywordCategories.length, vsync: _tickerProvider);
-    notifyListeners();
-  }
+  // void initTabController(List<KeywordCategory> keywordCategories) {
+  //   _giveTalentTabController.dispose();
+  //   _interestTalentTabController.dispose();
+  //   _giveTalentTabController =
+  //       TabController(length: keywordCategories.length, vsync: _tickerProvider);
+  //   _interestTalentTabController =
+  //       TabController(length: keywordCategories.length, vsync: _tickerProvider);
+  //   notifyListeners();
+  // }
 
   void resetGiveTabIndex() {
     _giveTalentTabController.index = 0;

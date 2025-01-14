@@ -2,7 +2,6 @@ import 'package:app_front_talearnt/data/model/param/my_talent_keywords_param.dar
 import 'package:flutter/material.dart';
 
 import '../common/common_navigator.dart';
-import '../constants/global_value_constants.dart';
 import '../data/repositories/talent_board_repository.dart';
 import '../provider/talent_board/keyword_provider.dart';
 import '../provider/talent_board/match_write_provider.dart';
@@ -21,17 +20,17 @@ class TalentBoardViewModel extends ChangeNotifier {
     this.matchWriteProvider,
   );
 
-  Future<void> getKeywords() async {
-    final result = await talentBoardRepository.getKeywords();
-    result.fold(
-        (failure) => commonNavigator.showSingleDialog(
-            content: ErrorMessages.getMessage(failure.errorCode)), (keywords) {
-      GlobalValueConstants.keywordCategoris = keywords;
-      keywordProvider.initTabController(keywords);
-      matchWriteProvider.initTabController(keywords);
-      commonNavigator.goRoute('/set-keyword');
-    });
-  }
+  // Future<void> getKeywords() async {
+  //   final result = await talentBoardRepository.getKeywords();
+  //   result.fold(
+  //       (failure) => commonNavigator.showSingleDialog(
+  //           content: ErrorMessages.getMessage(failure.errorCode)), (keywords) {
+  //     GlobalValueConstants.keywordCategoris = keywords;
+  //     keywordProvider.initTabController(keywords);
+  //     matchWriteProvider.initTabController(keywords);
+  //     commonNavigator.goRoute('/set-keyword');
+  //   });
+  // }
 
   Future<void> setMyKeywords(
       List<int> giveTalent, List<int> interestTalent) async {

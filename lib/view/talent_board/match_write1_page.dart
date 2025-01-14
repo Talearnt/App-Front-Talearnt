@@ -17,7 +17,7 @@ class MatchWrite1Page extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final matchWriteProvider = Provider.of<MatchWriteProvider>(context);
-    final talearntBoardViewModel = Provider.of<TalentBoardViewModel>(context);
+    final talentBoardViewModel = Provider.of<TalentBoardViewModel>(context);
     return Scaffold(
       appBar: TopAppBar(
         onPressed: () {
@@ -243,7 +243,7 @@ class MatchWrite1Page extends StatelessWidget {
                               height: 36,
                             ),
                             onPressed: () async {
-                              await talearntBoardViewModel.getKeywords();
+                              // await talentBoardViewModel.getKeywords();
                               showModalBottomSheet(
                                 context: context,
                                 shape: const RoundedRectangleBorder(

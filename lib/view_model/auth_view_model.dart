@@ -8,6 +8,7 @@ import 'package:app_front_talearnt/provider/auth/find_password_provider.dart';
 import 'package:app_front_talearnt/provider/auth/login_provider.dart';
 import 'package:app_front_talearnt/provider/auth/sign_up_provider.dart';
 import 'package:app_front_talearnt/provider/auth/storage_provider.dart';
+import 'package:app_front_talearnt/provider/common/common_provider.dart';
 import 'package:app_front_talearnt/utils/token_manager.dart';
 import 'package:flutter/material.dart';
 
@@ -26,6 +27,7 @@ class AuthViewModel extends ChangeNotifier {
   final FindPasswordProvider findPasswordProvider;
   final CommonNavigator commonNavigator;
   final StorageProvider storageProvider;
+  final CommonProvider commonProvider;
 
   AuthViewModel(
     this.loginProvider,
@@ -36,6 +38,7 @@ class AuthViewModel extends ChangeNotifier {
     this.findPasswordProvider,
     this.commonNavigator,
     this.storageProvider,
+    this.commonProvider,
   );
 
   Future<void> login(String email, String pw) async {
@@ -47,6 +50,7 @@ class AuthViewModel extends ChangeNotifier {
       (token) {
         tokenManager.saveToken(token);
         loginProvider.updateLoginFormSuccess();
+        commonNavigator.goRoute('/set-keyword');
       },
     );
   }

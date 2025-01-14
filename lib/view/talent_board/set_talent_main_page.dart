@@ -45,8 +45,9 @@ class SetTalentMainPage extends StatelessWidget {
                   leftText: '로그아웃',
                   rightText: '키워드 설정',
                   leftFun: () {
-                    context.pop();
-                    context.go('/');
+                    if (context.mounted) {
+                      context.pop();
+                    }
                   },
                 );
               } else if (keywordProvider.setTalentPage == 2) {
