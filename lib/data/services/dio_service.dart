@@ -67,7 +67,7 @@ class DioService {
     }
   }
 
-  Future<Either<Failure, Map<String, dynamic>>> put(String path, dynamic data,
+  Future<Either<Failure, String>> put(String path, dynamic data,
       {int? size, String? contentType}) async {
     try {
       final response = await _dio.put(
@@ -81,24 +81,19 @@ class DioService {
         ),
       );
 
-      return right(response.data as Map<String, dynamic>);
+      return right(response.statusCode.toString());
     } on DioException catch (e) {
       if (e.response?.statusCode == 401) {
         var result = await handleAuthResponse(e.response, () {
           return put(path, data, size: size, contentType: contentType);
         });
-        return right(result.data as Map<String, dynamic>);
+        return right(result.statusCode.toString());
       }
-      if (e.response?.data is Map<String, dynamic>) {
-        final failureData = e.response!.data;
-        return left(Failure.fromJson(failureData));
-      } else {
-        return left(Failure(
-          errorCode: 'DIO_ERROR',
-          errorMessage: e.message ?? 'Unknown error occurred',
-          success: false,
-        ));
-      }
+      return left(Failure(
+        errorCode: 'DIO_ERROR',
+        errorMessage: e.message ?? 'Unknown error occurred',
+        success: false,
+      ));
     }
   }
 
