@@ -19,12 +19,12 @@ class AuthorizationInterceptor extends InterceptorsWrapper {
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    if (_loginProvider.isLoggedIn) {
-      options.headers['authorization'] =
-          'Bearer ${_tokenManager.token!.accessToken}';
-    }
-
     if (!_matchWriteProvider.isS3Upload) {
+      if (_loginProvider.isLoggedIn) {
+        options.headers['authorization'] =
+            'Bearer ${_tokenManager.token!.accessToken}';
+      }
+
       options.headers['content-type'] = 'application/json';
     }
 

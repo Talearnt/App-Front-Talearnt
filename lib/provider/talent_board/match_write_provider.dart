@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:app_front_talearnt/data/model/param/s3_controller_param.dart';
 import 'package:app_front_talearnt/data/model/respone/keyword_category.dart';
+import 'package:app_front_talearnt/data/model/respone/keyword_talent.dart';
 import 'package:app_front_talearnt/provider/common/custom_ticker_provider.dart';
 import 'package:app_front_talearnt/view/talent_board/match_write2_page.dart';
 import 'package:flutter/material.dart';
@@ -306,6 +307,14 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
     notifyListeners();
   }
 
+  void setGiveTalentKeyword(List<dynamic> keywords) {
+    for (final keyword in keywords) {
+      if (!_giveTalentKeywordCodes.contains(keyword.code)) {
+        _giveTalentKeywordCodes.add(keyword.code);
+      }
+    }
+  }
+
   void checkChipsSelected() {
     _isChipsSelected = true;
 
@@ -383,10 +392,15 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
 
   void viewUploadImges() {
     for (int idx = 0; idx < _imageUploadUrls.length; idx++) {
-      contentController.insertImageBlock(imageSource: _imageUploadUrls[idx]);
+      String imgUrl = _imageUploadUrls[idx].split('?')[0];
+      contentController.insertImageBlock(imageSource: imgUrl);
     }
 
     _isS3Upload = false;
+    _uploadImageInfos.clear();
+  }
+
+  void clearInfos() {
     _uploadImageInfos.clear();
   }
 }

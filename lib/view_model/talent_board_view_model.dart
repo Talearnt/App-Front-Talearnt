@@ -48,6 +48,16 @@ class TalentBoardViewModel extends ChangeNotifier {
     });
   }
 
+  Future<void> getOfferedKeywords() async {
+    final result = await talentBoardRepository.getOfferedKeywords();
+    result.fold(
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)), (response) {
+      matchWriteProvider.setGiveTalentKeyword(response);
+      //commonNavigator.goRoute('/match_write1');
+    });
+  }
+
   Future<void> getImageUploadUrl(List<S3FileParam> uploadImageInfos) async {
     S3ControllerParam param = S3ControllerParam(files: uploadImageInfos);
 
@@ -65,10 +75,11 @@ class TalentBoardViewModel extends ChangeNotifier {
     final result = await talentBoardRepository.uploadImage(
         imageUploadUrl, image, fileSize, contentType);
 
-    result.fold(
-        (failure) => commonNavigator.showSingleDialog(
-            content: ErrorMessages.getMessage(failure.errorCode)), (result) {
-      print("result : $result");
+    result.fold((failure) {
+      commonNavigator.showSingleDialog(
+          content: ErrorMessages.getMessage(failure.errorCode));
+      matchWriteProvider.clearInfos();
+    }, (result) {
       matchWriteProvider.viewUploadImges();
     });
   }

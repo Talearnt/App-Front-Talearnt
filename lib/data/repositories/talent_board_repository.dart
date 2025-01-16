@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:app_front_talearnt/data/model/param/s3_controller_param.dart';
 import 'package:app_front_talearnt/data/model/respone/failure.dart';
 import 'package:app_front_talearnt/data/model/respone/keyword_category.dart';
+import 'package:app_front_talearnt/data/model/respone/keyword_talent.dart';
 import 'package:app_front_talearnt/data/model/respone/s3_upload_url.dart';
 import 'package:app_front_talearnt/data/model/respone/success.dart';
 import 'package:app_front_talearnt/data/services/dio_service.dart';
@@ -33,6 +34,15 @@ class TalentBoardRepository {
     return result.fold(left, (response) => right(Success.fromJson(response)));
   }
 
+  Future<Either<Failure, List<dynamic>>> getOfferedKeywords() async {
+    final result = await dio.get(ApiConstants.getOfferedKeywords, null, null);
+    return result.fold((failure) => left(failure), (response) {
+      List<dynamic> keywords = List<dynamic>.from(
+          response['data'].map((data) => KeywordTalent.fromJson(data)));
+      return right(keywords);
+    });
+  }
+
   Future<Either<Failure, S3UploadUrl>> getImageUploadUrl(
       S3ControllerParam body) async {
     final result =
@@ -50,6 +60,6 @@ class TalentBoardRepository {
       contentType: contentType,
     );
 
-    return result.fold(left, (response) => right(true));
+    return result.fold(left, (response) => right(response));
   }
 }

@@ -90,7 +90,8 @@ class DioService {
         return right(result.statusCode.toString());
       }
       return left(Failure(
-        errorCode: 'DIO_ERROR',
+        data: e.response?.data,
+        errorCode: e.response?.statusCode.toString() ?? 'DIO_ERROR',
         errorMessage: e.message ?? 'Unknown error occurred',
         success: false,
       ));
