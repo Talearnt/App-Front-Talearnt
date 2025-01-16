@@ -12,14 +12,14 @@ class TalentBoardRepository {
 
   TalentBoardRepository(this.dio);
 
-  Future<Either<Failure, List<KeywordCategory>>> getKeywords() async {
-    final result = await dio.get(ApiConstants.getTalentCategories, null, null);
-    return result.fold((failure) => left(failure), (response) {
-      List<KeywordCategory> categories = List<KeywordCategory>.from(
-          response['data'].map((data) => KeywordCategory.fromJson(data)));
-      return right(categories);
-    });
-  }
+  // Future<Either<Failure, List<KeywordCategory>>> getKeywords() async {
+  //   final result = await dio.get(ApiConstants.getTalentCategories, null, null);
+  //   return result.fold((failure) => left(failure), (response) {
+  //     List<KeywordCategory> categories = List<KeywordCategory>.from(
+  //         response['data'].map((data) => KeywordCategory.fromJson(data)));
+  //     return right(categories);
+  //   });
+  // }
 
   Future<Either<Failure, Success>> setMyKeywords(
       MyTalentKeywordsParam body) async {

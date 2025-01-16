@@ -1,15 +1,18 @@
-import 'package:app_front_talearnt/data/model/respone/keyword_category.dart';
 import 'package:app_front_talearnt/provider/common/custom_ticker_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 
+import '../../constants/global_value_constants.dart';
 import '../clear_text.dart';
 
 class MatchWriteProvider extends ChangeNotifier with ClearText {
   MatchWriteProvider() : _tickerProvider = CustomTickerProvider() {
-    _giveTalentTabController = TabController(length: 0, vsync: _tickerProvider);
-    _interestTalentTabController =
-        TabController(length: 0, vsync: _tickerProvider);
+    _giveTalentTabController = TabController(
+        length: GlobalValueConstants.keywordCategoris.length,
+        vsync: _tickerProvider);
+    _interestTalentTabController = TabController(
+        length: GlobalValueConstants.keywordCategoris.length,
+        vsync: _tickerProvider);
     _giveTalentFocusNode.addListener(_onChanged);
     _interestTalentFocusNode.addListener(_onChanged);
     _contentController.addListener(_onChanged);
@@ -46,9 +49,11 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
   String _exchangeTypeRequiredMesage = "";
 
   TextEditingController get titlerController => _titlerController;
+
   QuillController get contentController => _contentController;
 
   FocusNode get titleFocusNode => _titleFocusNode;
+
   FocusNode get contentFocusNode => _contentFocusNode;
 
   bool _onToolBar = false;
@@ -69,36 +74,55 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
   bool get onToolBar => _onToolBar;
 
   bool get isBold => _isBold;
+
   bool get isItalic => _isItalic;
+
   bool get isUnderline => _isUnderline;
+
   bool get isUl => _isUl;
+
   bool get isOl => _isOl;
 
   String get alignType => _alignType;
 
   String get giveTalentRequiredMessage => _giveTalentRequiredMessage;
+
   String get interestTalentRequiredMessage => _interestTalentRequiredMessage;
+
   String get durationRequiredMessage => _durationRequiredMessage;
+
   String get exchangeTypeRequiredMesage => _exchangeTypeRequiredMesage;
 
   bool get isChipsSelected => _isChipsSelected;
+
   bool get isTitleAndBoardEmpty => _isTitleAndBoardEmpty;
 
   TabController get giveTalentTabController => _giveTalentTabController;
+
   TabController get interestTalentTabController => _interestTalentTabController;
+
   List<int> get giveTalentKeywordCodes => _giveTalentKeywordCodes;
+
   List<int> get selectedGiveTalentKeywordCodes =>
       _selectedGiveTalentKeywordCodes;
+
   List<int> get searchedGiveTalentKeywordCodes =>
       _searchedGiveTalentKeywordCodes;
+
   List<int> get interestTalentKeywordCodes => _interestTalentKeywordCodes;
+
   List<int> get selectedInterestTalentKeywordCodes =>
       _selectedInterestTalentKeywordCodes;
+
   List<int> get searchedInterestTalentKeywordCodes =>
       _searchedInterestTalentKeywordCodes;
+
   List<String> get duration => _duration;
+
   List<String> get exchangeType => _exchangeType;
+
   String get selectedDuration => _selectedDuration;
+
   String get selectedExchangeType => _selectedExchangeType;
 
   String get boardToastMessage => _boardToastMessage;
@@ -148,15 +172,15 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
     notifyListeners();
   }
 
-  void initTabController(List<KeywordCategory> keywordCategories) {
-    _giveTalentTabController.dispose();
-    _interestTalentTabController.dispose();
-    _giveTalentTabController =
-        TabController(length: keywordCategories.length, vsync: _tickerProvider);
-    _interestTalentTabController =
-        TabController(length: keywordCategories.length, vsync: _tickerProvider);
-    notifyListeners();
-  }
+  // void initTabController(List<KeywordCategory> keywordCategories) {
+  //   _giveTalentTabController.dispose();
+  //   _interestTalentTabController.dispose();
+  //   _giveTalentTabController =
+  //       TabController(length: keywordCategories.length, vsync: _tickerProvider);
+  //   _interestTalentTabController =
+  //       TabController(length: keywordCategories.length, vsync: _tickerProvider);
+  //   notifyListeners();
+  // }
 
   void _onChanged() {
     notifyListeners(); // Focus 상태 변경 시 UI 갱신

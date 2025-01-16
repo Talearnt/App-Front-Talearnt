@@ -68,6 +68,7 @@ class ProviderSetup extends StatelessWidget {
             context.read<FindPasswordProvider>(),
             CommonNavigator(navigatorKey),
             context.read<StorageProvider>(),
+            context.read<CommonProvider>(),
           ),
         ),
         ChangeNotifierProvider<KeywordProvider>(
