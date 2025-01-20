@@ -2,7 +2,6 @@ import 'package:app_front_talearnt/common/theme.dart';
 import 'package:app_front_talearnt/common/widget/button.dart';
 import 'package:app_front_talearnt/common/widget/top_app_bar.dart';
 import 'package:app_front_talearnt/constants/global_value_constants.dart';
-import 'package:app_front_talearnt/view_model/talent_board_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
@@ -17,7 +16,7 @@ class MatchWrite1Page extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final matchWriteProvider = Provider.of<MatchWriteProvider>(context);
-    final talentBoardViewModel = Provider.of<TalentBoardViewModel>(context);
+    // final talentBoardViewModel = Provider.of<TalentBoardViewModel>(context);
     return Scaffold(
       appBar: TopAppBar(
         onPressed: () {
@@ -44,7 +43,7 @@ class MatchWrite1Page extends StatelessWidget {
               children: [
                 TextWithIcon(
                   content: '초기화',
-                  icon: Icons.refresh_outlined,
+                  svgPicture: SvgPicture.asset('assets/icons/reset.svg'),
                   onPressed: () {
                     matchWriteProvider.reset();
                   },
@@ -55,7 +54,6 @@ class MatchWrite1Page extends StatelessWidget {
                     content: '다음',
                     onPressed: () async {
                       matchWriteProvider.checkChipsSelected();
-
                       matchWriteProvider.isChipsSelected
                           ? context.go('/match_write2')
                           : null;

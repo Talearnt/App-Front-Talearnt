@@ -1,5 +1,6 @@
 import 'package:app_front_talearnt/common/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class PrimaryXs extends StatelessWidget {
   final String content;
@@ -595,13 +596,13 @@ class TextLineS extends StatelessWidget {
 
 class TextWithIcon extends StatelessWidget {
   final String content;
-  final IconData icon;
+  final SvgPicture svgPicture;
   final VoidCallback? onPressed;
 
   const TextWithIcon({
     super.key,
     required this.content,
-    required this.icon,
+    required this.svgPicture,
     this.onPressed,
   });
 
@@ -610,6 +611,7 @@ class TextWithIcon extends StatelessWidget {
     return TextButton(
       onPressed: onPressed ?? () {},
       style: ButtonStyle(
+        padding: WidgetStateProperty.all(EdgeInsets.zero), // 패딩 제거
         overlayColor: WidgetStateProperty.all(Colors.transparent),
       ),
       child: Row(
@@ -617,11 +619,7 @@ class TextWithIcon extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Icon(
-            icon,
-            size: 20,
-            color: Palette.icon01,
-          ),
+          svgPicture,
           const SizedBox(width: 3),
           Text(content,
               style: TextTypes.caption01(
