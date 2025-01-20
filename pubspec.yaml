@@ -140,6 +140,12 @@ flutter:
     - assets/icons/set_talent_keyword_success_logo.svg
     - assets/icons/search_small_disabled.svg
     - assets/icons/loading_animation.svg
+    - assets/icons/bookmark_on.svg
+    - assets/icons/bookmark_off.svg
+    - assets/icons/comment.svg
+    - assets/icons/eye_open_grey.svg
+    - assets/icons/filter_chip_arrow.svg
+    - assets/icons/filter_chip_selected_arrow.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

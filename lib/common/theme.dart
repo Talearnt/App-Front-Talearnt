@@ -97,6 +97,7 @@ class Palette {
   static const Color primary01 = Color(0xFF1B76FF);
   static const Color primaryBG01 = Color(0xFFE5F0FF);
   static const Color primaryBG02 = Color(0xFF4D94FF);
+  static const Color primaryBG04 = Color(0xFFF0F6FF);
   static const Color onPrimary = Color(0xFFFFFFFF);
   static const Color error01 = Color(0xFFFF2727);
   static const Color error02 = Color(0xFFF50000);
