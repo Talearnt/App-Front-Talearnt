@@ -231,4 +231,23 @@ class GlobalValueConstants {
       ],
     ),
   ];
+  static List<Map<String, String>> orderTypes = [
+    {'code': 'recent', 'value': '최신순'},
+    {'code': 'popular', 'value': '인기순'},
+  ];
+
+  static List<Map<String, String>> operationTypes = [
+    {'code': '', 'value': '전체'},
+    {'code': '온라인', 'value': '온라인'},
+    {'code': '오프라인', 'value': '오프라인'},
+    {'code': '온_오프라인', 'value': '온_오프라인'},
+  ];
+  static List<Map<String, String>> durationTypes = [
+    {'code': '', 'value': '전체'},
+    {'code': '기간 미정', 'value': '기간 미정'},
+    {'code': '1개월', 'value': '1개월'},
+    {'code': '2개월', 'value': '2개월'},
+    {'code': '3개월', 'value': '3개월'},
+    {'code': '3개월 이상', 'value': '3개월 이상'},
+  ];
 }
