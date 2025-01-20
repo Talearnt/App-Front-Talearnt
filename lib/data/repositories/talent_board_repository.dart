@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:app_front_talearnt/data/model/param/match_board_param.dart';
 import 'package:app_front_talearnt/data/model/param/s3_controller_param.dart';
 import 'package:app_front_talearnt/data/model/respone/failure.dart';
 import 'package:app_front_talearnt/data/model/respone/keyword_category.dart';
@@ -61,5 +62,12 @@ class TalentBoardRepository {
     );
 
     return result.fold(left, (response) => right(response));
+  }
+
+  Future<Either<Failure, Success>> insertMatchBoard(
+      MatchBoardParam body) async {
+    final result =
+        await dio.post(ApiConstants.insertMatchBoard, body.toJson(), null);
+    return result.fold(left, (response) => right(Success.fromJson(response)));
   }
 }

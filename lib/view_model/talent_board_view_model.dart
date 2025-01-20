@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:app_front_talearnt/data/model/param/match_board_param.dart';
 import 'package:app_front_talearnt/data/model/param/my_talent_keywords_param.dart';
 import 'package:app_front_talearnt/data/model/param/s3_controller_param.dart';
 import 'package:flutter/material.dart';
@@ -81,6 +82,37 @@ class TalentBoardViewModel extends ChangeNotifier {
       matchWriteProvider.clearInfos();
     }, (result) {
       matchWriteProvider.viewUploadImges();
+    });
+  }
+
+  Future<void> insertMatchBoard(
+      String title,
+      String content,
+      List<int> giveTalents,
+      List<int> receiveTalents,
+      String exchangeType,
+      bool? requiredBadge,
+      String duration,
+      List<String>? urls) async {
+    final badge = requiredBadge ?? false;
+    final urlList = urls ?? [];
+    MatchBoardParam param = MatchBoardParam(
+      title: title,
+      content: content,
+      giveTalents: giveTalents,
+      receiveTalents: receiveTalents,
+      exchangeType: exchangeType,
+      requiredBadge: badge,
+      duration: duration,
+      urls: urlList,
+    );
+
+    final result = await talentBoardRepository.insertMatchBoard(param);
+
+    result.fold(
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)), (result) {
+      print(1);
     });
   }
 }
