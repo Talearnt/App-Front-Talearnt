@@ -152,6 +152,7 @@ class SignUpMainPage extends StatelessWidget {
 
                                     //인증 완료되면 다음 페이지로 넘어감
                                     if (signUpProvider.checkSmsValidation) {
+                                      signUpProvider.resetTimer(180);
                                       signUpProvider.finishCheckCertNum();
                                       signUpProvider.pageController.nextPage(
                                         duration:
