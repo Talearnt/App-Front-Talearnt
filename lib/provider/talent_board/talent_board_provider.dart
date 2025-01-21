@@ -22,7 +22,9 @@ class TalentBoardProvider extends ChangeNotifier {
   String _selectedDurationType = '';
   String _selectedOperationType = '';
   final List<int> _giveTalentKeywordCodes = [];
+  final List<int> _selectedGiveTalentKeywordCodes = [];
   final List<int> _interestTalentKeywordCodes = [];
+  final List<int> _selectedInterestTalentKeywordCodes = [];
 
   TabController get giveTalentTabController => _giveTalentTabController;
 
@@ -36,7 +38,13 @@ class TalentBoardProvider extends ChangeNotifier {
 
   List<int> get giveTalentKeywordCodes => _giveTalentKeywordCodes;
 
+  List<int> get selectedGiveTalentKeywordCodes =>
+      _selectedGiveTalentKeywordCodes;
+
   List<int> get interestTalentKeywordCodes => _interestTalentKeywordCodes;
+
+  List<int> get selectedInterestTalentKeywordCodes =>
+      _selectedInterestTalentKeywordCodes;
 
   final List<TalentExchangePost> talentExchangePosts = [
     TalentExchangePost(
@@ -146,6 +154,40 @@ class TalentBoardProvider extends ChangeNotifier {
 
   void removeInterestKeywordList(int keywordTalent) {
     _interestTalentKeywordCodes.remove(keywordTalent);
+    notifyListeners();
+  }
+
+  void resetInterestKeywordList() {
+    _interestTalentKeywordCodes.clear();
+    notifyListeners();
+  }
+
+  void resetGiveKeywordList() {
+    _giveTalentKeywordCodes.clear();
+    notifyListeners();
+  }
+
+  void registerInterestKeywordList() {
+    _selectedInterestTalentKeywordCodes.clear();
+    _selectedInterestTalentKeywordCodes.addAll(_interestTalentKeywordCodes);
+    notifyListeners();
+  }
+
+  void registerGiveKeywordList() {
+    _selectedGiveTalentKeywordCodes.clear();
+    _selectedGiveTalentKeywordCodes.addAll(_giveTalentKeywordCodes);
+    notifyListeners();
+  }
+
+  void matchInterestKeywordList() {
+    _interestTalentKeywordCodes.clear();
+    _interestTalentKeywordCodes.addAll(_selectedInterestTalentKeywordCodes);
+    notifyListeners();
+  }
+
+  void matchGiveKeywordList() {
+    _giveTalentKeywordCodes.clear();
+    _giveTalentKeywordCodes.addAll(_selectedGiveTalentKeywordCodes);
     notifyListeners();
   }
 }

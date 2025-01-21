@@ -2,13 +2,11 @@ import 'package:app_front_talearnt/view/talent_board/widget/talearnt_chip_list.d
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 
 import '../../../common/theme.dart';
 import '../../../common/widget/button.dart';
 import '../../../common/widget/toast_message.dart';
 import '../../../constants/global_value_constants.dart';
-import '../../../provider/talent_board/talent_board_provider.dart';
 import 'bottom_selected_chip_list.dart';
 import 'keyword_tab_dot.dart';
 
@@ -18,6 +16,8 @@ class KeywordBottomSheet extends StatelessWidget {
   final TabController tabController;
   final Function removeFunction;
   final Function updateFunction;
+  final Function registerFunction;
+  final Function resetFunction;
 
   const KeywordBottomSheet(
       {super.key,
@@ -25,12 +25,12 @@ class KeywordBottomSheet extends StatelessWidget {
       required this.keywordCodes,
       required this.tabController,
       required this.removeFunction,
-      required this.updateFunction});
+      required this.updateFunction,
+      required this.registerFunction,
+      required this.resetFunction});
 
   @override
   Widget build(BuildContext context) {
-    TalentBoardProvider talentBoardProvider =
-        Provider.of<TalentBoardProvider>(context);
     return SafeArea(
       child: Scaffold(
         bottomNavigationBar: SizedBox(
@@ -50,8 +50,7 @@ class KeywordBottomSheet extends StatelessWidget {
                       baseCategory: GlobalValueConstants.keywordCategoris,
                       keywordCodes: keywordCodes,
                       onDeleted: (int labelCode) {
-                        talentBoardProvider
-                            .removeInterestKeywordList(labelCode);
+                        removeFunction(labelCode);
                       },
                     ),
                   ],
@@ -67,6 +66,9 @@ class KeywordBottomSheet extends StatelessWidget {
                     TextWithIcon(
                       content: '초기화',
                       svgPicture: SvgPicture.asset('assets/icons/reset.svg'),
+                      onPressed: () {
+                        resetFunction();
+                      },
                     ),
                     const SizedBox(
                       width: 12,
@@ -74,7 +76,8 @@ class KeywordBottomSheet extends StatelessWidget {
                     Expanded(
                       child: PrimaryM(
                         content: '등록 ${keywordCodes.length}',
-                        onPressed: () async {
+                        onPressed: () {
+                          registerFunction();
                           context.pop();
                         },
                       ),

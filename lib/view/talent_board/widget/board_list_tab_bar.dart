@@ -11,8 +11,8 @@ class BoardListTabBar extends SliverPersistentHeaderDelegate {
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
-    final TalentBoardProvider talentBoardProvider =
-        context.watch<TalentBoardProvider>();
+    TalentBoardProvider talentBoardProvider =
+        Provider.of<TalentBoardProvider>(context);
     return Container(
       height: maxExtent,
       color: Colors.white,
@@ -52,10 +52,11 @@ class BoardListTabBar extends SliverPersistentHeaderDelegate {
             ),
             BoardFilterChip(
               content:
-                  '받고 싶은 재능 ${talentBoardProvider.interestTalentKeywordCodes.isEmpty ? '' : talentBoardProvider.interestTalentKeywordCodes.length}',
-              selected:
-                  talentBoardProvider.interestTalentKeywordCodes.isNotEmpty,
+                  '받고 싶은 재능 ${talentBoardProvider.selectedInterestTalentKeywordCodes.isEmpty ? '' : talentBoardProvider.selectedInterestTalentKeywordCodes.length}',
+              selected: talentBoardProvider
+                  .selectedInterestTalentKeywordCodes.isNotEmpty,
               function: () {
+                talentBoardProvider.matchInterestKeywordList();
                 showModalBottomSheet(
                   context: context,
                   shape: const RoundedRectangleBorder(
@@ -65,17 +66,26 @@ class BoardListTabBar extends SliverPersistentHeaderDelegate {
                   ),
                   clipBehavior: Clip.antiAlias,
                   builder: (BuildContext context) {
-                    return KeywordBottomSheet(
-                      sheetTitle: '받고 싶은 재능',
-                      keywordCodes:
-                          talentBoardProvider.interestTalentKeywordCodes,
-                      tabController:
-                          talentBoardProvider.interestTalentTabController,
-                      removeFunction: (code) {
-                        talentBoardProvider.removeInterestKeywordList(code);
-                      },
-                      updateFunction: (codes) {
-                        talentBoardProvider.updateInterestKeywordList(codes);
+                    return Consumer<TalentBoardProvider>(
+                      builder: (context, talentBoardProvider, child) {
+                        return KeywordBottomSheet(
+                          sheetTitle: '받고 싶은 재능',
+                          keywordCodes:
+                              talentBoardProvider.interestTalentKeywordCodes,
+                          tabController:
+                              talentBoardProvider.interestTalentTabController,
+                          removeFunction: (code) {
+                            talentBoardProvider.removeInterestKeywordList(code);
+                          },
+                          updateFunction: (codes) {
+                            talentBoardProvider
+                                .updateInterestKeywordList(codes);
+                          },
+                          registerFunction: () =>
+                              talentBoardProvider.registerInterestKeywordList(),
+                          resetFunction: () =>
+                              talentBoardProvider.resetInterestKeywordList(),
+                        );
                       },
                     );
                   },
@@ -84,9 +94,11 @@ class BoardListTabBar extends SliverPersistentHeaderDelegate {
             ),
             BoardFilterChip(
               content:
-                  '주고 싶은 재능 ${talentBoardProvider.giveTalentKeywordCodes.isEmpty ? '' : talentBoardProvider.giveTalentKeywordCodes.length}',
-              selected: talentBoardProvider.giveTalentKeywordCodes.isNotEmpty,
+                  '주고 싶은 재능 ${talentBoardProvider.selectedGiveTalentKeywordCodes.isEmpty ? '' : talentBoardProvider.selectedGiveTalentKeywordCodes.length}',
+              selected:
+                  talentBoardProvider.selectedGiveTalentKeywordCodes.isNotEmpty,
               function: () {
+                talentBoardProvider.matchGiveKeywordList();
                 showModalBottomSheet(
                   context: context,
                   shape: const RoundedRectangleBorder(
@@ -96,16 +108,25 @@ class BoardListTabBar extends SliverPersistentHeaderDelegate {
                   ),
                   clipBehavior: Clip.antiAlias,
                   builder: (BuildContext context) {
-                    return KeywordBottomSheet(
-                      sheetTitle: '주고 싶은 재능',
-                      keywordCodes: talentBoardProvider.giveTalentKeywordCodes,
-                      tabController:
-                          talentBoardProvider.giveTalentTabController,
-                      removeFunction: (code) {
-                        talentBoardProvider.removeGiveKeywordList(code);
-                      },
-                      updateFunction: (codes) {
-                        talentBoardProvider.updateGiveKeywordList(codes);
+                    return Consumer<TalentBoardProvider>(
+                      builder: (context, talentBoardProvider, child) {
+                        return KeywordBottomSheet(
+                          sheetTitle: '주고 싶은 재능',
+                          keywordCodes:
+                              talentBoardProvider.giveTalentKeywordCodes,
+                          tabController:
+                              talentBoardProvider.giveTalentTabController,
+                          removeFunction: (code) {
+                            talentBoardProvider.removeGiveKeywordList(code);
+                          },
+                          updateFunction: (codes) {
+                            talentBoardProvider.updateGiveKeywordList(codes);
+                          },
+                          registerFunction: () =>
+                              talentBoardProvider.registerGiveKeywordList(),
+                          resetFunction: () =>
+                              talentBoardProvider.resetGiveKeywordList(),
+                        );
                       },
                     );
                   },
