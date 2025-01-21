@@ -28,7 +28,7 @@ class SignUpSub1Page extends StatelessWidget {
             style: TextTypes.heading(color: Palette.text01),
           ),
           const SizedBox(
-            height: 24,
+            height: 32,
           ),
           Row(children: [
             SizedBox(

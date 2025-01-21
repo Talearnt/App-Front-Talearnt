@@ -47,14 +47,14 @@ class SetTalentKeywordSuccessPage extends StatelessWidget {
                   '완료되었습니다.',
                   style: TextTypes.heading(color: Palette.text01),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 16),
                 Text(
                   '이제 서로의 재능들을 교환해 보세요!',
                   style: TextTypes.bodyMedium01(color: Palette.text02),
                 ),
               ],
             ),
-            const SizedBox(height: 36),
+            const SizedBox(height: 56),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: PrimaryM(
