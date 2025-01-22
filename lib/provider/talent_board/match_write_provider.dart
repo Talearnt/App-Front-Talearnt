@@ -2,12 +2,11 @@ import 'dart:io';
 
 import 'package:app_front_talearnt/data/model/param/s3_controller_param.dart';
 import 'package:app_front_talearnt/data/model/respone/keyword_category.dart';
-import 'package:app_front_talearnt/data/model/respone/keyword_talent.dart';
 import 'package:app_front_talearnt/provider/common/custom_ticker_provider.dart';
-import 'package:app_front_talearnt/view/talent_board/match_write2_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
+import 'package:vsc_quill_delta_to_html/vsc_quill_delta_to_html.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
 
@@ -52,6 +51,8 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
   String _durationRequiredMessage = "";
   String _exchangeTypeRequiredMesage = "";
 
+  String _htmlContent = "";
+
   final ImagePicker _picker = ImagePicker();
 
   TextEditingController get titlerController => _titlerController;
@@ -77,11 +78,9 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
 
   String _boardToastMessage = "";
 
-  final List<S3FileParam> _uploadImageInfos = [];
+  final List<Map<String, dynamic>> _uploadImageInfos = [];
 
   List<String> _imageUploadUrls = [];
-
-  final List<File> _imageUploadData = [];
 
   bool _isS3Upload = false;
 
@@ -143,13 +142,13 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
 
   ImagePicker get picker => _picker;
 
-  List<S3FileParam> get uploadImageInfos => _uploadImageInfos;
+  List<Map<String, dynamic>> get uploadImageInfos => _uploadImageInfos;
 
   List<String> get imageUploadUrls => _imageUploadUrls;
 
-  List<File> get imageUploadData => _imageUploadData;
-
   bool get isS3Upload => _isS3Upload;
+
+  String get htmlContent => _htmlContent;
 
   void clearProvider() {
     _titlerController.clear();
@@ -325,7 +324,7 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
 
     if (_selectedInterestTalentKeywordCodes.isEmpty) {
       _interestTalentRequiredMessage = "*필수";
-      _isChipsSelected = false;
+      //_isChipsSelected = false;
     }
 
     if (_selectedDuration == "") {
@@ -372,15 +371,7 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
           continue;
         }
 
-        uploadImageInfos.add(S3FileParam(
-            fileName: path.basename(pickedFile.path),
-            fileType:
-                "image/${path.extension(pickedFile.path).replaceAll(".", "")}",
-            fileSize: sizeInBytes));
-
-        imageUploadData.add(image);
-
-        //contentController.insertImageBlock(imageSource: image.path);
+        contentController.insertImageBlock(imageSource: image.path);
       }
     }
   }
@@ -390,17 +381,52 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
     _isS3Upload = true;
   }
 
-  void viewUploadImges() {
-    for (int idx = 0; idx < _imageUploadUrls.length; idx++) {
-      String imgUrl = _imageUploadUrls[idx].split('?')[0];
-      contentController.insertImageBlock(imageSource: imgUrl);
+  void getUploadImagesInfo() async {
+    final delta = contentController.document.toDelta();
+
+    for (var op in delta.toList()) {
+      if (op.value is Map<String, dynamic> && op.value.containsKey('image')) {
+        final imagePath = op.value['image'];
+
+        final imageFile = File(imagePath);
+
+        final int sizeInBytes = await imageFile.length();
+
+        uploadImageInfos.add({
+          "file": imageFile,
+          "fileName": path.basename(imagePath),
+          "fileType": "image/${path.extension(imagePath).replaceAll(".", "")}",
+          "fileSize": sizeInBytes,
+        });
+      }
+    }
+  }
+
+  void exchangeImageUrl(String imageUploadUrl, String imagePath) {
+    final delta = contentController.document.toDelta();
+
+    String newImageUrl = imageUploadUrl.split('?')[0];
+
+    for (var op in delta.toList()) {
+      if (op.value is Map<String, dynamic> && op.value.containsKey('image')) {
+        op.value['image'] = newImageUrl;
+      }
     }
 
     _isS3Upload = false;
     _uploadImageInfos.clear();
+    _imageUploadUrls.clear();
   }
 
   void clearInfos() {
     _uploadImageInfos.clear();
+  }
+
+  void insertMatchBoard() {
+    final delta = contentController.document.toDelta();
+    final deltaOps = delta.toList().map((op) => op.toJson()).toList();
+    final converter = QuillDeltaToHtmlConverter(deltaOps);
+    _htmlContent = converter.convert();
+    print(_htmlContent);
   }
 }

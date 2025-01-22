@@ -59,8 +59,17 @@ class TalentBoardViewModel extends ChangeNotifier {
     });
   }
 
-  Future<void> getImageUploadUrl(List<S3FileParam> uploadImageInfos) async {
-    S3ControllerParam param = S3ControllerParam(files: uploadImageInfos);
+  Future<void> getImageUploadUrl(
+      List<Map<String, dynamic>> uploadImageInfos) async {
+    List<S3FileParam> fileParams = uploadImageInfos.map((imageInfo) {
+      return S3FileParam(
+        fileName: imageInfo["fileName"],
+        fileType: imageInfo["fileType"],
+        fileSize: imageInfo["fileSize"],
+      );
+    }).toList();
+
+    S3ControllerParam param = S3ControllerParam(files: fileParams);
 
     final result = await talentBoardRepository.getImageUploadUrl(param);
 
@@ -81,7 +90,7 @@ class TalentBoardViewModel extends ChangeNotifier {
           content: ErrorMessages.getMessage(failure.errorCode));
       matchWriteProvider.clearInfos();
     }, (result) {
-      matchWriteProvider.viewUploadImges();
+      matchWriteProvider.exchangeImageUrl(imageUploadUrl, image.path);
     });
   }
 

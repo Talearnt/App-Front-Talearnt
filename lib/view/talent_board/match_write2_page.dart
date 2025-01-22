@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:app_front_talearnt/common/theme.dart';
 import 'package:app_front_talearnt/common/widget/button.dart';
 import 'package:app_front_talearnt/common/widget/toast_message.dart';
@@ -43,7 +45,39 @@ class MatchWrite2Page extends StatelessWidget {
                     bottom: 50);
           },
         ),
-        first: const PrimaryS(content: '등록'),
+        first: PrimaryS(
+          content: '등록',
+          onPressed: () async {
+            matchWriteProvider.getUploadImagesInfo();
+
+            await talentBoardViewModel
+                .getImageUploadUrl(matchWriteProvider.uploadImageInfos);
+
+            for (int idx = 0;
+                idx < matchWriteProvider.imageUploadUrls.length;
+                idx++) {
+              await talentBoardViewModel.uploadImage(
+                matchWriteProvider.imageUploadUrls[idx],
+                matchWriteProvider.uploadImageInfos[idx]["file"],
+                matchWriteProvider.uploadImageInfos[idx]["fileSize"],
+                matchWriteProvider.uploadImageInfos[idx]["fileType"],
+              );
+            }
+
+            matchWriteProvider.insertMatchBoard();
+
+            await talentBoardViewModel.insertMatchBoard(
+              matchWriteProvider.titlerController.text,
+              matchWriteProvider.htmlContent,
+              matchWriteProvider.selectedGiveTalentKeywordCodes,
+              matchWriteProvider.selectedInterestTalentKeywordCodes,
+              matchWriteProvider.selectedExchangeType,
+              false,
+              matchWriteProvider.selectedDuration,
+              [],
+            );
+          },
+        ),
       ),
       bottomNavigationBar: AnimatedPadding(
         padding: EdgeInsets.only(
@@ -244,22 +278,6 @@ class MatchWrite2Page extends StatelessWidget {
                         IconButton(
                           onPressed: () async {
                             await matchWriteProvider.pickImagesAndInsert();
-
-                            await talentBoardViewModel.getImageUploadUrl(
-                                matchWriteProvider.uploadImageInfos);
-
-                            for (int idx = 0;
-                                idx < matchWriteProvider.imageUploadUrls.length;
-                                idx++) {
-                              talentBoardViewModel.uploadImage(
-                                matchWriteProvider.imageUploadUrls[idx],
-                                matchWriteProvider.imageUploadData[idx],
-                                matchWriteProvider
-                                    .uploadImageInfos[idx].fileSize,
-                                matchWriteProvider
-                                    .uploadImageInfos[idx].fileType,
-                              );
-                            }
                           },
                           icon: SvgPicture.asset(
                             'assets/icons/image_before.svg',

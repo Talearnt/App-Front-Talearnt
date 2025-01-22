@@ -44,6 +44,7 @@ dependencies:
   flutter_quill: ^10.8.5
   image_picker: ^1.1.2
   flutter_quill_extensions: ^10.8.5
+  vsc_quill_delta_to_html: ^1.0.5
 
 dev_dependencies:
   flutter_test:
