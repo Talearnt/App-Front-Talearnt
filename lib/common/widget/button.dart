@@ -597,7 +597,7 @@ class TextLineS extends StatelessWidget {
 class TextWithIcon extends StatelessWidget {
   final String content;
   final SvgPicture svgPicture;
-  final VoidCallback? onPressed;
+  final Function()? onPressed;
 
   const TextWithIcon({
     super.key,
