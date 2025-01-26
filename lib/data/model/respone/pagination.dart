@@ -1,4 +1,3 @@
-
 class Pagination {
   final bool hasNext;
   final bool hasPrevious;
@@ -11,6 +10,12 @@ class Pagination {
     required this.totalPages,
     required this.currentPage,
   });
+
+  Pagination.empty()
+      : hasNext = false,
+        hasPrevious = false,
+        totalPages = 1,
+        currentPage = 1;
 
   factory Pagination.fromJson(Map<String, dynamic> json) {
     return Pagination(

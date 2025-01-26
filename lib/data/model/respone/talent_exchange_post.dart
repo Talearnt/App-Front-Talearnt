@@ -1,5 +1,3 @@
-import 'package:app_front_talearnt/data/model/respone/pagination.dart';
-
 class TalentExchangePost {
   final String profileImg;
   final String nickname;
@@ -14,9 +12,9 @@ class TalentExchangePost {
   final List<String> giveTalents;
   final List<String> receiveTalents;
   final DateTime createdAt;
-  final int count;
+  final int openedChatRoomCount;
   final int favoriteCount;
-  final Pagination pagination;
+  final bool isFavorite;
 
   TalentExchangePost({
     required this.profileImg,
@@ -32,9 +30,9 @@ class TalentExchangePost {
     required this.giveTalents,
     required this.receiveTalents,
     required this.createdAt,
-    required this.count,
+    required this.openedChatRoomCount,
     required this.favoriteCount,
-    required this.pagination,
+    required this.isFavorite,
   });
 
   factory TalentExchangePost.fromJson(Map<String, dynamic> json) {
@@ -52,9 +50,9 @@ class TalentExchangePost {
       giveTalents: List<String>.from(json['giveTalents']),
       receiveTalents: List<String>.from(json['receiveTalents']),
       createdAt: DateTime.parse(json['createdAt']),
-      count: json['count'],
+      openedChatRoomCount: json['openedChatRoomCount'],
       favoriteCount: json['favoriteCount'],
-      pagination: Pagination.fromJson(json['pagination']),
+      isFavorite: json['isFavorite'],
     );
   }
 
@@ -73,9 +71,9 @@ class TalentExchangePost {
       'giveTalents': giveTalents,
       'receiveTalents': receiveTalents,
       'createdAt': createdAt.toIso8601String(),
-      'count': count,
+      'openedChatRoomCount': openedChatRoomCount,
       'favoriteCount': favoriteCount,
-      'pagination': pagination.toJson(),
+      'isFavorite': isFavorite,
     };
   }
 }

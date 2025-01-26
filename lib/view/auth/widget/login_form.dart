@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import '../../../common/theme.dart';
 import '../../../provider/auth/login_provider.dart';
 import '../../../view_model/auth_view_model.dart';
+import '../../../view_model/talent_board_view_model.dart';
 
 class LoginForm extends StatelessWidget {
   const LoginForm({super.key});
@@ -17,7 +18,7 @@ class LoginForm extends StatelessWidget {
   Widget build(BuildContext context) {
     final loginProvider = Provider.of<LoginProvider>(context);
     final authViewModel = Provider.of<AuthViewModel>(context);
-    // final talentBoardViewModel = Provider.of<TalentBoardViewModel>(context);
+    final talentBoardViewModel = Provider.of<TalentBoardViewModel>(context);
     final commonProvider = Provider.of<CommonProvider>(context);
 
     return Column(
@@ -85,9 +86,13 @@ class LoginForm extends StatelessWidget {
             ),
           ),
         ),
+        //나중에 제거해야 합니다.
         ElevatedButton(
           onPressed: () async {
-            context.go('/match-board-list');
+            commonProvider.changeIsLoading(true);
+            talentBoardViewModel
+                .getTalentExchangePosts()
+                .whenComplete(() => commonProvider.changeIsLoading(false));
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xFF1B76FF),
