@@ -90,8 +90,8 @@ class LoginForm extends StatelessWidget {
         ElevatedButton(
           onPressed: () async {
             commonProvider.changeIsLoading(true);
-            talentBoardViewModel
-                .getTalentExchangePosts()
+            await talentBoardViewModel
+                .getInitTalentExchangePosts()
                 .whenComplete(() => commonProvider.changeIsLoading(false));
           },
           style: ElevatedButton.styleFrom(

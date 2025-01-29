@@ -48,20 +48,43 @@ class TalentBoardViewModel extends ChangeNotifier {
     });
   }
 
-  Future<void> getTalentExchangePosts(
-      // String? categories,
-      // List<int>? talents,
-      // String? order,
-      // String? duration,
-      // String? type,
-      // bool? badge,
-      // String? status,
-      // int? page,
-      // int? size,
-      // String? search
-      ) async {
+  Future<void> getInitTalentExchangePosts() async {
     TalentExchangePostsFilterParam param =
-        TalentExchangePostsFilterParam.empty(); //나중에 수정
+        TalentExchangePostsFilterParam.empty();
+    final result = await talentBoardRepository.getTalentExchangePosts(param);
+    result.fold(
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)), (result) {
+      final posts = result['posts'];
+      final pagination = result['pagination'];
+      talentBoardProvider.initTalentExchangePosts(posts);
+      talentBoardProvider.updateTalentExchangePostsPage(pagination);
+      commonNavigator.goRoute('/match-board-list');
+    });
+  }
+
+  Future<void> getTalentExchangePosts(
+      List<String>? giveTalents,
+      List<String>? receiveTalents,
+      String? order,
+      String? duration,
+      String? type,
+      String? badge,
+      String? status,
+      String? page,
+      String? size,
+      String? search) async {
+    TalentExchangePostsFilterParam param = TalentExchangePostsFilterParam(
+        giveTalents: giveTalents,
+        receiveTalents: receiveTalents,
+        order: order,
+        duration: duration,
+        type: type,
+        badge: badge,
+        status: status,
+        page: page,
+        size: size,
+        search: search);
     final result = await talentBoardRepository.getTalentExchangePosts(param);
     result.fold(
         (failure) => commonNavigator.showSingleDialog(
@@ -70,7 +93,6 @@ class TalentBoardViewModel extends ChangeNotifier {
       final pagination = result['pagination'];
       talentBoardProvider.updateTalentExchangePosts(posts);
       talentBoardProvider.updateTalentExchangePostsPage(pagination);
-      commonNavigator.goRoute('/match-board-list');
     });
   }
 }

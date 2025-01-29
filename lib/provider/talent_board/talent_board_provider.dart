@@ -22,9 +22,9 @@ class TalentBoardProvider extends ChangeNotifier {
   String _selectedDurationType = '';
   String _selectedOperationType = '';
   final List<int> _giveTalentKeywordCodes = [];
-  final List<int> _selectedGiveTalentKeywordCodes = [];
+  final List<int> _selectedGiveTalentKeywordCodes = []; //실제로 넘기는 값
   final List<int> _interestTalentKeywordCodes = [];
-  final List<int> _selectedInterestTalentKeywordCodes = [];
+  final List<int> _selectedInterestTalentKeywordCodes = []; //실제로 넘기는 값
   final List<TalentExchangePost> _talentExchangePosts = [];
   Pagination _talentPage = Pagination.empty();
 
@@ -123,8 +123,15 @@ class TalentBoardProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void initTalentExchangePosts(
+      List<TalentExchangePost> addTalentExchangePosts) {
+    _talentExchangePosts.addAll(addTalentExchangePosts);
+    notifyListeners();
+  }
+
   void updateTalentExchangePosts(
       List<TalentExchangePost> addTalentExchangePosts) {
+    _talentExchangePosts.clear();
     _talentExchangePosts.addAll(addTalentExchangePosts);
     notifyListeners();
   }

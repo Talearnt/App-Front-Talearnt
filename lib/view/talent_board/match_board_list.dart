@@ -14,34 +14,51 @@ class MatchBoardList extends StatelessWidget {
   Widget build(BuildContext context) {
     final TalentBoardProvider talentBoardProvider =
         Provider.of<TalentBoardProvider>(context);
-    return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          const SliverAppBar(
-            pinned: false,
-            floating: true,
-            snap: true,
-            backgroundColor: Palette.bgBackGround,
-            elevation: 0,
-            toolbarHeight: 56,
-            leading: null,
-            automaticallyImplyLeading: false,
-            flexibleSpace: BoardCustomAppBar(),
-          ),
-          SliverPersistentHeader(
-            pinned: true,
-            delegate: BoardListTabBar(),
-          ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                final post = talentBoardProvider.talentExchangePosts[index];
-                return BoardListCard(post: post, index: index);
-              },
-              childCount: talentBoardProvider.talentExchangePosts.length,
+    return SafeArea(
+      child: Scaffold(
+        body: CustomScrollView(
+          slivers: [
+            const SliverAppBar(
+              pinned: false,
+              floating: true,
+              snap: true,
+              backgroundColor: Palette.bgBackGround,
+              elevation: 0,
+              toolbarHeight: 56,
+              leading: null,
+              automaticallyImplyLeading: false,
+              flexibleSpace: BoardCustomAppBar(),
             ),
-          ),
-        ],
+            SliverPersistentHeader(
+              pinned: true,
+              delegate: BoardListTabBar(),
+            ),
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  final posts = talentBoardProvider.talentExchangePosts;
+
+                  if (posts.isEmpty) {
+                    return const Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(20.0),
+                        child: Text(
+                          "게시글이 없습니다.",
+                          style: TextStyle(fontSize: 16, color: Colors.grey),
+                        ),
+                      ),
+                    );
+                  }
+
+                  return BoardListCard(post: posts[index], index: index);
+                },
+                childCount: talentBoardProvider.talentExchangePosts.isEmpty
+                    ? 1
+                    : talentBoardProvider.talentExchangePosts.length,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
