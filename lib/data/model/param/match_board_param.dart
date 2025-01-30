@@ -28,7 +28,7 @@ class MatchBoardParam {
       'exchangeType': exchangeType,
       'requiredBadge': requiredBadge,
       'duration': duration,
-      'urls': urls,
+      'imageUrls': urls,
     };
   }
 }
