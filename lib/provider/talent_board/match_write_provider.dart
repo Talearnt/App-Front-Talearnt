@@ -8,6 +8,7 @@ import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
 import 'package:vsc_quill_delta_to_html/vsc_quill_delta_to_html.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:image/image.dart' as img;
 import 'package:path/path.dart' as path;
 
 import '../clear_text.dart';
@@ -52,6 +53,8 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
   String _exchangeTypeRequiredMesage = "";
 
   String _htmlContent = "";
+
+  int _totalImageSize = 0;
 
   final ImagePicker _picker = ImagePicker();
 
@@ -149,6 +152,8 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
   bool get isS3Upload => _isS3Upload;
 
   String get htmlContent => _htmlContent;
+
+  int get totalImageSize => _totalImageSize;
 
   void clearProvider() {
     _titlerController.clear();
@@ -362,18 +367,63 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
     if (pickedFiles.isNotEmpty) {
       for (final pickedFile in pickedFiles) {
         final File image = File(pickedFile.path);
-        final int sizeInBytes = await image.length(); // 파일 크기 (바이트 단위)
-        final double sizeInKB = sizeInBytes / 1024; // KB로 변환
-        final double sizeInMB = sizeInKB / 1024; // MB로 변환
+
+        final int sizeInBytes = await image.length();
+        final double sizeInMB = sizeInBytes / (1024 * 1024);
+
+        _totalImageSize += sizeInBytes;
 
         if (sizeInMB > 5) {
           print('File ${pickedFile.name} is too large.');
           continue;
         }
 
-        contentController.insertImageBlock(imageSource: image.path);
+        final processedImage = await _processImage(image);
+
+        contentController.insertImageBlock(imageSource: processedImage.path);
       }
     }
+  }
+
+  Future<File> _processImage(File imageFile) async {
+    final originalImage = img.decodeImage(await imageFile.readAsBytes());
+
+    if (originalImage == null) {
+      throw Exception('이미지를 디코딩할 수 없습니다.');
+    }
+
+    const maxHeight = 1024;
+    const maxFileSizeInMB = 3;
+    const quality = 75;
+
+    img.Image processedImage = originalImage;
+
+    if (originalImage.height > maxHeight) {
+      final scaleFactor = maxHeight / originalImage.height;
+      final newWidth = (originalImage.width * scaleFactor).toInt();
+      processedImage =
+          img.copyResize(originalImage, width: newWidth, height: maxHeight);
+    }
+
+    final String newPath = path.join(
+      imageFile.parent.path,
+      'processed_${imageFile.uri.pathSegments.last}',
+    );
+    final processedFile = File(newPath);
+
+    await processedFile
+        .writeAsBytes(img.encodeJpg(processedImage, quality: quality));
+
+    final int finalSizeInBytes = await processedFile.length();
+    final double finalSizeInMB = finalSizeInBytes / (1024 * 1024);
+
+    if (finalSizeInMB > maxFileSizeInMB) {
+      const lowerQuality = 75;
+      await processedFile
+          .writeAsBytes(img.encodeJpg(processedImage, quality: lowerQuality));
+    }
+
+    return processedFile;
   }
 
   void setImageUploadUrl(List<String> data) {
@@ -427,6 +477,5 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
     final deltaOps = delta.toList().map((op) => op.toJson()).toList();
     final converter = QuillDeltaToHtmlConverter(deltaOps);
     _htmlContent = converter.convert();
-    print(_htmlContent);
   }
 }
