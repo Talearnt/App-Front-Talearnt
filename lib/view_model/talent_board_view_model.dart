@@ -121,7 +121,7 @@ class TalentBoardViewModel extends ChangeNotifier {
     result.fold(
         (failure) => commonNavigator.showSingleDialog(
             content: ErrorMessages.getMessage(failure.errorCode)), (result) {
-      print(1);
+      commonNavigator.goRoute('/match_write_success');
     });
   }
 }

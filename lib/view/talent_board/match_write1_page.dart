@@ -2,7 +2,6 @@ import 'package:app_front_talearnt/common/theme.dart';
 import 'package:app_front_talearnt/common/widget/button.dart';
 import 'package:app_front_talearnt/common/widget/top_app_bar.dart';
 import 'package:app_front_talearnt/constants/global_value_constants.dart';
-import 'package:app_front_talearnt/view_model/talent_board_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
@@ -17,12 +16,12 @@ class MatchWrite1Page extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final matchWriteProvider = Provider.of<MatchWriteProvider>(context);
-    final talearntBoardViewModel = Provider.of<TalentBoardViewModel>(context);
+
     return Scaffold(
       appBar: TopAppBar(
         onPressed: () {
-          context.pop();
           matchWriteProvider.clearProvider();
+          context.pop();
         },
       ),
       bottomNavigationBar: Container(
@@ -293,7 +292,6 @@ class MatchWrite1Page extends StatelessWidget {
                               height: 36,
                             ),
                             onPressed: () async {
-                              await talearntBoardViewModel.getKeywords();
                               showModalBottomSheet(
                                 context: context,
                                 shape: const RoundedRectangleBorder(

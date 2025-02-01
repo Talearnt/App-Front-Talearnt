@@ -1,3 +1,4 @@
+import 'package:app_front_talearnt/provider/talent_board/match_write_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
@@ -6,14 +7,13 @@ import 'package:provider/provider.dart';
 import '../../common/theme.dart';
 import '../../common/widget/button.dart';
 import '../../common/widget/top_app_bar.dart';
-import '../../provider/auth/sign_up_provider.dart';
 
 class MatchWriteSuccessPage extends StatelessWidget {
   const MatchWriteSuccessPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final signUpProvider = Provider.of<SignUpProvider>(context);
+    final matchWriteProvider = Provider.of<MatchWriteProvider>(context);
 
     return Scaffold(
       backgroundColor: Palette.bgBackGround,
@@ -21,6 +21,7 @@ class MatchWriteSuccessPage extends StatelessWidget {
         leftIcon: false,
         first: GestureDetector(
             onTap: () {
+              matchWriteProvider.clearProvider();
               context.pop();
             },
             child: SvgPicture.asset("assets/icons/close.svg")),
@@ -59,7 +60,7 @@ class MatchWriteSuccessPage extends StatelessWidget {
               child: PrimaryM(
                 content: '내가 쓴 글 확인하기',
                 onPressed: () {
-                  signUpProvider.resetSignUp();
+                  matchWriteProvider.clearProvider();
                   context.pop();
                 },
               ),
@@ -69,7 +70,10 @@ class MatchWriteSuccessPage extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: SecondaryMGray(
                 content: '홈으로 돌아가기',
-                onPressed: () {},
+                onPressed: () {
+                  matchWriteProvider.clearProvider();
+                  context.pop();
+                },
               ),
             )
           ],

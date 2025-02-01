@@ -29,7 +29,7 @@ class MatchWrite2Page extends StatelessWidget {
       resizeToAvoidBottomInset: true,
       appBar: TopAppBar(
         onPressed: () {
-          context.pop();
+          context.go('/match_write1');
         },
         second: TextBtnM(
           content: '미리보기',
@@ -50,32 +50,45 @@ class MatchWrite2Page extends StatelessWidget {
           onPressed: () async {
             matchWriteProvider.getUploadImagesInfo();
 
-            await talentBoardViewModel
-                .getImageUploadUrl(matchWriteProvider.uploadImageInfos);
+            if (matchWriteProvider.uploadImageInfos.isNotEmpty) {
+              await talentBoardViewModel
+                  .getImageUploadUrl(matchWriteProvider.uploadImageInfos);
 
-            for (int idx = 0;
-                idx < matchWriteProvider.imageUploadUrls.length;
-                idx++) {
-              await talentBoardViewModel.uploadImage(
-                matchWriteProvider.imageUploadUrls[idx],
-                matchWriteProvider.uploadImageInfos[idx]["file"],
-                matchWriteProvider.uploadImageInfos[idx]["fileSize"],
-                matchWriteProvider.uploadImageInfos[idx]["fileType"],
-              );
+              for (int idx = 0;
+                  idx < matchWriteProvider.imageUploadUrls.length;
+                  idx++) {
+                await talentBoardViewModel.uploadImage(
+                  matchWriteProvider.imageUploadUrls[idx],
+                  matchWriteProvider.uploadImageInfos[idx]["file"],
+                  matchWriteProvider.uploadImageInfos[idx]["fileSize"],
+                  matchWriteProvider.uploadImageInfos[idx]["fileType"],
+                );
+              }
             }
 
-            matchWriteProvider.insertMatchBoard();
+            matchWriteProvider.checkTitleAndBoard();
 
-            await talentBoardViewModel.insertMatchBoard(
-              matchWriteProvider.titlerController.text,
-              matchWriteProvider.htmlContent,
-              matchWriteProvider.selectedGiveTalentKeywordCodes,
-              matchWriteProvider.selectedInterestTalentKeywordCodes,
-              matchWriteProvider.selectedExchangeType,
-              false,
-              matchWriteProvider.selectedDuration,
-              [],
-            );
+            if (matchWriteProvider.isTitleAndBoardEmpty) {
+              matchWriteProvider.insertMatchBoard();
+
+              await talentBoardViewModel.insertMatchBoard(
+                matchWriteProvider.titlerController.text,
+                matchWriteProvider.htmlContent,
+                matchWriteProvider.selectedGiveTalentKeywordCodes,
+                matchWriteProvider.selectedInterestTalentKeywordCodes,
+                matchWriteProvider.selectedExchangeType,
+                false,
+                matchWriteProvider.selectedDuration,
+                [],
+              );
+            } else {
+              ToastMessage.show(
+                context: context,
+                message: matchWriteProvider.boardToastMessage,
+                type: 2,
+                bottom: 50,
+              );
+            }
           },
         ),
       ),
@@ -277,7 +290,8 @@ class MatchWrite2Page extends StatelessWidget {
                         ),
                         IconButton(
                           onPressed: () async {
-                            await matchWriteProvider.pickImagesAndInsert();
+                            await matchWriteProvider
+                                .pickImagesAndInsert(context);
                           },
                           icon: SvgPicture.asset(
                             'assets/icons/image_before.svg',

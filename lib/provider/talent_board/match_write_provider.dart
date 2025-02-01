@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:app_front_talearnt/common/widget/button.dart';
+import 'package:app_front_talearnt/common/widget/dialog.dart';
 import 'package:app_front_talearnt/data/model/param/s3_controller_param.dart';
 import 'package:app_front_talearnt/data/model/respone/keyword_category.dart';
 import 'package:app_front_talearnt/provider/common/custom_ticker_provider.dart';
@@ -54,7 +56,7 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
 
   String _htmlContent = "";
 
-  int _totalImageSize = 0;
+  double _totalImageSize = 0;
 
   final ImagePicker _picker = ImagePicker();
 
@@ -153,7 +155,7 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
 
   String get htmlContent => _htmlContent;
 
-  int get totalImageSize => _totalImageSize;
+  double get totalImageSize => _totalImageSize;
 
   void clearProvider() {
     _titlerController.clear();
@@ -164,6 +166,8 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
 
     _searchedGiveTalentKeywordCodes.clear();
     _searchedInterestTalentKeywordCodes.clear();
+
+    _giveTalentKeywordCodes.clear();
 
     _giveTalentRequiredMessage = "";
     _interestTalentRequiredMessage = "";
@@ -180,6 +184,9 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
     _isTitleAndBoardEmpty = false;
     _boardToastMessage = "";
 
+    _htmlContent = "";
+    _totalImageSize = 0;
+
     reset();
     notifyListeners();
   }
@@ -189,7 +196,6 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
     _interestTalentTabController.index = 0;
     _giveTalentFocusNode.unfocus();
     _interestTalentFocusNode.unfocus();
-    _giveTalentKeywordCodes.clear();
     _interestTalentKeywordCodes.clear();
     _selectedGiveTalentKeywordCodes.clear();
     _selectedInterestTalentKeywordCodes.clear();
@@ -324,12 +330,12 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
 
     if (_selectedGiveTalentKeywordCodes.isEmpty) {
       _giveTalentRequiredMessage = "*필수";
-      //_isChipsSelected = false;
+      _isChipsSelected = false;
     }
 
     if (_selectedInterestTalentKeywordCodes.isEmpty) {
       _interestTalentRequiredMessage = "*필수";
-      //_isChipsSelected = false;
+      _isChipsSelected = false;
     }
 
     if (_selectedDuration == "") {
@@ -361,24 +367,31 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
     _isTitleAndBoardEmpty = true;
   }
 
-  Future<void> pickImagesAndInsert() async {
+  Future<void> pickImagesAndInsert(BuildContext context) async {
     final List<XFile> pickedFiles = await _picker.pickMultiImage();
 
     if (pickedFiles.isNotEmpty) {
       for (final pickedFile in pickedFiles) {
         final File image = File(pickedFile.path);
 
-        final int sizeInBytes = await image.length();
-        final double sizeInMB = sizeInBytes / (1024 * 1024);
+        final processedImage = await _processImage(image);
 
-        _totalImageSize += sizeInBytes;
+        // 압축 후 파일 크기 계산
+        final int finalSizeInBytes = await processedImage.length();
+        final double finalSizeInMB = finalSizeInBytes / (1024 * 1024);
 
-        if (sizeInMB > 5) {
-          print('File ${pickedFile.name} is too large.');
-          continue;
+        // 총 용량 초과 체크
+        if (_totalImageSize + finalSizeInMB > 5) {
+          SingleBtnDialog.show(context,
+              content: '이미지는 최대 5MB까지 업로드 가능합니다.',
+              button: const PrimaryM(
+                content: '확인',
+              ));
+          break;
         }
 
-        final processedImage = await _processImage(image);
+        // 압축 후 이미지 크기 추가
+        _totalImageSize += finalSizeInMB;
 
         contentController.insertImageBlock(imageSource: processedImage.path);
       }

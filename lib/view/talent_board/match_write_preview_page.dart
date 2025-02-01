@@ -2,8 +2,10 @@ import 'package:app_front_talearnt/common/theme.dart';
 import 'package:app_front_talearnt/common/widget/button.dart';
 import 'package:app_front_talearnt/common/widget/profile.dart';
 import 'package:app_front_talearnt/common/widget/state_badge.dart';
+import 'package:app_front_talearnt/common/widget/toast_message.dart';
 import 'package:app_front_talearnt/common/widget/top_app_bar.dart';
 import 'package:app_front_talearnt/constants/global_value_constants.dart';
+import 'package:app_front_talearnt/view_model/talent_board_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:go_router/go_router.dart';
@@ -18,6 +20,8 @@ class MatchWritePreviewPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final matchWriteProvider = Provider.of<MatchWriteProvider>(context);
+    final talentBoardViewModel = Provider.of<TalentBoardViewModel>(context);
+
     String today = DateFormat('yyyy.MM.dd').format(DateTime.now());
 
     ScrollController scrollController = ScrollController();
@@ -27,11 +31,56 @@ class MatchWritePreviewPage extends StatelessWidget {
         onPressed: () {
           context.pop();
         },
-        first: const PrimaryS(content: '등록'),
+        first: PrimaryS(
+          content: '등록',
+          onPressed: () async {
+            matchWriteProvider.getUploadImagesInfo();
+
+            if (matchWriteProvider.uploadImageInfos.isNotEmpty) {
+              await talentBoardViewModel
+                  .getImageUploadUrl(matchWriteProvider.uploadImageInfos);
+
+              for (int idx = 0;
+                  idx < matchWriteProvider.imageUploadUrls.length;
+                  idx++) {
+                await talentBoardViewModel.uploadImage(
+                  matchWriteProvider.imageUploadUrls[idx],
+                  matchWriteProvider.uploadImageInfos[idx]["file"],
+                  matchWriteProvider.uploadImageInfos[idx]["fileSize"],
+                  matchWriteProvider.uploadImageInfos[idx]["fileType"],
+                );
+              }
+            }
+
+            matchWriteProvider.checkTitleAndBoard();
+
+            if (matchWriteProvider.isTitleAndBoardEmpty) {
+              matchWriteProvider.insertMatchBoard();
+
+              await talentBoardViewModel.insertMatchBoard(
+                matchWriteProvider.titlerController.text,
+                matchWriteProvider.htmlContent,
+                matchWriteProvider.selectedGiveTalentKeywordCodes,
+                matchWriteProvider.selectedInterestTalentKeywordCodes,
+                matchWriteProvider.selectedExchangeType,
+                false,
+                matchWriteProvider.selectedDuration,
+                [],
+              );
+            } else {
+              ToastMessage.show(
+                context: context,
+                message: matchWriteProvider.boardToastMessage,
+                type: 2,
+                bottom: 50,
+              );
+            }
+          },
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(
-          mainAxisSize: MainAxisSize.min, // 자식들의 크기에 따라 크기가 결정되도록 설정
+          mainAxisSize: MainAxisSize.min,
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(
@@ -46,6 +95,9 @@ class MatchWritePreviewPage extends StatelessWidget {
                   const StateBadge(
                     state: true,
                     content: "모집중",
+                  ),
+                  const SizedBox(
+                    height: 8,
                   ),
                   Wrap(
                     children: [
@@ -114,21 +166,9 @@ class MatchWritePreviewPage extends StatelessWidget {
                   const SizedBox(
                     height: 8,
                   ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  Text(
-                    "받고 싶은 나의 재능",
-                    style: TextTypes.caption01(
-                      color: Palette.text03,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
                   Wrap(
                     children: [
-                      ...matchWriteProvider.interestTalentKeywordCodes.map(
+                      ...matchWriteProvider.selectedGiveTalentKeywordCodes.map(
                         (item) {
                           String labelText = '';
                           for (var category
@@ -172,7 +212,65 @@ class MatchWritePreviewPage extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(
-                    height: 24,
+                    height: 16,
+                  ),
+                  Text(
+                    "받고 싶은 나의 재능",
+                    style: TextTypes.caption01(
+                      color: Palette.text03,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  Wrap(
+                    children: [
+                      ...matchWriteProvider.selectedInterestTalentKeywordCodes
+                          .map(
+                        (item) {
+                          String labelText = '';
+                          for (var category
+                              in GlobalValueConstants.keywordCategoris) {
+                            if (category.talentKeywords
+                                .any((talent) => talent.code == item)) {
+                              var data = category.talentKeywords
+                                  .firstWhere((talent) => talent.code == item);
+                              labelText = data.name;
+                              break;
+                            }
+                          }
+                          return Padding(
+                            padding: const EdgeInsets.only(
+                              right: 8,
+                              bottom: 8,
+                            ),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 6,
+                              ),
+                              decoration: const BoxDecoration(
+                                color: Palette.bgUp02,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(
+                                    4,
+                                  ),
+                                ),
+                              ),
+                              child: Text(
+                                labelText,
+                                style: TextTypes.bodyLarge02(
+                                  color: Palette.text02,
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      )
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 16,
                   ),
                   const Divider(
                     color: Palette.bgUp02,

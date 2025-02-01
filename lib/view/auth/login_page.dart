@@ -27,11 +27,7 @@ class LoginPage extends StatelessWidget {
                 onPressed: () async {
                   await talearntBoardViewModel.getOfferedKeywords();
 
-                  Navigator.push(context, MaterialPageRoute(
-                    builder: (context) {
-                      return const MatchWrite1Page();
-                    },
-                  ));
+                  context.push('/match_write1');
                 },
                 icon: const Icon(Icons.close))
           ]),
