@@ -57,7 +57,7 @@ class TalentBoardViewModel extends ChangeNotifier {
             content: ErrorMessages.getMessage(failure.errorCode)), (result) {
       final posts = result['posts'];
       final pagination = result['pagination'];
-      talentBoardProvider.initTalentExchangePosts(posts);
+      talentBoardProvider.updateTalentExchangePosts(posts);
       talentBoardProvider.updateTalentExchangePostsPage(pagination);
       commonNavigator.goRoute('/match-board-list');
     });
@@ -92,6 +92,39 @@ class TalentBoardViewModel extends ChangeNotifier {
       final posts = result['posts'];
       final pagination = result['pagination'];
       talentBoardProvider.updateTalentExchangePosts(posts);
+      talentBoardProvider.updateTalentExchangePostsPage(pagination);
+    });
+  }
+
+  Future<void> addTalentExchangePosts(
+      List<String>? giveTalents,
+      List<String>? receiveTalents,
+      String? order,
+      String? duration,
+      String? type,
+      String? badge,
+      String? status,
+      String? page,
+      String? size,
+      String? search) async {
+    TalentExchangePostsFilterParam param = TalentExchangePostsFilterParam(
+        giveTalents: giveTalents,
+        receiveTalents: receiveTalents,
+        order: order,
+        duration: duration,
+        type: type,
+        badge: badge,
+        status: status,
+        page: page,
+        size: size,
+        search: search);
+    final result = await talentBoardRepository.getTalentExchangePosts(param);
+    result.fold(
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)), (result) {
+      final posts = result['posts'];
+      final pagination = result['pagination'];
+      talentBoardProvider.addTalentExchangePosts(posts);
       talentBoardProvider.updateTalentExchangePostsPage(pagination);
     });
   }

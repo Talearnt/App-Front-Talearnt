@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../constants/global_value_constants.dart';
 import '../../data/model/respone/talent_exchange_post.dart';
+import '../../view_model/talent_board_view_model.dart';
 import '../common/custom_ticker_provider.dart';
 
 class TalentBoardProvider extends ChangeNotifier {
@@ -13,8 +14,10 @@ class TalentBoardProvider extends ChangeNotifier {
     _interestTalentTabController = TabController(
         length: GlobalValueConstants.keywordCategoris.length,
         vsync: _tickerProvider);
+    _scrollController.addListener(_onScroll);
   }
 
+  bool _isFetching = false;
   late TabController _giveTalentTabController;
   late TabController _interestTalentTabController;
   final CustomTickerProvider _tickerProvider;
@@ -27,6 +30,9 @@ class TalentBoardProvider extends ChangeNotifier {
   final List<int> _selectedInterestTalentKeywordCodes = []; //실제로 넘기는 값
   final List<TalentExchangePost> _talentExchangePosts = [];
   Pagination _talentPage = Pagination.empty();
+  final ScrollController _scrollController = ScrollController();
+  late TalentBoardViewModel _viewModel;
+  final String getVersion = "filter"; //filter - 필터 , scroll - 스크롤
 
   TabController get giveTalentTabController => _giveTalentTabController;
 
@@ -51,6 +57,12 @@ class TalentBoardProvider extends ChangeNotifier {
   List<TalentExchangePost> get talentExchangePosts => _talentExchangePosts;
 
   Pagination get talentPage => _talentPage;
+
+  ScrollController get scrollController => _scrollController;
+
+  void setViewModel(TalentBoardViewModel viewModel) {
+    _viewModel = viewModel;
+  }
 
   void updateOrderType(String newType) {
     _selectedOrderType = newType;
@@ -123,8 +135,7 @@ class TalentBoardProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void initTalentExchangePosts(
-      List<TalentExchangePost> addTalentExchangePosts) {
+  void addTalentExchangePosts(List<TalentExchangePost> addTalentExchangePosts) {
     _talentExchangePosts.addAll(addTalentExchangePosts);
     notifyListeners();
   }
@@ -139,5 +150,29 @@ class TalentBoardProvider extends ChangeNotifier {
   void updateTalentExchangePostsPage(Pagination paging) {
     _talentPage = paging;
     notifyListeners();
+  }
+
+  void _onScroll() {
+    if (!_isFetching &&
+        _scrollController.position.pixels >=
+            _scrollController.position.maxScrollExtent - 200) {
+      _fetchMoreData();
+    }
+  }
+
+  Future<void> _fetchMoreData() async {
+    _isFetching = true;
+    await _viewModel.addTalentExchangePosts(
+        selectedGiveTalentKeywordCodes.map((e) => e.toString()).toList(),
+        selectedInterestTalentKeywordCodes.map((e) => e.toString()).toList(),
+        selectedOrderType,
+        selectedDurationType,
+        selectedOperationType,
+        null,
+        null,
+        (_talentPage.currentPage + 1).toString(),
+        null,
+        null);
+    _isFetching = false;
   }
 }

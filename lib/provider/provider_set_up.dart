@@ -87,7 +87,6 @@ class ProviderSetup extends StatelessWidget {
             context.read<TalentBoardProvider>(),
           ),
         ),
-
       ],
       child: child,
     );
