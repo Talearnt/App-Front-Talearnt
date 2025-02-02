@@ -1,12 +1,13 @@
 import 'package:app_front_talearnt/view/auth/widget/login_form.dart';
 import 'package:app_front_talearnt/view/auth/widget/simple_login_form.dart';
+import 'package:app_front_talearnt/view_model/talent_board_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../common/widget/loading.dart';
 import '../../provider/common/common_provider.dart';
-import '../talent_board/match_write1_page.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -14,6 +15,7 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final commonProvider = Provider.of<CommonProvider>(context);
+    final talentBoardViewModel = Provider.of<TalentBoardViewModel>(context);
     return Scaffold(
       appBar: AppBar(
           elevation: 0.0,
@@ -21,12 +23,10 @@ class LoginPage extends StatelessWidget {
           surfaceTintColor: Colors.transparent,
           actions: [
             IconButton(
-                onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(
-                    builder: (context) {
-                      return const MatchWrite1Page();
-                    },
-                  ));
+                onPressed: () async {
+                  await talentBoardViewModel.getOfferedKeywords();
+
+                  context.push('/match_write1');
                 },
                 icon: const Icon(Icons.close))
           ]),

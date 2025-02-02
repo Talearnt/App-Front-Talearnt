@@ -16,7 +16,7 @@ class Profile extends StatelessWidget {
           'assets/img/profile.svg',
         )),
         const SizedBox(
-          width: 12,
+          width: 10,
         ),
         Text(
           nickName,

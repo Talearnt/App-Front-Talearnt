@@ -21,6 +21,12 @@ abstract class ApiConstants {
   static const String setMyTalentKeywordsUrl = "$baseUrl/v1/users/my-talents";
   static const String getTalentBoardListUrl = "$baseUrl/v1/posts/exchanges";
 
+  static const String getOfferedKeywords =
+      "$baseUrl/v1/posts/exchange/talents/offered";
+  static const String insertMatchBoard = "$baseUrl/v1/posts/exchanges";
+
+  static const String getUploadImagesUrl = "$baseUrl/v1/uploads";
+
   static String getFineUserPwUrl(String userId) {
     return "$baseUrl/v1/auth/password/$userId/email";
   }

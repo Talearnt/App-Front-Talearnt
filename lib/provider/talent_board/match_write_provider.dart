@@ -1,6 +1,17 @@
+import 'dart:io';
+
+import 'package:app_front_talearnt/common/widget/button.dart';
+import 'package:app_front_talearnt/common/widget/dialog.dart';
+import 'package:app_front_talearnt/data/model/param/s3_controller_param.dart';
+import 'package:app_front_talearnt/data/model/respone/keyword_category.dart';
 import 'package:app_front_talearnt/provider/common/custom_ticker_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
+import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
+import 'package:vsc_quill_delta_to_html/vsc_quill_delta_to_html.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:image/image.dart' as img;
+import 'package:path/path.dart' as path;
 
 import '../../constants/global_value_constants.dart';
 import '../clear_text.dart';
@@ -27,10 +38,9 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
   late TabController _giveTalentTabController;
   late TabController _interestTalentTabController;
   final CustomTickerProvider _tickerProvider;
-  final List<int> _giveTalentKeywordCodes = []; //처음 선택되는 keyword
-  final List<int> _selectedGiveTalentKeywordCodes =
-      []; // 키워드 확인 화면에서 사용되는 keyword
-  final List<int> _searchedGiveTalentKeywordCodes = []; // 검색용 keyword
+  final List<int> _giveTalentKeywordCodes = [];
+  final List<int> _selectedGiveTalentKeywordCodes = [];
+  final List<int> _searchedGiveTalentKeywordCodes = [];
   final List<int> _interestTalentKeywordCodes = [];
   final List<int> _selectedInterestTalentKeywordCodes = [];
   final List<int> _searchedInterestTalentKeywordCodes = [];
@@ -47,6 +57,12 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
   String _interestTalentRequiredMessage = "";
   String _durationRequiredMessage = "";
   String _exchangeTypeRequiredMesage = "";
+
+  String _htmlContent = "";
+
+  double _totalImageSize = 0;
+
+  final ImagePicker _picker = ImagePicker();
 
   TextEditingController get titlerController => _titlerController;
 
@@ -70,6 +86,12 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
   bool _isTitleAndBoardEmpty = false;
 
   String _boardToastMessage = "";
+
+  final List<Map<String, dynamic>> _uploadImageInfos = [];
+
+  List<String> _imageUploadUrls = [];
+
+  bool _isS3Upload = false;
 
   bool get onToolBar => _onToolBar;
 
@@ -127,6 +149,18 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
 
   String get boardToastMessage => _boardToastMessage;
 
+  ImagePicker get picker => _picker;
+
+  List<Map<String, dynamic>> get uploadImageInfos => _uploadImageInfos;
+
+  List<String> get imageUploadUrls => _imageUploadUrls;
+
+  bool get isS3Upload => _isS3Upload;
+
+  String get htmlContent => _htmlContent;
+
+  double get totalImageSize => _totalImageSize;
+
   void clearProvider() {
     _titlerController.clear();
     _contentController.clear();
@@ -136,6 +170,8 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
 
     _searchedGiveTalentKeywordCodes.clear();
     _searchedInterestTalentKeywordCodes.clear();
+
+    _giveTalentKeywordCodes.clear();
 
     _giveTalentRequiredMessage = "";
     _interestTalentRequiredMessage = "";
@@ -152,6 +188,9 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
     _isTitleAndBoardEmpty = false;
     _boardToastMessage = "";
 
+    _htmlContent = "";
+    _totalImageSize = 0;
+
     reset();
     notifyListeners();
   }
@@ -161,7 +200,6 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
     _interestTalentTabController.index = 0;
     _giveTalentFocusNode.unfocus();
     _interestTalentFocusNode.unfocus();
-    _giveTalentKeywordCodes.clear();
     _interestTalentKeywordCodes.clear();
     _selectedGiveTalentKeywordCodes.clear();
     _selectedInterestTalentKeywordCodes.clear();
@@ -283,12 +321,20 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
     notifyListeners();
   }
 
+  void setGiveTalentKeyword(List<dynamic> keywords) {
+    for (final keyword in keywords) {
+      if (!_giveTalentKeywordCodes.contains(keyword.code)) {
+        _giveTalentKeywordCodes.add(keyword.code);
+      }
+    }
+  }
+
   void checkChipsSelected() {
     _isChipsSelected = true;
 
     if (_selectedGiveTalentKeywordCodes.isEmpty) {
       _giveTalentRequiredMessage = "*필수";
-      //_isChipsSelected = false;
+      _isChipsSelected = false;
     }
 
     if (_selectedInterestTalentKeywordCodes.isEmpty) {
@@ -323,5 +369,130 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
     }
 
     _isTitleAndBoardEmpty = true;
+  }
+
+  Future<void> pickImagesAndInsert(BuildContext context) async {
+    final List<XFile> pickedFiles = await _picker.pickMultiImage();
+
+    if (pickedFiles.isNotEmpty) {
+      for (final pickedFile in pickedFiles) {
+        final File image = File(pickedFile.path);
+
+        final processedImage = await _processImage(image);
+
+        // 압축 후 파일 크기 계산
+        final int finalSizeInBytes = await processedImage.length();
+        final double finalSizeInMB = finalSizeInBytes / (1024 * 1024);
+
+        // 총 용량 초과 체크
+        if (_totalImageSize + finalSizeInMB > 5) {
+          SingleBtnDialog.show(context,
+              content: '이미지는 최대 5MB까지 업로드 가능합니다.',
+              button: const PrimaryM(
+                content: '확인',
+              ));
+          break;
+        }
+
+        // 압축 후 이미지 크기 추가
+        _totalImageSize += finalSizeInMB;
+
+        contentController.insertImageBlock(imageSource: processedImage.path);
+      }
+    }
+  }
+
+  Future<File> _processImage(File imageFile) async {
+    final originalImage = img.decodeImage(await imageFile.readAsBytes());
+
+    if (originalImage == null) {
+      throw Exception('이미지를 디코딩할 수 없습니다.');
+    }
+
+    const maxHeight = 1024;
+    const maxFileSizeInMB = 3;
+    const quality = 75;
+
+    img.Image processedImage = originalImage;
+
+    if (originalImage.height > maxHeight) {
+      final scaleFactor = maxHeight / originalImage.height;
+      final newWidth = (originalImage.width * scaleFactor).toInt();
+      processedImage =
+          img.copyResize(originalImage, width: newWidth, height: maxHeight);
+    }
+
+    final String newPath = path.join(
+      imageFile.parent.path,
+      'processed_${imageFile.uri.pathSegments.last}',
+    );
+    final processedFile = File(newPath);
+
+    await processedFile
+        .writeAsBytes(img.encodeJpg(processedImage, quality: quality));
+
+    final int finalSizeInBytes = await processedFile.length();
+    final double finalSizeInMB = finalSizeInBytes / (1024 * 1024);
+
+    if (finalSizeInMB > maxFileSizeInMB) {
+      const lowerQuality = 75;
+      await processedFile
+          .writeAsBytes(img.encodeJpg(processedImage, quality: lowerQuality));
+    }
+
+    return processedFile;
+  }
+
+  void setImageUploadUrl(List<String> data) {
+    _imageUploadUrls = (data);
+    _isS3Upload = true;
+  }
+
+  void getUploadImagesInfo() async {
+    final delta = contentController.document.toDelta();
+
+    for (var op in delta.toList()) {
+      if (op.value is Map<String, dynamic> && op.value.containsKey('image')) {
+        final imagePath = op.value['image'];
+
+        final imageFile = File(imagePath);
+
+        final int sizeInBytes = await imageFile.length();
+
+        uploadImageInfos.add({
+          "file": imageFile,
+          "fileName": path.basename(imagePath),
+          "fileType": "image/${path.extension(imagePath).replaceAll(".", "")}",
+          "fileSize": sizeInBytes,
+        });
+      }
+    }
+  }
+
+  void exchangeImageUrl(String imageUploadUrl, String imagePath) {
+    final delta = contentController.document.toDelta();
+
+    String newImageUrl = imageUploadUrl.split('?')[0];
+
+    for (var op in delta.toList()) {
+      if (op.value is Map<String, dynamic> && op.value.containsKey('image')) {
+        op.value['image'] = newImageUrl;
+      }
+    }
+
+    _isS3Upload = false;
+    _uploadImageInfos.clear();
+    _imageUploadUrls.clear();
+  }
+
+  void clearInfos() {
+    _uploadImageInfos.clear();
+  }
+
+  void insertMatchBoard() {
+    final delta = contentController.document.toDelta();
+    final deltaOps = delta.toList().map((op) => op.toJson()).toList();
+    final converter = QuillDeltaToHtmlConverter(deltaOps);
+    _htmlContent = converter.convert();
   }
 }
