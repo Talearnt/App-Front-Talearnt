@@ -48,7 +48,6 @@ dependencies:
   image: ^4.5.2
   animated_splash_screen: ^1.3.0
 
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -86,6 +85,8 @@ flutter:
     - assets/icons/bookmark_pressed.svg
     - assets/icons/center_before.svg
     - assets/icons/center_after.svg
+    - assets/icons/chat_off.svg
+    - assets/icons/chat_on.svg
     - assets/icons/check_off_primary.svg
     - assets/icons/check_off_second.svg
     - assets/icons/check_on_primary.svg
@@ -103,6 +104,8 @@ flutter:
     - assets/icons/eye_close.svg
     - assets/icons/eye_open.svg
     - assets/icons/finish.svg
+    - assets/icons/home_off.svg
+    - assets/icons/home_on.svg
     - assets/icons/image_after.svg
     - assets/icons/image_before.svg
     - assets/icons/italics_after.svg
@@ -116,6 +119,8 @@ flutter:
     - assets/icons/list_before.svg
     - assets/icons/listnumber_after.svg
     - assets/icons/listnumber_before.svg
+    - assets/icons/my_off.svg
+    - assets/icons/my_on.svg
     - assets/icons/next_arrow.svg
     - assets/img/profile.svg
     - assets/icons/reset.svg
@@ -130,11 +135,15 @@ flutter:
     - assets/icons/sns_kakao.svg
     - assets/icons/default_logo.svg
     - assets/icons/no_rabbit_logo.svg
+    - assets/icons/post_off.svg
+    - assets/icons/post_on.svg
     - assets/icons/right_before.svg
     - assets/img/success_sign_up_logo.svg
     - assets/icons/typo.svg
     - assets/icons/underline_after.svg
     - assets/icons/underline_before.svg
+    - assets/icons/write_off.svg
+    - assets/icons/write_on.svg
     - assets/icons/typo.svg
     - assets/icons/field_check.svg
     - assets/icons/field_check_again_fail.svg

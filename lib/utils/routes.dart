@@ -5,6 +5,7 @@ import 'package:app_front_talearnt/view/auth/find_password_page.dart';
 import 'package:app_front_talearnt/view/auth/find_password_success_page.dart';
 import 'package:app_front_talearnt/view/auth/reset_password_page.dart';
 import 'package:app_front_talearnt/view/auth/sign_up_success_page.dart';
+import 'package:app_front_talearnt/view/home_page.dart';
 import 'package:app_front_talearnt/view/talent_board/match_write_success_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -137,6 +138,12 @@ class Routes {
             path: '/match-board-list',
             builder: (BuildContext context, GoRouterState state) {
               return const MatchBoardList();
+            },
+          ),
+          GoRoute(
+            path: '/home',
+            builder: (BuildContext context, GoRouterState state) {
+              return const HomePage();
             },
           ),
         ],

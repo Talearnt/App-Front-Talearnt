@@ -15,20 +15,14 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final commonProvider = Provider.of<CommonProvider>(context);
-    final talentBoardViewModel = Provider.of<TalentBoardViewModel>(context);
+
     return Scaffold(
       appBar: AppBar(
           elevation: 0.0,
           backgroundColor: Colors.transparent,
           surfaceTintColor: Colors.transparent,
           actions: [
-            IconButton(
-                onPressed: () async {
-                  await talentBoardViewModel.getOfferedKeywords();
-
-                  context.push('/match_write1');
-                },
-                icon: const Icon(Icons.close))
+            IconButton(onPressed: () async {}, icon: const Icon(Icons.close))
           ]),
       body: Stack(
         children: [

@@ -34,7 +34,8 @@ class SetTalentKeywordSuccessPage extends StatelessWidget {
             const SizedBox(
               height: 99,
             ),
-            SvgPicture.asset('assets/icons/set_talent_keyword_success_logo.svg'),
+            SvgPicture.asset(
+                'assets/icons/set_talent_keyword_success_logo.svg'),
             const SizedBox(height: 43),
             Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -60,7 +61,7 @@ class SetTalentKeywordSuccessPage extends StatelessWidget {
               child: PrimaryM(
                 content: '매칭 게시물 보러가기',
                 onPressed: () {
-                  //-> 홈화면으로 갈듯
+                  context.go('/home');
                 },
               ),
             ),
