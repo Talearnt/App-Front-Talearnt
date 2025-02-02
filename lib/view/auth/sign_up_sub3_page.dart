@@ -34,7 +34,7 @@ class SignUpSub3Page extends StatelessWidget {
                 style: TextTypes.heading(color: Palette.text01),
               ),
               const SizedBox(
-                height: 24,
+                height: 32,
               ),
               const TextFieldLabel(
                 content: '성별',

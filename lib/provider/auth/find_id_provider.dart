@@ -24,7 +24,7 @@ class FindIdProvider extends ChangeNotifier with ClearText {
   bool _isCertSend = false;
   String _certValidMessage = '';
   int _certNumberCount = 0;
-  ValueNotifier<int> _certNumSecond = ValueNotifier<int>(180);
+  ValueNotifier<int> _certNumSecond = ValueNotifier<int>(18);
   Timer? _timer;
 
   bool _isValidNameAndPhoneNumber = false;
@@ -113,6 +113,8 @@ class FindIdProvider extends ChangeNotifier with ClearText {
     _loadFindIdSuccessPage = false;
 
     _textInputEnabled = true;
+
+    resetTimer();
 
     notifyListeners();
   }
@@ -221,7 +223,7 @@ class FindIdProvider extends ChangeNotifier with ClearText {
 
   void resetTimer() {
     stopTimer();
-    _certNumSecond = ValueNotifier<int>(180);
+    _certNumSecond = ValueNotifier<int>(18);
   }
 
   void afterLoad() {

@@ -9,7 +9,6 @@ import 'package:provider/provider.dart';
 import '../../../common/theme.dart';
 import '../../../provider/auth/login_provider.dart';
 import '../../../view_model/auth_view_model.dart';
-import '../../../view_model/talent_board_view_model.dart';
 
 class LoginForm extends StatelessWidget {
   const LoginForm({super.key});
@@ -18,7 +17,7 @@ class LoginForm extends StatelessWidget {
   Widget build(BuildContext context) {
     final loginProvider = Provider.of<LoginProvider>(context);
     final authViewModel = Provider.of<AuthViewModel>(context);
-    final talentBoardViewModel = Provider.of<TalentBoardViewModel>(context);
+    // final talentBoardViewModel = Provider.of<TalentBoardViewModel>(context);
     final commonProvider = Provider.of<CommonProvider>(context);
 
     return Column(
@@ -66,11 +65,10 @@ class LoginForm extends StatelessWidget {
           onPressed: () async {
             if (loginProvider.checkLoginValidity()) {
               commonProvider.changeIsLoading(true);
-              await authViewModel
-                  .login(loginProvider.emailController.text,
-                      loginProvider.passwordController.text)
-                  .whenComplete(() => commonProvider.changeIsLoading(false));
-              await talentBoardViewModel.getKeywords();
+              await authViewModel.login(loginProvider.emailController.text,
+                  loginProvider.passwordController.text);
+              commonProvider.changeIsLoading(false);
+              // await talentBoardViewModel.getKeywords(); 하드코딩으로 대체
             }
           },
           style: ElevatedButton.styleFrom(
@@ -89,7 +87,7 @@ class LoginForm extends StatelessWidget {
         ),
         ElevatedButton(
           onPressed: () async {
-            await talentBoardViewModel.getKeywords();
+            context.go('/match-board-list');
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xFF1B76FF),
@@ -100,7 +98,7 @@ class LoginForm extends StatelessWidget {
           child: const Padding(
             padding: EdgeInsets.all(11.5),
             child: Text(
-              '키워드 설정 임시 버튼',
+              '목록 임시 버튼',
               style: TextStyle(fontSize: 18, color: Color(0xFFFFFFFF)),
             ),
           ),

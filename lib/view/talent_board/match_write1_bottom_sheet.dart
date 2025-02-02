@@ -6,8 +6,8 @@ import 'package:app_front_talearnt/view/talent_board/widget/bottom_selected_chip
 import 'package:app_front_talearnt/view/talent_board/widget/keyword_tab_dot.dart';
 import 'package:app_front_talearnt/view/talent_board/widget/talearnt_chip_list.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 import '../../provider/talent_board/match_write_provider.dart';
 

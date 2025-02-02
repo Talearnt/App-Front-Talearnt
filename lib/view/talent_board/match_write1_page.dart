@@ -43,7 +43,7 @@ class MatchWrite1Page extends StatelessWidget {
               children: [
                 TextWithIcon(
                   content: '초기화',
-                  icon: Icons.refresh_outlined,
+                  svgPicture: SvgPicture.asset('assets/icons/reset.svg'),
                   onPressed: () {
                     matchWriteProvider.reset();
                   },
@@ -54,7 +54,6 @@ class MatchWrite1Page extends StatelessWidget {
                     content: '다음',
                     onPressed: () async {
                       matchWriteProvider.checkChipsSelected();
-
                       matchWriteProvider.isChipsSelected
                           ? context.go('/match_write2')
                           : null;

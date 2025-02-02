@@ -9,8 +9,13 @@ import 'package:app_front_talearnt/view/talent_board/match_write_success_page.da
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../view/auth/agreement/privacy_agreement_optional.dart';
+import '../view/auth/agreement/privacy_agreement_required.dart';
+import '../view/auth/agreement/terms_agreement_optional.dart';
+import '../view/auth/agreement/terms_agreement_required.dart';
 import '../view/auth/login_page.dart';
 import '../view/auth/sign_up_main_page.dart';
+import '../view/talent_board/match_board_list.dart';
 import '../view/talent_board/match_write1_page.dart';
 import '../view/talent_board/match_write2_page.dart';
 import '../view/talent_board/match_write_preview_page.dart';
@@ -102,6 +107,36 @@ class Routes {
             path: '/match_write_success',
             builder: (BuildContext context, GoRouterState state) {
               return const MatchWriteSuccessPage();
+            },
+          ),
+          GoRoute(
+            path: '/terms-agree-required',
+            builder: (BuildContext context, GoRouterState state) {
+              return const TermsAgreementRequired();
+            },
+          ),
+          GoRoute(
+            path: '/privacy-agree-required',
+            builder: (BuildContext context, GoRouterState state) {
+              return const PrivacyAgreementRequired();
+            },
+          ),
+          GoRoute(
+            path: '/privacy-agree-optional',
+            builder: (BuildContext context, GoRouterState state) {
+              return const PrivacyAgreementOptional();
+            },
+          ),
+          GoRoute(
+            path: '/terms-agree-optional',
+            builder: (BuildContext context, GoRouterState state) {
+              return const TermsAgreementOptional();
+            },
+          ),
+          GoRoute(
+            path: '/match-board-list',
+            builder: (BuildContext context, GoRouterState state) {
+              return const MatchBoardList();
             },
           ),
         ],

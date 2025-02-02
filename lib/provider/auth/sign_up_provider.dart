@@ -612,6 +612,7 @@ class SignUpProvider extends ChangeNotifier with ClearText {
     _emailHelperType = '';
     _nickNameHelper = false;
     _emailHelper = false;
+    resetTimer(180);
     notifyListeners();
   }
 

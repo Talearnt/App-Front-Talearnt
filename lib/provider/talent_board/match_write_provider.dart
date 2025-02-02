@@ -13,13 +13,17 @@ import 'package:image_picker/image_picker.dart';
 import 'package:image/image.dart' as img;
 import 'package:path/path.dart' as path;
 
+import '../../constants/global_value_constants.dart';
 import '../clear_text.dart';
 
 class MatchWriteProvider extends ChangeNotifier with ClearText {
   MatchWriteProvider() : _tickerProvider = CustomTickerProvider() {
-    _giveTalentTabController = TabController(length: 0, vsync: _tickerProvider);
-    _interestTalentTabController =
-        TabController(length: 0, vsync: _tickerProvider);
+    _giveTalentTabController = TabController(
+        length: GlobalValueConstants.keywordCategoris.length,
+        vsync: _tickerProvider);
+    _interestTalentTabController = TabController(
+        length: GlobalValueConstants.keywordCategoris.length,
+        vsync: _tickerProvider);
     _giveTalentFocusNode.addListener(_onChanged);
     _interestTalentFocusNode.addListener(_onChanged);
     _contentController.addListener(_onChanged);
@@ -206,15 +210,15 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
     notifyListeners();
   }
 
-  void initTabController(List<KeywordCategory> keywordCategories) {
-    _giveTalentTabController.dispose();
-    _interestTalentTabController.dispose();
-    _giveTalentTabController =
-        TabController(length: keywordCategories.length, vsync: _tickerProvider);
-    _interestTalentTabController =
-        TabController(length: keywordCategories.length, vsync: _tickerProvider);
-    notifyListeners();
-  }
+  // void initTabController(List<KeywordCategory> keywordCategories) {
+  //   _giveTalentTabController.dispose();
+  //   _interestTalentTabController.dispose();
+  //   _giveTalentTabController =
+  //       TabController(length: keywordCategories.length, vsync: _tickerProvider);
+  //   _interestTalentTabController =
+  //       TabController(length: keywordCategories.length, vsync: _tickerProvider);
+  //   notifyListeners();
+  // }
 
   void _onChanged() {
     notifyListeners(); // Focus 상태 변경 시 UI 갱신

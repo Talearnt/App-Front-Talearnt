@@ -224,82 +224,87 @@ class KakaoSignUpPage extends StatelessWidget {
                         height: 14,
                       ),
                       Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    kakaoProvider
-                                        .updateRequiredTermsOfUseCheck();
-                                  },
-                                  child: SizedBox(
-                                    width: 24,
-                                    height: 24,
-                                    child: kakaoProvider.requiredTermsOfUseCheck
-                                        ? SvgPicture.asset(
-                                            "assets/icons/check_on_second.svg")
-                                        : SvgPicture.asset(
-                                            "assets/icons/check_off_second.svg"),
-                                  ),
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  kakaoProvider.updateRequiredTermsOfUseCheck();
+                                },
+                                child: SizedBox(
+                                  width: 24,
+                                  height: 24,
+                                  child: kakaoProvider.requiredTermsOfUseCheck
+                                      ? SvgPicture.asset(
+                                          "assets/icons/check_on_second.svg")
+                                      : SvgPicture.asset(
+                                          "assets/icons/check_off_second.svg"),
                                 ),
-                                Text(
-                                  '[필수]',
-                                  style: TextTypes.bodyMedium02(
-                                      color: Palette.error01),
-                                ),
-                                Text(
-                                  ' 이용약관 동의',
-                                  style: TextTypes.bodyMedium02(
-                                      color: Palette.text01),
-                                  softWrap: true,
-                                )
-                              ],
-                            ),
-                            const TextLineXs(
-                              content: '보기',
-                            ),
-                          ]),
+                              ),
+                              Text(
+                                '[필수]',
+                                style: TextTypes.bodyMedium02(
+                                    color: Palette.error01),
+                              ),
+                              Text(
+                                ' 이용약관 동의',
+                                style: TextTypes.bodyMedium02(
+                                    color: Palette.text01),
+                                softWrap: true,
+                              )
+                            ],
+                          ),
+                          TextLineXs(
+                            content: '보기',
+                            onPressed: () =>
+                                context.push('/terms-agree-required'),
+                          ),
+                        ],
+                      ),
                       const SizedBox(
                         height: 8,
                       ),
                       Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    kakaoProvider.updatePersonalInfoCheck();
-                                  },
-                                  child: SizedBox(
-                                    width: 24,
-                                    height: 24,
-                                    child: kakaoProvider.personalInfoCheck
-                                        ? SvgPicture.asset(
-                                            "assets/icons/check_on_second.svg")
-                                        : SvgPicture.asset(
-                                            "assets/icons/check_off_second.svg"),
-                                  ),
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  kakaoProvider.updatePersonalInfoCheck();
+                                },
+                                child: SizedBox(
+                                  width: 24,
+                                  height: 24,
+                                  child: kakaoProvider.personalInfoCheck
+                                      ? SvgPicture.asset(
+                                          "assets/icons/check_on_second.svg")
+                                      : SvgPicture.asset(
+                                          "assets/icons/check_off_second.svg"),
                                 ),
-                                Text(
-                                  '[필수]',
-                                  style: TextTypes.bodyMedium02(
-                                      color: Palette.error01),
-                                ),
-                                Text(
-                                  ' 개인 정보 수집 및 이용 동의',
-                                  style: TextTypes.bodyMedium02(
-                                      color: Palette.text01),
-                                  softWrap: true,
-                                  overflow: TextOverflow.visible,
-                                )
-                              ],
-                            ),
-                            const TextLineXs(
-                              content: '보기',
-                            ),
-                          ]),
+                              ),
+                              Text(
+                                '[필수]',
+                                style: TextTypes.bodyMedium02(
+                                    color: Palette.error01),
+                              ),
+                              Text(
+                                ' 개인 정보 수집 및 이용 동의',
+                                style: TextTypes.bodyMedium02(
+                                    color: Palette.text01),
+                                softWrap: true,
+                                overflow: TextOverflow.visible,
+                              )
+                            ],
+                          ),
+                          TextLineXs(
+                            content: '보기',
+                            onPressed: () =>
+                                context.push('/privacy-agree-required'),
+                          ),
+                        ],
+                      ),
                       const SizedBox(
                         height: 8,
                       ),
@@ -342,8 +347,10 @@ class KakaoSignUpPage extends StatelessWidget {
                               ],
                             ),
                           ),
-                          const TextLineXs(
+                          TextLineXs(
                             content: '보기',
+                            onPressed: () =>
+                                context.push('/privacy-agree-optional'),
                           ),
                         ],
                       ),
@@ -383,8 +390,10 @@ class KakaoSignUpPage extends StatelessWidget {
                               )
                             ],
                           ),
-                          const TextLineXs(
+                          TextLineXs(
                             content: '보기',
+                            onPressed: () =>
+                                context.push('/terms-agree-optional'),
                           ),
                         ],
                       ),

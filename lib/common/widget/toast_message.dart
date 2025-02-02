@@ -8,7 +8,7 @@ class ToastMessage {
       margin: const EdgeInsets.symmetric(horizontal: 24.0),
       padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 14.0),
       decoration: BoxDecoration(
-        color: Palette.bgBlack01,
+        color: Palette.bgToast01,
         borderRadius: BorderRadius.circular(8.0),
       ),
       width: MediaQuery.of(context).size.width,
@@ -34,7 +34,7 @@ class ToastMessage {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 48.0, vertical: 14.0),
       decoration: BoxDecoration(
-        color: Palette.bgBlack01,
+        color: Palette.bgToast01,
         borderRadius: BorderRadius.circular(100.0),
       ),
       child: Text(
