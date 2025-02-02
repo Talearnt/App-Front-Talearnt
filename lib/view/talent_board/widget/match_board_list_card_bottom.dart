@@ -32,7 +32,7 @@ class MatchBoardListCardBottom extends StatelessWidget {
                 SvgPicture.asset('assets/icons/eye_open_grey.svg'),
                 const SizedBox(width: 4),
                 Text(
-                  "${post.count}",
+                  "조회수",
                   style: TextTypes.caption02(color: Palette.text03),
                 ),
               ],
@@ -48,7 +48,7 @@ class MatchBoardListCardBottom extends StatelessWidget {
                 SvgPicture.asset('assets/icons/comment.svg'),
                 const SizedBox(width: 4),
                 Text(
-                  "안정해짐",
+                  "${post.openedChatRoomCount}",
                   style: TextTypes.caption02(color: Palette.text03),
                 ),
               ],

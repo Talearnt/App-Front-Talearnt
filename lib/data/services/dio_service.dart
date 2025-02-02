@@ -16,11 +16,22 @@ class DioService {
     _dio.interceptors.add(interceptor);
   }
 
-  Future<Either<Failure, Map<String, dynamic>>> get(String path,
-      Map<String, dynamic>? data, Map<String, dynamic>? params) async {
+  Future<Either<Failure, dynamic>> get(String path, Map<String, dynamic>? data,
+      Map<String, dynamic>? params) async {
     try {
       var response = await _dio.get(path, queryParameters: params, data: data);
-      return right(response.data as Map<String, dynamic>);
+      if (response.data is List) {
+        return right(response.data as List<dynamic>);
+      } else if (response.data is Map<String, dynamic>) {
+        return right(response.data as Map<String, dynamic>);
+      } else {
+        // 알 수 없는 형태의 데이터
+        return left(Failure(
+          errorCode: 'UNEXPECTED_RESPONSE',
+          errorMessage: 'Unexpected response format',
+          success: false,
+        ));
+      }
     } on DioException catch (e) {
       if (e.response?.statusCode == 401) {
         var result = await handleAuthResponse(e.response, () {

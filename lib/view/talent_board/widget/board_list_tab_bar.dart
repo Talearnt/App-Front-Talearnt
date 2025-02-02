@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../constants/global_value_constants.dart';
+import '../../../provider/common/common_provider.dart';
 import '../../../provider/talent_board/talent_board_provider.dart';
+import '../../../view_model/talent_board_view_model.dart';
 import 'board_filter_chip.dart';
 import 'keyword_bottom_sheet.dart';
 
@@ -11,8 +13,9 @@ class BoardListTabBar extends SliverPersistentHeaderDelegate {
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
-    TalentBoardProvider talentBoardProvider =
-        Provider.of<TalentBoardProvider>(context);
+    final talentBoardProvider = Provider.of<TalentBoardProvider>(context);
+    final talentBoardViewModel = Provider.of<TalentBoardViewModel>(context);
+    final commonProvider = Provider.of<CommonProvider>(context);
     return Container(
       height: maxExtent,
       color: Colors.white,
@@ -44,6 +47,8 @@ class BoardListTabBar extends SliverPersistentHeaderDelegate {
                       selectedCode: talentBoardProvider.selectedOrderType,
                       changedFunction: (code) {
                         talentBoardProvider.updateOrderType(code);
+                        getList(commonProvider, talentBoardViewModel,
+                            talentBoardProvider);
                       },
                     );
                   },
@@ -81,8 +86,11 @@ class BoardListTabBar extends SliverPersistentHeaderDelegate {
                             talentBoardProvider
                                 .updateInterestKeywordList(codes);
                           },
-                          registerFunction: () =>
-                              talentBoardProvider.registerInterestKeywordList(),
+                          registerFunction: () {
+                            talentBoardProvider.registerInterestKeywordList();
+                            getList(commonProvider, talentBoardViewModel,
+                                talentBoardProvider);
+                          },
                           resetFunction: () =>
                               talentBoardProvider.resetInterestKeywordList(),
                         );
@@ -122,8 +130,11 @@ class BoardListTabBar extends SliverPersistentHeaderDelegate {
                           updateFunction: (codes) {
                             talentBoardProvider.updateGiveKeywordList(codes);
                           },
-                          registerFunction: () =>
-                              talentBoardProvider.registerGiveKeywordList(),
+                          registerFunction: () {
+                            talentBoardProvider.registerGiveKeywordList();
+                            getList(commonProvider, talentBoardViewModel,
+                                talentBoardProvider);
+                          },
                           resetFunction: () =>
                               talentBoardProvider.resetGiveKeywordList(),
                         );
@@ -159,6 +170,8 @@ class BoardListTabBar extends SliverPersistentHeaderDelegate {
                       selectedCode: talentBoardProvider.selectedOperationType,
                       changedFunction: (code) {
                         talentBoardProvider.updateOperationType(code);
+                        getList(commonProvider, talentBoardViewModel,
+                            talentBoardProvider);
                       },
                     );
                   },
@@ -191,6 +204,8 @@ class BoardListTabBar extends SliverPersistentHeaderDelegate {
                       selectedCode: talentBoardProvider.selectedDurationType,
                       changedFunction: (code) {
                         talentBoardProvider.updateDurationType(code);
+                        getList(commonProvider, talentBoardViewModel,
+                            talentBoardProvider);
                       },
                     );
                   },
@@ -212,5 +227,29 @@ class BoardListTabBar extends SliverPersistentHeaderDelegate {
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
     return true;
+  }
+
+  Future<void> getList(
+      CommonProvider commonProvider,
+      TalentBoardViewModel talentBoardViewModel,
+      TalentBoardProvider talentBoardProvider) async {
+    commonProvider.changeIsLoading(true);
+    await talentBoardViewModel
+        .getTalentExchangePosts(
+            talentBoardProvider.selectedGiveTalentKeywordCodes
+                .map((e) => e.toString())
+                .toList(),
+            talentBoardProvider.selectedInterestTalentKeywordCodes
+                .map((e) => e.toString())
+                .toList(),
+            talentBoardProvider.selectedOrderType,
+            talentBoardProvider.selectedDurationType,
+            talentBoardProvider.selectedOperationType,
+            null,
+            null,
+            null,
+            null,
+            null)
+        .whenComplete(() => commonProvider.changeIsLoading(false));
   }
 }
