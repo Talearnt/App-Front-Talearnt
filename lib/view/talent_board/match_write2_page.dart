@@ -1,14 +1,19 @@
+import 'dart:io';
+
 import 'package:app_front_talearnt/common/theme.dart';
 import 'package:app_front_talearnt/common/widget/button.dart';
 import 'package:app_front_talearnt/common/widget/toast_message.dart';
 import 'package:app_front_talearnt/common/widget/top_app_bar.dart';
+import 'package:app_front_talearnt/view_model/talent_board_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_quill/flutter_quill.dart';
+import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_quill/flutter_quill.dart';
 
 import '../../provider/talent_board/match_write_provider.dart';
+import '../../provider/talent_board/keyword_provider.dart';
 
 class MatchWrite2Page extends StatelessWidget {
   const MatchWrite2Page({super.key});
@@ -16,6 +21,7 @@ class MatchWrite2Page extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final matchWriteProvider = Provider.of<MatchWriteProvider>(context);
+    final talentBoardViewModel = Provider.of<TalentBoardViewModel>(context);
 
     ScrollController scrollController = ScrollController();
 
@@ -23,7 +29,7 @@ class MatchWrite2Page extends StatelessWidget {
       resizeToAvoidBottomInset: true,
       appBar: TopAppBar(
         onPressed: () {
-          context.pop();
+          context.go('/match_write1');
         },
         second: TextBtnM(
           content: '미리보기',
@@ -39,7 +45,52 @@ class MatchWrite2Page extends StatelessWidget {
                     bottom: 50);
           },
         ),
-        first: const PrimaryS(content: '등록'),
+        first: PrimaryS(
+          content: '등록',
+          onPressed: () async {
+            matchWriteProvider.getUploadImagesInfo();
+
+            if (matchWriteProvider.uploadImageInfos.isNotEmpty) {
+              await talentBoardViewModel
+                  .getImageUploadUrl(matchWriteProvider.uploadImageInfos);
+
+              for (int idx = 0;
+                  idx < matchWriteProvider.imageUploadUrls.length;
+                  idx++) {
+                await talentBoardViewModel.uploadImage(
+                  matchWriteProvider.imageUploadUrls[idx],
+                  matchWriteProvider.uploadImageInfos[idx]["file"],
+                  matchWriteProvider.uploadImageInfos[idx]["fileSize"],
+                  matchWriteProvider.uploadImageInfos[idx]["fileType"],
+                );
+              }
+            }
+
+            matchWriteProvider.checkTitleAndBoard();
+
+            if (matchWriteProvider.isTitleAndBoardEmpty) {
+              matchWriteProvider.insertMatchBoard();
+
+              await talentBoardViewModel.insertMatchBoard(
+                matchWriteProvider.titlerController.text,
+                matchWriteProvider.htmlContent,
+                matchWriteProvider.selectedGiveTalentKeywordCodes,
+                matchWriteProvider.selectedInterestTalentKeywordCodes,
+                matchWriteProvider.selectedExchangeType,
+                false,
+                matchWriteProvider.selectedDuration,
+                [],
+              );
+            } else {
+              ToastMessage.show(
+                context: context,
+                message: matchWriteProvider.boardToastMessage,
+                type: 2,
+                bottom: 50,
+              );
+            }
+          },
+        ),
       ),
       bottomNavigationBar: AnimatedPadding(
         padding: EdgeInsets.only(
@@ -237,8 +288,14 @@ class MatchWrite2Page extends StatelessWidget {
                         const SizedBox(
                           width: 20,
                         ),
-                        SvgPicture.asset(
-                          'assets/icons/image_before.svg',
+                        IconButton(
+                          onPressed: () async {
+                            await matchWriteProvider
+                                .pickImagesAndInsert(context);
+                          },
+                          icon: SvgPicture.asset(
+                            'assets/icons/image_before.svg',
+                          ),
                         ),
                         const SizedBox(
                           width: 10,
@@ -356,6 +413,7 @@ class MatchWrite2Page extends StatelessWidget {
                 focusNode: matchWriteProvider.contentFocusNode,
                 scrollController: scrollController,
                 configurations: QuillEditorConfigurations(
+                  embedBuilders: FlutterQuillEmbeds.editorBuilders(),
                   placeholder: "내용을 입력해주세요",
                   expands: true,
                   customStyles: DefaultStyles(

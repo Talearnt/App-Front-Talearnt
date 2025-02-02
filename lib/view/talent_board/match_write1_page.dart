@@ -16,12 +16,12 @@ class MatchWrite1Page extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final matchWriteProvider = Provider.of<MatchWriteProvider>(context);
-    // final talentBoardViewModel = Provider.of<TalentBoardViewModel>(context);
+
     return Scaffold(
       appBar: TopAppBar(
         onPressed: () {
-          context.pop();
           matchWriteProvider.clearProvider();
+          context.pop();
         },
       ),
       bottomNavigationBar: Container(
@@ -134,15 +134,65 @@ class MatchWrite1Page extends StatelessWidget {
                     const SizedBox(
                       height: 16,
                     ),
-                    const Wrap(
-                      spacing: 12.0,
-                      runSpacing: 12.0,
+                    Wrap(
                       children: [
-                        // chips 들어갈 예정
+                        ...matchWriteProvider.giveTalentKeywordCodes
+                            .map((item) {
+                          String labelText = '';
+                          for (var category
+                              in GlobalValueConstants.keywordCategoris) {
+                            if (category.talentKeywords
+                                .any((talent) => talent.code == item)) {
+                              var data = category.talentKeywords
+                                  .firstWhere((talent) => talent.code == item);
+                              labelText = data.name;
+                              break;
+                            }
+                          }
+                          return Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 0, 12, 16),
+                            child: ChoiceChip(
+                              showCheckmark: false,
+                              shape: RoundedRectangleBorder(
+                                side: BorderSide(
+                                  color: matchWriteProvider
+                                          .selectedGiveTalentKeywordCodes
+                                          .contains(item)
+                                      ? Palette.primary01
+                                      : Palette.line01,
+                                  width: 1,
+                                ),
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                              backgroundColor: Palette.bgBackGround,
+                              label: Text(labelText),
+                              labelStyle: TextStyle(
+                                color: matchWriteProvider
+                                        .selectedGiveTalentKeywordCodes
+                                        .contains(item)
+                                    ? Palette.primary01
+                                    : Palette.text04,
+                              ),
+                              selected: matchWriteProvider
+                                  .selectedGiveTalentKeywordCodes
+                                  .contains(item),
+                              selectedColor: Palette.bgBackGround,
+                              onSelected: (selected) {
+                                final updatedFilter = matchWriteProvider
+                                    .selectedGiveTalentKeywordCodes
+                                    .toList();
+                                updatedFilter.contains(item)
+                                    ? updatedFilter.removeWhere(
+                                        (keyword) => keyword == item)
+                                    : updatedFilter.add(item);
+                                matchWriteProvider
+                                    .updateSelectedGiveTalentKeywordCodes
+                                    .call(updatedFilter);
+                              },
+                            ),
+                          );
+                        }).toList(),
                       ],
-                    ),
-                    const SizedBox(
-                      height: 24,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -241,7 +291,6 @@ class MatchWrite1Page extends StatelessWidget {
                               height: 36,
                             ),
                             onPressed: () async {
-                              // await talentBoardViewModel.getKeywords();
                               showModalBottomSheet(
                                 context: context,
                                 shape: const RoundedRectangleBorder(
