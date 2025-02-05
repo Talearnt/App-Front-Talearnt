@@ -77,17 +77,19 @@ class ProviderSetup extends StatelessWidget {
         ),
         ChangeNotifierProvider<KeywordProvider>(
             create: (_) => KeywordProvider()),
-
+        ChangeNotifierProvider<MatchWriteProvider>(
+            create: (_) => MatchWriteProvider()),
+        ChangeNotifierProvider<TalentBoardProvider>(
+            create: (_) => TalentBoardProvider()),
         ChangeNotifierProvider<TalentBoardViewModel>(
           create: (context) => TalentBoardViewModel(
             CommonNavigator(navigatorKey),
             TalentBoardRepository(context.read<DioService>()),
             context.read<KeywordProvider>(),
             context.read<MatchWriteProvider>(),
+            context.read<TalentBoardProvider>(),
           ),
         ),
-        ChangeNotifierProvider<TalentBoardProvider>(
-            create: (_) => TalentBoardProvider()),
       ],
       child: child,
     );

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:app_front_talearnt/data/model/param/match_board_param.dart';
 import 'package:app_front_talearnt/data/model/param/s3_controller_param.dart';
 import 'package:app_front_talearnt/data/model/respone/failure.dart';
+import 'package:app_front_talearnt/data/model/respone/pagination.dart';
 import 'package:app_front_talearnt/data/model/respone/keyword_category.dart';
 import 'package:app_front_talearnt/data/model/respone/keyword_talent.dart';
 import 'package:app_front_talearnt/data/model/respone/s3_upload_url.dart';
@@ -13,6 +14,8 @@ import 'package:flutter/material.dart';
 
 import '../../constants/api_constants.dart';
 import '../model/param/my_talent_keywords_param.dart';
+import '../model/param/talent_exchange_posts_filter_param';
+import '../model/respone/talent_exchange_post.dart';
 
 class TalentBoardRepository {
   final DioService dio;
@@ -69,5 +72,17 @@ class TalentBoardRepository {
     final result =
         await dio.post(ApiConstants.insertMatchBoard, body.toJson(), null);
     return result.fold(left, (response) => right(Success.fromJson(response)));
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> getTalentExchangePosts(
+      TalentExchangePostsFilterParam body) async {
+    final response =
+        await dio.get(ApiConstants.getTalentBoardListUrl, null, body.toJson());
+    return response.fold(left, (response) {
+      final posts = List<TalentExchangePost>.from(
+          response['data'].map((data) => TalentExchangePost.fromJson(data)));
+      final pagination = Pagination.fromJson(response['pagination']);
+      return right({'posts': posts, 'pagination': pagination});
+    });
   }
 }
