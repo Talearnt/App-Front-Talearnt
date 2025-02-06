@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-import '../../../common/theme.dart';
-import '../../../data/model/respone/keyword_talent.dart';
+import '../../data/model/respone/keyword_talent.dart';
+import '../theme.dart';
 
-class TalentChipList extends StatelessWidget {
+class TalentKeywordChipList extends StatelessWidget {
   final List<KeywordTalent> keywords;
   final List<int> selectedKeywords;
   final Function(List<int>) onSelectionChanged;
 
-  const TalentChipList({
+  const TalentKeywordChipList({
     super.key,
     required this.keywords,
     required this.selectedKeywords,

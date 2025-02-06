@@ -1,15 +1,15 @@
 import 'package:app_front_talearnt/common/theme.dart';
 import 'package:app_front_talearnt/common/widget/button.dart';
+import 'package:app_front_talearnt/common/widget/talent_keyword_chip_list.dart';
 import 'package:app_front_talearnt/common/widget/toast_message.dart';
 import 'package:app_front_talearnt/constants/global_value_constants.dart';
-import 'package:app_front_talearnt/view/talent_board/widget/bottom_selected_chip_list.dart';
-import 'package:app_front_talearnt/view/talent_board/widget/keyword_tab_dot.dart';
-import 'package:app_front_talearnt/view/talent_board/widget/talearnt_chip_list.dart';
+import 'package:app_front_talearnt/common/widget/bottom_selected_chip_list.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import '../../provider/talent_board/match_write_provider.dart';
+import '../../../provider/board/match_write_provider.dart';
+import '../../keyword/widget/keyword_tab_dot.dart';
 
 class MatchWrite1BottomSheet extends StatelessWidget {
   const MatchWrite1BottomSheet({super.key});
@@ -128,7 +128,7 @@ class MatchWrite1BottomSheet extends StatelessWidget {
                 children: [
                   for (var tabText in GlobalValueConstants.keywordCategoris)
                     SingleChildScrollView(
-                      child: TalentChipList(
+                      child: TalentKeywordChipList(
                         keywords: tabText.talentKeywords,
                         selectedKeywords:
                             matchWriteProvider.interestTalentKeywordCodes,

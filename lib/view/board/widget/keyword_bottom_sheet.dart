@@ -1,13 +1,13 @@
-import 'package:app_front_talearnt/view/talent_board/widget/talearnt_chip_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../common/theme.dart';
+import '../../../common/widget/bottom_selected_chip_list.dart';
 import '../../../common/widget/button.dart';
+import '../../../common/widget/talent_keyword_chip_list.dart';
 import '../../../common/widget/toast_message.dart';
 import '../../../constants/global_value_constants.dart';
-import 'bottom_selected_chip_list.dart';
 import 'keyword_tab_dot.dart';
 
 class KeywordBottomSheet extends StatelessWidget {
@@ -154,7 +154,7 @@ class KeywordBottomSheet extends StatelessWidget {
                   children: [
                     for (var tabText in GlobalValueConstants.keywordCategoris)
                       SingleChildScrollView(
-                        child: TalentChipList(
+                        child: TalentKeywordChipList(
                           keywords: tabText.talentKeywords,
                           selectedKeywords: keywordCodes,
                           onSelectionChanged: (newSelectedKeyword) {

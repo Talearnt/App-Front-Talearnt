@@ -1,6 +1,5 @@
-import 'package:app_front_talearnt/view/talent_board/widget/bottom_selected_chip_list.dart';
-import 'package:app_front_talearnt/view/talent_board/widget/keyword_tab_dot.dart';
-import 'package:app_front_talearnt/view/talent_board/widget/talearnt_chip_list.dart';
+import 'package:app_front_talearnt/common/widget/bottom_selected_chip_list.dart';
+import 'package:app_front_talearnt/common/widget/talent_keyword_chip_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
@@ -8,10 +7,11 @@ import 'package:provider/provider.dart';
 import '../../common/theme.dart';
 import '../../common/widget/toast_message.dart';
 import '../../constants/global_value_constants.dart';
-import '../../provider/talent_board/keyword_provider.dart';
+import '../../provider/keyword/keyword_provider.dart';
+import '../board/widget/keyword_tab_dot.dart';
 
-class SetGiveTalentPage extends StatelessWidget {
-  const SetGiveTalentPage({super.key});
+class SetGiveTalentKeywordPage extends StatelessWidget {
+  const SetGiveTalentKeywordPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -204,7 +204,7 @@ class SetGiveTalentPage extends StatelessWidget {
                   children: [
                     for (var tabText in GlobalValueConstants.keywordCategoris)
                       SingleChildScrollView(
-                        child: TalentChipList(
+                        child: TalentKeywordChipList(
                           keywords: tabText.talentKeywords,
                           selectedKeywords:
                               setKeywordProvider.giveTalentKeywordCodes,

@@ -1,10 +1,8 @@
-import 'dart:io';
-
 import 'package:app_front_talearnt/common/theme.dart';
 import 'package:app_front_talearnt/common/widget/button.dart';
 import 'package:app_front_talearnt/common/widget/toast_message.dart';
 import 'package:app_front_talearnt/common/widget/top_app_bar.dart';
-import 'package:app_front_talearnt/view_model/talent_board_view_model.dart';
+import 'package:app_front_talearnt/view_model/board_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
@@ -12,8 +10,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import '../../provider/talent_board/match_write_provider.dart';
-import '../../provider/talent_board/keyword_provider.dart';
+import '../../../provider/board/match_write_provider.dart';
 
 class MatchWrite2Page extends StatelessWidget {
   const MatchWrite2Page({super.key});
@@ -21,7 +18,7 @@ class MatchWrite2Page extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final matchWriteProvider = Provider.of<MatchWriteProvider>(context);
-    final talentBoardViewModel = Provider.of<TalentBoardViewModel>(context);
+    final boardViewModel = Provider.of<BoardViewModel>(context);
 
     ScrollController scrollController = ScrollController();
 
@@ -51,13 +48,13 @@ class MatchWrite2Page extends StatelessWidget {
             matchWriteProvider.getUploadImagesInfo();
 
             if (matchWriteProvider.uploadImageInfos.isNotEmpty) {
-              await talentBoardViewModel
+              await boardViewModel
                   .getImageUploadUrl(matchWriteProvider.uploadImageInfos);
 
               for (int idx = 0;
                   idx < matchWriteProvider.imageUploadUrls.length;
                   idx++) {
-                await talentBoardViewModel.uploadImage(
+                await boardViewModel.uploadImage(
                   matchWriteProvider.imageUploadUrls[idx],
                   matchWriteProvider.uploadImageInfos[idx]["file"],
                   matchWriteProvider.uploadImageInfos[idx]["fileSize"],
@@ -71,7 +68,7 @@ class MatchWrite2Page extends StatelessWidget {
             if (matchWriteProvider.isTitleAndBoardEmpty) {
               matchWriteProvider.insertMatchBoard();
 
-              await talentBoardViewModel.insertMatchBoard(
+              await boardViewModel.insertMatchBoard(
                 matchWriteProvider.titlerController.text,
                 matchWriteProvider.htmlContent,
                 matchWriteProvider.selectedGiveTalentKeywordCodes,

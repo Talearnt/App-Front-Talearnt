@@ -1,7 +1,8 @@
 import 'package:app_front_talearnt/provider/auth/login_provider.dart';
-import 'package:app_front_talearnt/provider/talent_board/match_write_provider.dart';
+
 import 'package:dio/dio.dart';
 
+import '../../provider/board/match_write_provider.dart';
 import '../../utils/token_manager.dart';
 
 class AuthorizationInterceptor extends InterceptorsWrapper {

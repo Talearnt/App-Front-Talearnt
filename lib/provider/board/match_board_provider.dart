@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 
 import '../../constants/global_value_constants.dart';
 import '../../data/model/respone/talent_exchange_post.dart';
-import '../../view_model/talent_board_view_model.dart';
+import '../../view_model/board_view_model.dart';
 import '../common/custom_ticker_provider.dart';
 
-class TalentBoardProvider extends ChangeNotifier {
-  TalentBoardProvider() : _tickerProvider = CustomTickerProvider() {
+class MatchBoardProvider extends ChangeNotifier {
+  MatchBoardProvider() : _tickerProvider = CustomTickerProvider() {
     _giveTalentTabController = TabController(
         length: GlobalValueConstants.keywordCategoris.length,
         vsync: _tickerProvider);
@@ -31,7 +31,7 @@ class TalentBoardProvider extends ChangeNotifier {
   final List<TalentExchangePost> _talentExchangePosts = [];
   Pagination _talentPage = Pagination.empty();
   final ScrollController _scrollController = ScrollController();
-  late TalentBoardViewModel _viewModel;
+  late BoardViewModel _viewModel;
   final String getVersion = "filter"; //filter - 필터 , scroll - 스크롤
 
   TabController get giveTalentTabController => _giveTalentTabController;
@@ -60,7 +60,7 @@ class TalentBoardProvider extends ChangeNotifier {
 
   ScrollController get scrollController => _scrollController;
 
-  void setViewModel(TalentBoardViewModel viewModel) {
+  void setViewModel(BoardViewModel viewModel) {
     _viewModel = viewModel;
   }
 

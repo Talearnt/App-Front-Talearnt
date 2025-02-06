@@ -1,10 +1,8 @@
 import 'package:app_front_talearnt/view/auth/widget/login_form.dart';
 import 'package:app_front_talearnt/view/auth/widget/simple_login_form.dart';
-import 'package:app_front_talearnt/view_model/talent_board_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../common/widget/loading.dart';
 import '../../provider/common/common_provider.dart';
