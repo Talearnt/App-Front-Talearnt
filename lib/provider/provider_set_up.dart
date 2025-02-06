@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
 
 import '../data/model/respone/token.dart';
 import '../data/repositories/auth_repository.dart';
-import '../data/repositories/talent_board_repository.dart';
+import '../data/repositories/board_repository.dart';
 import '../data/services/authorization_interceptor.dart';
 import '../data/services/dio_service.dart';
 import '../main.dart';
@@ -84,7 +84,7 @@ class ProviderSetup extends StatelessWidget {
         ChangeNotifierProvider<BoardViewModel>(
           create: (context) => BoardViewModel(
             CommonNavigator(navigatorKey),
-            TalentBoardRepository(context.read<DioService>()),
+            BoardRepository(context.read<DioService>()),
             context.read<KeywordProvider>(),
             context.read<MatchWriteProvider>(),
             context.read<MatchBoardProvider>(),

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import '../common/common_navigator.dart';
 import '../data/model/param/s3_controller_param.dart';
 import '../data/model/param/talent_exchange_posts_filter_param';
-import '../data/repositories/talent_board_repository.dart';
+import '../data/repositories/board_repository.dart';
 import '../provider/board/match_board_provider.dart';
 import '../provider/board/match_write_provider.dart';
 import '../provider/keyword/keyword_provider.dart';
@@ -14,14 +14,14 @@ import '../utils/error_message.dart';
 
 class BoardViewModel extends ChangeNotifier {
   final CommonNavigator commonNavigator;
-  final TalentBoardRepository talentBoardRepository;
+  final BoardRepository boardRepository;
   final KeywordProvider keywordProvider;
   final MatchWriteProvider matchWriteProvider;
   final MatchBoardProvider talentBoardProvider;
 
   BoardViewModel(
     this.commonNavigator,
-    this.talentBoardRepository,
+    this.boardRepository,
     this.keywordProvider,
     this.matchWriteProvider,
     this.talentBoardProvider,
@@ -39,7 +39,7 @@ class BoardViewModel extends ChangeNotifier {
 
     S3ControllerParam param = S3ControllerParam(files: fileParams);
 
-    final result = await talentBoardRepository.getImageUploadUrl(param);
+    final result = await boardRepository.getImageUploadUrl(param);
 
     result.fold(
         (failure) => commonNavigator.showSingleDialog(
@@ -50,7 +50,7 @@ class BoardViewModel extends ChangeNotifier {
 
   Future<void> uploadImage(String imageUploadUrl, File image, int fileSize,
       String contentType) async {
-    final result = await talentBoardRepository.uploadImage(
+    final result = await boardRepository.uploadImage(
         imageUploadUrl, image, fileSize, contentType);
 
     result.fold((failure) {
@@ -84,7 +84,7 @@ class BoardViewModel extends ChangeNotifier {
       urls: urlList,
     );
 
-    final result = await talentBoardRepository.insertMatchBoard(param);
+    final result = await boardRepository.insertMatchBoard(param);
 
     result.fold(
         (failure) => commonNavigator.showSingleDialog(
@@ -96,7 +96,7 @@ class BoardViewModel extends ChangeNotifier {
   Future<void> getInitTalentExchangePosts() async {
     TalentExchangePostsFilterParam param =
         TalentExchangePostsFilterParam.empty();
-    final result = await talentBoardRepository.getTalentExchangePosts(param);
+    final result = await boardRepository.getTalentExchangePosts(param);
     result.fold(
         (failure) => commonNavigator.showSingleDialog(
             content: ErrorMessages.getMessage(failure.errorCode)), (result) {
@@ -130,7 +130,7 @@ class BoardViewModel extends ChangeNotifier {
         page: page,
         size: size,
         search: search);
-    final result = await talentBoardRepository.getTalentExchangePosts(param);
+    final result = await boardRepository.getTalentExchangePosts(param);
     result.fold(
         (failure) => commonNavigator.showSingleDialog(
             content: ErrorMessages.getMessage(failure.errorCode)), (result) {
@@ -163,7 +163,7 @@ class BoardViewModel extends ChangeNotifier {
         page: page,
         size: size,
         search: search);
-    final result = await talentBoardRepository.getTalentExchangePosts(param);
+    final result = await boardRepository.getTalentExchangePosts(param);
     result.fold(
         (failure) => commonNavigator.showSingleDialog(
             content: ErrorMessages.getMessage(failure.errorCode)), (result) {
