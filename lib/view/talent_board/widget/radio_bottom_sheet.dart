@@ -1,9 +1,6 @@
 import 'package:app_front_talearnt/common/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
-
-import '../../../provider/talent_board/talent_board_provider.dart';
 
 class RadioBottomSheet extends StatelessWidget {
   final String sheetTitle;

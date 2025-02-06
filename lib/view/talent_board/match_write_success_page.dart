@@ -1,4 +1,3 @@
-import 'package:app_front_talearnt/provider/talent_board/match_write_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
@@ -7,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../../common/theme.dart';
 import '../../common/widget/button.dart';
 import '../../common/widget/top_app_bar.dart';
+import '../../provider/board/match_write_provider.dart';
 
 class MatchWriteSuccessPage extends StatelessWidget {
   const MatchWriteSuccessPage({super.key});

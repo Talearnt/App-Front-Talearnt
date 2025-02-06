@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import '../../provider/talent_board/match_write_provider.dart';
+import '../../provider/board/match_write_provider.dart';
 
 class MatchWrite1BottomSheet extends StatelessWidget {
   const MatchWrite1BottomSheet({super.key});

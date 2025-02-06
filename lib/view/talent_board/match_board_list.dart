@@ -5,22 +5,22 @@ import 'package:provider/provider.dart';
 
 import '../../common/theme.dart';
 import '../../common/widget/board_custom_app_bar.dart';
-import '../../provider/talent_board/talent_board_provider.dart';
-import '../../view_model/talent_board_view_model.dart';
+import '../../provider/board/match_board_provider.dart';
+import '../../view_model/board_view_model.dart';
 
 class MatchBoardList extends StatelessWidget {
   const MatchBoardList({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = Provider.of<TalentBoardViewModel>(context);
-    final TalentBoardProvider talentBoardProvider =
-        Provider.of<TalentBoardProvider>(context);
-    talentBoardProvider.setViewModel(viewModel);
-    return SafeArea(
-      child: Scaffold(
-        body: CustomScrollView(
-          controller: talentBoardProvider.scrollController,
+    final viewModel = Provider.of<BoardViewModel>(context);
+    final MatchBoardProvider matchBoardProvider =
+        Provider.of<MatchBoardProvider>(context);
+    matchBoardProvider.setViewModel(viewModel);
+    return Scaffold(
+      body: SafeArea(
+        child: CustomScrollView(
+          controller: matchBoardProvider.scrollController,
           slivers: [
             const SliverAppBar(
               pinned: false,
@@ -40,7 +40,7 @@ class MatchBoardList extends StatelessWidget {
             SliverList(
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
-                  final posts = talentBoardProvider.talentExchangePosts;
+                  final posts = matchBoardProvider.talentExchangePosts;
                   if (posts.isEmpty) {
                     return const Center(
                       child: Padding(
@@ -55,9 +55,9 @@ class MatchBoardList extends StatelessWidget {
 
                   return BoardListCard(post: posts[index], index: index);
                 },
-                childCount: talentBoardProvider.talentExchangePosts.isEmpty
+                childCount: matchBoardProvider.talentExchangePosts.isEmpty
                     ? 1
-                    : talentBoardProvider.talentExchangePosts.length,
+                    : matchBoardProvider.talentExchangePosts.length,
               ),
             ),
           ],

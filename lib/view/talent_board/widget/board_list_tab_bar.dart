@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../constants/global_value_constants.dart';
+import '../../../provider/board/match_board_provider.dart';
 import '../../../provider/common/common_provider.dart';
-import '../../../provider/talent_board/talent_board_provider.dart';
-import '../../../view_model/talent_board_view_model.dart';
+import '../../../view_model/board_view_model.dart';
 import 'board_filter_chip.dart';
 import 'keyword_bottom_sheet.dart';
 
@@ -13,8 +13,8 @@ class BoardListTabBar extends SliverPersistentHeaderDelegate {
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
-    final talentBoardProvider = Provider.of<TalentBoardProvider>(context);
-    final talentBoardViewModel = Provider.of<TalentBoardViewModel>(context);
+    final matchBoardProvider = Provider.of<MatchBoardProvider>(context);
+    final boardViewModel = Provider.of<BoardViewModel>(context);
     final commonProvider = Provider.of<CommonProvider>(context);
     return Container(
       height: maxExtent,
@@ -29,7 +29,7 @@ class BoardListTabBar extends SliverPersistentHeaderDelegate {
             BoardFilterChip(
               content: GlobalValueConstants.orderTypes.firstWhere(
                 (option) =>
-                    option['code'] == talentBoardProvider.selectedOrderType,
+                    option['code'] == matchBoardProvider.selectedOrderType,
               )['value']!,
               function: () {
                 showModalBottomSheet(
@@ -44,11 +44,11 @@ class BoardListTabBar extends SliverPersistentHeaderDelegate {
                     return RadioBottomSheet(
                       sheetTitle: "정렬 방식",
                       bottomSheetContent: GlobalValueConstants.orderTypes,
-                      selectedCode: talentBoardProvider.selectedOrderType,
+                      selectedCode: matchBoardProvider.selectedOrderType,
                       changedFunction: (code) {
-                        talentBoardProvider.updateOrderType(code);
-                        getList(commonProvider, talentBoardViewModel,
-                            talentBoardProvider);
+                        matchBoardProvider.updateOrderType(code);
+                        getList(
+                            commonProvider, boardViewModel, matchBoardProvider);
                       },
                     );
                   },
@@ -57,11 +57,11 @@ class BoardListTabBar extends SliverPersistentHeaderDelegate {
             ),
             BoardFilterChip(
               content:
-                  '받고 싶은 재능 ${talentBoardProvider.selectedInterestTalentKeywordCodes.isEmpty ? '' : talentBoardProvider.selectedInterestTalentKeywordCodes.length}',
-              selected: talentBoardProvider
+                  '받고 싶은 재능 ${matchBoardProvider.selectedInterestTalentKeywordCodes.isEmpty ? '' : matchBoardProvider.selectedInterestTalentKeywordCodes.length}',
+              selected: matchBoardProvider
                   .selectedInterestTalentKeywordCodes.isNotEmpty,
               function: () {
-                talentBoardProvider.matchInterestKeywordList();
+                matchBoardProvider.matchInterestKeywordList();
                 showModalBottomSheet(
                   context: context,
                   shape: const RoundedRectangleBorder(
@@ -71,28 +71,27 @@ class BoardListTabBar extends SliverPersistentHeaderDelegate {
                   ),
                   clipBehavior: Clip.antiAlias,
                   builder: (BuildContext context) {
-                    return Consumer<TalentBoardProvider>(
-                      builder: (context, talentBoardProvider, child) {
+                    return Consumer<MatchBoardProvider>(
+                      builder: (context, matchBoardProvider, child) {
                         return KeywordBottomSheet(
                           sheetTitle: '받고 싶은 재능',
                           keywordCodes:
-                              talentBoardProvider.interestTalentKeywordCodes,
+                              matchBoardProvider.interestTalentKeywordCodes,
                           tabController:
-                              talentBoardProvider.interestTalentTabController,
+                              matchBoardProvider.interestTalentTabController,
                           removeFunction: (code) {
-                            talentBoardProvider.removeInterestKeywordList(code);
+                            matchBoardProvider.removeInterestKeywordList(code);
                           },
                           updateFunction: (codes) {
-                            talentBoardProvider
-                                .updateInterestKeywordList(codes);
+                            matchBoardProvider.updateInterestKeywordList(codes);
                           },
                           registerFunction: () {
-                            talentBoardProvider.registerInterestKeywordList();
-                            getList(commonProvider, talentBoardViewModel,
-                                talentBoardProvider);
+                            matchBoardProvider.registerInterestKeywordList();
+                            getList(commonProvider, boardViewModel,
+                                matchBoardProvider);
                           },
                           resetFunction: () =>
-                              talentBoardProvider.resetInterestKeywordList(),
+                              matchBoardProvider.resetInterestKeywordList(),
                         );
                       },
                     );
@@ -102,11 +101,11 @@ class BoardListTabBar extends SliverPersistentHeaderDelegate {
             ),
             BoardFilterChip(
               content:
-                  '주고 싶은 재능 ${talentBoardProvider.selectedGiveTalentKeywordCodes.isEmpty ? '' : talentBoardProvider.selectedGiveTalentKeywordCodes.length}',
+                  '주고 싶은 재능 ${matchBoardProvider.selectedGiveTalentKeywordCodes.isEmpty ? '' : matchBoardProvider.selectedGiveTalentKeywordCodes.length}',
               selected:
-                  talentBoardProvider.selectedGiveTalentKeywordCodes.isNotEmpty,
+                  matchBoardProvider.selectedGiveTalentKeywordCodes.isNotEmpty,
               function: () {
-                talentBoardProvider.matchGiveKeywordList();
+                matchBoardProvider.matchGiveKeywordList();
                 showModalBottomSheet(
                   context: context,
                   shape: const RoundedRectangleBorder(
@@ -116,27 +115,27 @@ class BoardListTabBar extends SliverPersistentHeaderDelegate {
                   ),
                   clipBehavior: Clip.antiAlias,
                   builder: (BuildContext context) {
-                    return Consumer<TalentBoardProvider>(
-                      builder: (context, talentBoardProvider, child) {
+                    return Consumer<MatchBoardProvider>(
+                      builder: (context, matchBoardProvider, child) {
                         return KeywordBottomSheet(
                           sheetTitle: '주고 싶은 재능',
                           keywordCodes:
-                              talentBoardProvider.giveTalentKeywordCodes,
+                              matchBoardProvider.giveTalentKeywordCodes,
                           tabController:
-                              talentBoardProvider.giveTalentTabController,
+                              matchBoardProvider.giveTalentTabController,
                           removeFunction: (code) {
-                            talentBoardProvider.removeGiveKeywordList(code);
+                            matchBoardProvider.removeGiveKeywordList(code);
                           },
                           updateFunction: (codes) {
-                            talentBoardProvider.updateGiveKeywordList(codes);
+                            matchBoardProvider.updateGiveKeywordList(codes);
                           },
                           registerFunction: () {
-                            talentBoardProvider.registerGiveKeywordList();
-                            getList(commonProvider, talentBoardViewModel,
-                                talentBoardProvider);
+                            matchBoardProvider.registerGiveKeywordList();
+                            getList(commonProvider, boardViewModel,
+                                matchBoardProvider);
                           },
                           resetFunction: () =>
-                              talentBoardProvider.resetGiveKeywordList(),
+                              matchBoardProvider.resetGiveKeywordList(),
                         );
                       },
                     );
@@ -146,14 +145,14 @@ class BoardListTabBar extends SliverPersistentHeaderDelegate {
             ),
             //진행방식
             BoardFilterChip(
-              content: talentBoardProvider.selectedOperationType == ''
+              content: matchBoardProvider.selectedOperationType == ''
                   ? '방식'
                   : GlobalValueConstants.operationTypes.firstWhere(
                       (option) =>
                           option['code'] ==
-                          talentBoardProvider.selectedOperationType,
+                          matchBoardProvider.selectedOperationType,
                     )['value']!,
-              selected: talentBoardProvider.selectedOperationType != '',
+              selected: matchBoardProvider.selectedOperationType != '',
               function: () {
                 showModalBottomSheet(
                   context: context,
@@ -167,11 +166,11 @@ class BoardListTabBar extends SliverPersistentHeaderDelegate {
                     return RadioBottomSheet(
                       sheetTitle: "진행 방식",
                       bottomSheetContent: GlobalValueConstants.operationTypes,
-                      selectedCode: talentBoardProvider.selectedOperationType,
+                      selectedCode: matchBoardProvider.selectedOperationType,
                       changedFunction: (code) {
-                        talentBoardProvider.updateOperationType(code);
-                        getList(commonProvider, talentBoardViewModel,
-                            talentBoardProvider);
+                        matchBoardProvider.updateOperationType(code);
+                        getList(
+                            commonProvider, boardViewModel, matchBoardProvider);
                       },
                     );
                   },
@@ -180,14 +179,14 @@ class BoardListTabBar extends SliverPersistentHeaderDelegate {
             ),
             //진행기간
             BoardFilterChip(
-              content: talentBoardProvider.selectedDurationType == ''
+              content: matchBoardProvider.selectedDurationType == ''
                   ? '기간'
                   : GlobalValueConstants.durationTypes.firstWhere(
                       (option) =>
                           option['code'] ==
-                          talentBoardProvider.selectedDurationType,
+                          matchBoardProvider.selectedDurationType,
                     )['value']!,
-              selected: talentBoardProvider.selectedDurationType != '',
+              selected: matchBoardProvider.selectedDurationType != '',
               function: () {
                 showModalBottomSheet(
                   context: context,
@@ -201,11 +200,11 @@ class BoardListTabBar extends SliverPersistentHeaderDelegate {
                     return RadioBottomSheet(
                       sheetTitle: "진행 기간",
                       bottomSheetContent: GlobalValueConstants.durationTypes,
-                      selectedCode: talentBoardProvider.selectedDurationType,
+                      selectedCode: matchBoardProvider.selectedDurationType,
                       changedFunction: (code) {
-                        talentBoardProvider.updateDurationType(code);
-                        getList(commonProvider, talentBoardViewModel,
-                            talentBoardProvider);
+                        matchBoardProvider.updateDurationType(code);
+                        getList(
+                            commonProvider, boardViewModel, matchBoardProvider);
                       },
                     );
                   },
@@ -231,8 +230,8 @@ class BoardListTabBar extends SliverPersistentHeaderDelegate {
 
   Future<void> getList(
       CommonProvider commonProvider,
-      TalentBoardViewModel talentBoardViewModel,
-      TalentBoardProvider talentBoardProvider) async {
+      BoardViewModel talentBoardViewModel,
+      MatchBoardProvider talentBoardProvider) async {
     commonProvider.changeIsLoading(true);
     await talentBoardViewModel
         .getTalentExchangePosts(

@@ -1,6 +1,6 @@
 import 'package:app_front_talearnt/common/theme.dart';
-import 'package:app_front_talearnt/view/talent_board/set_give_talent_page.dart';
-import 'package:app_front_talearnt/view/talent_board/set_interest_talent_page.dart';
+import 'package:app_front_talearnt/view/talent_board/set_give_talent_keyword_page.dart';
+import 'package:app_front_talearnt/view/talent_board/set_interest_talent_keyword_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -9,18 +9,18 @@ import '../../common/common_navigator.dart';
 import '../../common/widget/bottom_btn.dart';
 import '../../common/widget/top_app_bar.dart';
 import '../../provider/common/common_provider.dart';
-import '../../provider/talent_board/keyword_provider.dart';
-import '../../view_model/talent_board_view_model.dart';
-import 'confirmation_talent_page.dart';
+import '../../provider/keyword/keyword_provider.dart';
+import '../../view_model/keyword_view_model.dart';
+import 'confirmation_talent_keyword_page.dart';
 
-class SetTalentMainPage extends StatelessWidget {
-  const SetTalentMainPage({super.key});
+class SetTalentKeywordMainPage extends StatelessWidget {
+  const SetTalentKeywordMainPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     final keywordProvider = Provider.of<KeywordProvider>(context);
     final commonNavigator = Provider.of<CommonNavigator>(context);
-    final talentBoardViewModel = Provider.of<TalentBoardViewModel>(context);
+    final keywordViewModel = Provider.of<KeywordViewModel>(context);
     final commonProvider = Provider.of<CommonProvider>(context);
 
     return PopScope(
@@ -79,9 +79,9 @@ class SetTalentMainPage extends StatelessWidget {
                       keywordProvider.updatePage(page);
                     },
                     children: const [
-                      SetGiveTalentPage(),
-                      SetInterestTalentPage(),
-                      ConfirmationTalentPage()
+                      SetGiveTalentKeywordPage(),
+                      SetInterestTalentKeywordPage(),
+                      ConfirmationTalentKeywordPage()
                     ],
                   ),
                 ),
@@ -123,7 +123,7 @@ class SetTalentMainPage extends StatelessWidget {
                           isEnabled: keywordProvider.isConfirmButtonEnabled,
                           onPressed: () async {
                             commonProvider.changeIsLoading(true);
-                            talentBoardViewModel
+                            keywordViewModel
                                 .setMyKeywords(
                                     keywordProvider
                                         .selectedGiveTalentKeywordCodes,

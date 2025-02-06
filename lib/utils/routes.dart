@@ -21,7 +21,7 @@ import '../view/talent_board/match_write1_page.dart';
 import '../view/talent_board/match_write2_page.dart';
 import '../view/talent_board/match_write_preview_page.dart';
 import '../view/talent_board/set_talent_keyword_success_page.dart';
-import '../view/talent_board/set_talent_main_page.dart';
+import '../view/talent_board/set_talent_keyword_main_page.dart';
 
 class Routes {
   static final GoRouter router = GoRouter(
@@ -77,7 +77,7 @@ class Routes {
           GoRoute(
             path: '/set-keyword',
             builder: (BuildContext context, GoRouterState state) {
-              return const SetTalentMainPage();
+              return const SetTalentKeywordMainPage();
             },
           ),
           GoRoute(
