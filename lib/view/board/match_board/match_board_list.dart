@@ -1,12 +1,13 @@
-import 'package:app_front_talearnt/view/talent_board/widget/board_list_card.dart';
-import 'package:app_front_talearnt/view/talent_board/widget/board_list_tab_bar.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../common/theme.dart';
-import '../../common/widget/board_custom_app_bar.dart';
-import '../../provider/board/match_board_provider.dart';
-import '../../view_model/board_view_model.dart';
+import '../../../common/theme.dart';
+import '../../../common/widget/board_custom_app_bar.dart';
+import '../../../provider/board/match_board_provider.dart';
+import '../../../view_model/board_view_model.dart';
+import '../widget/board_list_card.dart';
+import '../widget/board_list_tab_bar.dart';
 
 class MatchBoardList extends StatelessWidget {
   const MatchBoardList({super.key});

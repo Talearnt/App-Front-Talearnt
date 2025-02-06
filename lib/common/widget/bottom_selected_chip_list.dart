@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../../common/theme.dart';
-import '../../../data/model/respone/keyword_category.dart';
+import '../theme.dart';
+import '../../data/model/respone/keyword_category.dart';
 
 class BottomSelectedChipList extends StatelessWidget {
   final List<KeywordCategory> baseCategory;

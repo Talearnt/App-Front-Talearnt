@@ -6,7 +6,6 @@ import 'package:app_front_talearnt/view/auth/find_password_success_page.dart';
 import 'package:app_front_talearnt/view/auth/reset_password_page.dart';
 import 'package:app_front_talearnt/view/auth/sign_up_success_page.dart';
 import 'package:app_front_talearnt/view/home_page.dart';
-import 'package:app_front_talearnt/view/talent_board/match_write_success_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -16,12 +15,13 @@ import '../view/auth/agreement/terms_agreement_optional.dart';
 import '../view/auth/agreement/terms_agreement_required.dart';
 import '../view/auth/login_page.dart';
 import '../view/auth/sign_up_main_page.dart';
-import '../view/talent_board/match_board_list.dart';
-import '../view/talent_board/match_write1_page.dart';
-import '../view/talent_board/match_write2_page.dart';
-import '../view/talent_board/match_write_preview_page.dart';
-import '../view/talent_board/set_talent_keyword_success_page.dart';
-import '../view/talent_board/set_talent_keyword_main_page.dart';
+import '../view/board/match_board/match_board_list.dart';
+import '../view/board/match_board/match_write1_page.dart';
+import '../view/board/match_board/match_write2_page.dart';
+import '../view/board/match_board/match_write_preview_page.dart';
+import '../view/board/match_board/match_write_success_page.dart';
+import '../view/keyword/set_talent_keyword_main_page.dart';
+import '../view/keyword/set_talent_keyword_success_page.dart';
 
 class Routes {
   static final GoRouter router = GoRouter(
@@ -135,7 +135,7 @@ class Routes {
             },
           ),
           GoRoute(
-            path: '/match-board-list',
+            path: '/board-list',
             builder: (BuildContext context, GoRouterState state) {
               return const MatchBoardList();
             },

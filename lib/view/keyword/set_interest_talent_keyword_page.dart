@@ -1,28 +1,28 @@
-import 'package:app_front_talearnt/view/talent_board/widget/bottom_selected_chip_list.dart';
-import 'package:app_front_talearnt/view/talent_board/widget/keyword_tab_dot.dart';
-import 'package:app_front_talearnt/view/talent_board/widget/talearnt_chip_list.dart';
+import 'package:app_front_talearnt/common/widget/bottom_selected_chip_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 import '../../common/theme.dart';
+import '../../common/widget/talent_keyword_chip_list.dart';
 import '../../common/widget/toast_message.dart';
 import '../../constants/global_value_constants.dart';
 import '../../provider/keyword/keyword_provider.dart';
+import '../board/widget/keyword_tab_dot.dart';
 
-class SetGiveTalentKeywordPage extends StatelessWidget {
-  const SetGiveTalentKeywordPage({super.key});
+class SetInterestTalentKeywordPage extends StatelessWidget {
+  const SetInterestTalentKeywordPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     final setKeywordProvider = Provider.of<KeywordProvider>(context);
     return Column(
-      children: <Widget>[
+      children: [
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              "나의 재능 키워드를",
+              "관심있는 재능 키워드를",
               style: TextTypes.heading(color: Palette.text01),
             ),
             Text(
@@ -36,8 +36,8 @@ class SetGiveTalentKeywordPage extends StatelessWidget {
             ),
             const SizedBox(height: 24),
             TextField(
-              controller: setKeywordProvider.giveTalentSearchController,
-              focusNode: setKeywordProvider.giveTalentFocusNode,
+              controller: setKeywordProvider.interestTalentSearchController,
+              focusNode: setKeywordProvider.interestTalentFocusNode,
               onChanged: (value) {
                 List<int> labelCode = [];
                 for (var category in GlobalValueConstants.keywordCategoris) {
@@ -53,7 +53,7 @@ class SetGiveTalentKeywordPage extends StatelessWidget {
                     }
                   }
                 }
-                setKeywordProvider.updateSearchGiveTalent(labelCode);
+                setKeywordProvider.updateSearchInterestTalent(labelCode);
               },
               decoration: InputDecoration(
                 hintStyle: TextTypes.caption01(color: Palette.text04),
@@ -61,7 +61,7 @@ class SetGiveTalentKeywordPage extends StatelessWidget {
                 prefixIcon: Padding(
                   padding: const EdgeInsets.fromLTRB(16.0, 8.0, 8.0, 8.0),
                   child: SvgPicture.asset(
-                      setKeywordProvider.giveTalentFocusNode.hasFocus
+                      setKeywordProvider.interestTalentFocusNode.hasFocus
                           ? 'assets/icons/search_small.svg'
                           : 'assets/icons/search_small_disabled.svg'),
                 ),
@@ -81,10 +81,10 @@ class SetGiveTalentKeywordPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 24),
-            setKeywordProvider.isGiveTalentSearch
+            setKeywordProvider.isInterestTalentSearch
                 ? Container()
                 : TabBar(
-                    controller: setKeywordProvider.giveTalentTabController,
+                    controller: setKeywordProvider.interestTalentTabController,
                     tabAlignment: TabAlignment.start,
                     isScrollable: true,
                     indicatorSize: TabBarIndicatorSize.tab,
@@ -113,7 +113,7 @@ class SetGiveTalentKeywordPage extends StatelessWidget {
                                     child: Text(tabText.name)),
                                 if (tabText.talentKeywords.any(
                                   (talent) => setKeywordProvider
-                                      .giveTalentKeywordCodes
+                                      .interestTalentKeywordCodes
                                       .contains(talent.code),
                                 ))
                                   const KeywordTabDot()
@@ -125,17 +125,17 @@ class SetGiveTalentKeywordPage extends StatelessWidget {
                   )
           ],
         ),
-        setKeywordProvider.isGiveTalentSearch
+        setKeywordProvider.isInterestTalentSearch
             ? Container()
             : const SizedBox(height: 20),
         Expanded(
-          child: setKeywordProvider.isGiveTalentSearch
+          child: setKeywordProvider.isInterestTalentSearch
               ? SingleChildScrollView(
                   child: Container(
                     alignment: Alignment.centerLeft,
                     child: Wrap(
                       children: setKeywordProvider
-                          .searchedGiveTalentKeywordCodes
+                          .searchedInterestTalentKeywordCodes
                           .map((item) {
                         String labelText = '';
                         int categoryIndex = -1;
@@ -156,7 +156,8 @@ class SetGiveTalentKeywordPage extends StatelessWidget {
                             showCheckmark: false,
                             shape: RoundedRectangleBorder(
                               side: BorderSide(
-                                color: setKeywordProvider.giveTalentKeywordCodes
+                                color: setKeywordProvider
+                                        .interestTalentKeywordCodes
                                         .contains(item)
                                     ? Palette.primary01
                                     : Palette.line01,
@@ -167,19 +168,21 @@ class SetGiveTalentKeywordPage extends StatelessWidget {
                             backgroundColor: Palette.bgBackGround,
                             label: Text(labelText),
                             labelStyle: TextStyle(
-                              color: setKeywordProvider.giveTalentKeywordCodes
+                              color: setKeywordProvider
+                                      .interestTalentKeywordCodes
                                       .map((keyword) => keyword)
                                       .contains(item)
                                   ? Palette.primary01
                                   : Palette.text04,
                             ),
-                            selected: setKeywordProvider.giveTalentKeywordCodes
+                            selected: setKeywordProvider
+                                .interestTalentKeywordCodes
                                 .map((keyword) => keyword)
                                 .contains(item),
                             selectedColor: Palette.bgBackGround,
                             onSelected: (selected) {
                               final updatedFilter = setKeywordProvider
-                                  .giveTalentKeywordCodes
+                                  .interestTalentKeywordCodes
                                   .toList();
                               updatedFilter
                                       .map((keyword) => keyword)
@@ -190,7 +193,7 @@ class SetGiveTalentKeywordPage extends StatelessWidget {
                                       updatedFilter.add(item),
                                     };
                               setKeywordProvider
-                                  .updateSelectedSearchGiveTalentKeywordCodes
+                                  .updateSelectedSearchInterestTalentKeywordCodes
                                   .call(categoryIndex, updatedFilter);
                             },
                           ),
@@ -200,14 +203,14 @@ class SetGiveTalentKeywordPage extends StatelessWidget {
                   ),
                 )
               : TabBarView(
-                  controller: setKeywordProvider.giveTalentTabController,
+                  controller: setKeywordProvider.interestTalentTabController,
                   children: [
                     for (var tabText in GlobalValueConstants.keywordCategoris)
                       SingleChildScrollView(
-                        child: TalentChipList(
+                        child: TalentKeywordChipList(
                           keywords: tabText.talentKeywords,
                           selectedKeywords:
-                              setKeywordProvider.giveTalentKeywordCodes,
+                              setKeywordProvider.interestTalentKeywordCodes,
                           onSelectionChanged: (newSelectedKeyword) {
                             if (newSelectedKeyword.length > 5) {
                               ToastMessage.show(
@@ -216,8 +219,8 @@ class SetGiveTalentKeywordPage extends StatelessWidget {
                                   type: 2,
                                   bottom: 42);
                             } else {
-                              setKeywordProvider
-                                  .updateGiveKeywordList(newSelectedKeyword);
+                              setKeywordProvider.updateInterestKeywordList(
+                                  newSelectedKeyword);
                             }
                           },
                         ),
@@ -227,9 +230,9 @@ class SetGiveTalentKeywordPage extends StatelessWidget {
         ),
         BottomSelectedChipList(
           baseCategory: GlobalValueConstants.keywordCategoris,
-          keywordCodes: setKeywordProvider.giveTalentKeywordCodes,
+          keywordCodes: setKeywordProvider.interestTalentKeywordCodes,
           onDeleted: (int labelCode) {
-            setKeywordProvider.removeGiveKeywordList(labelCode);
+            setKeywordProvider.removeInterestKeywordList(labelCode);
           },
         ),
       ],

@@ -10,7 +10,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import '../../provider/board/match_write_provider.dart';
+import '../../../provider/board/match_write_provider.dart';
 
 class MatchWrite2Page extends StatelessWidget {
   const MatchWrite2Page({super.key});

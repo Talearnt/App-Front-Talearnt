@@ -1,4 +1,5 @@
-import 'package:app_front_talearnt/view/talent_board/widget/radio_bottom_sheet.dart';
+
+import 'package:app_front_talearnt/view/board/widget/radio_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

@@ -12,7 +12,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../../provider/board/match_write_provider.dart';
+import '../../../provider/board/match_write_provider.dart';
 
 class MatchWritePreviewPage extends StatelessWidget {
   const MatchWritePreviewPage({super.key});
