@@ -6,6 +6,7 @@ import 'package:app_front_talearnt/common/widget/toast_message.dart';
 import 'package:app_front_talearnt/common/widget/top_app_bar.dart';
 import 'package:app_front_talearnt/constants/global_value_constants.dart';
 import 'package:app_front_talearnt/view_model/board_view_model.dart';
+import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:go_router/go_router.dart';
@@ -336,16 +337,20 @@ class MatchWritePreviewPage extends StatelessWidget {
               ),
               child: Column(
                 children: [
+                  const Row(
+                    children: [],
+                  ),
                   QuillEditor.basic(
                     controller: matchWriteProvider.contentController,
-                    configurations: const QuillEditorConfigurations(
+                    configurations: QuillEditorConfigurations(
                       showCursor: false,
                       readOnlyMouseCursor: MouseCursor.uncontrolled,
                       enableAlwaysIndentOnTab: false,
                       enableInteractiveSelection: false,
                       enableScribble: false,
+                      embedBuilders: FlutterQuillEmbeds.editorBuilders(),
                     ),
-                  )
+                  ),
                 ],
               ),
             )
