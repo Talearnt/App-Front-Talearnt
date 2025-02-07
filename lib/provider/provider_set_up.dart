@@ -1,4 +1,5 @@
 import 'package:app_front_talearnt/common/common_navigator.dart';
+import 'package:app_front_talearnt/data/repositories/keyword_repository.dart';
 import 'package:app_front_talearnt/provider/auth/find_id_provider.dart';
 import 'package:app_front_talearnt/provider/auth/find_password_provider.dart';
 import 'package:app_front_talearnt/provider/auth/login_provider.dart';
@@ -6,6 +7,7 @@ import 'package:app_front_talearnt/provider/auth/sign_up_provider.dart';
 import 'package:app_front_talearnt/provider/auth/storage_provider.dart';
 import 'package:app_front_talearnt/provider/board/match_board_provider.dart';
 import 'package:app_front_talearnt/provider/keyword/keyword_provider.dart';
+import 'package:app_front_talearnt/view_model/keyword_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -85,6 +87,15 @@ class ProviderSetup extends StatelessWidget {
           create: (context) => BoardViewModel(
             CommonNavigator(navigatorKey),
             BoardRepository(context.read<DioService>()),
+            context.read<KeywordProvider>(),
+            context.read<MatchWriteProvider>(),
+            context.read<MatchBoardProvider>(),
+          ),
+        ),
+        ChangeNotifierProvider<KeywordViewModel>(
+          create: (context) => KeywordViewModel(
+            CommonNavigator(navigatorKey),
+            KeywordRepository(context.read<DioService>()),
             context.read<KeywordProvider>(),
             context.read<MatchWriteProvider>(),
             context.read<MatchBoardProvider>(),
