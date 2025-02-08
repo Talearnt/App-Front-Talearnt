@@ -33,13 +33,16 @@ class MatchWrite2Page extends StatelessWidget {
           onPressed: () {
             matchWriteProvider.checkTitleAndBoard();
 
-            matchWriteProvider.isTitleAndBoardEmpty
-                ? context.push('/match_preview')
-                : ToastMessage.show(
-                    context: context,
-                    message: matchWriteProvider.boardToastMessage,
-                    type: 2,
-                    bottom: 50);
+            if (matchWriteProvider.isTitleAndBoardEmpty) {
+              matchWriteProvider.makePreviewImageList();
+              context.push('/match_preview');
+            } else {
+              ToastMessage.show(
+                  context: context,
+                  message: matchWriteProvider.boardToastMessage,
+                  type: 2,
+                  bottom: 50);
+            }
           },
         ),
         first: PrimaryS(

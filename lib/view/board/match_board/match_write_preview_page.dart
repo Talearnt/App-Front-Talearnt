@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:app_front_talearnt/common/theme.dart';
 import 'package:app_front_talearnt/common/widget/button.dart';
 import 'package:app_front_talearnt/common/widget/profile.dart';
@@ -28,6 +30,7 @@ class MatchWritePreviewPage extends StatelessWidget {
     return Scaffold(
       appBar: TopAppBar(
         onPressed: () {
+          //matchWriteProvider.previewImageListclear();
           context.pop();
         },
         first: PrimaryS(
@@ -144,7 +147,7 @@ class MatchWritePreviewPage extends StatelessWidget {
             ),
             const Divider(
               color: Palette.bgUp02,
-              thickness: 8.0,
+              thickness: 12.0,
             ),
             Padding(
               padding: const EdgeInsets.symmetric(
@@ -269,14 +272,14 @@ class MatchWritePreviewPage extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(
-                    height: 16,
+                    height: 8,
                   ),
                   const Divider(
                     color: Palette.bgUp02,
                     thickness: 1.0,
                   ),
                   const SizedBox(
-                    height: 24,
+                    height: 16,
                   ),
                   Row(
                     children: [
@@ -327,7 +330,7 @@ class MatchWritePreviewPage extends StatelessWidget {
             ),
             const Divider(
               color: Palette.bgUp02,
-              thickness: 8.0,
+              thickness: 12.0,
             ),
             Padding(
               padding: const EdgeInsets.only(
@@ -337,8 +340,77 @@ class MatchWritePreviewPage extends StatelessWidget {
               ),
               child: Column(
                 children: [
-                  const Row(
-                    children: [],
+                  Row(
+                    children: [
+                      ...matchWriteProvider.previewImageList
+                          .asMap()
+                          .entries
+                          .map(
+                        (entry) {
+                          int index = entry.key; // 현재 인덱스
+                          var item = entry.value;
+
+                          double imageSize =
+                              (MediaQuery.of(context).size.width - 92) / 4;
+
+                          return Padding(
+                            padding: EdgeInsets.only(
+                                right: index < 3
+                                    ? 12
+                                    : 0), // 인덱스 0,1,2까지만 right 12
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: Stack(
+                                children: [
+                                  GestureDetector(
+                                    onTap: index == 3
+                                        ? () => print(
+                                            "click") // 이미지 모아보기 페이지로 이동 라우트 추가
+                                        : null, // 네 번째 이미지 클릭 시 "click" 출력
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: Palette.icon04,
+                                          width: 1,
+                                        ),
+                                      ),
+                                      child: Image.file(
+                                        item,
+                                        width: imageSize,
+                                        height: imageSize,
+                                        fit: BoxFit.cover,
+                                        color: index == 3
+                                            ? Colors.black.withOpacity(0.6)
+                                            : null, // 네 번째 이미지 60% 어둡게
+                                        colorBlendMode: index == 3
+                                            ? BlendMode.darken
+                                            : null,
+                                      ),
+                                    ),
+                                  ),
+                                  if (index == 3) // 네 번째 이미지에만 텍스트 추가
+                                    const Positioned.fill(
+                                      child: Center(
+                                        child: Text(
+                                          "이미지 더보기",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 50,
                   ),
                   QuillEditor.basic(
                     controller: matchWriteProvider.contentController,

@@ -89,6 +89,8 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
 
   List<String> _imageUploadUrls = [];
 
+  final List<File> _previewImageList = [];
+
   bool _isS3Upload = false;
 
   bool get onToolBar => _onToolBar;
@@ -159,6 +161,8 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
 
   double get totalImageSize => _totalImageSize;
 
+  List<File> get previewImageList => _previewImageList;
+
   void clearProvider() {
     _titlerController.clear();
     _contentController.clear();
@@ -207,16 +211,6 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
 
     notifyListeners();
   }
-
-  // void initTabController(List<KeywordCategory> keywordCategories) {
-  //   _giveTalentTabController.dispose();
-  //   _interestTalentTabController.dispose();
-  //   _giveTalentTabController =
-  //       TabController(length: keywordCategories.length, vsync: _tickerProvider);
-  //   _interestTalentTabController =
-  //       TabController(length: keywordCategories.length, vsync: _tickerProvider);
-  //   notifyListeners();
-  // }
 
   void _onChanged() {
     notifyListeners(); // Focus 상태 변경 시 UI 갱신
@@ -492,5 +486,23 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
     final deltaOps = delta.toList().map((op) => op.toJson()).toList();
     final converter = QuillDeltaToHtmlConverter(deltaOps);
     _htmlContent = converter.convert();
+  }
+
+  void makePreviewImageList() async {
+    final delta = contentController.document.toDelta();
+
+    for (var op in delta.toList()) {
+      if (op.value is Map<String, dynamic> && op.value.containsKey('image')) {
+        final imagePath = op.value['image'];
+
+        final imageFile = File(imagePath);
+
+        _previewImageList.add(imageFile);
+      }
+    }
+  }
+
+  void previewImageListclear() {
+    _previewImageList.clear();
   }
 }
