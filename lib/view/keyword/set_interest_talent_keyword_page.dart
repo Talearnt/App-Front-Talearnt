@@ -1,4 +1,5 @@
 import 'package:app_front_talearnt/common/widget/bottom_selected_chip_list.dart';
+import 'package:app_front_talearnt/view/keyword/widget/keyword_tab_dot.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
@@ -8,7 +9,6 @@ import '../../common/widget/talent_keyword_chip_list.dart';
 import '../../common/widget/toast_message.dart';
 import '../../constants/global_value_constants.dart';
 import '../../provider/keyword/keyword_provider.dart';
-import '../board/widget/keyword_tab_dot.dart';
 
 class SetInterestTalentKeywordPage extends StatelessWidget {
   const SetInterestTalentKeywordPage({super.key});

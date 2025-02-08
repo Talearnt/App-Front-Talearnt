@@ -1,16 +1,15 @@
-
-import 'package:app_front_talearnt/view/board/widget/radio_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../constants/global_value_constants.dart';
-import '../../../provider/board/match_board_provider.dart';
-import '../../../provider/common/common_provider.dart';
-import '../../../view_model/board_view_model.dart';
-import 'board_filter_chip.dart';
-import 'keyword_bottom_sheet.dart';
+import '../../../../constants/global_value_constants.dart';
+import '../../../../provider/board/match_board_provider.dart';
+import '../../../../provider/common/common_provider.dart';
+import '../../../../view_model/board_view_model.dart';
+import '../../widget/board_filter_chip.dart';
+import '../../widget/radio_bottom_sheet.dart';
+import 'keyword_filter_bottom_sheet.dart';
 
-class BoardListTabBar extends SliverPersistentHeaderDelegate {
+class MatchBoardListTabBar extends SliverPersistentHeaderDelegate {
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
@@ -20,7 +19,7 @@ class BoardListTabBar extends SliverPersistentHeaderDelegate {
     return Container(
       height: maxExtent,
       color: Colors.white,
-      padding: const EdgeInsets.symmetric(horizontal: 18),
+      padding: const EdgeInsets.symmetric(horizontal: 22),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
@@ -74,7 +73,7 @@ class BoardListTabBar extends SliverPersistentHeaderDelegate {
                   builder: (BuildContext context) {
                     return Consumer<MatchBoardProvider>(
                       builder: (context, matchBoardProvider, child) {
-                        return KeywordBottomSheet(
+                        return KeywordFilterBottomSheet(
                           sheetTitle: '받고 싶은 재능',
                           keywordCodes:
                               matchBoardProvider.interestTalentKeywordCodes,
@@ -118,7 +117,7 @@ class BoardListTabBar extends SliverPersistentHeaderDelegate {
                   builder: (BuildContext context) {
                     return Consumer<MatchBoardProvider>(
                       builder: (context, matchBoardProvider, child) {
-                        return KeywordBottomSheet(
+                        return KeywordFilterBottomSheet(
                           sheetTitle: '주고 싶은 재능',
                           keywordCodes:
                               matchBoardProvider.giveTalentKeywordCodes,

@@ -11,7 +11,7 @@ import 'package:dartz/dartz.dart';
 
 import '../../constants/api_constants.dart';
 import '../model/param/talent_exchange_posts_filter_param';
-import '../model/respone/talent_exchange_post.dart';
+import '../model/respone/matching_post.dart';
 
 class BoardRepository {
   final DioService dio;
@@ -50,8 +50,8 @@ class BoardRepository {
     final response =
         await dio.get(ApiConstants.getTalentBoardListUrl, null, body.toJson());
     return response.fold(left, (response) {
-      final posts = List<TalentExchangePost>.from(
-          response['data'].map((data) => TalentExchangePost.fromJson(data)));
+      final posts = List<MatchingPost>.from(
+          response['data'].map((data) => MatchingPost.fromJson(data)));
       final pagination = Pagination.fromJson(response['pagination']);
       return right({'posts': posts, 'pagination': pagination});
     });
