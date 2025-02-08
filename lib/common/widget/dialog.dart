@@ -79,7 +79,7 @@ class DoubleBtnDialog extends StatelessWidget {
                       padding: const EdgeInsets.all(8),
                       child: Text(
                         content,
-                        style: TextTypes.bodyLarge02(
+                        style: TextTypes.body02(
                           color: Palette.text01,
                         ),
                         textAlign: TextAlign.center,
@@ -195,7 +195,7 @@ class SingleBtnDialog extends StatelessWidget {
                       padding: const EdgeInsets.all(8),
                       child: Text(
                         content,
-                        style: TextTypes.bodyLarge02(
+                        style: TextTypes.body02(
                           color: Palette.text01,
                         ),
                         textAlign: TextAlign.center,

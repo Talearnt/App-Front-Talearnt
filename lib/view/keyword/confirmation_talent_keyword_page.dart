@@ -23,16 +23,16 @@ class ConfirmationTalentKeywordPage extends StatelessWidget {
           children: <Widget>[
             Text(
               "키워드를 이렇게 등록할게요!",
-              style: TextTypes.heading(color: Palette.text01),
+              style: TextTypes.heading2(color: Palette.text01),
             ),
             const SizedBox(height: 12),
             Text(
               "선택하신 키워드는",
-              style: TextTypes.bodyMedium02(color: Palette.text04),
+              style: TextTypes.bodyMedium03(color: Palette.text04),
             ),
             Text(
               "매칭 게시글 추천에 반영됩니다",
-              style: TextTypes.bodyMedium02(color: Palette.text04),
+              style: TextTypes.bodyMedium03(color: Palette.text04),
             ),
             const SizedBox(height: 48),
             const KeywordLabel(

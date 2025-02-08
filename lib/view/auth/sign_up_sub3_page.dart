@@ -27,11 +27,11 @@ class SignUpSub3Page extends StatelessWidget {
             children: [
               Text(
                 '로그인에 사용할',
-                style: TextTypes.heading(color: Palette.text01),
+                style: TextTypes.heading2(color: Palette.text01),
               ),
               Text(
                 '회원정보를 입력해 주세요.',
-                style: TextTypes.heading(color: Palette.text01),
+                style: TextTypes.heading2(color: Palette.text01),
               ),
               const SizedBox(
                 height: 32,

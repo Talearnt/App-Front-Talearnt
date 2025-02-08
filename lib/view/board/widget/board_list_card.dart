@@ -12,7 +12,8 @@ class BoardListCard extends StatelessWidget {
 
   const BoardListCard({
     Key? key,
-    required this.post, required this.index,
+    required this.post,
+    required this.index,
   }) : super(key: key);
 
   @override
@@ -35,7 +36,7 @@ class BoardListCard extends StatelessWidget {
                   const SizedBox(width: 8),
                   Text(
                     post.nickname,
-                    style: TextTypes.caption02(color: Palette.text02),
+                    style: TextTypes.captionMedium02(color: Palette.text02),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
@@ -53,7 +54,7 @@ class BoardListCard extends StatelessWidget {
                   ),
                   Text(
                     post.duration,
-                    style: TextTypes.caption02(color: Palette.text04),
+                    style: TextTypes.captionMedium02(color: Palette.text04),
                   ),
                 ],
               ),
@@ -69,7 +70,7 @@ class BoardListCard extends StatelessWidget {
                     ),
                     child: Text(
                       post.status,
-                      style: TextTypes.caption02(color: Palette.primary01),
+                      style: TextTypes.captionSemi02(color: Palette.primary01),
                     ),
                   ),
                   const SizedBox(width: 4),
@@ -82,7 +83,7 @@ class BoardListCard extends StatelessWidget {
                     ),
                     child: Text(
                       post.exchangeType,
-                      style: TextTypes.caption02(color: Palette.primary01),
+                      style: TextTypes.captionSemi02(color: Palette.primary01),
                     ),
                   ),
                   const SizedBox(width: 4),
@@ -95,7 +96,7 @@ class BoardListCard extends StatelessWidget {
                     ),
                     child: Text(
                       post.duration,
-                      style: TextTypes.caption02(color: Palette.primary01),
+                      style: TextTypes.captionSemi02(color: Palette.primary01),
                     ),
                   ),
                 ],
@@ -103,24 +104,24 @@ class BoardListCard extends StatelessWidget {
               const SizedBox(height: 12),
               Text(
                 post.title,
-                style: TextTypes.heading(color: Palette.text01),
+                style: TextTypes.heading4(color: Palette.text01),
               ),
               const SizedBox(height: 8),
               Text(
                 post.content,
-                style: TextTypes.bodyMedium02(color: Palette.text03),
+                style: TextTypes.bodyMedium03(color: Palette.text03),
               ),
               const SizedBox(height: 24),
               Text(
                 '주고 싶은 나의 재능',
-                style: TextTypes.caption02(color: Palette.text04),
+                style: TextTypes.captionMedium02(color: Palette.text04),
               ),
               const SizedBox(height: 8),
               BoardSelectedChipList(keywordNames: post.giveTalents),
               const SizedBox(height: 16),
               Text(
                 '받고 싶은 상대의 재능',
-                style: TextTypes.caption02(color: Palette.text04),
+                style: TextTypes.captionMedium02(color: Palette.text04),
               ),
               const SizedBox(height: 8),
               BoardSelectedChipList(keywordNames: post.receiveTalents),

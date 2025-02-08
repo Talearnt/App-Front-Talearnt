@@ -27,7 +27,7 @@ class SignUpSub2Page extends StatelessWidget {
           children: [
             Text(
               '본인인증을 진행해 주세요.',
-              style: TextTypes.heading(color: Palette.text01),
+              style: TextTypes.heading2(color: Palette.text01),
             ),
             const SizedBox(height: 32),
             const TextFieldLabel(

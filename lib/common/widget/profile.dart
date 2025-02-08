@@ -20,7 +20,7 @@ class Profile extends StatelessWidget {
         ),
         Text(
           nickName,
-          style: TextTypes.bodyLarge02(
+          style: TextTypes.body02(
             color: Palette.text02,
           ),
         )

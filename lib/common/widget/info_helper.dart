@@ -13,11 +13,11 @@ class InfoHelper extends StatelessWidget {
     TextStyle textStyle;
 
     if (type == 'errorInfo') {
-      textStyle = TextTypes.caption02(color: Palette.error01);
+      textStyle = TextTypes.captionSemi02(color: Palette.error01);
     } else if (type == 'checkInfo') {
-      textStyle = TextTypes.caption02(color: Palette.primary01);
+      textStyle = TextTypes.captionSemi02(color: Palette.primary01);
     } else {
-      textStyle = TextTypes.caption02(color: Palette.text03);
+      textStyle = TextTypes.captionSemi02(color: Palette.text03);
     }
 
     return Text('*$content', style: textStyle);

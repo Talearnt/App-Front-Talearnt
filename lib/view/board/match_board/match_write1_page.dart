@@ -113,12 +113,12 @@ class MatchWrite1Page extends StatelessWidget {
                               TextSpan(
                                 text: '주고 싶은 나의 재능',
                                 style:
-                                    TextTypes.bodySemi02(color: Palette.text01),
+                                    TextTypes.bodySemi03(color: Palette.text01),
                               ),
                               TextSpan(
                                 text: '(최소 1개)',
                                 style:
-                                    TextTypes.bodySemi02(color: Palette.text02),
+                                    TextTypes.bodySemi03(color: Palette.text02),
                               ),
                             ],
                           ),
@@ -203,12 +203,12 @@ class MatchWrite1Page extends StatelessWidget {
                               TextSpan(
                                 text: '받고 싶은 나의 재능',
                                 style:
-                                    TextTypes.bodySemi02(color: Palette.text01),
+                                    TextTypes.bodySemi03(color: Palette.text01),
                               ),
                               TextSpan(
                                 text: '(최소 1개)',
                                 style:
-                                    TextTypes.bodySemi02(color: Palette.text02),
+                                    TextTypes.bodySemi03(color: Palette.text02),
                               ),
                             ],
                           ),
@@ -313,7 +313,7 @@ class MatchWrite1Page extends StatelessWidget {
                       children: [
                         Text(
                           '진행 기간',
-                          style: TextTypes.bodySemi02(
+                          style: TextTypes.bodySemi03(
                             color: Palette.text01,
                           ),
                         ),
@@ -376,7 +376,7 @@ class MatchWrite1Page extends StatelessWidget {
                       children: [
                         Text(
                           '진행 방식',
-                          style: TextTypes.bodySemi02(
+                          style: TextTypes.bodySemi03(
                             color: Palette.text01,
                           ),
                         ),

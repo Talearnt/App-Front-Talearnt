@@ -42,11 +42,11 @@ class SetTalentKeywordSuccessPage extends StatelessWidget {
               children: [
                 Text(
                   '맞춤 키워드 등록이',
-                  style: TextTypes.heading(color: Palette.text01),
+                  style: TextTypes.heading2(color: Palette.text01),
                 ),
                 Text(
                   '완료되었습니다.',
-                  style: TextTypes.heading(color: Palette.text01),
+                  style: TextTypes.heading2(color: Palette.text01),
                 ),
                 const SizedBox(height: 16),
                 Text(

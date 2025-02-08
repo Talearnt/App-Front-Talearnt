@@ -101,7 +101,7 @@ class MatchWritePreviewPage extends StatelessWidget {
                     children: [
                       Text(
                         matchWriteProvider.titlerController.text,
-                        style: TextTypes.heading(
+                        style: TextTypes.heading2(
                           color: Palette.text01,
                         ),
                       )
@@ -199,7 +199,7 @@ class MatchWritePreviewPage extends StatelessWidget {
                               ),
                               child: Text(
                                 labelText,
-                                style: TextTypes.bodyLarge02(
+                                style: TextTypes.body02(
                                   color: Palette.text02,
                                 ),
                               ),
@@ -257,7 +257,7 @@ class MatchWritePreviewPage extends StatelessWidget {
                               ),
                               child: Text(
                                 labelText,
-                                style: TextTypes.bodyLarge02(
+                                style: TextTypes.body02(
                                   color: Palette.text02,
                                 ),
                               ),
@@ -281,7 +281,7 @@ class MatchWritePreviewPage extends StatelessWidget {
                     children: [
                       Text(
                         "진행 방식",
-                        style: TextTypes.bodyLarge02(
+                        style: TextTypes.body02(
                           color: Palette.text03,
                         ),
                       ),
@@ -290,7 +290,7 @@ class MatchWritePreviewPage extends StatelessWidget {
                       ),
                       Text(
                         matchWriteProvider.selectedDuration,
-                        style: TextTypes.bodyLarge02(
+                        style: TextTypes.body02(
                           color: Palette.text02,
                         ),
                       )
@@ -303,7 +303,7 @@ class MatchWritePreviewPage extends StatelessWidget {
                     children: [
                       Text(
                         "진행 기간",
-                        style: TextTypes.bodyLarge02(
+                        style: TextTypes.body02(
                           color: Palette.text03,
                         ),
                       ),
@@ -312,7 +312,7 @@ class MatchWritePreviewPage extends StatelessWidget {
                       ),
                       Text(
                         matchWriteProvider.selectedExchangeType,
-                        style: TextTypes.bodyLarge02(
+                        style: TextTypes.body02(
                           color: Palette.text02,
                         ),
                       )

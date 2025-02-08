@@ -1,9 +1,9 @@
 import 'package:app_front_talearnt/common/theme.dart';
+import 'package:app_front_talearnt/common/widget/bottom_selected_chip_list.dart';
 import 'package:app_front_talearnt/common/widget/button.dart';
 import 'package:app_front_talearnt/common/widget/talent_keyword_chip_list.dart';
 import 'package:app_front_talearnt/common/widget/toast_message.dart';
 import 'package:app_front_talearnt/constants/global_value_constants.dart';
-import 'package:app_front_talearnt/common/widget/bottom_selected_chip_list.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -89,8 +89,8 @@ class MatchWrite1BottomSheet extends StatelessWidget {
             dividerColor: Palette.bgUp02,
             dividerHeight: 2.0,
             labelColor: Palette.text01,
-            labelStyle: TextTypes.bodyLarge02(color: Palette.text01),
-            unselectedLabelStyle: TextTypes.bodyLarge02(color: Palette.text02),
+            labelStyle: TextTypes.body02(color: Palette.text01),
+            unselectedLabelStyle: TextTypes.body02(color: Palette.text02),
             padding: EdgeInsets.zero,
             tabs: [
               for (var tabText in GlobalValueConstants.keywordCategoris)

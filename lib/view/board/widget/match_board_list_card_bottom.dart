@@ -33,7 +33,7 @@ class MatchBoardListCardBottom extends StatelessWidget {
                 const SizedBox(width: 4),
                 Text(
                   "조회수",
-                  style: TextTypes.caption02(color: Palette.text03),
+                  style: TextTypes.captionSemi02(color: Palette.text03),
                 ),
               ],
             ),
@@ -49,7 +49,7 @@ class MatchBoardListCardBottom extends StatelessWidget {
                 const SizedBox(width: 4),
                 Text(
                   "${post.openedChatRoomCount}",
-                  style: TextTypes.caption02(color: Palette.text03),
+                  style: TextTypes.captionSemi02(color: Palette.text03),
                 ),
               ],
             ),
@@ -65,7 +65,7 @@ class MatchBoardListCardBottom extends StatelessWidget {
                 const SizedBox(width: 4),
                 Text(
                   "${post.favoriteCount}",
-                  style: TextTypes.caption02(color: Palette.text03),
+                  style: TextTypes.captionSemi02(color: Palette.text03),
                 ),
               ],
             ),

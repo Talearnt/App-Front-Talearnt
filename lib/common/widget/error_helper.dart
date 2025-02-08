@@ -15,10 +15,10 @@ class ErrorHelper extends StatelessWidget {
     String iconPath;
 
     if (type == 'error') {
-      textStyle = TextTypes.caption02(color: Palette.error01);
+      textStyle = TextTypes.captionSemi02(color: Palette.error01);
       iconPath = 'assets/icons/fail_helper.svg';
     } else {
-      textStyle = TextTypes.caption02(color: Palette.primary01);
+      textStyle = TextTypes.captionSemi02(color: Palette.primary01);
       iconPath = 'assets/icons/success_helper.svg';
     }
 

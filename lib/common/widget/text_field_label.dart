@@ -8,6 +8,6 @@ class TextFieldLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(content, style: TextTypes.bodyMedium02(color: Palette.text01));
+    return Text(content, style: TextTypes.body02(color: Palette.text01));
   }
 }

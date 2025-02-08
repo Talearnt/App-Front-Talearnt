@@ -48,12 +48,12 @@ class FindPasswordSuccessPage extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               '비밀번호 재설정 링크 발송 완료',
-              style: TextTypes.heading(color: Palette.text01),
+              style: TextTypes.heading2(color: Palette.text01),
             ),
             const SizedBox(height: 8),
             Text(
               "인증 메일을 통해 비밀번호 재설정 후 로그인해 주세요",
-              style: TextTypes.bodyMedium02(color: Palette.text02),
+              style: TextTypes.bodySemi03(color: Palette.text02),
             ),
             const SizedBox(height: 48),
             Container(
@@ -75,20 +75,20 @@ class FindPasswordSuccessPage extends StatelessWidget {
                   children: [
                     Text(
                       "발송 이메일은",
-                      style: TextTypes.bodyLarge02(
+                      style: TextTypes.body02(
                         color: Palette.text01,
                       ),
                     ),
                     Text(
                       "${findPasswordProvider.userId.isNotEmpty ? findPasswordProvider.userId.replaceRange(findPasswordProvider.userId.indexOf('@') - 3, findPasswordProvider.userId.indexOf('@'), '***') : ""} 입니다.",
-                      style: TextTypes.bodyLarge02(
+                      style: TextTypes.body02(
                         color: Palette.text01,
                       ),
                     ),
                     const SizedBox(height: 12),
                     Text(
                       "${findPasswordProvider.createdAt} 발송",
-                      style: TextTypes.caption02(
+                      style: TextTypes.captionSemi02(
                         color: Palette.text03,
                       ),
                     ),

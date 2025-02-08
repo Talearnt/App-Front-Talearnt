@@ -155,13 +155,13 @@ class BaseTextFieldState extends State<BaseTextField> {
           maxLengthEnforcement: MaxLengthEnforcement.enforced,
           buildCounter: (context,
               {required int currentLength,
-                required bool isFocused,
-                required int? maxLength}) {
+              required bool isFocused,
+              required int? maxLength}) {
             return null;
           },
           style: widget.isEnabled
-              ? TextTypes.bodyMedium02(color: Palette.text02)
-              : TextTypes.bodyMedium02(color: Palette.text04),
+              ? TextTypes.body02(color: Palette.text02)
+              : TextTypes.body02(color: Palette.text04),
           enabled: widget.isEnabled,
           keyboardType: widget.keyboardType == 'num'
               ? TextInputType.number
@@ -221,8 +221,8 @@ class BaseTextFieldState extends State<BaseTextField> {
       borderSide: BorderSide(
         color: !widget.isValid
             ? (widget.helperType == 'error'
-            ? Palette.error02
-            : Palette.primary01)
+                ? Palette.error02
+                : Palette.primary01)
             : Palette.primary01,
       ),
     );

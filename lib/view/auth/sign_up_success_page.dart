@@ -41,11 +41,11 @@ class SignUpSuccessPage extends StatelessWidget {
               children: [
                 Text(
                   '성공적으로 가입되었어요',
-                  style: TextTypes.heading(color: Palette.text01),
+                  style: TextTypes.heading2(color: Palette.text01),
                 ),
                 Text(
                   'talearnt에서 만나요!',
-                  style: TextTypes.heading(color: Palette.text01),
+                  style: TextTypes.heading2(color: Palette.text01),
                 ),
                 const SizedBox(height: 12),
                 Text(

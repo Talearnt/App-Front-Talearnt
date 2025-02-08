@@ -140,14 +140,14 @@ class _CustomChipListState extends State<ChipList> {
             child: Text(
               widget.chipLabels[index],
               style: isDisabled
-                  ? widget.disabledTextStyle ?? TextTypes.bodyLarge02()
+                  ? widget.disabledTextStyle ?? TextTypes.body02()
                   : isSelected
                       ? widget.selectedTextStyle ??
-                          TextTypes.bodyLarge02(
+                          TextTypes.body02(
                             color: Palette.primary01,
                           )
                       : widget.unselectedTextStyle ??
-                          TextTypes.bodyLarge02(
+                          TextTypes.body02(
                             color: Palette.text04,
                           ),
             ),

@@ -18,7 +18,7 @@ class TimeSet extends StatelessWidget {
       children: [
         Text(
           timerProvider.getFormattedTime(timerSeconds),
-          style: TextTypes.bodyMedium02(color: Palette.primary01),
+          style: TextTypes.body02(color: Palette.primary01),
         ),
       ],
     );

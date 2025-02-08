@@ -32,7 +32,7 @@ class ResetPasswordPage extends StatelessWidget {
               children: [
                 Text(
                   '새 비밀번호를 입력해 주세요',
-                  style: TextTypes.heading(color: Palette.text01),
+                  style: TextTypes.heading2(color: Palette.text01),
                 ),
                 const SizedBox(
                   height: 32,

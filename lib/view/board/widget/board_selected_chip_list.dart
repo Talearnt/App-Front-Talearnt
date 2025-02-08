@@ -22,7 +22,7 @@ class BoardSelectedChipList extends StatelessWidget {
             child: Chip(
               label: Text(
                 chip,
-                style: TextTypes.bodyMedium02(
+                style: TextTypes.bodyMedium03(
                   color: Palette.text02,
                 ),
               ),

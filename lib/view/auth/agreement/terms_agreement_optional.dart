@@ -29,49 +29,49 @@ class TermsAgreementOptional extends StatelessWidget {
                   children: [
                     Text(
                       "광고성 정보 수신 동의",
-                      style: TextTypes.bodySemi02(
+                      style: TextTypes.bodySemi03(
                         color: Palette.text02,
                       ),
                     ),
                     const SizedBox(height: 24),
                     Text(
                       "수집하는 개인정보 항목",
-                      style: TextTypes.bodySemi02(
+                      style: TextTypes.bodySemi03(
                         color: Palette.text02,
                       ),
                     ),
                     const SizedBox(height: 8),
                     Text(
                       "· 이메일, 전화번호",
-                      style: TextTypes.bodyMedium02(
+                      style: TextTypes.bodyMedium03(
                         color: Palette.text03,
                       ),
                     ),
                     const SizedBox(height: 24),
                     Text(
                       "광고성 정보의 발송 목적",
-                      style: TextTypes.bodySemi02(
+                      style: TextTypes.bodySemi03(
                         color: Palette.text02,
                       ),
                     ),
                     const SizedBox(height: 8),
                     Text(
                       "· 이벤트, 할인 정보 등 서비스와 관련된 광고성 정보 제공",
-                      style: TextTypes.bodyMedium02(
+                      style: TextTypes.bodyMedium03(
                         color: Palette.text03,
                       ),
                     ),
                     const SizedBox(height: 24),
                     Text(
                       "광고성 정보 수신 동의 철회",
-                      style: TextTypes.bodySemi02(
+                      style: TextTypes.bodySemi03(
                         color: Palette.text02,
                       ),
                     ),
                     const SizedBox(height: 8),
                     Text(
                       "이용자는 언제든지 광고성 정보 수신 동의를 철회할 수 있으며, 철회 시 관련 정보 발송이 중단됩니다.",
-                      style: TextTypes.bodyMedium02(
+                      style: TextTypes.bodyMedium03(
                         color: Palette.text03,
                       ),
                     ),

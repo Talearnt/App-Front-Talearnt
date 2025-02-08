@@ -30,7 +30,7 @@ class PrimaryXs extends StatelessWidget {
       onPressed: onPressed ?? () {},
       child: Text(
         content,
-        style: TextTypes.bodyMedium02(
+        style: TextTypes.body02(
           color: Palette.bgBackGround,
         ),
       ),
@@ -551,7 +551,7 @@ class TextLineXs extends StatelessWidget {
       ),
       child: Text(
         content,
-        style: TextTypes.caption02(
+        style: TextTypes.captionSemi02(
           color: Palette.text03,
         ).copyWith(
           decoration: TextDecoration.underline,

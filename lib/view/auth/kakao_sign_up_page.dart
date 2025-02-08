@@ -50,11 +50,11 @@ class KakaoSignUpPage extends StatelessWidget {
                     children: [
                       Text(
                         '로그인에 사용할 회원정보와',
-                        style: TextTypes.heading(color: Palette.text01),
+                        style: TextTypes.heading2(color: Palette.text01),
                       ),
                       Text(
                         '약관에 동의해 주세요.',
-                        style: TextTypes.heading(color: Palette.text01),
+                        style: TextTypes.heading2(color: Palette.text01),
                       ),
                       const SizedBox(
                         height: 24,
@@ -86,7 +86,7 @@ class KakaoSignUpPage extends StatelessWidget {
                               child: Padding(
                                 padding: const EdgeInsets.all(11.5),
                                 child: Text('남자',
-                                    style: TextTypes.bodyMedium02(
+                                    style: TextTypes.body02(
                                         color: Palette.text04)),
                               ),
                             ),
@@ -112,7 +112,7 @@ class KakaoSignUpPage extends StatelessWidget {
                                 padding: const EdgeInsets.all(11.5),
                                 child: Text(
                                   '여자',
-                                  style: TextTypes.bodyMedium02(
+                                  style: TextTypes.body02(
                                       color: Palette.text04),
                                 ),
                               ),
@@ -213,7 +213,7 @@ class KakaoSignUpPage extends StatelessWidget {
                         ),
                         Text(
                           '모두 동의 합니다.',
-                          style: TextTypes.bodyLarge02(color: Palette.text01),
+                          style: TextTypes.body02(color: Palette.text01),
                         )
                       ]),
                       const SizedBox(
@@ -244,12 +244,12 @@ class KakaoSignUpPage extends StatelessWidget {
                               ),
                               Text(
                                 '[필수]',
-                                style: TextTypes.bodyMedium02(
+                                style: TextTypes.bodyMedium03(
                                     color: Palette.error01),
                               ),
                               Text(
                                 ' 이용약관 동의',
-                                style: TextTypes.bodyMedium02(
+                                style: TextTypes.bodyMedium03(
                                     color: Palette.text01),
                                 softWrap: true,
                               )
@@ -286,12 +286,12 @@ class KakaoSignUpPage extends StatelessWidget {
                               ),
                               Text(
                                 '[필수]',
-                                style: TextTypes.bodyMedium02(
+                                style: TextTypes.bodyMedium03(
                                     color: Palette.error01),
                               ),
                               Text(
                                 ' 개인 정보 수집 및 이용 동의',
-                                style: TextTypes.bodyMedium02(
+                                style: TextTypes.bodyMedium03(
                                     color: Palette.text01),
                                 softWrap: true,
                                 overflow: TextOverflow.visible,
@@ -332,12 +332,12 @@ class KakaoSignUpPage extends StatelessWidget {
                                   child: Text.rich(
                                     TextSpan(
                                       text: '[선택] ', // 기본 텍스트
-                                      style: TextTypes.bodyMedium02(
+                                      style: TextTypes.bodyMedium03(
                                           color: Palette.text01),
                                       children: [
                                         TextSpan(
                                           text: '마케팅 목적의 개인정보 수집 및 이용 동의',
-                                          style: TextTypes.bodyMedium02(
+                                          style: TextTypes.bodyMedium03(
                                               color: Palette.text01),
                                         ),
                                       ],
@@ -378,12 +378,12 @@ class KakaoSignUpPage extends StatelessWidget {
                               ),
                               Text(
                                 '[선택]',
-                                style: TextTypes.bodyMedium02(
+                                style: TextTypes.bodyMedium03(
                                     color: Palette.text01),
                               ),
                               Text(
                                 ' 이용 약관 동의',
-                                style: TextTypes.bodyMedium02(
+                                style: TextTypes.bodyMedium03(
                                     color: Palette.text01),
                                 softWrap: true,
                                 overflow: TextOverflow.visible,

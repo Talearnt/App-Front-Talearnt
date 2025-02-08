@@ -8,6 +8,6 @@ class KeywordLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(content, style: TextTypes.bodySemi02(color: Palette.text02));
+    return Text(content, style: TextTypes.body02(color: Palette.text02));
   }
 }

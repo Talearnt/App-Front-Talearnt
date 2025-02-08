@@ -116,9 +116,8 @@ class KeywordBottomSheet extends StatelessWidget {
               dividerColor: Palette.bgUp02,
               dividerHeight: 2.0,
               labelColor: Palette.text01,
-              labelStyle: TextTypes.bodyLarge02(color: Palette.text01),
-              unselectedLabelStyle:
-                  TextTypes.bodyLarge02(color: Palette.text02),
+              labelStyle: TextTypes.body02(color: Palette.text01),
+              unselectedLabelStyle: TextTypes.body02(color: Palette.text02),
               padding: EdgeInsets.zero,
               tabs: [
                 for (var tabText in GlobalValueConstants.keywordCategoris)

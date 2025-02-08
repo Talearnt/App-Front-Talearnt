@@ -27,7 +27,7 @@ class StateBadge extends StatelessWidget {
             ),
             child: Text(
               content,
-              style: TextTypes.bodyLarge02(
+              style: TextTypes.body02(
                 color: Palette.primary01,
               ),
             ),
@@ -45,7 +45,7 @@ class StateBadge extends StatelessWidget {
             ),
             child: Text(
               content,
-              style: TextTypes.bodyLarge02(
+              style: TextTypes.body02(
                 color: Palette.text04,
               ),
             ),

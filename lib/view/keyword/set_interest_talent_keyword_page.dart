@@ -23,16 +23,16 @@ class SetInterestTalentKeywordPage extends StatelessWidget {
           children: <Widget>[
             Text(
               "관심있는 재능 키워드를",
-              style: TextTypes.heading(color: Palette.text01),
+              style: TextTypes.heading2(color: Palette.text01),
             ),
             Text(
               "선택해 주세요!",
-              style: TextTypes.heading(color: Palette.text01),
+              style: TextTypes.heading2(color: Palette.text01),
             ),
             const SizedBox(height: 8),
             Text(
               "최대 5개까지 선택 가능해요",
-              style: TextTypes.bodyMedium02(color: Palette.text02),
+              style: TextTypes.bodyMedium03(color: Palette.text02),
             ),
             const SizedBox(height: 24),
             TextField(
@@ -94,9 +94,9 @@ class SetInterestTalentKeywordPage extends StatelessWidget {
                     dividerColor: Palette.bgUp02,
                     dividerHeight: 2.0,
                     labelColor: Palette.text01,
-                    labelStyle: TextTypes.bodyLarge02(color: Palette.text01),
+                    labelStyle: TextTypes.body02(color: Palette.text01),
                     unselectedLabelStyle:
-                        TextTypes.bodyLarge02(color: Palette.text02),
+                        TextTypes.body02(color: Palette.text02),
                     padding: EdgeInsets.zero,
                     tabs: [
                       for (var tabText in GlobalValueConstants.keywordCategoris)

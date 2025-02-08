@@ -41,7 +41,7 @@ class MatchWriteSuccessPage extends StatelessWidget {
               children: [
                 Text(
                   '글을 성공적으로 작성했어요!',
-                  style: TextTypes.heading(color: Palette.text01),
+                  style: TextTypes.heading2(color: Palette.text01),
                 ),
                 const SizedBox(height: 12),
                 Text(

@@ -52,7 +52,7 @@ class RadioBottomSheet extends StatelessWidget {
                             children: [
                               Text(
                                 option['value']!,
-                                style: TextTypes.bodySemi02(
+                                style: TextTypes.body02(
                                   color: isSelected
                                       ? Palette.text02
                                       : Palette.text04,

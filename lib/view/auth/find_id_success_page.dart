@@ -2,25 +2,23 @@ import 'package:app_front_talearnt/common/theme.dart';
 import 'package:app_front_talearnt/common/widget/button.dart';
 import 'package:app_front_talearnt/common/widget/toast_message.dart';
 import 'package:app_front_talearnt/common/widget/top_app_bar.dart';
-import 'package:go_router/go_router.dart';
-
-import 'package:provider/provider.dart';
 import 'package:app_front_talearnt/provider/auth/find_id_provider.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 class FindIdSuccessPage extends StatelessWidget {
   const FindIdSuccessPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final findIdprovider = Provider.of<FindIdProvider>(context);
+    final findIdProvider = Provider.of<FindIdProvider>(context);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!findIdprovider.loadFindIdSuccessPage) {
+      if (!findIdProvider.loadFindIdSuccessPage) {
         ToastMessage.show(
             context: context, message: '인증이 완료되었습니다.', type: 1, bottom: 46);
-        findIdprovider.afterLoad();
+        findIdProvider.afterLoad();
       }
     });
     return Scaffold(
@@ -32,7 +30,7 @@ class FindIdSuccessPage extends StatelessWidget {
             'assets/icons/close.svg',
           ),
           onPressed: () {
-            findIdprovider.clearProvider();
+            findIdProvider.clearProvider();
             context.pop();
           },
         ),
@@ -47,22 +45,22 @@ class FindIdSuccessPage extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               '아이디 찾기 완료',
-              style: TextTypes.heading(color: Palette.text01),
+              style: TextTypes.heading2(color: Palette.text01),
             ),
             const SizedBox(height: 8),
             Row(
               children: [
                 Text(
                   "아이디가 ",
-                  style: TextTypes.bodyMedium02(color: Palette.text02),
+                  style: TextTypes.bodyMedium03(color: Palette.text02),
                 ),
                 Text(
                   "휴대폰 번호로 발송",
-                  style: TextTypes.bodyMedium02(color: Palette.error02),
+                  style: TextTypes.bodyMedium03(color: Palette.error02),
                 ),
                 Text(
                   "되었습니다.",
-                  style: TextTypes.bodyMedium02(color: Palette.text02),
+                  style: TextTypes.bodyMedium03(color: Palette.text02),
                 ),
               ],
             ),
@@ -86,20 +84,20 @@ class FindIdSuccessPage extends StatelessWidget {
                   children: [
                     Text(
                       "고객님의 아이디는",
-                      style: TextTypes.bodyLarge02(
+                      style: TextTypes.body02(
                         color: Palette.text01,
                       ),
                     ),
                     Text(
-                      "${findIdprovider.userId.isNotEmpty ? findIdprovider.userId.replaceRange(findIdprovider.userId.indexOf('@') - 3, findIdprovider.userId.indexOf('@'), '***') : ""} 입니다.",
-                      style: TextTypes.bodyLarge02(
+                      "${findIdProvider.userId.isNotEmpty ? findIdProvider.userId.replaceRange(findIdProvider.userId.indexOf('@') - 3, findIdProvider.userId.indexOf('@'), '***') : ""} 입니다.",
+                      style: TextTypes.body02(
                         color: Palette.text01,
                       ),
                     ),
                     const SizedBox(height: 12),
                     Text(
-                      "${findIdprovider.createdAt} 가입",
-                      style: TextTypes.caption02(
+                      "${findIdProvider.createdAt} 가입",
+                      style: TextTypes.captionSemi02(
                         color: Palette.text03,
                       ),
                     ),
@@ -114,7 +112,7 @@ class FindIdSuccessPage extends StatelessWidget {
                   child: SecondaryMGray(
                     content: "비밀번호 찾기",
                     onPressed: () {
-                      findIdprovider.clearProvider();
+                      findIdProvider.clearProvider();
                       context.go('/find-password');
                     },
                   ),
@@ -124,7 +122,7 @@ class FindIdSuccessPage extends StatelessWidget {
                   child: PrimaryM(
                     content: "로그인",
                     onPressed: () {
-                      findIdprovider.clearProvider();
+                      findIdProvider.clearProvider();
                       context.pop();
                     },
                   ),

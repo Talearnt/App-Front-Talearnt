@@ -16,11 +16,20 @@ class AppTheme {
 }
 
 class TextTypes {
-  static TextStyle heading({Color color = Colors.black}) {
+  static TextStyle heading2({Color color = Palette.textStrong}) {
     return TextStyle(
       fontSize: 24,
       fontWeight: FontWeight.w600,
-      height: 1.5,
+      height: 1.3,
+      color: color,
+    );
+  }
+
+  static TextStyle heading4({Color color = Palette.textStrong}) {
+    return TextStyle(
+      fontSize: 20,
+      fontWeight: FontWeight.w600,
+      height: 1.3,
       color: color,
     );
   }
@@ -43,7 +52,7 @@ class TextTypes {
     );
   }
 
-  static TextStyle bodyLarge02({Color color = Palette.textStrong}) {
+  static TextStyle body02({Color color = Palette.textStrong}) {
     return TextStyle(
       fontSize: 16,
       fontWeight: FontWeight.w500,
@@ -52,7 +61,7 @@ class TextTypes {
     );
   }
 
-  static TextStyle bodyMedium02({Color color = Palette.textStrong}) {
+  static TextStyle bodyMedium03({Color color = Palette.textStrong}) {
     return TextStyle(
       fontSize: 14,
       fontWeight: FontWeight.w500,
@@ -61,7 +70,7 @@ class TextTypes {
     );
   }
 
-  static TextStyle bodySemi02({Color color = Palette.textStrong}) {
+  static TextStyle bodySemi03({Color color = Palette.textStrong}) {
     return TextStyle(
       fontSize: 14,
       fontWeight: FontWeight.w600,
@@ -79,9 +88,27 @@ class TextTypes {
     );
   }
 
-  static TextStyle caption02({Color color = Palette.textStrong}) {
+  static TextStyle captionMedium02({Color color = Palette.textStrong}) {
     return TextStyle(
       fontSize: 12,
+      fontWeight: FontWeight.w500,
+      height: 1.3,
+      color: color,
+    );
+  }
+
+  static TextStyle captionSemi02({Color color = Palette.textStrong}) {
+    return TextStyle(
+      fontSize: 12,
+      fontWeight: FontWeight.w600,
+      height: 1.3,
+      color: color,
+    );
+  }
+
+  static TextStyle label01({Color color = Palette.textStrong}) {
+    return TextStyle(
+      fontSize: 10,
       fontWeight: FontWeight.w500,
       height: 1.3,
       color: color,

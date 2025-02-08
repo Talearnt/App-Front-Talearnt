@@ -21,11 +21,11 @@ class SignUpSub1Page extends StatelessWidget {
         children: [
           Text(
             'Talearnt 서비스 이용을 위한',
-            style: TextTypes.heading(color: Palette.text01),
+            style: TextTypes.heading2(color: Palette.text01),
           ),
           Text(
             '약관에 동의해 주세요!',
-            style: TextTypes.heading(color: Palette.text01),
+            style: TextTypes.heading2(color: Palette.text01),
           ),
           const SizedBox(
             height: 32,
@@ -48,7 +48,7 @@ class SignUpSub1Page extends StatelessWidget {
             ),
             Text(
               '모두 동의 합니다.',
-              style: TextTypes.bodyMedium02(color: Palette.text01),
+              style: TextTypes.body02(color: Palette.text01),
             )
           ]),
           const SizedBox(
@@ -78,11 +78,11 @@ class SignUpSub1Page extends StatelessWidget {
                   ),
                   Text(
                     '[필수]',
-                    style: TextTypes.bodyMedium02(color: Palette.error01),
+                    style: TextTypes.bodyMedium03(color: Palette.error01),
                   ),
                   Text(
                     ' 이용약관 동의',
-                    style: TextTypes.bodyMedium02(color: Palette.text01),
+                    style: TextTypes.bodyMedium03(color: Palette.text01),
                     softWrap: true,
                   )
                 ],
@@ -116,11 +116,11 @@ class SignUpSub1Page extends StatelessWidget {
                   ),
                   Text(
                     '[필수]',
-                    style: TextTypes.bodyMedium02(color: Palette.error01),
+                    style: TextTypes.bodyMedium03(color: Palette.error01),
                   ),
                   Text(
                     ' 개인 정보 수집 및 이용 동의',
-                    style: TextTypes.bodyMedium02(color: Palette.text01),
+                    style: TextTypes.bodyMedium03(color: Palette.text01),
                     softWrap: true,
                     overflow: TextOverflow.visible,
                   )
@@ -159,12 +159,12 @@ class SignUpSub1Page extends StatelessWidget {
                       child: Text.rich(
                         TextSpan(
                           text: '[선택] ', // 기본 텍스트
-                          style: TextTypes.bodyMedium02(color: Palette.text01),
+                          style: TextTypes.bodyMedium03(color: Palette.text01),
                           children: [
                             TextSpan(
                               text: '마케팅 목적의 개인정보 수집 및 이용 동의',
                               style:
-                                  TextTypes.bodyMedium02(color: Palette.text01),
+                                  TextTypes.bodyMedium03(color: Palette.text01),
                             ),
                           ],
                         ),
@@ -202,11 +202,11 @@ class SignUpSub1Page extends StatelessWidget {
                   ),
                   Text(
                     '[선택]',
-                    style: TextTypes.bodyMedium02(color: Palette.text01),
+                    style: TextTypes.bodyMedium03(color: Palette.text01),
                   ),
                   Text(
                     ' 이용약관 동의',
-                    style: TextTypes.bodyMedium02(color: Palette.text01),
+                    style: TextTypes.bodyMedium03(color: Palette.text01),
                     softWrap: true,
                     overflow: TextOverflow.visible,
                   )

@@ -359,7 +359,7 @@ class MatchWrite2Page extends StatelessWidget {
                             alignment: Alignment.centerRight,
                             child: Text(
                               "${matchWriteProvider.contentController.document.toPlainText().length - 1}/1000", // 텍스트 길이 계산
-                              style: TextTypes.bodyLarge02(
+                              style: TextTypes.body02(
                                 color: Palette.text04,
                               ),
                             ),
@@ -384,11 +384,11 @@ class MatchWrite2Page extends StatelessWidget {
               decoration: InputDecoration(
                 border: InputBorder.none,
                 hintText: "제목을 입력해주세요",
-                hintStyle: TextTypes.heading(
+                hintStyle: TextTypes.heading2(
                   color: Palette.text04,
                 ),
               ),
-              style: TextTypes.heading(
+              style: TextTypes.heading2(
                 color: Palette.text02,
               ),
               controller: matchWriteProvider.titlerController,
@@ -415,7 +415,7 @@ class MatchWrite2Page extends StatelessWidget {
                   expands: true,
                   customStyles: DefaultStyles(
                     placeHolder: DefaultTextBlockStyle(
-                      TextTypes.bodyLarge02(color: Palette.text04),
+                      TextTypes.body02(color: Palette.text04),
                       const HorizontalSpacing(10, 10),
                       const VerticalSpacing(10, 10),
                       const VerticalSpacing(10, 10),
