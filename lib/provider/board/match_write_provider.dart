@@ -89,6 +89,12 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
 
   List<String> _imageUploadUrls = [];
 
+  final List<File> _previewImageList = []; // 이미지 미리보기
+
+  int _previeImageIndex = 0; // 이미지 미리보기
+
+  bool _isAppBarVisible = true; // 이미지 미리보기
+
   bool _isS3Upload = false;
 
   bool get onToolBar => _onToolBar;
@@ -159,6 +165,12 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
 
   double get totalImageSize => _totalImageSize;
 
+  List<File> get previewImageList => _previewImageList; // 이미지 미리보기
+
+  int get previeImageIndex => _previeImageIndex; // 이미지 미리보기
+
+  bool get isAppBarVisible => _isAppBarVisible; // 이미지 미리보기
+
   void clearProvider() {
     _titlerController.clear();
     _contentController.clear();
@@ -207,16 +219,6 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
 
     notifyListeners();
   }
-
-  // void initTabController(List<KeywordCategory> keywordCategories) {
-  //   _giveTalentTabController.dispose();
-  //   _interestTalentTabController.dispose();
-  //   _giveTalentTabController =
-  //       TabController(length: keywordCategories.length, vsync: _tickerProvider);
-  //   _interestTalentTabController =
-  //       TabController(length: keywordCategories.length, vsync: _tickerProvider);
-  //   notifyListeners();
-  // }
 
   void _onChanged() {
     notifyListeners(); // Focus 상태 변경 시 UI 갱신
@@ -492,5 +494,39 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
     final deltaOps = delta.toList().map((op) => op.toJson()).toList();
     final converter = QuillDeltaToHtmlConverter(deltaOps);
     _htmlContent = converter.convert();
+  }
+
+  void makePreviewImageList() async {
+    // 이미지 미리보기
+    final delta = contentController.document.toDelta();
+
+    for (var op in delta.toList()) {
+      if (op.value is Map<String, dynamic> && op.value.containsKey('image')) {
+        final imagePath = op.value['image'];
+
+        final imageFile = File(imagePath);
+
+        _previewImageList.add(imageFile);
+      }
+    }
+  }
+
+  void previewImageListclear() {
+    // 이미지 미리보기
+    _previewImageList.clear();
+  }
+
+  void setPreviewImageIndex(int num) {
+    // 이미지 미리보기
+    _previeImageIndex = num;
+
+    notifyListeners();
+  }
+
+  void toggleAppbarVisible() {
+    // 이미지 미리보기
+    _isAppBarVisible = !_isAppBarVisible;
+
+    notifyListeners();
   }
 }

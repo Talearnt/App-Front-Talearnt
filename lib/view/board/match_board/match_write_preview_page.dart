@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:app_front_talearnt/common/theme.dart';
 import 'package:app_front_talearnt/common/widget/button.dart';
 import 'package:app_front_talearnt/common/widget/profile.dart';
@@ -6,6 +8,7 @@ import 'package:app_front_talearnt/common/widget/toast_message.dart';
 import 'package:app_front_talearnt/common/widget/top_app_bar.dart';
 import 'package:app_front_talearnt/constants/global_value_constants.dart';
 import 'package:app_front_talearnt/view_model/board_view_model.dart';
+import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:go_router/go_router.dart';
@@ -27,6 +30,7 @@ class MatchWritePreviewPage extends StatelessWidget {
     return Scaffold(
       appBar: TopAppBar(
         onPressed: () {
+          matchWriteProvider.previewImageListclear();
           context.pop();
         },
         first: PrimaryS(
@@ -143,7 +147,7 @@ class MatchWritePreviewPage extends StatelessWidget {
             ),
             const Divider(
               color: Palette.bgUp02,
-              thickness: 8.0,
+              thickness: 12.0,
             ),
             Padding(
               padding: const EdgeInsets.symmetric(
@@ -268,14 +272,14 @@ class MatchWritePreviewPage extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(
-                    height: 16,
+                    height: 8,
                   ),
                   const Divider(
                     color: Palette.bgUp02,
                     thickness: 1.0,
                   ),
                   const SizedBox(
-                    height: 24,
+                    height: 16,
                   ),
                   Row(
                     children: [
@@ -326,7 +330,7 @@ class MatchWritePreviewPage extends StatelessWidget {
             ),
             const Divider(
               color: Palette.bgUp02,
-              thickness: 8.0,
+              thickness: 12.0,
             ),
             Padding(
               padding: const EdgeInsets.only(
@@ -336,16 +340,94 @@ class MatchWritePreviewPage extends StatelessWidget {
               ),
               child: Column(
                 children: [
+                  Row(
+                    children: [
+                      ...matchWriteProvider.previewImageList
+                          .asMap()
+                          .entries
+                          .take(4)
+                          .map(
+                        (entry) {
+                          int index = entry.key;
+                          var item = entry.value;
+
+                          double imageSize =
+                              (MediaQuery.of(context).size.width - 92) / 4;
+
+                          return Padding(
+                            padding: EdgeInsets.only(right: index < 3 ? 12 : 0),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: GestureDetector(
+                                onTap: () {
+                                  if (index == 3) {
+                                    context.push('/match_image_view');
+                                  } else {
+                                    matchWriteProvider
+                                        .setPreviewImageIndex(index);
+                                    context.push('/match_image_view_detail');
+                                  }
+                                },
+                                child: Stack(
+                                  children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: Palette.icon04,
+                                          width: 1,
+                                        ),
+                                      ),
+                                      child: Image.file(
+                                        item,
+                                        width: imageSize,
+                                        height: imageSize,
+                                        fit: BoxFit.cover,
+                                        color: index == 3
+                                            ? Colors.black.withOpacity(0.6)
+                                            : null,
+                                        colorBlendMode: index == 3
+                                            ? BlendMode.darken
+                                            : null,
+                                      ),
+                                    ),
+                                    if (index == 3)
+                                      Positioned.fill(
+                                        child: GestureDetector(
+                                          onTap: () =>
+                                              context.push('/match_image_view'),
+                                          child: Center(
+                                            child: Text(
+                                              "이미지\n더보기",
+                                              style: TextTypes.bodyMedium03(
+                                                color: Palette.bgBackGround,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 50,
+                  ),
                   QuillEditor.basic(
                     controller: matchWriteProvider.contentController,
-                    configurations: const QuillEditorConfigurations(
+                    configurations: QuillEditorConfigurations(
                       showCursor: false,
                       readOnlyMouseCursor: MouseCursor.uncontrolled,
                       enableAlwaysIndentOnTab: false,
                       enableInteractiveSelection: false,
                       enableScribble: false,
+                      embedBuilders: FlutterQuillEmbeds.editorBuilders(),
                     ),
-                  )
+                  ),
                 ],
               ),
             )
