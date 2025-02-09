@@ -10,7 +10,7 @@ import 'package:app_front_talearnt/data/services/dio_service.dart';
 import 'package:dartz/dartz.dart';
 
 import '../../constants/api_constants.dart';
-import '../model/param/talent_exchange_posts_filter_param';
+import '../model/param/talent_exchange_posts_filter_param.dart';
 import '../model/respone/matching_post.dart';
 
 class BoardRepository {

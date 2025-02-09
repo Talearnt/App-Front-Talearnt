@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import '../view_model/board_view_model.dart';
 import '../view_model/keyword_view_model.dart';
 
 class HomePage extends StatelessWidget {
@@ -13,6 +14,8 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final keywordViewModel = Provider.of<KeywordViewModel>(context);
+    // final commonProvider = Provider.of<CommonProvider>(context);
+    final viewModel = Provider.of<BoardViewModel>(context);
 
     return Scaffold(
       appBar: TopAppBar(
@@ -50,8 +53,8 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () {
-                    context.push('/board-list');
+                  onTap: () async {
+                    await viewModel.getInitTalentExchangePosts();
                   },
                   child: Column(
                     children: [

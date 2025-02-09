@@ -18,10 +18,11 @@ class TalentExchangePostsFilterParam {
     this.type,
     this.badge,
     this.status,
-    this.page = '1',
-    this.size = '15',
+    String? page,
+    String? size,
     this.search,
-  });
+  })  : page = page ?? '1',
+        size = size ?? '15';
 
   TalentExchangePostsFilterParam.empty()
       : giveTalents = [],

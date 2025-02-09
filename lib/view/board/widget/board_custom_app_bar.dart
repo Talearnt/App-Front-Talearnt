@@ -4,6 +4,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
 import '../../../provider/board/common_board_provider.dart';
+import '../../../provider/board/match_board_provider.dart';
+import '../../../view_model/board_view_model.dart';
 
 class BoardCustomAppBar extends StatelessWidget {
   final String type;
@@ -14,6 +16,12 @@ class BoardCustomAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final CommonBoardProvider commonBoardProvider =
         Provider.of<CommonBoardProvider>(context);
+    final viewModel = Provider.of<BoardViewModel>(context);
+    final MatchBoardProvider matchBoardProvider =
+        Provider.of<MatchBoardProvider>(context);
+    // final CommunityBoardProvider communityBoardProvider =
+    //     Provider.of<CommunityBoardProvider>(context);
+    matchBoardProvider.setViewModel(viewModel);
     return Container(
       height: kToolbarHeight,
       decoration: const BoxDecoration(
@@ -34,6 +42,21 @@ class BoardCustomAppBar extends StatelessWidget {
             children: [
               TextButton(
                 onPressed: () {
+                  viewModel.getTalentExchangePosts(
+                      matchBoardProvider.selectedGiveTalentKeywordCodes
+                          .map((e) => e.toString())
+                          .toList(),
+                      matchBoardProvider.selectedInterestTalentKeywordCodes
+                          .map((e) => e.toString())
+                          .toList(),
+                      matchBoardProvider.selectedOrderType,
+                      matchBoardProvider.selectedDurationType,
+                      matchBoardProvider.selectedOperationType,
+                      null,
+                      null,
+                      null,
+                      null,
+                      null);
                   commonBoardProvider.setBoardType("match");
                 },
                 style: ButtonStyle(
@@ -48,6 +71,21 @@ class BoardCustomAppBar extends StatelessWidget {
               const SizedBox(width: 20),
               TextButton(
                 onPressed: () {
+                  // viewModel.getCommunityPosts(
+                  //     matchBoardProvider.selectedGiveTalentKeywordCodes
+                  //         .map((e) => e.toString())
+                  //         .toList(),
+                  //     matchBoardProvider.selectedInterestTalentKeywordCodes
+                  //         .map((e) => e.toString())
+                  //         .toList(),
+                  //     matchBoardProvider.selectedOrderType,
+                  //     matchBoardProvider.selectedDurationType,
+                  //     matchBoardProvider.selectedOperationType,
+                  //     null,
+                  //     null,
+                  //     null,
+                  //     null,
+                  //     null);
                   commonBoardProvider.setBoardType("community");
                 },
                 style: ButtonStyle(

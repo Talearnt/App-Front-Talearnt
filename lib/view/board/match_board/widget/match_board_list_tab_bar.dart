@@ -230,20 +230,20 @@ class MatchBoardListTabBar extends SliverPersistentHeaderDelegate {
 
   Future<void> getList(
       CommonProvider commonProvider,
-      BoardViewModel talentBoardViewModel,
-      MatchBoardProvider talentBoardProvider) async {
+      BoardViewModel boardViewModel,
+      MatchBoardProvider matchBoardProvider) async {
     commonProvider.changeIsLoading(true);
-    await talentBoardViewModel
+    await boardViewModel
         .getTalentExchangePosts(
-            talentBoardProvider.selectedGiveTalentKeywordCodes
+            matchBoardProvider.selectedGiveTalentKeywordCodes
                 .map((e) => e.toString())
                 .toList(),
-            talentBoardProvider.selectedInterestTalentKeywordCodes
+            matchBoardProvider.selectedInterestTalentKeywordCodes
                 .map((e) => e.toString())
                 .toList(),
-            talentBoardProvider.selectedOrderType,
-            talentBoardProvider.selectedDurationType,
-            talentBoardProvider.selectedOperationType,
+            matchBoardProvider.selectedOrderType,
+            matchBoardProvider.selectedDurationType,
+            matchBoardProvider.selectedOperationType,
             null,
             null,
             null,
