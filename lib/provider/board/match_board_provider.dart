@@ -139,10 +139,12 @@ class MatchBoardProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void updateTalentExchangePosts(
-      List<MatchingPost> addTalentExchangePosts) {
+  void updateTalentExchangePosts(List<MatchingPost> addTalentExchangePosts) {
     _talentExchangePosts.clear();
     _talentExchangePosts.addAll(addTalentExchangePosts);
+    if (_scrollController.hasClients) {
+      _scrollController.jumpTo(0);
+    }
     notifyListeners();
   }
 
@@ -173,5 +175,6 @@ class MatchBoardProvider extends ChangeNotifier {
         null,
         null);
     _isFetching = false;
+    notifyListeners();
   }
 }

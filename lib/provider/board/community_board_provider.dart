@@ -30,7 +30,8 @@ class CommunityBoardProvider extends ChangeNotifier {
         content: "일곱 번째 글은 엔터키가 없고 HTML 태그만 있는 겁니다.",
         createdAt: "2024-12-29T20:38:09.267246",
         favoriteCount: 0,
-        isFavorite: false), CommunityPost(
+        isFavorite: false),
+    CommunityPost(
         category: "질문 게시판",
         profileImg: "유저 이미지",
         nickname: "테스트",
@@ -40,7 +41,8 @@ class CommunityBoardProvider extends ChangeNotifier {
         content: "일곱 번째 글은 엔터키가 없고 HTML 태그만 있는 겁니다.",
         createdAt: "2024-12-29T20:38:09.267246",
         favoriteCount: 0,
-        isFavorite: false), CommunityPost(
+        isFavorite: false),
+    CommunityPost(
         category: "질문 게시판",
         profileImg: "유저 이미지",
         nickname: "테스트",
@@ -50,7 +52,8 @@ class CommunityBoardProvider extends ChangeNotifier {
         content: "일곱 번째 글은 엔터키가 없고 HTML 태그만 있는 겁니다.",
         createdAt: "2024-12-29T20:38:09.267246",
         favoriteCount: 0,
-        isFavorite: false), CommunityPost(
+        isFavorite: false),
+    CommunityPost(
         category: "질문 게시판",
         profileImg: "유저 이미지",
         nickname: "테스트",
@@ -60,7 +63,8 @@ class CommunityBoardProvider extends ChangeNotifier {
         content: "일곱 번째 글은 엔터키가 없고 HTML 태그만 있는 겁니다.",
         createdAt: "2024-12-29T20:38:09.267246",
         favoriteCount: 0,
-        isFavorite: false), CommunityPost(
+        isFavorite: false),
+    CommunityPost(
         category: "질문 게시판",
         profileImg: "유저 이미지",
         nickname: "테스트",
@@ -113,6 +117,9 @@ class CommunityBoardProvider extends ChangeNotifier {
   void updateCommunityPosts(List<CommunityPost> addCommunityPosts) {
     _communityPosts.clear();
     _communityPosts.addAll(addCommunityPosts);
+    if (_scrollController.hasClients) {
+      _scrollController.jumpTo(0);
+    }
     notifyListeners();
   }
 

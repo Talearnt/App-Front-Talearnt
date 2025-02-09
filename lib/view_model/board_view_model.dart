@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../common/common_navigator.dart';
 import '../data/model/param/s3_controller_param.dart';
-import '../data/model/param/talent_exchange_posts_filter_param';
+import '../data/model/param/talent_exchange_posts_filter_param.dart';
 import '../data/repositories/board_repository.dart';
 import '../provider/board/match_board_provider.dart';
 import '../provider/board/match_write_provider.dart';
@@ -104,7 +104,7 @@ class BoardViewModel extends ChangeNotifier {
       final pagination = result['pagination'];
       talentBoardProvider.updateTalentExchangePosts(posts);
       talentBoardProvider.updateTalentExchangePostsPage(pagination);
-      commonNavigator.goRoute('/match-board-list');
+      commonNavigator.goRoute('/board-list');
     });
   }
 
