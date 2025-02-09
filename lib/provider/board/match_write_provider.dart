@@ -524,6 +524,7 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
   }
 
   void toggleAppbarVisible() {
+    // 이미지 미리보기
     _isAppBarVisible = !_isAppBarVisible;
 
     notifyListeners();
