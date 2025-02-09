@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../../../common/theme.dart';
+import '../../../../common/theme.dart';
 
-class BoardSelectedChipList extends StatelessWidget {
+class MatchBoardSelectedChipList extends StatelessWidget {
   final List<String> keywordNames;
 
-  const BoardSelectedChipList({
+  const MatchBoardSelectedChipList({
     Key? key,
     required this.keywordNames,
   }) : super(key: key);

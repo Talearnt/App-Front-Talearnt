@@ -15,7 +15,7 @@ import '../view/auth/agreement/terms_agreement_optional.dart';
 import '../view/auth/agreement/terms_agreement_required.dart';
 import '../view/auth/login_page.dart';
 import '../view/auth/sign_up_main_page.dart';
-import '../view/board/match_board/match_board_list.dart';
+import '../view/board/board_list.dart';
 import '../view/board/match_board/match_write1_page.dart';
 import '../view/board/match_board/match_write2_page.dart';
 import '../view/board/match_board/match_write_preview_page.dart';
@@ -137,7 +137,7 @@ class Routes {
           GoRoute(
             path: '/board-list',
             builder: (BuildContext context, GoRouterState state) {
-              return const MatchBoardList();
+              return const BoardList();
             },
           ),
           GoRoute(

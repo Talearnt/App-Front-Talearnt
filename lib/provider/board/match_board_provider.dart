@@ -2,7 +2,7 @@ import 'package:app_front_talearnt/data/model/respone/pagination.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants/global_value_constants.dart';
-import '../../data/model/respone/talent_exchange_post.dart';
+import '../../data/model/respone/matching_post.dart';
 import '../../view_model/board_view_model.dart';
 import '../common/custom_ticker_provider.dart';
 
@@ -28,11 +28,10 @@ class MatchBoardProvider extends ChangeNotifier {
   final List<int> _selectedGiveTalentKeywordCodes = []; //실제로 넘기는 값
   final List<int> _interestTalentKeywordCodes = [];
   final List<int> _selectedInterestTalentKeywordCodes = []; //실제로 넘기는 값
-  final List<TalentExchangePost> _talentExchangePosts = [];
+  final List<MatchingPost> _talentExchangePosts = [];
   Pagination _talentPage = Pagination.empty();
   final ScrollController _scrollController = ScrollController();
   late BoardViewModel _viewModel;
-  final String getVersion = "filter"; //filter - 필터 , scroll - 스크롤
 
   TabController get giveTalentTabController => _giveTalentTabController;
 
@@ -54,7 +53,7 @@ class MatchBoardProvider extends ChangeNotifier {
   List<int> get selectedInterestTalentKeywordCodes =>
       _selectedInterestTalentKeywordCodes;
 
-  List<TalentExchangePost> get talentExchangePosts => _talentExchangePosts;
+  List<MatchingPost> get talentExchangePosts => _talentExchangePosts;
 
   Pagination get talentPage => _talentPage;
 
@@ -135,13 +134,13 @@ class MatchBoardProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addTalentExchangePosts(List<TalentExchangePost> addTalentExchangePosts) {
+  void addTalentExchangePosts(List<MatchingPost> addTalentExchangePosts) {
     _talentExchangePosts.addAll(addTalentExchangePosts);
     notifyListeners();
   }
 
   void updateTalentExchangePosts(
-      List<TalentExchangePost> addTalentExchangePosts) {
+      List<MatchingPost> addTalentExchangePosts) {
     _talentExchangePosts.clear();
     _talentExchangePosts.addAll(addTalentExchangePosts);
     notifyListeners();

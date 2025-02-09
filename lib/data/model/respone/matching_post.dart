@@ -1,4 +1,6 @@
-class TalentExchangePost {
+import 'package:intl/intl.dart';
+
+class MatchingPost {
   final String profileImg;
   final String nickname;
   final String authority;
@@ -11,12 +13,12 @@ class TalentExchangePost {
   final String content;
   final List<String> giveTalents;
   final List<String> receiveTalents;
-  final DateTime createdAt;
+  final String createdAt;
   final int openedChatRoomCount;
   final int favoriteCount;
   final bool isFavorite;
 
-  TalentExchangePost({
+  MatchingPost({
     required this.profileImg,
     required this.nickname,
     required this.authority,
@@ -35,8 +37,10 @@ class TalentExchangePost {
     required this.isFavorite,
   });
 
-  factory TalentExchangePost.fromJson(Map<String, dynamic> json) {
-    return TalentExchangePost(
+  factory MatchingPost.fromJson(Map<String, dynamic> json) {
+    DateTime dateTime = DateTime.parse(json['createdAt']);
+    String formattedDate = DateFormat('yyyy.MM.dd').format(dateTime);
+    return MatchingPost(
       profileImg: json['profileImg'],
       nickname: json['nickname'],
       authority: json['authority'],
@@ -49,7 +53,7 @@ class TalentExchangePost {
       content: json['content'],
       giveTalents: List<String>.from(json['giveTalents']),
       receiveTalents: List<String>.from(json['receiveTalents']),
-      createdAt: DateTime.parse(json['createdAt']),
+      createdAt: formattedDate,
       openedChatRoomCount: json['openedChatRoomCount'],
       favoriteCount: json['favoriteCount'],
       isFavorite: json['isFavorite'],
@@ -70,7 +74,7 @@ class TalentExchangePost {
       'content': content,
       'giveTalents': giveTalents,
       'receiveTalents': receiveTalents,
-      'createdAt': createdAt.toIso8601String(),
+      'createdAt': createdAt,
       'openedChatRoomCount': openedChatRoomCount,
       'favoriteCount': favoriteCount,
       'isFavorite': isFavorite,

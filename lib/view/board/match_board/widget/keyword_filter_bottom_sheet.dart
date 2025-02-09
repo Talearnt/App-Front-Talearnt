@@ -1,16 +1,16 @@
+import 'package:app_front_talearnt/common/widget/talent_keyword_chip_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../common/theme.dart';
-import '../../../common/widget/bottom_selected_chip_list.dart';
-import '../../../common/widget/button.dart';
-import '../../../common/widget/talent_keyword_chip_list.dart';
-import '../../../common/widget/toast_message.dart';
-import '../../../constants/global_value_constants.dart';
-import 'keyword_tab_dot.dart';
+import '../../../../common/theme.dart';
+import '../../../../common/widget/bottom_selected_chip_list.dart';
+import '../../../../common/widget/button.dart';
+import '../../../../common/widget/toast_message.dart';
+import '../../../../constants/global_value_constants.dart';
+import '../../../keyword/widget/keyword_tab_dot.dart';
 
-class KeywordBottomSheet extends StatelessWidget {
+class KeywordFilterBottomSheet extends StatelessWidget {
   final String sheetTitle;
   final List<int> keywordCodes;
   final TabController tabController;
@@ -19,7 +19,7 @@ class KeywordBottomSheet extends StatelessWidget {
   final Function registerFunction;
   final Function resetFunction;
 
-  const KeywordBottomSheet(
+  const KeywordFilterBottomSheet(
       {super.key,
       required this.sheetTitle,
       required this.keywordCodes,
@@ -117,7 +117,8 @@ class KeywordBottomSheet extends StatelessWidget {
               dividerHeight: 2.0,
               labelColor: Palette.text01,
               labelStyle: TextTypes.body02(color: Palette.text01),
-              unselectedLabelStyle: TextTypes.body02(color: Palette.text02),
+              unselectedLabelStyle:
+                  TextTypes.body02(color: Palette.text02),
               padding: EdgeInsets.zero,
               tabs: [
                 for (var tabText in GlobalValueConstants.keywordCategoris)

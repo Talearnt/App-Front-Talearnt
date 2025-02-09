@@ -51,7 +51,7 @@ class HomePage extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    context.push('/match-board-list');
+                    context.push('/board-list');
                   },
                   child: Column(
                     children: [
@@ -68,7 +68,6 @@ class HomePage extends StatelessWidget {
                 GestureDetector(
                   onTap: () async {
                     await keywordViewModel.getOfferedKeywords();
-
                     context.push('/match_write1');
                   },
                   child: Column(

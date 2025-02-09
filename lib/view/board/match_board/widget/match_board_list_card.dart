@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../../../common/theme.dart';
-import '../../../data/model/respone/talent_exchange_post.dart';
-import 'board_selected_chip_list.dart';
+import '../../../../common/theme.dart';
+import '../../../../data/model/respone/matching_post.dart';
 import 'match_board_list_card_bottom.dart';
+import 'match_board_selected_chip_list.dart';
 
-class BoardListCard extends StatelessWidget {
-  final TalentExchangePost post;
+class MatchBoardListCard extends StatelessWidget {
+  final MatchingPost post;
   final int index;
 
-  const BoardListCard({
+  const MatchBoardListCard({
     Key? key,
     required this.post,
     required this.index,
@@ -53,7 +53,7 @@ class BoardListCard extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    post.duration,
+                    post.createdAt,
                     style: TextTypes.captionMedium02(color: Palette.text04),
                   ),
                 ],
@@ -117,14 +117,14 @@ class BoardListCard extends StatelessWidget {
                 style: TextTypes.captionMedium02(color: Palette.text04),
               ),
               const SizedBox(height: 8),
-              BoardSelectedChipList(keywordNames: post.giveTalents),
+              MatchBoardSelectedChipList(keywordNames: post.giveTalents),
               const SizedBox(height: 16),
               Text(
                 '받고 싶은 상대의 재능',
                 style: TextTypes.captionMedium02(color: Palette.text04),
               ),
               const SizedBox(height: 8),
-              BoardSelectedChipList(keywordNames: post.receiveTalents),
+              MatchBoardSelectedChipList(keywordNames: post.receiveTalents),
               const SizedBox(height: 8),
             ],
           ),
