@@ -30,7 +30,7 @@ class MatchWritePreviewPage extends StatelessWidget {
     return Scaffold(
       appBar: TopAppBar(
         onPressed: () {
-          //matchWriteProvider.previewImageListclear();
+          matchWriteProvider.previewImageListclear();
           context.pop();
         },
         first: PrimaryS(
@@ -345,29 +345,32 @@ class MatchWritePreviewPage extends StatelessWidget {
                       ...matchWriteProvider.previewImageList
                           .asMap()
                           .entries
+                          .take(4)
                           .map(
                         (entry) {
-                          int index = entry.key; // 현재 인덱스
+                          int index = entry.key;
                           var item = entry.value;
 
                           double imageSize =
                               (MediaQuery.of(context).size.width - 92) / 4;
 
                           return Padding(
-                            padding: EdgeInsets.only(
-                                right: index < 3
-                                    ? 12
-                                    : 0), // 인덱스 0,1,2까지만 right 12
+                            padding: EdgeInsets.only(right: index < 3 ? 12 : 0),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(8),
-                              child: Stack(
-                                children: [
-                                  GestureDetector(
-                                    onTap: index == 3
-                                        ? () => print(
-                                            "click") // 이미지 모아보기 페이지로 이동 라우트 추가
-                                        : null, // 네 번째 이미지 클릭 시 "click" 출력
-                                    child: Container(
+                              child: GestureDetector(
+                                onTap: () {
+                                  if (index == 3) {
+                                    context.push('/match_image_view');
+                                  } else {
+                                    matchWriteProvider
+                                        .setPreviewImageIndex(index);
+                                    context.push('/match_image_view_detail');
+                                  }
+                                },
+                                child: Stack(
+                                  children: [
+                                    Container(
                                       decoration: BoxDecoration(
                                         border: Border.all(
                                           color: Palette.icon04,
@@ -381,27 +384,29 @@ class MatchWritePreviewPage extends StatelessWidget {
                                         fit: BoxFit.cover,
                                         color: index == 3
                                             ? Colors.black.withOpacity(0.6)
-                                            : null, // 네 번째 이미지 60% 어둡게
+                                            : null,
                                         colorBlendMode: index == 3
                                             ? BlendMode.darken
                                             : null,
                                       ),
                                     ),
-                                  ),
-                                  if (index == 3) // 네 번째 이미지에만 텍스트 추가
-                                    const Positioned.fill(
-                                      child: Center(
-                                        child: Text(
-                                          "이미지 더보기",
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold,
+                                    if (index == 3)
+                                      Positioned.fill(
+                                        child: GestureDetector(
+                                          onTap: () =>
+                                              context.push('/match_image_view'),
+                                          child: Center(
+                                            child: Text(
+                                              "이미지\n더보기",
+                                              style: TextTypes.bodyMedium03(
+                                                color: Palette.bgBackGround,
+                                              ),
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
                           );
