@@ -152,12 +152,7 @@ class SingleBtnDialog extends StatelessWidget {
   }) {
     showDialog(
       context: context,
-<<<<<<< Updated upstream
-      useRootNavigator: false,
-      builder: (BuildContext context) {
-=======
       builder: (BuildContext dialogContext) {
->>>>>>> Stashed changes
         return SingleBtnDialog(
           content: content,
           timer: timer,
