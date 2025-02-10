@@ -47,6 +47,7 @@ class SetTalentKeywordMainPage extends StatelessWidget {
                   leftFun: () {
                     if (context.mounted) {
                       context.pop();
+                      context.go('/');
                     }
                   },
                 );

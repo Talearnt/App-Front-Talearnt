@@ -34,6 +34,7 @@ class DoubleBtnDialog extends StatelessWidget {
   }) {
     showDialog(
       context: context,
+      useRootNavigator: false,
       builder: (BuildContext context) {
         return DoubleBtnDialog(
           content: content,
@@ -158,6 +159,7 @@ class SingleBtnDialog extends StatelessWidget {
 
     showDialog(
       context: context,
+      useRootNavigator: false,
       builder: (BuildContext context) {
         return SingleBtnDialog(
           content: content,
