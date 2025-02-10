@@ -150,22 +150,25 @@ class SingleBtnDialog extends StatelessWidget {
     bool timer = false,
     ValueNotifier<int>? timeSeconds,
   }) {
-    button ??= PrimaryM(
-      content: '확인',
-      onPressed: () {
-        context.pop();
-      },
-    );
-
     showDialog(
       context: context,
+<<<<<<< Updated upstream
       useRootNavigator: false,
       builder: (BuildContext context) {
+=======
+      builder: (BuildContext dialogContext) {
+>>>>>>> Stashed changes
         return SingleBtnDialog(
           content: content,
           timer: timer,
           timeSeconds: timeSeconds,
-          button: button,
+          button: button ??
+              PrimaryM(
+                content: '확인',
+                onPressed: () {
+                  Navigator.of(dialogContext).pop();
+                },
+              ),
         );
       },
     );
