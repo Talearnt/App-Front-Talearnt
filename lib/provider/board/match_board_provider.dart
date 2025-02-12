@@ -153,6 +153,17 @@ class MatchBoardProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void resetFilter() {
+    _selectedOrderType = 'recent';
+    _selectedDurationType = '';
+    _selectedOperationType = '';
+    _giveTalentKeywordCodes.clear();
+    _selectedGiveTalentKeywordCodes.clear(); //실제로 넘기는 값
+    _interestTalentKeywordCodes.clear();
+    _selectedInterestTalentKeywordCodes.clear(); //실제로 넘기는 값
+    notifyListeners();
+  }
+
   void _onScroll() {
     if (!_isFetching &&
         _scrollController.position.pixels >=

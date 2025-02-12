@@ -1,4 +1,5 @@
 import 'package:app_front_talearnt/provider/board/common_board_provider.dart';
+import 'package:app_front_talearnt/view/board/after_filter_no_board_list_page.dart';
 import 'package:app_front_talearnt/view/board/community_board/widget/community_board_list_card.dart';
 import 'package:app_front_talearnt/view/board/community_board/widget/community_board_list_tab_bar.dart';
 import 'package:app_front_talearnt/view/board/match_board/widget/match_board_list_card.dart';
@@ -10,6 +11,7 @@ import '../../../common/theme.dart';
 import '../../../provider/board/match_board_provider.dart';
 import '../../../view_model/board_view_model.dart';
 import '../../provider/board/community_board_provider.dart';
+import 'no_board_list_page.dart';
 import 'widget/board_custom_app_bar.dart';
 
 class BoardList extends StatelessWidget {
@@ -27,6 +29,10 @@ class BoardList extends StatelessWidget {
     return Scaffold(body: SafeArea(
       child: Consumer<CommonBoardProvider>(
         builder: (subContext, commonBoardProvider, child) {
+          final int childCount = (commonBoardProvider.boardType == 'match'
+              ? matchBoardProvider.talentExchangePosts.length
+              : communityBoardProvider.communityPosts.length);
+
           return CustomScrollView(
             controller: commonBoardProvider.boardType == 'match'
                 ? matchBoardProvider.scrollController
@@ -59,25 +65,22 @@ class BoardList extends StatelessWidget {
                             ? matchBoardProvider.talentExchangePosts
                             : communityBoardProvider.communityPosts;
                     if (posts.isEmpty) {
-                      return const Center(
-                        child: Padding(
-                          padding: EdgeInsets.all(20.0),
-                          child: Text(
-                            "게시글이 없습니다.",
-                            style: TextStyle(fontSize: 16, color: Colors.grey),
-                          ),
-                        ),
-                      );
+                      if (commonBoardProvider.initState) {
+                        return NoBoardListPage(
+                          boardType: commonBoardProvider.boardType,
+                        );
+                      } else {
+                        return AfterFilterNoBoardListPage(
+                          boardType: commonBoardProvider.boardType,
+                        );
+                      }
                     }
                     return commonBoardProvider.boardType == 'match'
                         ? MatchBoardListCard(post: posts[index], index: index)
                         : CommunityBoardListCard(
                             post: posts[index], index: index);
                   },
-                  childCount: (commonBoardProvider.boardType == 'match'
-                          ? matchBoardProvider.talentExchangePosts
-                          : communityBoardProvider.communityPosts)
-                      .length,
+                  childCount: childCount == 0 ? 1 : childCount,
                 ),
               ),
             ],

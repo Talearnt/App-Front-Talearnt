@@ -128,6 +128,11 @@ class CommunityBoardProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void resetFilter() {
+    _selectedOrderType = 'recent';
+    notifyListeners();
+  }
+
 //api 생성 후 처리
 // void _onScroll() {
 //   if (!_isFetching &&
