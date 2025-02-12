@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../common/theme.dart';
 import '../../../../constants/global_value_constants.dart';
+import '../../../../provider/board/common_board_provider.dart';
 import '../../../../provider/board/community_board_provider.dart';
 import '../../widget/board_filter_chip.dart';
 import '../../widget/radio_bottom_sheet.dart';
@@ -14,6 +15,8 @@ class CommunityBoardListTabBar extends SliverPersistentHeaderDelegate {
     final communityBoardProvider = Provider.of<CommunityBoardProvider>(context);
     // final boardViewModel = Provider.of<BoardViewModel>(context);
     // final commonProvider = Provider.of<CommonProvider>(context);
+    final commonBoardProvider = Provider.of<CommonBoardProvider>(context);
+
     return Container(
         height: maxExtent,
         color: Colors.white,
@@ -85,6 +88,7 @@ class CommunityBoardListTabBar extends SliverPersistentHeaderDelegate {
                                   communityBoardProvider.selectedOrderType,
                               changedFunction: (code) {
                                 communityBoardProvider.updateOrderType(code);
+                                commonBoardProvider.updateInitState(false);
                                 // getList(commonProvider, boardViewModel,
                                 //     communityBoardProvider);
                               },

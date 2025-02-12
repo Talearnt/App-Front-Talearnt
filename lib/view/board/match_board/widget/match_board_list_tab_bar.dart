@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../constants/global_value_constants.dart';
+import '../../../../provider/board/common_board_provider.dart';
 import '../../../../provider/board/match_board_provider.dart';
 import '../../../../provider/common/common_provider.dart';
 import '../../../../view_model/board_view_model.dart';
@@ -16,6 +17,7 @@ class MatchBoardListTabBar extends SliverPersistentHeaderDelegate {
     final matchBoardProvider = Provider.of<MatchBoardProvider>(context);
     final boardViewModel = Provider.of<BoardViewModel>(context);
     final commonProvider = Provider.of<CommonProvider>(context);
+    final commonBoardProvider = Provider.of<CommonBoardProvider>(context);
     return Container(
       height: maxExtent,
       color: Colors.white,
@@ -47,6 +49,7 @@ class MatchBoardListTabBar extends SliverPersistentHeaderDelegate {
                       selectedCode: matchBoardProvider.selectedOrderType,
                       changedFunction: (code) {
                         matchBoardProvider.updateOrderType(code);
+                        commonBoardProvider.updateInitState(false);
                         getList(
                             commonProvider, boardViewModel, matchBoardProvider);
                       },
@@ -87,6 +90,7 @@ class MatchBoardListTabBar extends SliverPersistentHeaderDelegate {
                           },
                           registerFunction: () {
                             matchBoardProvider.registerInterestKeywordList();
+                            commonBoardProvider.updateInitState(false);
                             getList(commonProvider, boardViewModel,
                                 matchBoardProvider);
                           },
@@ -131,6 +135,7 @@ class MatchBoardListTabBar extends SliverPersistentHeaderDelegate {
                           },
                           registerFunction: () {
                             matchBoardProvider.registerGiveKeywordList();
+                            commonBoardProvider.updateInitState(false);
                             getList(commonProvider, boardViewModel,
                                 matchBoardProvider);
                           },
@@ -169,6 +174,7 @@ class MatchBoardListTabBar extends SliverPersistentHeaderDelegate {
                       selectedCode: matchBoardProvider.selectedOperationType,
                       changedFunction: (code) {
                         matchBoardProvider.updateOperationType(code);
+                        commonBoardProvider.updateInitState(false);
                         getList(
                             commonProvider, boardViewModel, matchBoardProvider);
                       },
@@ -203,6 +209,7 @@ class MatchBoardListTabBar extends SliverPersistentHeaderDelegate {
                       selectedCode: matchBoardProvider.selectedDurationType,
                       changedFunction: (code) {
                         matchBoardProvider.updateDurationType(code);
+                        commonBoardProvider.updateInitState(false);
                         getList(
                             commonProvider, boardViewModel, matchBoardProvider);
                       },
