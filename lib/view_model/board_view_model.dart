@@ -43,7 +43,8 @@ class BoardViewModel extends ChangeNotifier {
 
     result.fold(
         (failure) => commonNavigator.showSingleDialog(
-            content: ErrorMessages.getMessage(failure.errorCode)), (result) {
+            content: ErrorMessages.getMessage(failure.errorCode)),
+        (result) async {
       matchWriteProvider.setImageUploadUrl(result.data);
     });
   }

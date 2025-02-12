@@ -400,6 +400,8 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
         contentController.insertImageBlock(imageSource: processedImage.path);
       }
     }
+
+    notifyListeners();
   }
 
   Future<File> _processImage(File imageFile) async {
@@ -444,13 +446,14 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
   }
 
   void setImageUploadUrl(List<String> data) {
-    _imageUploadUrls = (data);
+    _imageUploadUrls = data;
     _isS3Upload = true;
+    notifyListeners();
   }
 
-  void getUploadImagesInfo() async {
+  Future<void> getUploadImagesInfo() async {
     final delta = contentController.document.toDelta();
-
+    uploadImageInfos.clear();
     for (var op in delta.toList()) {
       if (op.value is Map<String, dynamic> && op.value.containsKey('image')) {
         final imagePath = op.value['image'];
@@ -467,6 +470,8 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
         });
       }
     }
+
+    notifyListeners();
   }
 
   void exchangeImageUrl(String imageUploadUrl, String imagePath) {

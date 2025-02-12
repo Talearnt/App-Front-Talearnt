@@ -81,8 +81,6 @@ class ProviderSetup extends StatelessWidget {
         ),
         ChangeNotifierProvider<KeywordProvider>(
             create: (_) => KeywordProvider()),
-        ChangeNotifierProvider<MatchWriteProvider>(
-            create: (_) => MatchWriteProvider()),
         ChangeNotifierProvider<CommonBoardProvider>(
             create: (_) => CommonBoardProvider()),
         ChangeNotifierProvider<MatchBoardProvider>(
