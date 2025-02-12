@@ -84,6 +84,28 @@ class LoginForm extends StatelessWidget {
             ),
           ),
         ),
+        ElevatedButton(
+          onPressed: () async {
+            loginProvider.testAutoLogin();
+            commonProvider.changeIsLoading(true);
+            await authViewModel.login(loginProvider.emailController.text,
+                loginProvider.passwordController.text);
+            commonProvider.changeIsLoading(false);
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xFF1B76FF),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+          ),
+          child: const Padding(
+            padding: EdgeInsets.all(11.5),
+            child: Text(
+              'Test자동로그인',
+              style: TextStyle(fontSize: 18, color: Color(0xFFFFFFFF)),
+            ),
+          ),
+        ),
         const SizedBox(height: 12.0),
         SizedBox(
           height: 18,

@@ -12,6 +12,7 @@ import 'package:dartz/dartz.dart';
 import '../../constants/api_constants.dart';
 import '../model/param/login_param.dart';
 import '../model/param/sign_up_param.dart';
+import '../model/respone/user_profile.dart';
 
 class AuthRepository {
   final DioService dio;
@@ -87,5 +88,11 @@ class AuthRepository {
         ApiConstants.getFineUserPwUrl(email), body.toJson(), null);
     return result.fold(
         left, (response) => right(SendMailInfo.fromJson(response)));
+  }
+
+  Future<Either<Failure, UserProfile>> getUserProfile() async {
+    final result = await dio.get(ApiConstants.getUserProfile, null, null);
+    return result.fold(
+        left, (response) => right(UserProfile.fromJson(response)));
   }
 }

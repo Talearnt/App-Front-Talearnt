@@ -108,4 +108,10 @@ class LoginProvider extends ChangeNotifier with ClearText {
   void logout() {
     _isLoggedIn = false;
   }
+
+  void testAutoLogin() {
+    _emailController.text = "test@test.com";
+    _passwordController.text = "!1q2w3e4r";
+    notifyListeners();
+  }
 }

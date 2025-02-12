@@ -58,6 +58,7 @@ class BoardCustomAppBar extends StatelessWidget {
                       null,
                       null);
                   commonBoardProvider.setBoardType("match");
+                  commonBoardProvider.updateInitState(true);
                 },
                 style: ButtonStyle(
                   padding: WidgetStateProperty.all(EdgeInsets.zero),
@@ -87,6 +88,7 @@ class BoardCustomAppBar extends StatelessWidget {
                   //     null,
                   //     null);
                   commonBoardProvider.setBoardType("community");
+                  commonBoardProvider.updateInitState(true);
                 },
                 style: ButtonStyle(
                   padding: WidgetStateProperty.all(EdgeInsets.zero),
