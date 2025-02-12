@@ -38,6 +38,16 @@ class SetGiveTalentKeywordPage extends StatelessWidget {
             TextField(
               controller: setKeywordProvider.giveTalentSearchController,
               focusNode: setKeywordProvider.giveTalentFocusNode,
+              onSubmitted:(value){
+                if(setKeywordProvider.searchedGiveTalentKeywordCodes.isEmpty){
+                  setKeywordProvider.giveTalentSearchController.clear();
+                  ToastMessage.show(
+                      context: context,
+                      message: '검색 결과가 없습니다.',
+                      type: 2,
+                      bottom: 42);
+                }
+              },
               onChanged: (value) {
                 List<int> labelCode = [];
                 for (var category in GlobalValueConstants.keywordCategoris) {

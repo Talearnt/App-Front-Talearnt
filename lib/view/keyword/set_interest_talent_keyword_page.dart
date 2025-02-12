@@ -38,6 +38,16 @@ class SetInterestTalentKeywordPage extends StatelessWidget {
             TextField(
               controller: setKeywordProvider.interestTalentSearchController,
               focusNode: setKeywordProvider.interestTalentFocusNode,
+              onSubmitted:(value){
+                if(setKeywordProvider.searchedInterestTalentKeywordCodes.isEmpty){
+                  setKeywordProvider.interestTalentSearchController.clear();
+                  ToastMessage.show(
+                      context: context,
+                      message: '검색 결과가 없습니다.',
+                      type: 2,
+                      bottom: 42);
+                }
+              },
               onChanged: (value) {
                 List<int> labelCode = [];
                 for (var category in GlobalValueConstants.keywordCategoris) {
