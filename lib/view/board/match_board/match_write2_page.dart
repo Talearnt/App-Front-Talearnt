@@ -68,30 +68,6 @@ class MatchWrite2Page extends StatelessWidget {
                 },
               );
             }
-
-            // matchWriteProvider.checkTitleAndBoard();
-
-            // if (matchWriteProvider.isTitleAndBoardEmpty) {
-            //   matchWriteProvider.insertMatchBoard();
-
-            //   await boardViewModel.insertMatchBoard(
-            //     matchWriteProvider.titlerController.text,
-            //     matchWriteProvider.htmlContent,
-            //     matchWriteProvider.selectedGiveTalentKeywordCodes,
-            //     matchWriteProvider.selectedInterestTalentKeywordCodes,
-            //     matchWriteProvider.selectedExchangeType,
-            //     false,
-            //     matchWriteProvider.selectedDuration,
-            //     [],
-            //   );
-            // } else {
-            //   ToastMessage.show(
-            //     context: context,
-            //     message: matchWriteProvider.boardToastMessage,
-            //     type: 2,
-            //     bottom: 50,
-            //   );
-            // }
           },
         ),
       ),
