@@ -50,7 +50,7 @@ class AuthViewModel extends ChangeNotifier {
       (token) {
         tokenManager.saveToken(token);
         loginProvider.updateLoginFormSuccess();
-        commonNavigator.goRoute('/set-keyword');
+        getUserProfile();
       },
     );
   }
@@ -253,6 +253,24 @@ class AuthViewModel extends ChangeNotifier {
       (userIdInfo) {
         findIdProvider.setFindedUserIdInfo(
             userIdInfo.userId, userIdInfo.createdAt);
+      },
+    );
+  }
+
+  Future<void> getUserProfile() async {
+    final result = await authRepository.getUserProfile();
+
+    result.fold(
+      (failure) => commonNavigator.showSingleDialog(
+          content: ErrorMessages.getMessage(
+        failure.errorCode,
+      )), //dialog 띄워줘야됨
+      (userProfile) {
+        if(userProfile.receiveTalents.isEmpty && userProfile.giveTalents.isEmpty){
+          commonNavigator.goRoute('/set-keyword');
+        }else{
+          commonNavigator.goRoute('/home');
+        }
       },
     );
   }
