@@ -359,15 +359,7 @@ class MatchWritePreviewPage extends StatelessWidget {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(8),
                               child: GestureDetector(
-                                onTap: () {
-                                  if (index == 3) {
-                                    context.push('/match_image_view');
-                                  } else {
-                                    matchWriteProvider
-                                        .setPreviewImageIndex(index);
-                                    context.push('/match_image_view_detail');
-                                  }
-                                },
+                                onTap: () {},
                                 child: Stack(
                                   children: [
                                     Container(
@@ -393,8 +385,7 @@ class MatchWritePreviewPage extends StatelessWidget {
                                     if (index == 3)
                                       Positioned.fill(
                                         child: GestureDetector(
-                                          onTap: () =>
-                                              context.push('/match_image_view'),
+                                          onTap: () {},
                                           child: Center(
                                             child: Text(
                                               "이미지\n더보기",
