@@ -79,6 +79,10 @@ flutter:
     - assets/icons/back_typo.svg
     - assets/icons/bell_off.svg
     - assets/icons/bell_on.svg
+    - assets/icons/blue_60_off.svg
+    - assets/icons/blue_60_on.svg
+    - assets/icons/gray_100_off.svg
+    - assets/icons/gray_100_on.svg
     - assets/icons/bold_after.svg
     - assets/icons/bold_before.svg
     - assets/icons/bookmark_default.svg
@@ -105,6 +109,32 @@ flutter:
     - assets/icons/eye_close.svg
     - assets/icons/eye_open.svg
     - assets/icons/finish.svg
+    - assets/icons/font_size_12.svg
+    - assets/icons/font_size_12_off.svg
+    - assets/icons/font_size_12_on.svg
+    - assets/icons/font_size_14.svg
+    - assets/icons/font_size_14_off.svg
+    - assets/icons/font_size_14_on.svg
+    - assets/icons/font_size_16.svg
+    - assets/icons/font_size_16_off.svg
+    - assets/icons/font_size_16_on.svg
+    - assets/icons/font_size_18.svg
+    - assets/icons/font_size_18_off.svg
+    - assets/icons/font_size_18_on.svg
+    - assets/icons/font_size_20.svg
+    - assets/icons/font_size_20_off.svg
+    - assets/icons/font_size_20_on.svg
+    - assets/icons/font_size_22.svg
+    - assets/icons/font_size_22_off.svg
+    - assets/icons/font_size_22_on.svg
+    - assets/icons/font_size_24.svg
+    - assets/icons/font_size_24_off.svg
+    - assets/icons/font_size_24_on.svg
+    - assets/icons/font_size_30.svg
+    - assets/icons/font_size_30_off.svg
+    - assets/icons/font_size_30_on.svg
+    - assets/icons/green_60_off.svg
+    - assets/icons/green_60_on.svg
     - assets/icons/home_off.svg
     - assets/icons/home_on.svg
     - assets/icons/image_after.svg
@@ -136,8 +166,14 @@ flutter:
     - assets/icons/sns_kakao.svg
     - assets/icons/default_logo.svg
     - assets/icons/no_rabbit_logo.svg
+    - assets/icons/orange_60_off.svg
+    - assets/icons/orange_60_on.svg
     - assets/icons/post_off.svg
     - assets/icons/post_on.svg
+    - assets/icons/purple_60_off.svg
+    - assets/icons/purple_60_on.svg
+    - assets/icons/red_60_off.svg
+    - assets/icons/red_60_on.svg
     - assets/icons/right_before.svg
     - assets/img/success_sign_up_logo.svg
     - assets/icons/typo.svg
@@ -146,6 +182,8 @@ flutter:
     - assets/icons/write_off.svg
     - assets/icons/write_on.svg
     - assets/icons/typo.svg
+    - assets/icons/yellow_60_off.svg
+    - assets/icons/yellow_60_on.svg
     - assets/icons/field_check.svg
     - assets/icons/field_check_again_fail.svg
     - assets/icons/field_check_again_success.svg
