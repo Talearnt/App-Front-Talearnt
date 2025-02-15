@@ -70,13 +70,45 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
 
   FocusNode get contentFocusNode => _contentFocusNode;
 
-  bool _onToolBar = false;
+  String _onToolBar = "default";
 
   bool _isBold = false;
   bool _isItalic = false;
   bool _isUnderline = false;
   bool _isUl = false;
   bool _isOl = false;
+
+  int _fontSize = 16;
+  final List<int> _fontSizeList = [12, 14, 16, 18, 20, 22, 24, 30];
+
+  static Color gray_100 = const Color(0xFF1E2224);
+  static Color red_60 = const Color(0xFFFF2727);
+  static Color orange_60 = const Color(0xFFFF9A27);
+  static Color yellow_60 = const Color(0xFFFFDB27);
+  static Color green_60 = const Color(0xFF00E57E);
+  static Color blue_60 = const Color(0xFF1B76FF);
+  static Color purple_60 = const Color(0xFFA927FF);
+
+  Color _fontColor = gray_100;
+  final List<Color> _fontColorList = [
+    gray_100,
+    red_60,
+    orange_60,
+    yellow_60,
+    green_60,
+    blue_60,
+    purple_60
+  ];
+
+  static final Map<Color, String> _colorNames = {
+    gray_100: "gray_100",
+    red_60: "red_60",
+    orange_60: "orange_60",
+    yellow_60: "yellow_60",
+    green_60: "green_60",
+    blue_60: "blue_60",
+    purple_60: "purple_60",
+  };
 
   String _alignType = "left";
 
@@ -97,7 +129,7 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
 
   bool _isS3Upload = false;
 
-  bool get onToolBar => _onToolBar;
+  String get onToolBar => _onToolBar;
 
   bool get isBold => _isBold;
 
@@ -108,6 +140,16 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
   bool get isUl => _isUl;
 
   bool get isOl => _isOl;
+
+  int get fontSize => _fontSize;
+
+  List<int> get fontSizeList => _fontSizeList;
+
+  Color get fontColor => _fontColor;
+
+  List<Color> get fontColorList => _fontColorList;
+
+  Map<Color, String> get colorNames => _colorNames;
 
   String get alignType => _alignType;
 
@@ -188,11 +230,15 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
     _durationRequiredMessage = "";
     _exchangeTypeRequiredMesage = "";
 
+    _onToolBar = "default";
+
     _isBold = false;
     _isItalic = false;
     _isUnderline = false;
     _isUl = false;
     _isOl = false;
+    _fontSize = 16;
+    _fontColor = gray_100;
     _alignType = "left";
     _isChipsSelected = false;
     _isTitleAndBoardEmpty = false;
@@ -200,6 +246,9 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
 
     _htmlContent = "";
     _totalImageSize = 0;
+
+    _previewImageList.clear();
+    _isS3Upload = false;
 
     reset();
     notifyListeners();
@@ -252,8 +301,20 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
     notifyListeners();
   }
 
-  void setToolbar(boolType) {
-    _onToolBar = boolType;
+  void setFontSize(size) {
+    _fontSize = size;
+
+    notifyListeners();
+  }
+
+  void setFontColor(color) {
+    _fontColor = color;
+
+    notifyListeners();
+  }
+
+  void setToolbar(type) {
+    _onToolBar = type;
     notifyListeners();
   }
 
