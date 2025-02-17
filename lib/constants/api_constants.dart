@@ -10,6 +10,7 @@ abstract class ApiConstants {
   static const String checkNickNameAvailableUrl =
       "$baseUrl/v1/auth/users/nickname/availability";
   static const String checkUserIdDuplicationUrl = "$baseUrl/v1/auth/users/id";
+  static const String getUserProfile = "$baseUrl/v1/users/header/profile";
 
   static const String smsVerifyCodeUrl =
       "$baseUrl/v1/auth/sms/verification-codes"; //인증번호 문자 전송 통합 url (회원가입, 아이디 찾기)
