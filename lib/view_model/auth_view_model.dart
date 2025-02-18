@@ -266,9 +266,10 @@ class AuthViewModel extends ChangeNotifier {
         failure.errorCode,
       )), //dialog 띄워줘야됨
       (userProfile) {
-        if(userProfile.receiveTalents.isEmpty && userProfile.giveTalents.isEmpty){
+        if (userProfile.receiveTalents.isEmpty &&
+            userProfile.giveTalents.isEmpty) {
           commonNavigator.goRoute('/set-keyword');
-        }else{
+        } else {
           commonNavigator.goRoute('/home');
         }
       },
