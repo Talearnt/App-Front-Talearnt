@@ -79,10 +79,10 @@ flutter:
     - assets/icons/back_typo.svg
     - assets/icons/bell_off.svg
     - assets/icons/bell_on.svg
+    - assets/icons/blue_30_off.svg
+    - assets/icons/blue_30_on.svg
     - assets/icons/blue_60_off.svg
     - assets/icons/blue_60_on.svg
-    - assets/icons/gray_100_off.svg
-    - assets/icons/gray_100_on.svg
     - assets/icons/bold_after.svg
     - assets/icons/bold_before.svg
     - assets/icons/bookmark_default.svg
@@ -133,6 +133,12 @@ flutter:
     - assets/icons/font_size_30.svg
     - assets/icons/font_size_30_off.svg
     - assets/icons/font_size_30_on.svg
+    - assets/icons/gray_30_off.svg
+    - assets/icons/gray_30_on.svg
+    - assets/icons/gray_100_off.svg
+    - assets/icons/gray_100_on.svg
+    - assets/icons/green_30_off.svg
+    - assets/icons/green_30_on.svg
     - assets/icons/green_60_off.svg
     - assets/icons/green_60_on.svg
     - assets/icons/home_off.svg
@@ -166,12 +172,18 @@ flutter:
     - assets/icons/sns_kakao.svg
     - assets/icons/default_logo.svg
     - assets/icons/no_rabbit_logo.svg
+    - assets/icons/orange_30_off.svg
+    - assets/icons/orange_30_on.svg
     - assets/icons/orange_60_off.svg
     - assets/icons/orange_60_on.svg
     - assets/icons/post_off.svg
     - assets/icons/post_on.svg
+    - assets/icons/purple_30_off.svg
+    - assets/icons/purple_30_on.svg
     - assets/icons/purple_60_off.svg
     - assets/icons/purple_60_on.svg
+    - assets/icons/red_20_off.svg
+    - assets/icons/red_20_on.svg
     - assets/icons/red_60_off.svg
     - assets/icons/red_60_on.svg
     - assets/icons/right_before.svg
@@ -179,9 +191,13 @@ flutter:
     - assets/icons/typo.svg
     - assets/icons/underline_after.svg
     - assets/icons/underline_before.svg
+    - assets/icons/white_off.svg
+    - assets/icons/white_on.svg
     - assets/icons/write_off.svg
     - assets/icons/write_on.svg
     - assets/icons/typo.svg
+    - assets/icons/yellow_30_off.svg
+    - assets/icons/yellow_30_on.svg
     - assets/icons/yellow_60_off.svg
     - assets/icons/yellow_60_on.svg
     - assets/icons/field_check.svg

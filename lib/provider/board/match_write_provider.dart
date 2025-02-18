@@ -100,13 +100,42 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
     purple_60
   ];
 
+  static Color white = const Color(0xFFFFFFFF);
+  static Color gray_30 = const Color(0xFFDEE1E3);
+  static Color red_20 = const Color(0xFFFFE5E5);
+  static Color orange_30 = const Color(0xFFFFE2C2);
+  static Color yellow_30 = const Color(0xFFFFF5C2);
+  static Color green_30 = const Color(0xFFB2FFDD);
+  static Color blue_30 = const Color(0xFFB2D1FF);
+  static Color purple_30 = const Color(0xFFE7C2FF);
+
+  Color _backGroundColor = white;
+  final List<Color> _backGroundColorList = [
+    white,
+    gray_30,
+    red_20,
+    orange_30,
+    yellow_30,
+    green_30,
+    blue_30,
+    purple_30
+  ];
+
   static final Map<Color, String> _colorNames = {
+    white: "white",
+    gray_30: "gray_30",
     gray_100: "gray_100",
+    red_20: "red_20",
     red_60: "red_60",
+    orange_30: "orange_30",
     orange_60: "orange_60",
+    yellow_30: "yellow_30",
     yellow_60: "yellow_60",
+    green_30: "green_30",
     green_60: "green_60",
+    blue_30: "blue_30",
     blue_60: "blue_60",
+    purple_30: "purple_30",
     purple_60: "purple_60",
   };
 
@@ -148,6 +177,10 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
   Color get fontColor => _fontColor;
 
   List<Color> get fontColorList => _fontColorList;
+
+  Color get backGroundColor => _backGroundColor;
+
+  List<Color> get backGroundColorList => _backGroundColorList;
 
   Map<Color, String> get colorNames => _colorNames;
 
@@ -239,6 +272,7 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
     _isOl = false;
     _fontSize = 16;
     _fontColor = gray_100;
+    _backGroundColor = white;
     _alignType = "left";
     _isChipsSelected = false;
     _isTitleAndBoardEmpty = false;
@@ -309,6 +343,12 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
 
   void setFontColor(color) {
     _fontColor = color;
+
+    notifyListeners();
+  }
+
+  void setBackGroundColor(color) {
+    _backGroundColor = color;
 
     notifyListeners();
   }

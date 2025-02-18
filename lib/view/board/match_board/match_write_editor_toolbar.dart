@@ -25,8 +25,10 @@ Widget getToolbar(BuildContext context, MatchWriteProvider matchWriteProvider) {
     return Row(
       children: [
         const SizedBox(width: 10),
-        SvgPicture.asset('assets/icons/link_before.svg'),
-        const SizedBox(width: 20),
+        IconButton(
+          onPressed: () async {},
+          icon: SvgPicture.asset('assets/icons/link_before.svg'),
+        ),
         IconButton(
           onPressed: () async {
             await matchWriteProvider.pickImagesAndInsert(context);
@@ -252,6 +254,13 @@ Widget getToolbar(BuildContext context, MatchWriteProvider matchWriteProvider) {
                   icon: SvgPicture.asset(
                       'assets/icons/${matchWriteProvider.colorNames[matchWriteProvider.fontColor]}_off.svg'),
                 ),
+                IconButton(
+                  onPressed: () {
+                    matchWriteProvider.setToolbar("backgroundColor");
+                  },
+                  icon: SvgPicture.asset(
+                      'assets/icons/${matchWriteProvider.colorNames[matchWriteProvider.backGroundColor]}_off.svg'),
+                ),
               ],
             ),
           ),
@@ -322,6 +331,45 @@ Widget getToolbar(BuildContext context, MatchWriteProvider matchWriteProvider) {
                         );
                       },
                       icon: matchWriteProvider.fontColor == item
+                          ? SvgPicture.asset(
+                              'assets/icons/${matchWriteProvider.colorNames[item]}_on.svg')
+                          : SvgPicture.asset(
+                              'assets/icons/${matchWriteProvider.colorNames[item]}_off.svg'),
+                    );
+                  },
+                )
+              ],
+            ),
+          ),
+        )
+      ],
+    );
+  } else if (matchWriteProvider.onToolBar == "backgroundColor") {
+    return Row(
+      children: [
+        IconButton(
+          onPressed: () {
+            matchWriteProvider.setToolbar("style");
+          },
+          icon: SvgPicture.asset('assets/icons/back_typo.svg'),
+        ),
+        Expanded(
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                ...matchWriteProvider.backGroundColorList.map(
+                  (item) {
+                    return IconButton(
+                      onPressed: () {
+                        matchWriteProvider.setBackGroundColor(item);
+                        matchWriteProvider.setToolbar('style');
+                        matchWriteProvider.contentController.formatSelection(
+                          Attribute.fromKeyValue('background',
+                              '#${item.value.toRadixString(16).padLeft(8, '0')}'),
+                        );
+                      },
+                      icon: matchWriteProvider.backGroundColor == item
                           ? SvgPicture.asset(
                               'assets/icons/${matchWriteProvider.colorNames[item]}_on.svg')
                           : SvgPicture.asset(
