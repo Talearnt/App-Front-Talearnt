@@ -51,8 +51,8 @@ class BoardRepository {
         await dio.get(ApiConstants.getTalentBoardListUrl, null, body.toJson());
     return response.fold(left, (response) {
       final posts = List<MatchingPost>.from(
-          response['data'].map((data) => MatchingPost.fromJson(data)));
-      final pagination = Pagination.fromJson(response['pagination']);
+          response['data']['results'].map((data) => MatchingPost.fromJson(data)));
+      final pagination = Pagination.fromJson(response['data']['pagination']);
       return right({'posts': posts, 'pagination': pagination});
     });
   }
