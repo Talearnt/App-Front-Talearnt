@@ -32,6 +32,16 @@ class Routes {
         builder: (BuildContext context, GoRouterState state) {
           return const LoginPage();
         },
+        // redirect: (context, state) async {
+        //   final secureStorageService = context.read<SecureStorageService>();
+        //   final userId = await secureStorageService.read(key: "email");
+        //   final password = await secureStorageService.read(key: "password");
+        //   if (!secureStorageService.isLoggedIn) {
+        //     getUserProfile();
+        //     return '/home';
+        //   }
+        //   return null;
+        // },
         routes: <RouteBase>[
           GoRoute(
             path: '/find-id',

@@ -17,6 +17,7 @@ import '../data/repositories/auth_repository.dart';
 import '../data/repositories/board_repository.dart';
 import '../data/services/authorization_interceptor.dart';
 import '../data/services/dio_service.dart';
+import '../data/services/secure_storage_service.dart';
 import '../main.dart';
 import '../utils/token_manager.dart';
 import '../view_model/auth_view_model.dart';
@@ -56,6 +57,9 @@ class ProviderSetup extends StatelessWidget {
             context.read<TokenManager>(),
             interceptor: context.read<AuthorizationInterceptor>(),
           ),
+        ),
+        Provider<SecureStorageService>(
+          create: (context) => SecureStorageService(),
         ),
         ChangeNotifierProvider<CommonProvider>(create: (_) => CommonProvider()),
         ChangeNotifierProvider<KakaoProvider>(create: (_) => KakaoProvider()),

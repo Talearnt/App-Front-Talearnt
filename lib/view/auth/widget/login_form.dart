@@ -3,10 +3,12 @@ import 'package:app_front_talearnt/common/widget/obscure_text_field.dart';
 import 'package:app_front_talearnt/common/widget/text_field_label.dart';
 import 'package:app_front_talearnt/provider/common/common_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../../common/theme.dart';
+import '../../../data/services/secure_storage_service.dart';
 import '../../../provider/auth/login_provider.dart';
 import '../../../view_model/auth_view_model.dart';
 
@@ -18,6 +20,7 @@ class LoginForm extends StatelessWidget {
     final loginProvider = Provider.of<LoginProvider>(context);
     final authViewModel = Provider.of<AuthViewModel>(context);
     final commonProvider = Provider.of<CommonProvider>(context);
+    final secureStorageService = Provider.of<SecureStorageService>(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -59,10 +62,41 @@ class LoginForm extends StatelessWidget {
           validMessage: loginProvider.passwordValidMessage,
           isValid: loginProvider.passwordValid,
         ),
+        const SizedBox(height: 12.0),
+        InkWell(
+          overlayColor: WidgetStateProperty.all(Colors.transparent),
+          onTap: () {
+            loginProvider.setAutoLogin();
+          },
+          child: Row(
+            children: [
+              loginProvider.autoLoggedIn
+                  ? SvgPicture.asset("assets/icons/check_on_primary.svg")
+                  : SvgPicture.asset("assets/icons/check_off_primary.svg"),
+              const SizedBox(
+                width: 8,
+              ),
+              Text(
+                '자동 로그인',
+                style: TextTypes.caption01(color: Palette.text02),
+              ),
+            ],
+          ),
+        ),
         const SizedBox(height: 24.0),
         ElevatedButton(
           onPressed: () async {
             if (loginProvider.checkLoginValidity()) {
+              if (loginProvider.autoLoggedIn) {
+                secureStorageService.write(
+                    key: "email", value: loginProvider.emailController.text);
+                secureStorageService.write(
+                    key: "password",
+                    value: loginProvider.passwordController.text);
+              } else {
+                secureStorageService.delete(key: "email");
+                secureStorageService.delete(key: "password");
+              }
               commonProvider.changeIsLoading(true);
               await authViewModel.login(loginProvider.emailController.text,
                   loginProvider.passwordController.text);
