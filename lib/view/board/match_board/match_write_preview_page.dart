@@ -36,7 +36,7 @@ class MatchWritePreviewPage extends StatelessWidget {
         first: PrimaryS(
           content: '등록',
           onPressed: () async {
-            matchWriteProvider.getUploadImagesInfo();
+            await matchWriteProvider.getUploadImagesInfo();
 
             if (matchWriteProvider.uploadImageInfos.isNotEmpty) {
               await boardViewModel
@@ -67,7 +67,7 @@ class MatchWritePreviewPage extends StatelessWidget {
                 matchWriteProvider.selectedExchangeType,
                 false,
                 matchWriteProvider.selectedDuration,
-                [],
+                matchWriteProvider.imageUploadedUrls,
               );
             } else {
               ToastMessage.show(
