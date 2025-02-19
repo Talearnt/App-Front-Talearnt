@@ -16,6 +16,9 @@ import '../view/auth/agreement/terms_agreement_required.dart';
 import '../view/auth/login_page.dart';
 import '../view/auth/sign_up_main_page.dart';
 import '../view/board/board_list.dart';
+import '../view/board/match_board/match_board_detail_page.dart';
+import '../view/board/match_board/match_board_image_view_detail_page.dart';
+import '../view/board/match_board/match_board_image_view_page.dart';
 import '../view/board/match_board/match_write1_page.dart';
 import '../view/board/match_board/match_write2_page.dart';
 import '../view/board/match_board/match_write_preview_page.dart';
@@ -146,6 +149,24 @@ class Routes {
               return const HomePage();
             },
           ),
+          GoRoute(
+              path: '/match-board-detail-page',
+              builder: (BuildContext context, GoRouterState state) {
+                return const MatchBoardDetailPage();
+              },
+              routes: <RouteBase>[
+                GoRoute(
+                  path: 'match-image-view',
+                  builder: (BuildContext context, GoRouterState state) {
+                    return const MatchBoardImageViewPage();
+                  },
+                ), GoRoute(
+                  path: 'match-image-view-detail',
+                  builder: (BuildContext context, GoRouterState state) {
+                    return const MatchBoardImageViewDetailPage();
+                  },
+                ),
+              ]),
         ],
       ),
     ],

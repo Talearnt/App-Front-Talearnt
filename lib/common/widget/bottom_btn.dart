@@ -6,6 +6,7 @@ class BottomBtn extends StatelessWidget {
   final bool isEnabled;
   final String content;
   final VoidCallback? onPressed;
+  final Widget? otherSetting;
 
   const BottomBtn({
     super.key,
@@ -13,6 +14,7 @@ class BottomBtn extends StatelessWidget {
     required this.content,
     this.isEnabled = false,
     this.onPressed,
+    this.otherSetting,
   });
 
   @override
@@ -21,28 +23,39 @@ class BottomBtn extends StatelessWidget {
       padding: EdgeInsets.only(
         left: mediaBottom > 0 ? 0 : 24,
         right: mediaBottom > 0 ? 0 : 24,
-        bottom: mediaBottom > 0 ? 0 : 24,
+        bottom: mediaBottom > 0 ? 0 : 12,
+        top: mediaBottom > 0 ? 0 : 16,
       ),
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: isEnabled ? Palette.primary01 : Palette.bgUp02,
-          minimumSize: const Size(double.infinity, 50),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(
-              mediaBottom > 0 ? 0 : 12,
+      child: Row(
+        children: [
+          if (otherSetting != null) ...[
+            InkWell(child: otherSetting!),
+            const SizedBox(width: 12), // 간격 추가
+          ],
+          Expanded(
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: isEnabled ? Palette.primary01 : Palette.bgUp02,
+                minimumSize: const Size(double.infinity, 50),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(
+                    mediaBottom > 0 ? 0 : 12,
+                  ),
+                ),
+                elevation: 0,
+              ),
+              onPressed: isEnabled ? onPressed : null,
+              child: Center(
+                child: Text(
+                  content,
+                  style: TextTypes.bodyMedium01(
+                    color: isEnabled ? Palette.bgBackGround : Palette.text04,
+                  ),
+                ),
+              ),
             ),
           ),
-          elevation: 0,
-        ),
-        onPressed: isEnabled ? onPressed : null,
-        child: Center(
-          child: Text(
-            content,
-            style: TextTypes.bodyMedium01(
-              color: isEnabled ? Palette.bgBackGround : Palette.text04,
-            ),
-          ),
-        ),
+        ],
       ),
     );
   }
