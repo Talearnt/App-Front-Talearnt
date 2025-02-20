@@ -5,7 +5,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
 import '../../common/widget/loading.dart';
+import '../../data/services/secure_storage_service.dart';
+import '../../provider/auth/login_provider.dart';
 import '../../provider/common/common_provider.dart';
+import '../../view_model/auth_view_model.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -13,6 +16,24 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final commonProvider = Provider.of<CommonProvider>(context);
+    final authViewModel = Provider.of<AuthViewModel>(context);
+    final secureStorageService =
+        Provider.of<SecureStorageService>(context, listen: false);
+    final loginProvider = Provider.of<LoginProvider>(context);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Future.delayed(Duration.zero, () async {
+        if (loginProvider.initLoggedIn) {
+          loginProvider.updateInitLoggedIn(false);
+          final email = await secureStorageService.read(key: "email");
+          final password = await secureStorageService.read(key: "password");
+          if (email != null && password != null) {
+            commonProvider.changeIsLoading(true);
+            await authViewModel.login(email, password);
+            commonProvider.changeIsLoading(false);
+          }
+        }
+      });
+    });
 
     return Scaffold(
       appBar: AppBar(
