@@ -6,7 +6,7 @@ class MatchBoardParam {
   final String exchangeType;
   final bool requiredBadge;
   final String duration;
-  final List<String> urls;
+  final List<String> imageUrls;
 
   MatchBoardParam({
     required this.title,
@@ -16,7 +16,7 @@ class MatchBoardParam {
     required this.exchangeType,
     required this.requiredBadge,
     required this.duration,
-    required this.urls,
+    required this.imageUrls,
   });
 
   Map<String, dynamic> toJson() {
@@ -28,7 +28,7 @@ class MatchBoardParam {
       'exchangeType': exchangeType,
       'requiredBadge': requiredBadge,
       'duration': duration,
-      'imageUrls': urls,
+      'imageUrls': imageUrls,
     };
   }
 }
