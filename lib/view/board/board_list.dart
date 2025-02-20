@@ -5,12 +5,14 @@ import 'package:app_front_talearnt/view/board/community_board/widget/community_b
 import 'package:app_front_talearnt/view/board/match_board/widget/match_board_list_card.dart';
 import 'package:app_front_talearnt/view/board/match_board/widget/match_board_list_tab_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../../common/theme.dart';
 import '../../../provider/board/match_board_provider.dart';
 import '../../../view_model/board_view_model.dart';
 import '../../provider/board/community_board_provider.dart';
+import '../../provider/board/match_board_detail_provider.dart';
 import 'no_board_list_page.dart';
 import 'widget/board_custom_app_bar.dart';
 
@@ -21,10 +23,12 @@ class BoardList extends StatelessWidget {
   Widget build(BuildContext context) {
     final viewModel = Provider.of<BoardViewModel>(context);
     final MatchBoardProvider matchBoardProvider =
-        Provider.of<MatchBoardProvider>(context);
+    Provider.of<MatchBoardProvider>(context);
     final CommunityBoardProvider communityBoardProvider =
-        Provider.of<CommunityBoardProvider>(context);
+    Provider.of<CommunityBoardProvider>(context);
     matchBoardProvider.setViewModel(viewModel);
+    final matchBoardDetailProvider =
+    Provider.of<MatchBoardDetailProvider>(context);
     // communityBoardProvider.setViewModel(viewModel);
     return Scaffold(body: SafeArea(
       child: Consumer<CommonBoardProvider>(
@@ -59,11 +63,11 @@ class BoardList extends StatelessWidget {
               ),
               SliverList(
                 delegate: SliverChildBuilderDelegate(
-                  (context, index) {
+                      (context, index) {
                     List<dynamic> posts =
-                        commonBoardProvider.boardType == 'match'
-                            ? matchBoardProvider.talentExchangePosts
-                            : communityBoardProvider.communityPosts;
+                    commonBoardProvider.boardType == 'match'
+                        ? matchBoardProvider.talentExchangePosts
+                        : communityBoardProvider.communityPosts;
                     if (posts.isEmpty) {
                       if (commonBoardProvider.initState) {
                         return NoBoardListPage(
@@ -76,9 +80,19 @@ class BoardList extends StatelessWidget {
                       }
                     }
                     return commonBoardProvider.boardType == 'match'
-                        ? MatchBoardListCard(post: posts[index], index: index)
+                        ? InkWell(
+                        overlayColor:
+                        WidgetStateProperty.all(Colors.transparent),
+                        onTap: () {
+                          matchBoardDetailProvider.setContent(
+                              matchBoardDetailProvider
+                                  .matchingDetailPost.content);
+                          context.push('/match-board-detail-page');
+                        },
+                        child: MatchBoardListCard(
+                            post: posts[index], index: index))
                         : CommunityBoardListCard(
-                            post: posts[index], index: index);
+                        post: posts[index], index: index);
                   },
                   childCount: childCount == 0 ? 1 : childCount,
                 ),
