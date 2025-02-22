@@ -2,13 +2,13 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
-import 'package:flutter_quill/quill_delta.dart';
+import 'package:flutter_quill_delta_from_html/parser/html_to_delta.dart';
 
 import '../../data/model/respone/matching_detail_post.dart';
 
 class MatchBoardDetailProvider extends ChangeNotifier {
   final QuillController _contentController = QuillController.basic();
-  final MatchingDetailPost _matchingDetailPost = MatchingDetailPost(
+  MatchingDetailPost _matchingDetailPost = MatchingDetailPost(
       userNo: 2,
       nickname: "테스트",
       profileImg: "유저 이미지",
@@ -46,23 +46,8 @@ class MatchBoardDetailProvider extends ChangeNotifier {
 
   bool get isAppBarVisible => _isAppBarVisible;
 
-  void setContent(String content) {
-    if (!content.endsWith('\n')) {
-      content += '\n';
-    }
-
-    final Delta delta = Delta()..insert(content);
-
-    contentController.document = Document.fromDelta(delta);
-
-    // 문서 업데이트
-    // contentController.replaceText(
-    //     0, contentController.document.length, content);
-    notifyListeners();
-  }
-
   void makePreviewImageList() async {
-    // 이미지 미리보기
+    _previewImageList.clear();
     final delta = contentController.document.toDelta();
 
     for (var op in delta.toList()) {
@@ -88,6 +73,18 @@ class MatchBoardDetailProvider extends ChangeNotifier {
 
   void toggleAppbarVisible() {
     _isAppBarVisible = !_isAppBarVisible;
+    notifyListeners();
+  }
+
+  void updateTalentDetailPost(MatchingDetailPost detailPost) {
+    _matchingDetailPost = detailPost;
+    String content = _matchingDetailPost.content;
+
+    var htmlToDelta = HtmlToDelta().convert(content);
+
+    contentController.document = Document.fromDelta(htmlToDelta);
+    contentController.readOnly = true;
+    makePreviewImageList();
     notifyListeners();
   }
 }
