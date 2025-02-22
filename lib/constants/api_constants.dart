@@ -28,6 +28,10 @@ abstract class ApiConstants {
 
   static const String getUploadImagesUrl = "$baseUrl/v1/uploads";
 
+  static String getTalentBoard(int postNo) {
+    return "$baseUrl/v1/posts/exchanges/$postNo";
+  }
+
   static String getFineUserPwUrl(String userId) {
     return "$baseUrl/v1/auth/password/$userId/email";
   }
