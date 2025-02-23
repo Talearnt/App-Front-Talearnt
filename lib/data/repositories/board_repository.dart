@@ -11,6 +11,7 @@ import 'package:dartz/dartz.dart';
 
 import '../../constants/api_constants.dart';
 import '../model/param/talent_exchange_posts_filter_param.dart';
+import '../model/respone/matching_detail_post.dart';
 import '../model/respone/matching_post.dart';
 
 class BoardRepository {
@@ -55,5 +56,13 @@ class BoardRepository {
       final pagination = Pagination.fromJson(response['data']['pagination']);
       return right({'posts': posts, 'pagination': pagination});
     });
+  }
+
+  Future<Either<Failure, MatchingDetailPost>> getTalentDetailPost(
+      int postNo) async {
+    final response =
+        await dio.get(ApiConstants.getTalentBoard(postNo), null, null);
+    return response.fold(
+        left, (result) => right(MatchingDetailPost.fromJson(result["data"])));
   }
 }
