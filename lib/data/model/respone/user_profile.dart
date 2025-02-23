@@ -13,6 +13,13 @@ class UserProfile {
     required this.receiveTalents,
   });
 
+  UserProfile.empty()
+      : userNo = 0,
+        profileImg = '',
+        nickname = '',
+        giveTalents = [],
+        receiveTalents = [];
+
   factory UserProfile.fromJson(Map<String, dynamic> json) {
     return UserProfile(
       userNo: json['userNo'] ?? 0,

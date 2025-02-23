@@ -11,6 +11,8 @@ import 'package:provider/provider.dart';
 
 import '../../../common/widget/bottom_btn.dart';
 import '../../../provider/board/match_board_detail_provider.dart';
+import '../../../provider/profile/profile_provider.dart';
+import '../widget/modify_board_bottom_sheet.dart';
 
 class MatchBoardDetailPage extends StatelessWidget {
   const MatchBoardDetailPage({super.key});
@@ -19,12 +21,30 @@ class MatchBoardDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final matchBoardDetailProvider =
         Provider.of<MatchBoardDetailProvider>(context);
+    final profileProvider = Provider.of<ProfileProvider>(context);
     return Scaffold(
       appBar: TopAppBar(
         onPressed: () {
           context.pop();
         },
         first: InkWell(
+          onTap: () {
+            showModalBottomSheet(
+              context: context,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(24),
+                ),
+              ),
+              clipBehavior: Clip.antiAlias,
+              builder: (BuildContext context) {
+                return ModifyBoardBottomSheet(
+                  isMine: matchBoardDetailProvider.matchingDetailPost.userNo ==
+                      profileProvider.userProfile.userNo,
+                );
+              },
+            );
+          },
           child: SvgPicture.asset(
             'assets/icons/kebab_menu.svg',
           ),

@@ -10,6 +10,7 @@ import 'package:app_front_talearnt/provider/auth/sign_up_provider.dart';
 import 'package:app_front_talearnt/provider/auth/storage_provider.dart';
 import 'package:app_front_talearnt/provider/common/common_provider.dart';
 import 'package:app_front_talearnt/utils/token_manager.dart';
+import 'package:app_front_talearnt/view_model/profile_view_model.dart';
 import 'package:flutter/material.dart';
 
 import '../common/common_navigator.dart';
@@ -28,6 +29,7 @@ class AuthViewModel extends ChangeNotifier {
   final CommonNavigator commonNavigator;
   final StorageProvider storageProvider;
   final CommonProvider commonProvider;
+  final ProfileViewModel profileViewModel;
 
   AuthViewModel(
     this.loginProvider,
@@ -39,6 +41,7 @@ class AuthViewModel extends ChangeNotifier {
     this.commonNavigator,
     this.storageProvider,
     this.commonProvider,
+    this.profileViewModel,
   );
 
   Future<void> login(String email, String pw) async {
@@ -50,7 +53,7 @@ class AuthViewModel extends ChangeNotifier {
       (token) {
         tokenManager.saveToken(token);
         loginProvider.updateLoginFormSuccess();
-        getUserProfile();
+        profileViewModel.getUserProfile();
       },
     );
   }
@@ -253,25 +256,6 @@ class AuthViewModel extends ChangeNotifier {
       (userIdInfo) {
         findIdProvider.setFindedUserIdInfo(
             userIdInfo.userId, userIdInfo.createdAt);
-      },
-    );
-  }
-
-  Future<void> getUserProfile() async {
-    final result = await authRepository.getUserProfile();
-
-    result.fold(
-      (failure) => commonNavigator.showSingleDialog(
-          content: ErrorMessages.getMessage(
-        failure.errorCode,
-      )), //dialog 띄워줘야됨
-      (userProfile) {
-        if (userProfile.receiveTalents.isEmpty &&
-            userProfile.giveTalents.isEmpty) {
-          commonNavigator.goRoute('/set-keyword');
-        } else {
-          commonNavigator.goRoute('/home');
-        }
       },
     );
   }
