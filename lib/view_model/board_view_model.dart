@@ -74,9 +74,9 @@ class BoardViewModel extends ChangeNotifier {
       String exchangeType,
       bool? requiredBadge,
       String duration,
-      List<String>? urls) async {
+      List<String>? imageUrls) async {
     final badge = requiredBadge ?? false;
-    final urlList = urls ?? [];
+    final urlList = imageUrls ?? [];
     MatchBoardParam param = MatchBoardParam(
       title: title,
       content: content,
@@ -85,7 +85,7 @@ class BoardViewModel extends ChangeNotifier {
       exchangeType: exchangeType,
       requiredBadge: badge,
       duration: duration,
-      urls: urlList,
+      imageUrls: urlList,
     );
 
     final result = await boardRepository.insertMatchBoard(param);
