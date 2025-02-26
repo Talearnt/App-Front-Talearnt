@@ -121,6 +121,7 @@ class MatchWrite2Page extends StatelessWidget {
             const SizedBox(
               height: 16,
             ),
+
             Expanded(
               child: QuillEditor(
                 controller: matchWriteProvider.contentController,

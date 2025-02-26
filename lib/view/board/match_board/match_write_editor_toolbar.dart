@@ -1,4 +1,5 @@
 import 'package:app_front_talearnt/common/theme.dart';
+import 'package:app_front_talearnt/common/widget/button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:provider/provider.dart';
@@ -26,7 +27,19 @@ Widget getToolbar(BuildContext context, MatchWriteProvider matchWriteProvider) {
       children: [
         const SizedBox(width: 10),
         IconButton(
-          onPressed: () async {},
+          onPressed: () async {
+            final linkData =
+                QuillTextLink.prepare(matchWriteProvider.contentController);
+
+            final result =
+                await _showLinkDialog(context, linkData.text, linkData.link);
+
+            if (result == null || result["url"]!.isEmpty) return;
+
+            final updatedLink = QuillTextLink(result["text"]!, result["url"]!);
+
+            updatedLink.submit(matchWriteProvider.contentController);
+          },
           icon: SvgPicture.asset('assets/icons/link_before.svg'),
         ),
         IconButton(
@@ -386,4 +399,119 @@ Widget getToolbar(BuildContext context, MatchWriteProvider matchWriteProvider) {
   } else {
     return const SizedBox.shrink();
   }
+}
+
+Future<Map<String, String>?> _showLinkDialog(
+    BuildContext context, String? initialText, String? initialUrl) async {
+  TextEditingController textController =
+      TextEditingController(text: initialText);
+  TextEditingController urlController = TextEditingController(text: initialUrl);
+
+  return showDialog<Map<String, String>>(
+    context: context,
+    barrierDismissible: false,
+    builder: (context) {
+      return Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+          width: MediaQuery.of(context).size.width * 0.75,
+          height: 302,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "내용문구",
+                    style: TextTypes.bodyMedium03(color: Palette.text01),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 4),
+              TextField(
+                controller: textController,
+                decoration: InputDecoration(
+                  hintText: "예: 제 포트폴리오입니다.",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  enabledBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Palette.line01,
+                    ),
+                  ),
+                  hintStyle: TextTypes.body02(color: Palette.text04),
+                ),
+              ),
+              const SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "하이퍼링크",
+                    style: TextTypes.bodyMedium03(
+                      color: Palette.text01,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 4),
+              TextField(
+                controller: urlController,
+                decoration: InputDecoration(
+                  hintText: "URL을 입력해 주세요.",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  hintStyle: TextTypes.body02(color: Palette.text04),
+                  enabledBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Palette.line01,
+                    ),
+                  ),
+                ),
+                keyboardType: TextInputType.url,
+              ),
+              const SizedBox(height: 32),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Expanded(
+                    child: SecondaryMGray(
+                      content: "취소",
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 8,
+                  ),
+                  Expanded(
+                    child: PrimaryM(
+                      isEnabled: textController.text.isNotEmpty &&
+                          urlController.text.isNotEmpty,
+                      content: "완료",
+                      onPressed: () {
+                        Navigator.pop(context, {
+                          "text": textController.text,
+                          "url": urlController.text,
+                        });
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
 }
