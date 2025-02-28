@@ -75,6 +75,7 @@ flutter:
     - assets/icons/fail_helper.svg
     - assets/icons/success_helper.svg
     - assets/icons/add_square.svg
+    - assets/icons/background_color.svg
     - assets/icons/back_arrow.svg
     - assets/icons/back_typo.svg
     - assets/icons/bell_off.svg
@@ -188,6 +189,7 @@ flutter:
     - assets/icons/red_60_on.svg
     - assets/icons/right_before.svg
     - assets/img/success_sign_up_logo.svg
+    - assets/icons/text_color.svg
     - assets/icons/typo.svg
     - assets/icons/underline_after.svg
     - assets/icons/underline_before.svg
