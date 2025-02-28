@@ -47,5 +47,7 @@ class CommonNavigator {
 
   void goRoute(String route) => context.go(route);
 
+  void pushRoute(String route) => context.push(route);
+
   void goBack() => context.pop();
 }

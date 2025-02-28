@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../clear_text.dart';
 
 class LoginProvider extends ChangeNotifier with ClearText {
+  bool _initLoggedIn = true;
+  bool _autoLoggedIn = false;
   bool _isLoggedIn = false;
   final TextEditingController _emailController = TextEditingController();
   final FocusNode _emailFocusNode = FocusNode();
@@ -14,6 +16,9 @@ class LoginProvider extends ChangeNotifier with ClearText {
   final FocusNode _passwordFocusNode = FocusNode();
   bool _passwordValid = true;
   String _passwordValidMessage = '';
+
+  bool get initLoggedIn => _initLoggedIn;
+  bool get autoLoggedIn => _autoLoggedIn;
 
   bool get isLoggedIn => _isLoggedIn;
 
@@ -107,6 +112,15 @@ class LoginProvider extends ChangeNotifier with ClearText {
 
   void logout() {
     _isLoggedIn = false;
+    notifyListeners();
+  }
+  void setAutoLogin() {
+    _autoLoggedIn = !_autoLoggedIn;
+    notifyListeners();
+  }
+  void updateInitLoggedIn(bool loggedIn) {
+    _initLoggedIn = loggedIn;
+    notifyListeners();
   }
 
   void testAutoLogin() {

@@ -1,17 +1,18 @@
 import 'package:app_front_talearnt/common/theme.dart';
-import '../../../provider/board/match_write_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:go_router/go_router.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+
+import '../../../provider/board/match_board_detail_provider.dart';
 
 class MatchBoardImageViewDetailPage extends StatelessWidget {
   const MatchBoardImageViewDetailPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final matchWriteProvider = Provider.of<MatchWriteProvider>(context);
-    final double screenHeight = MediaQuery.of(context).size.height;
+    final matchBoardDetailProvider =
+        Provider.of<MatchBoardDetailProvider>(context);
     final double appBarHeight = AppBar().preferredSize.height;
     final double safePadding = MediaQuery.of(context).padding.top;
     const double bottomAppBarHeight = 128.0; // 바텀 앱바 높이
@@ -20,15 +21,15 @@ class MatchBoardImageViewDetailPage extends StatelessWidget {
       backgroundColor: const Color(0xff000000),
       body: GestureDetector(
         onTap: () {
-          matchWriteProvider.toggleAppbarVisible(); // 앱바의 가시성 토글
+          matchBoardDetailProvider.toggleAppbarVisible(); // 앱바의 가시성 토글
         },
         child: Stack(
           children: [
             Align(
               alignment: Alignment.center,
               child: Image.file(
-                matchWriteProvider
-                    .previewImageList[matchWriteProvider.previeImageIndex],
+                matchBoardDetailProvider.previewImageList[
+                    matchBoardDetailProvider.previewImageIndex],
                 width: double.infinity,
                 fit: BoxFit.cover,
               ),
@@ -36,7 +37,7 @@ class MatchBoardImageViewDetailPage extends StatelessWidget {
             // 상단 AppBar
             AnimatedPositioned(
               duration: const Duration(milliseconds: 300),
-              top: matchWriteProvider.isAppBarVisible
+              top: matchBoardDetailProvider.isAppBarVisible
                   ? 0
                   : -appBarHeight - safePadding,
               left: 0,
@@ -49,19 +50,23 @@ class MatchBoardImageViewDetailPage extends StatelessWidget {
                   hoverColor: Colors.transparent,
                   icon: SvgPicture.asset(
                     'assets/icons/justify_before.svg',
-                    color: const Color(0xffffffff),
+                    colorFilter: const ColorFilter.mode(
+                      Color(0xffffffff),
+                      BlendMode.srcIn,
+                    ),
                   ),
                   onPressed: () {
-                    context.push('/match_image_view');
+                    context.go('/match-board-detail-page/match-image-view');
                   },
                 ),
                 title: Text.rich(
                   TextSpan(
-                    text: '${matchWriteProvider.previeImageIndex + 1}',
+                    text: '${matchBoardDetailProvider.previewImageIndex + 1}',
                     style: TextTypes.body02(color: Palette.primaryBG02),
                     children: [
                       TextSpan(
-                        text: '/${matchWriteProvider.previewImageList.length}',
+                        text:
+                            '/${matchBoardDetailProvider.previewImageList.length}',
                         style: TextTypes.body02(color: Palette.bgBackGround),
                       ),
                     ],
@@ -72,10 +77,13 @@ class MatchBoardImageViewDetailPage extends StatelessWidget {
                     hoverColor: Colors.transparent,
                     icon: SvgPicture.asset(
                       'assets/icons/close.svg',
-                      color: const Color(0xffffffff),
+                      colorFilter: const ColorFilter.mode(
+                        Color(0xffffffff),
+                        BlendMode.srcIn,
+                      ),
                     ),
                     onPressed: () {
-                      context.go('/match_preview');
+                      context.pop();
                     },
                   ),
                 ],
@@ -83,8 +91,9 @@ class MatchBoardImageViewDetailPage extends StatelessWidget {
             ),
             AnimatedPositioned(
               duration: const Duration(milliseconds: 300),
-              bottom:
-                  matchWriteProvider.isAppBarVisible ? 0 : -bottomAppBarHeight,
+              bottom: matchBoardDetailProvider.isAppBarVisible
+                  ? 0
+                  : -bottomAppBarHeight,
               left: 0,
               right: 0,
               child: Container(
@@ -97,7 +106,7 @@ class MatchBoardImageViewDetailPage extends StatelessWidget {
                       const SizedBox(
                         width: 24,
                       ),
-                      ...matchWriteProvider.previewImageList
+                      ...matchBoardDetailProvider.previewImageList
                           .asMap()
                           .entries
                           .map(
@@ -113,17 +122,17 @@ class MatchBoardImageViewDetailPage extends StatelessWidget {
                               borderRadius: BorderRadius.circular(8),
                               child: GestureDetector(
                                 onTap: () {
-                                  matchWriteProvider
+                                  matchBoardDetailProvider
                                       .setPreviewImageIndex(index);
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(
                                     border: Border.all(
-                                      color:
-                                          matchWriteProvider.previeImageIndex ==
-                                                  index
-                                              ? Palette.primary01
-                                              : Palette.icon04,
+                                      color: matchBoardDetailProvider
+                                                  .previewImageIndex ==
+                                              index
+                                          ? Palette.primary01
+                                          : Palette.icon04,
                                       width: 1,
                                     ),
                                   ),

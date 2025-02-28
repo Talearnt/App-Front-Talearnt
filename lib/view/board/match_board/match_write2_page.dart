@@ -52,20 +52,41 @@ class MatchWrite2Page extends StatelessWidget {
 
             if (matchWriteProvider.uploadImageInfos.isNotEmpty) {
               await boardViewModel
-                  .getImageUploadUrl(matchWriteProvider.uploadImageInfos)
-                  .then(
-                (value) async {
-                  for (int idx = 0;
-                      idx < matchWriteProvider.imageUploadUrls.length;
-                      idx++) {
-                    await boardViewModel.uploadImage(
-                      matchWriteProvider.imageUploadUrls[idx],
-                      matchWriteProvider.uploadImageInfos[idx]["file"],
-                      matchWriteProvider.uploadImageInfos[idx]["fileSize"],
-                      matchWriteProvider.uploadImageInfos[idx]["fileType"],
-                    );
-                  }
-                },
+                  .getImageUploadUrl(matchWriteProvider.uploadImageInfos);
+
+              for (int idx = 0;
+                  idx < matchWriteProvider.imageUploadUrls.length;
+                  idx++) {
+                await boardViewModel.uploadImage(
+                  matchWriteProvider.imageUploadUrls[idx],
+                  matchWriteProvider.uploadImageInfos[idx]["file"],
+                  matchWriteProvider.uploadImageInfos[idx]["fileSize"],
+                  matchWriteProvider.uploadImageInfos[idx]["fileType"],
+                );
+              }
+            }
+
+            matchWriteProvider.checkTitleAndBoard();
+
+            if (matchWriteProvider.isTitleAndBoardEmpty) {
+              matchWriteProvider.insertMatchBoard();
+
+              await boardViewModel.insertMatchBoard(
+                matchWriteProvider.titlerController.text,
+                matchWriteProvider.htmlContent,
+                matchWriteProvider.selectedGiveTalentKeywordCodes,
+                matchWriteProvider.selectedInterestTalentKeywordCodes,
+                matchWriteProvider.selectedExchangeType,
+                false,
+                matchWriteProvider.selectedDuration,
+                matchWriteProvider.imageUploadedUrls,
+              );
+            } else {
+              ToastMessage.show(
+                context: context,
+                message: matchWriteProvider.boardToastMessage,
+                type: 2,
+                bottom: 50,
               );
             }
           },

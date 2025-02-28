@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../common/theme.dart';
@@ -40,12 +41,28 @@ class AfterFilterNoBoardListPage extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                '필터 변경 후 다시 시도해 보세요',
+                '필터를 초기화 하거나',
+                style: TextTypes.bodyMedium01(color: Palette.text02),
+              ),
+              Text(
+                '직접 게시물을 작성해 보세요',
                 style: TextTypes.bodyMedium01(color: Palette.text02),
               ),
             ],
           ),
           const SizedBox(height: 56),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: PrimaryM(
+              content: '게시물 작성하기',
+              onPressed: () {
+                boardType == 'match'
+                    ? context.push('/match_write1')
+                    : context.push('/match_write1'); //이후에 커뮤니티 작성 으로 변경해야됨
+              },
+            ),
+          ),
+          const SizedBox(height: 8),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: SecondaryMGray(

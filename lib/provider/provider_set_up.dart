@@ -1,5 +1,6 @@
 import 'package:app_front_talearnt/common/common_navigator.dart';
 import 'package:app_front_talearnt/data/repositories/keyword_repository.dart';
+import 'package:app_front_talearnt/data/repositories/profile_repository.dart';
 import 'package:app_front_talearnt/provider/auth/find_id_provider.dart';
 import 'package:app_front_talearnt/provider/auth/find_password_provider.dart';
 import 'package:app_front_talearnt/provider/auth/login_provider.dart';
@@ -8,6 +9,7 @@ import 'package:app_front_talearnt/provider/auth/storage_provider.dart';
 import 'package:app_front_talearnt/provider/board/common_board_provider.dart';
 import 'package:app_front_talearnt/provider/board/match_board_provider.dart';
 import 'package:app_front_talearnt/provider/keyword/keyword_provider.dart';
+import 'package:app_front_talearnt/provider/profile/profile_provider.dart';
 import 'package:app_front_talearnt/view_model/keyword_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -17,12 +19,15 @@ import '../data/repositories/auth_repository.dart';
 import '../data/repositories/board_repository.dart';
 import '../data/services/authorization_interceptor.dart';
 import '../data/services/dio_service.dart';
+import '../data/services/secure_storage_service.dart';
 import '../main.dart';
 import '../utils/token_manager.dart';
 import '../view_model/auth_view_model.dart';
 import '../view_model/board_view_model.dart';
+import '../view_model/profile_view_model.dart';
 import 'auth/kakao_provider.dart';
 import 'board/community_board_provider.dart';
+import 'board/match_board_detail_provider.dart';
 import 'board/match_write_provider.dart';
 import 'common/common_provider.dart';
 
@@ -57,6 +62,9 @@ class ProviderSetup extends StatelessWidget {
             interceptor: context.read<AuthorizationInterceptor>(),
           ),
         ),
+        Provider<SecureStorageService>(
+          create: (context) => SecureStorageService(),
+        ),
         ChangeNotifierProvider<CommonProvider>(create: (_) => CommonProvider()),
         ChangeNotifierProvider<KakaoProvider>(create: (_) => KakaoProvider()),
         ChangeNotifierProvider<SignUpProvider>(create: (_) => SignUpProvider()),
@@ -66,6 +74,15 @@ class ProviderSetup extends StatelessWidget {
             create: (_) => StorageProvider()),
         ChangeNotifierProvider<FindPasswordProvider>(
             create: (_) => FindPasswordProvider()),
+        ChangeNotifierProvider<ProfileProvider>(
+            create: (_) => ProfileProvider()),
+        ChangeNotifierProvider<ProfileViewModel>(
+          create: (context) => ProfileViewModel(
+            CommonNavigator(navigatorKey),
+            ProfileRepository(context.read<DioService>()),
+            context.read<ProfileProvider>(),
+          ),
+        ),
         ChangeNotifierProvider<AuthViewModel>(
           create: (context) => AuthViewModel(
             context.read<LoginProvider>(),
@@ -77,6 +94,7 @@ class ProviderSetup extends StatelessWidget {
             CommonNavigator(navigatorKey),
             context.read<StorageProvider>(),
             context.read<CommonProvider>(),
+            context.read<ProfileViewModel>(),
           ),
         ),
         ChangeNotifierProvider<KeywordProvider>(
@@ -87,6 +105,8 @@ class ProviderSetup extends StatelessWidget {
             create: (_) => MatchBoardProvider()),
         ChangeNotifierProvider<CommunityBoardProvider>(
             create: (_) => CommunityBoardProvider()),
+        ChangeNotifierProvider<MatchBoardDetailProvider>(
+            create: (_) => MatchBoardDetailProvider()),
         ChangeNotifierProvider<BoardViewModel>(
           create: (context) => BoardViewModel(
             CommonNavigator(navigatorKey),
@@ -94,15 +114,7 @@ class ProviderSetup extends StatelessWidget {
             context.read<KeywordProvider>(),
             context.read<MatchWriteProvider>(),
             context.read<MatchBoardProvider>(),
-          ),
-        ),
-        ChangeNotifierProvider<KeywordViewModel>(
-          create: (context) => KeywordViewModel(
-            CommonNavigator(navigatorKey),
-            KeywordRepository(context.read<DioService>()),
-            context.read<KeywordProvider>(),
-            context.read<MatchWriteProvider>(),
-            context.read<MatchBoardProvider>(),
+            context.read<MatchBoardDetailProvider>(),
           ),
         ),
         ChangeNotifierProvider<KeywordViewModel>(

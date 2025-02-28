@@ -2,7 +2,7 @@
     package="com.example.app_front_talearnt">
     <uses-permission android:name="android.permission.INTERNET" />
     <application
-        android:label="app_front_talearnt"
+        android:label="Talearnt"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

@@ -1,7 +1,7 @@
 import 'package:intl/intl.dart';
 
 class MatchingPost {
-  final String profileImg;
+  final String? profileImg;
   final String nickname;
   final String authority;
   final int exchangePostNo;

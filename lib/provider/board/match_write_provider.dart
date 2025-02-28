@@ -151,6 +151,8 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
 
   List<String> _imageUploadUrls = [];
 
+  final List<String> _imageUploadedUrls = [];
+
   final List<File> _previewImageList = []; // 이미지 미리보기
 
   int _previeImageIndex = 0; // 이미지 미리보기
@@ -240,6 +242,8 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
   List<Map<String, dynamic>> get uploadImageInfos => _uploadImageInfos;
 
   List<String> get imageUploadUrls => _imageUploadUrls;
+
+  List<String> get imageUploadedUrls => _imageUploadedUrls;
 
   bool get isS3Upload => _isS3Upload;
 
@@ -606,14 +610,17 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
     String newImageUrl = imageUploadUrl.split('?')[0];
 
     for (var op in delta.toList()) {
-      if (op.value is Map<String, dynamic> && op.value.containsKey('image')) {
+      if (op.value is Map<String, dynamic> &&
+          op.value.containsKey('image') &&
+          op.value["image"] == imagePath) {
         op.value['image'] = newImageUrl;
       }
     }
 
+    _imageUploadedUrls.add(newImageUrl);
+
     _isS3Upload = false;
     _uploadImageInfos.clear();
-    _imageUploadUrls.clear();
   }
 
   void clearInfos() {

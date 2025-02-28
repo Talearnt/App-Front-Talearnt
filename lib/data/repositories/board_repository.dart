@@ -11,6 +11,7 @@ import 'package:dartz/dartz.dart';
 
 import '../../constants/api_constants.dart';
 import '../model/param/talent_exchange_posts_filter_param.dart';
+import '../model/respone/matching_detail_post.dart';
 import '../model/respone/matching_post.dart';
 
 class BoardRepository {
@@ -51,9 +52,17 @@ class BoardRepository {
         await dio.get(ApiConstants.getTalentBoardListUrl, null, body.toJson());
     return response.fold(left, (response) {
       final posts = List<MatchingPost>.from(
-          response['data'].map((data) => MatchingPost.fromJson(data)));
-      final pagination = Pagination.fromJson(response['pagination']);
+          response['data']['results'].map((data) => MatchingPost.fromJson(data)));
+      final pagination = Pagination.fromJson(response['data']['pagination']);
       return right({'posts': posts, 'pagination': pagination});
     });
+  }
+
+  Future<Either<Failure, MatchingDetailPost>> getTalentDetailPost(
+      int postNo) async {
+    final response =
+        await dio.get(ApiConstants.getTalentBoard(postNo), null, null);
+    return response.fold(
+        left, (result) => right(MatchingDetailPost.fromJson(result["data"])));
   }
 }

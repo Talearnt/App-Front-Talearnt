@@ -25,7 +25,6 @@ class BoardList extends StatelessWidget {
     final CommunityBoardProvider communityBoardProvider =
         Provider.of<CommunityBoardProvider>(context);
     matchBoardProvider.setViewModel(viewModel);
-    // communityBoardProvider.setViewModel(viewModel);
     return Scaffold(body: SafeArea(
       child: Consumer<CommonBoardProvider>(
         builder: (subContext, commonBoardProvider, child) {
@@ -76,7 +75,21 @@ class BoardList extends StatelessWidget {
                       }
                     }
                     return commonBoardProvider.boardType == 'match'
-                        ? MatchBoardListCard(post: posts[index], index: index)
+                        ? InkWell(
+                            overlayColor:
+                                WidgetStateProperty.all(Colors.transparent),
+                            onTap: () async {
+                              int postNo =
+                                  commonBoardProvider.boardType == 'match'
+                                      ? matchBoardProvider
+                                          .talentExchangePosts[index]
+                                          .exchangePostNo
+                                      : communityBoardProvider
+                                          .communityPosts[index].exchangePostNo;
+                              await viewModel.getTalentDetailPost(postNo);
+                            },
+                            child: MatchBoardListCard(
+                                post: posts[index], index: index))
                         : CommunityBoardListCard(
                             post: posts[index], index: index);
                   },

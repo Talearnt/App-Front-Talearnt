@@ -7,6 +7,7 @@ import '../common/common_navigator.dart';
 import '../data/model/param/s3_controller_param.dart';
 import '../data/model/param/talent_exchange_posts_filter_param.dart';
 import '../data/repositories/board_repository.dart';
+import '../provider/board/match_board_detail_provider.dart';
 import '../provider/board/match_board_provider.dart';
 import '../provider/board/match_write_provider.dart';
 import '../provider/keyword/keyword_provider.dart';
@@ -18,6 +19,7 @@ class BoardViewModel extends ChangeNotifier {
   final KeywordProvider keywordProvider;
   final MatchWriteProvider matchWriteProvider;
   final MatchBoardProvider talentBoardProvider;
+  final MatchBoardDetailProvider talentBoardDetailProvider;
 
   BoardViewModel(
     this.commonNavigator,
@@ -25,6 +27,7 @@ class BoardViewModel extends ChangeNotifier {
     this.keywordProvider,
     this.matchWriteProvider,
     this.talentBoardProvider,
+    this.talentBoardDetailProvider,
   );
 
   Future<void> getImageUploadUrl(
@@ -71,9 +74,9 @@ class BoardViewModel extends ChangeNotifier {
       String exchangeType,
       bool? requiredBadge,
       String duration,
-      List<String>? urls) async {
+      List<String>? imageUrls) async {
     final badge = requiredBadge ?? false;
-    final urlList = urls ?? [];
+    final urlList = imageUrls ?? [];
     MatchBoardParam param = MatchBoardParam(
       title: title,
       content: content,
@@ -82,7 +85,7 @@ class BoardViewModel extends ChangeNotifier {
       exchangeType: exchangeType,
       requiredBadge: badge,
       duration: duration,
-      urls: urlList,
+      imageUrls: urlList,
     );
 
     final result = await boardRepository.insertMatchBoard(param);
@@ -172,6 +175,16 @@ class BoardViewModel extends ChangeNotifier {
       final pagination = result['pagination'];
       talentBoardProvider.addTalentExchangePosts(posts);
       talentBoardProvider.updateTalentExchangePostsPage(pagination);
+    });
+  }
+
+  Future<void> getTalentDetailPost(int postNo) async {
+    final result = await boardRepository.getTalentDetailPost(postNo);
+    result.fold(
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)), (post) {
+      talentBoardDetailProvider.updateTalentDetailPost(post);
+      commonNavigator.pushRoute('/match-board-detail-page');
     });
   }
 }
