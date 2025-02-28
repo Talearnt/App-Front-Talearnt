@@ -10,6 +10,7 @@ import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
 import 'package:vsc_quill_delta_to_html/vsc_quill_delta_to_html.dart';
+import 'package:mime/mime.dart';
 
 import '../../constants/global_value_constants.dart';
 import '../clear_text.dart';
@@ -70,13 +71,74 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
 
   FocusNode get contentFocusNode => _contentFocusNode;
 
-  bool _onToolBar = false;
+  String _onToolBar = "default";
 
   bool _isBold = false;
   bool _isItalic = false;
   bool _isUnderline = false;
   bool _isUl = false;
   bool _isOl = false;
+
+  int _fontSize = 16;
+  final List<int> _fontSizeList = [12, 14, 16, 18, 20, 22, 24, 30];
+
+  static Color gray_100 = const Color(0xFF1E2224);
+  static Color red_60 = const Color(0xFFFF2727);
+  static Color orange_60 = const Color(0xFFFF9A27);
+  static Color yellow_60 = const Color(0xFFFFDB27);
+  static Color green_60 = const Color(0xFF00E57E);
+  static Color blue_60 = const Color(0xFF1B76FF);
+  static Color purple_60 = const Color(0xFFA927FF);
+
+  Color _fontColor = gray_100;
+  final List<Color> _fontColorList = [
+    gray_100,
+    red_60,
+    orange_60,
+    yellow_60,
+    green_60,
+    blue_60,
+    purple_60
+  ];
+
+  static Color white = const Color(0xFFFFFFFF);
+  static Color gray_30 = const Color(0xFFDEE1E3);
+  static Color red_20 = const Color(0xFFFFE5E5);
+  static Color orange_30 = const Color(0xFFFFE2C2);
+  static Color yellow_30 = const Color(0xFFFFF5C2);
+  static Color green_30 = const Color(0xFFB2FFDD);
+  static Color blue_30 = const Color(0xFFB2D1FF);
+  static Color purple_30 = const Color(0xFFE7C2FF);
+
+  Color _backGroundColor = white;
+  final List<Color> _backGroundColorList = [
+    white,
+    gray_30,
+    red_20,
+    orange_30,
+    yellow_30,
+    green_30,
+    blue_30,
+    purple_30
+  ];
+
+  static final Map<Color, String> _colorNames = {
+    white: "white",
+    gray_30: "gray_30",
+    gray_100: "gray_100",
+    red_20: "red_20",
+    red_60: "red_60",
+    orange_30: "orange_30",
+    orange_60: "orange_60",
+    yellow_30: "yellow_30",
+    yellow_60: "yellow_60",
+    green_30: "green_30",
+    green_60: "green_60",
+    blue_30: "blue_30",
+    blue_60: "blue_60",
+    purple_30: "purple_30",
+    purple_60: "purple_60",
+  };
 
   String _alignType = "left";
 
@@ -97,9 +159,15 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
 
   bool _isAppBarVisible = true; // 이미지 미리보기
 
+  final TextEditingController _linkTextController = TextEditingController();
+
+  final TextEditingController _urlController = TextEditingController();
+
+  bool _isLinkTextNotEmpty = false;
+
   bool _isS3Upload = false;
 
-  bool get onToolBar => _onToolBar;
+  String get onToolBar => _onToolBar;
 
   bool get isBold => _isBold;
 
@@ -110,6 +178,20 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
   bool get isUl => _isUl;
 
   bool get isOl => _isOl;
+
+  int get fontSize => _fontSize;
+
+  List<int> get fontSizeList => _fontSizeList;
+
+  Color get fontColor => _fontColor;
+
+  List<Color> get fontColorList => _fontColorList;
+
+  Color get backGroundColor => _backGroundColor;
+
+  List<Color> get backGroundColorList => _backGroundColorList;
+
+  Map<Color, String> get colorNames => _colorNames;
 
   String get alignType => _alignType;
 
@@ -175,6 +257,12 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
 
   bool get isAppBarVisible => _isAppBarVisible; // 이미지 미리보기
 
+  TextEditingController get linkTextController => _linkTextController;
+
+  TextEditingController get urlController => _urlController;
+
+  bool get isLinkTextNotEmpty => _isLinkTextNotEmpty;
+
   void clearProvider() {
     _titlerController.clear();
     _contentController.clear();
@@ -192,11 +280,16 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
     _durationRequiredMessage = "";
     _exchangeTypeRequiredMesage = "";
 
+    _onToolBar = "default";
+
     _isBold = false;
     _isItalic = false;
     _isUnderline = false;
     _isUl = false;
     _isOl = false;
+    _fontSize = 16;
+    _fontColor = gray_100;
+    _backGroundColor = white;
     _alignType = "left";
     _isChipsSelected = false;
     _isTitleAndBoardEmpty = false;
@@ -205,9 +298,11 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
     _htmlContent = "";
     _totalImageSize = 0;
 
-    _imageUploadUrls.clear();
-    _imageUploadedUrls.clear;
-    _uploadImageInfos.clear;
+    _previewImageList.clear();
+    _isS3Upload = false;
+
+    _linkTextController.clear();
+    _urlController.clear();
 
     reset();
     notifyListeners();
@@ -230,6 +325,12 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
 
   void _onChanged() {
     notifyListeners(); // Focus 상태 변경 시 UI 갱신
+  }
+
+  void updateController(TextEditingController textEditingController) {
+    textEditingController.addListener(() {
+      notifyListeners();
+    });
   }
 
   @override
@@ -260,8 +361,26 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
     notifyListeners();
   }
 
-  void setToolbar(boolType) {
-    _onToolBar = boolType;
+  void setFontSize(size) {
+    _fontSize = size;
+
+    notifyListeners();
+  }
+
+  void setFontColor(color) {
+    _fontColor = color;
+
+    notifyListeners();
+  }
+
+  void setBackGroundColor(color) {
+    _backGroundColor = color;
+
+    notifyListeners();
+  }
+
+  void setToolbar(type) {
+    _onToolBar = type;
     notifyListeners();
   }
 
@@ -462,18 +581,21 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
   Future<void> getUploadImagesInfo() async {
     final delta = contentController.document.toDelta();
     uploadImageInfos.clear();
+
     for (var op in delta.toList()) {
       if (op.value is Map<String, dynamic> && op.value.containsKey('image')) {
         final imagePath = op.value['image'];
 
         final imageFile = File(imagePath);
-
         final int sizeInBytes = await imageFile.length();
+
+        final mimeType =
+            lookupMimeType(imagePath) ?? "application/octet-stream";
 
         uploadImageInfos.add({
           "file": imageFile,
           "fileName": path.basename(imagePath),
-          "fileType": "image/${path.extension(imagePath).replaceAll(".", "")}",
+          "fileType": mimeType,
           "fileSize": sizeInBytes,
         });
       }
@@ -542,6 +664,23 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
   void toggleAppbarVisible() {
     // 이미지 미리보기
     _isAppBarVisible = !_isAppBarVisible;
+
+    notifyListeners();
+  }
+
+  void setLink(String linkText, String? url) {
+    _linkTextController.text = linkText;
+    _urlController.text = url ?? "";
+
+    notifyListeners();
+  }
+
+  void checkLinkText() {
+    if (_linkTextController.text.isNotEmpty && _urlController.text.isNotEmpty) {
+      _isLinkTextNotEmpty = true;
+    } else {
+      _isLinkTextNotEmpty = false;
+    }
 
     notifyListeners();
   }
