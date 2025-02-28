@@ -10,6 +10,7 @@ import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
 import 'package:vsc_quill_delta_to_html/vsc_quill_delta_to_html.dart';
+import 'package:mime/mime.dart';
 
 import '../../constants/global_value_constants.dart';
 import '../clear_text.dart';
@@ -156,6 +157,12 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
 
   bool _isAppBarVisible = true; // 이미지 미리보기
 
+  final TextEditingController _linkTextController = TextEditingController();
+
+  final TextEditingController _urlController = TextEditingController();
+
+  bool _isLinkTextNotEmpty = false;
+
   bool _isS3Upload = false;
 
   String get onToolBar => _onToolBar;
@@ -246,6 +253,12 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
 
   bool get isAppBarVisible => _isAppBarVisible; // 이미지 미리보기
 
+  TextEditingController get linkTextController => _linkTextController;
+
+  TextEditingController get urlController => _urlController;
+
+  bool get isLinkTextNotEmpty => _isLinkTextNotEmpty;
+
   void clearProvider() {
     _titlerController.clear();
     _contentController.clear();
@@ -284,6 +297,9 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
     _previewImageList.clear();
     _isS3Upload = false;
 
+    _linkTextController.clear();
+    _urlController.clear();
+
     reset();
     notifyListeners();
   }
@@ -305,6 +321,12 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
 
   void _onChanged() {
     notifyListeners(); // Focus 상태 변경 시 UI 갱신
+  }
+
+  void updateController(TextEditingController textEditingController) {
+    textEditingController.addListener(() {
+      notifyListeners();
+    });
   }
 
   @override
@@ -555,18 +577,21 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
   Future<void> getUploadImagesInfo() async {
     final delta = contentController.document.toDelta();
     uploadImageInfos.clear();
+
     for (var op in delta.toList()) {
       if (op.value is Map<String, dynamic> && op.value.containsKey('image')) {
         final imagePath = op.value['image'];
 
         final imageFile = File(imagePath);
-
         final int sizeInBytes = await imageFile.length();
+
+        final mimeType =
+            lookupMimeType(imagePath) ?? "application/octet-stream";
 
         uploadImageInfos.add({
           "file": imageFile,
           "fileName": path.basename(imagePath),
-          "fileType": "image/${path.extension(imagePath).replaceAll(".", "")}",
+          "fileType": mimeType,
           "fileSize": sizeInBytes,
         });
       }
@@ -632,6 +657,23 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
   void toggleAppbarVisible() {
     // 이미지 미리보기
     _isAppBarVisible = !_isAppBarVisible;
+
+    notifyListeners();
+  }
+
+  void setLink(String linkText, String? url) {
+    _linkTextController.text = linkText;
+    _urlController.text = url ?? "";
+
+    notifyListeners();
+  }
+
+  void checkLinkText() {
+    if (_linkTextController.text.isNotEmpty && _urlController.text.isNotEmpty) {
+      _isLinkTextNotEmpty = true;
+    } else {
+      _isLinkTextNotEmpty = false;
+    }
 
     notifyListeners();
   }
