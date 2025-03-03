@@ -60,7 +60,7 @@ class MatchWritePreviewPage extends StatelessWidget {
               matchWriteProvider.insertMatchBoard();
 
               await boardViewModel.insertMatchBoard(
-                matchWriteProvider.titlerController.text,
+                matchWriteProvider.titleController.text,
                 matchWriteProvider.htmlContent,
                 matchWriteProvider.selectedGiveTalentKeywordCodes,
                 matchWriteProvider.selectedInterestTalentKeywordCodes,
@@ -104,7 +104,7 @@ class MatchWritePreviewPage extends StatelessWidget {
                   Wrap(
                     children: [
                       Text(
-                        matchWriteProvider.titlerController.text,
+                        matchWriteProvider.titleController.text,
                         style: TextTypes.heading2(
                           color: Palette.text01,
                         ),

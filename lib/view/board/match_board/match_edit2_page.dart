@@ -2,6 +2,7 @@ import 'package:app_front_talearnt/common/theme.dart';
 import 'package:app_front_talearnt/common/widget/button.dart';
 import 'package:app_front_talearnt/common/widget/toast_message.dart';
 import 'package:app_front_talearnt/common/widget/top_app_bar.dart';
+import 'package:app_front_talearnt/provider/board/match_edit_provider.dart';
 import 'package:app_front_talearnt/view/board/match_board/match_write_editor_toolbar.dart';
 import 'package:app_front_talearnt/view_model/board_view_model.dart';
 import 'package:flutter/material.dart';
@@ -10,14 +11,12 @@ import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import '../../../provider/board/match_write_provider.dart';
-
-class MatchWrite2Page extends StatelessWidget {
-  const MatchWrite2Page({super.key});
+class MatchEdit2Page extends StatelessWidget {
+  const MatchEdit2Page({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final matchWriteProvider = Provider.of<MatchWriteProvider>(context);
+    final matchEditProvider = Provider.of<MatchEditProvider>(context);
     final boardViewModel = Provider.of<BoardViewModel>(context);
 
     ScrollController scrollController = ScrollController();
@@ -26,20 +25,20 @@ class MatchWrite2Page extends StatelessWidget {
       resizeToAvoidBottomInset: true,
       appBar: TopAppBar(
         onPressed: () {
-          context.go('/match_write1');
+          context.go('/match-edit1');
         },
         second: TextBtnM(
           content: '미리보기',
           onPressed: () {
-            matchWriteProvider.checkTitleAndBoard();
+            matchEditProvider.checkTitleAndBoard();
 
-            if (matchWriteProvider.isTitleAndBoardEmpty) {
-              matchWriteProvider.makePreviewImageList();
+            if (matchEditProvider.isTitleAndBoardEmpty) {
+              matchEditProvider.makePreviewImageList();
               context.push('/match_preview');
             } else {
               ToastMessage.show(
                   context: context,
-                  message: matchWriteProvider.boardToastMessage,
+                  message: matchEditProvider.boardToastMessage,
                   type: 2,
                   bottom: 50);
             }
@@ -48,43 +47,43 @@ class MatchWrite2Page extends StatelessWidget {
         first: PrimaryS(
           content: '등록',
           onPressed: () async {
-            await matchWriteProvider.getUploadImagesInfo();
+            await matchEditProvider.getUploadImagesInfo();
 
-            if (matchWriteProvider.uploadImageInfos.isNotEmpty) {
+            if (matchEditProvider.uploadImageInfos.isNotEmpty) {
               await boardViewModel
-                  .getImageUploadUrl(matchWriteProvider.uploadImageInfos);
+                  .getImageUploadUrl(matchEditProvider.uploadImageInfos);
 
               for (int idx = 0;
-                  idx < matchWriteProvider.imageUploadUrls.length;
+                  idx < matchEditProvider.imageUploadUrls.length;
                   idx++) {
                 await boardViewModel.uploadImage(
-                  matchWriteProvider.imageUploadUrls[idx],
-                  matchWriteProvider.uploadImageInfos[idx]["file"],
-                  matchWriteProvider.uploadImageInfos[idx]["fileSize"],
-                  matchWriteProvider.uploadImageInfos[idx]["fileType"],
+                  matchEditProvider.imageUploadUrls[idx],
+                  matchEditProvider.uploadImageInfos[idx]["file"],
+                  matchEditProvider.uploadImageInfos[idx]["fileSize"],
+                  matchEditProvider.uploadImageInfos[idx]["fileType"],
                 );
               }
             }
 
-            matchWriteProvider.checkTitleAndBoard();
+            matchEditProvider.checkTitleAndBoard();
 
-            if (matchWriteProvider.isTitleAndBoardEmpty) {
-              matchWriteProvider.insertMatchBoard();
+            if (matchEditProvider.isTitleAndBoardEmpty) {
+              matchEditProvider.insertMatchBoard();
 
               await boardViewModel.insertMatchBoard(
-                matchWriteProvider.titleController.text,
-                matchWriteProvider.htmlContent,
-                matchWriteProvider.selectedGiveTalentKeywordCodes,
-                matchWriteProvider.selectedInterestTalentKeywordCodes,
-                matchWriteProvider.selectedExchangeType,
+                matchEditProvider.titleController.text,
+                matchEditProvider.htmlContent,
+                matchEditProvider.selectedGiveTalentKeywordCodes,
+                matchEditProvider.selectedInterestTalentKeywordCodes,
+                matchEditProvider.selectedExchangeType,
                 false,
-                matchWriteProvider.selectedDuration,
-                matchWriteProvider.imageUploadedUrls,
+                matchEditProvider.selectedDuration,
+                matchEditProvider.imageUploadedUrls,
               );
             } else {
               ToastMessage.show(
                 context: context,
-                message: matchWriteProvider.boardToastMessage,
+                message: matchEditProvider.boardToastMessage,
                 type: 2,
                 bottom: 50,
               );
@@ -129,8 +128,8 @@ class MatchWrite2Page extends StatelessWidget {
               style: TextTypes.heading2(
                 color: Palette.text02,
               ),
-              controller: matchWriteProvider.titleController,
-              focusNode: matchWriteProvider.titleFocusNode,
+              controller: matchEditProvider.titleController,
+              focusNode: matchEditProvider.titleFocusNode,
             ),
             const SizedBox(
               height: 16,
@@ -145,8 +144,8 @@ class MatchWrite2Page extends StatelessWidget {
 
             Expanded(
               child: QuillEditor(
-                controller: matchWriteProvider.contentController,
-                focusNode: matchWriteProvider.contentFocusNode,
+                controller: matchEditProvider.contentController,
+                focusNode: matchEditProvider.contentFocusNode,
                 scrollController: scrollController,
                 configurations: QuillEditorConfigurations(
                   embedBuilders: FlutterQuillEmbeds.editorBuilders(),

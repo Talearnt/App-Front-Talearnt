@@ -8,6 +8,7 @@ import 'package:app_front_talearnt/provider/auth/sign_up_provider.dart';
 import 'package:app_front_talearnt/provider/auth/storage_provider.dart';
 import 'package:app_front_talearnt/provider/board/common_board_provider.dart';
 import 'package:app_front_talearnt/provider/board/match_board_provider.dart';
+import 'package:app_front_talearnt/provider/board/match_edit_provider.dart';
 import 'package:app_front_talearnt/provider/keyword/keyword_provider.dart';
 import 'package:app_front_talearnt/provider/profile/profile_provider.dart';
 import 'package:app_front_talearnt/view_model/keyword_view_model.dart';
@@ -47,6 +48,8 @@ class ProviderSetup extends StatelessWidget {
         ChangeNotifierProvider<LoginProvider>(create: (_) => LoginProvider()),
         ChangeNotifierProvider<MatchWriteProvider>(
             create: (_) => MatchWriteProvider()),
+        ChangeNotifierProvider<MatchEditProvider>(
+            create: (_) => MatchEditProvider()),
         Provider<AuthorizationInterceptor>(
           create: (context) => AuthorizationInterceptor(
             tokenManager: context.read<TokenManager>(),
@@ -124,6 +127,7 @@ class ProviderSetup extends StatelessWidget {
             context.read<KeywordProvider>(),
             context.read<MatchWriteProvider>(),
             context.read<MatchBoardProvider>(),
+            context.read<MatchEditProvider>(),
           ),
         ),
       ],

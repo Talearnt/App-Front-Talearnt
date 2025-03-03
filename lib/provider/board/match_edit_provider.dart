@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:app_front_talearnt/common/widget/button.dart';
 import 'package:app_front_talearnt/common/widget/dialog.dart';
+import 'package:app_front_talearnt/data/model/respone/keyword_category.dart';
+import 'package:app_front_talearnt/data/model/respone/matching_detail_post.dart';
 import 'package:app_front_talearnt/provider/common/custom_ticker_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
@@ -10,13 +12,14 @@ import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
 import 'package:vsc_quill_delta_to_html/vsc_quill_delta_to_html.dart';
+import 'package:flutter_quill_delta_from_html/parser/html_to_delta.dart';
 import 'package:mime/mime.dart';
 
 import '../../constants/global_value_constants.dart';
 import '../clear_text.dart';
 
-class MatchWriteProvider extends ChangeNotifier with ClearText {
-  MatchWriteProvider() : _tickerProvider = CustomTickerProvider() {
+class MatchEditProvider extends ChangeNotifier with ClearText {
+  MatchEditProvider() : _tickerProvider = CustomTickerProvider() {
     _giveTalentTabController = TabController(
         length: GlobalValueConstants.keywordCategoris.length,
         vsync: _tickerProvider);
@@ -683,5 +686,48 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
     }
 
     notifyListeners();
+  }
+
+  void updateTalentDetailPost(String content) {
+    var htmlToDelta = HtmlToDelta().convert(content);
+
+    contentController.document = Document.fromDelta(htmlToDelta);
+
+    notifyListeners();
+  }
+
+  void updateTitle(String title) {
+    _titleController.text = title;
+
+    notifyListeners();
+  }
+
+  List<int> convertTalentNamesToCodes(List<String> receiveTalents) {
+    Map<String, int> talentCodeMap = {
+      for (var category in GlobalValueConstants.keywordCategoris)
+        for (var talent in category.talentKeywords) talent.name: talent.code
+    };
+
+    return receiveTalents
+        .map((name) => talentCodeMap[name] ?? -1)
+        .where((code) => code != -1)
+        .toList();
+  }
+
+  Future<void> setPostInfo(MatchingDetailPost matchingDetailPost) async {
+    updateSelectedDuration(matchingDetailPost.duration);
+    updateSelectedExhangeType(matchingDetailPost.exchangeType);
+    updateTalentDetailPost(matchingDetailPost.content);
+    updateTitle(matchingDetailPost.title);
+
+    List<int> selectedGiveCode =
+        convertTalentNamesToCodes(matchingDetailPost.giveTalents);
+
+    List<int> selectedInterestCode =
+        convertTalentNamesToCodes(matchingDetailPost.receiveTalents);
+
+    updateSelectedGiveTalentKeywordCodes(selectedGiveCode);
+    updateInterestKeywordList(selectedInterestCode);
+    updateSelectedInterestTalentKeywordCodes(selectedInterestCode);
   }
 }
