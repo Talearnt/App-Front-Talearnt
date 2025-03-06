@@ -250,4 +250,10 @@ class GlobalValueConstants {
     {'code': '3개월', 'value': '3개월'},
     {'code': '3개월 이상', 'value': '3개월 이상'},
   ];
+  static List<Map<String, String>> communityCategoryTypes = [
+    {'code': '', 'value': '전체'},
+    {'code': 'FREE', 'value': '자유 게시판'},
+    {'code': 'STUDY', 'value': '스터디 모임 게시판'},
+    {'code': 'QUESTION', 'value': '질문 게시판'},
+  ];
 }

@@ -8,7 +8,7 @@ import '../common/custom_ticker_provider.dart';
 class CommunityBoardProvider extends ChangeNotifier {
   CommunityBoardProvider() : _tickerProvider = CustomTickerProvider() {
     _communityTabController = TabController(
-        length: GlobalValueConstants.keywordCategoris.length,
+        length: GlobalValueConstants.communityCategoryTypes.length,
         vsync: _tickerProvider);
     //_scrollController.addListener(_onScroll);
   }
