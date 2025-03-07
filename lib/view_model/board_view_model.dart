@@ -97,6 +97,40 @@ class BoardViewModel extends ChangeNotifier {
     });
   }
 
+  Future<void> editMatchBoard(
+    String title,
+    String content,
+    List<int> giveTalents,
+    List<int> receiveTalents,
+    String exchangeType,
+    bool? requiredBadge,
+    String duration,
+    List<String>? imageUrls,
+    int postNo,
+  ) async {
+    final badge = requiredBadge ?? false;
+    final urlList = imageUrls ?? [];
+    MatchBoardParam param = MatchBoardParam(
+      title: title,
+      content: content,
+      giveTalents: giveTalents,
+      receiveTalents: receiveTalents,
+      exchangeType: exchangeType,
+      requiredBadge: badge,
+      duration: duration,
+      imageUrls: urlList,
+    );
+
+    final result = await boardRepository.editMatchBoard(param, postNo);
+
+    result.fold(
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)),
+        (result) async {
+      await getEditedPostData(postNo);
+    });
+  }
+
   Future<void> getInitTalentExchangePosts() async {
     TalentExchangePostsFilterParam param = TalentExchangePostsFilterParam(
       status: "모집중",
@@ -187,6 +221,16 @@ class BoardViewModel extends ChangeNotifier {
             content: ErrorMessages.getMessage(failure.errorCode)), (post) {
       talentBoardDetailProvider.updateTalentDetailPost(post);
       commonNavigator.pushRoute('/match-board-detail-page');
+    });
+  }
+
+  Future<void> getEditedPostData(int postNo) async {
+    final result = await boardRepository.getTalentDetailPost(postNo);
+    result.fold(
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)), (post) {
+      talentBoardDetailProvider.updateTalentDetailPost(post);
+      commonNavigator.goRoute('/match-board-detail-page');
     });
   }
 }

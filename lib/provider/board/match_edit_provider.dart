@@ -31,6 +31,8 @@ class MatchEditProvider extends ChangeNotifier with ClearText {
     _contentController.addListener(_onChanged);
   }
 
+  int _postNo = 0;
+
   final TextEditingController _titleController = TextEditingController();
   final FocusNode _titleFocusNode = FocusNode();
 
@@ -154,7 +156,7 @@ class MatchEditProvider extends ChangeNotifier with ClearText {
 
   List<String> _imageUploadUrls = [];
 
-  final List<String> _imageUploadedUrls = [];
+  List<String> _imageUploadedUrls = [];
 
   final List<File> _previewImageList = []; // 이미지 미리보기
 
@@ -169,6 +171,8 @@ class MatchEditProvider extends ChangeNotifier with ClearText {
   bool _isLinkTextNotEmpty = false;
 
   bool _isS3Upload = false;
+
+  int get postNo => _postNo;
 
   String get onToolBar => _onToolBar;
 
@@ -306,6 +310,8 @@ class MatchEditProvider extends ChangeNotifier with ClearText {
 
     _linkTextController.clear();
     _urlController.clear();
+
+    _postNo = 0;
 
     reset();
     notifyListeners();
@@ -702,6 +708,18 @@ class MatchEditProvider extends ChangeNotifier with ClearText {
     notifyListeners();
   }
 
+  void updatePostNo(int postNumber) {
+    _postNo = postNumber;
+
+    notifyListeners();
+  }
+
+  void updateUploadedUrls(List<String> imageUrls) {
+    _imageUploadedUrls = imageUrls;
+
+    notifyListeners();
+  }
+
   List<int> convertTalentNamesToCodes(List<String> receiveTalents) {
     Map<String, int> talentCodeMap = {
       for (var category in GlobalValueConstants.keywordCategoris)
@@ -715,6 +733,8 @@ class MatchEditProvider extends ChangeNotifier with ClearText {
   }
 
   Future<void> setPostInfo(MatchingDetailPost matchingDetailPost) async {
+    updatePostNo(matchingDetailPost.exchangePostNo);
+
     updateSelectedDuration(matchingDetailPost.duration);
     updateSelectedExhangeType(matchingDetailPost.exchangeType);
     updateTalentDetailPost(matchingDetailPost.content);
@@ -729,5 +749,7 @@ class MatchEditProvider extends ChangeNotifier with ClearText {
     updateSelectedGiveTalentKeywordCodes(selectedGiveCode);
     updateInterestKeywordList(selectedInterestCode);
     updateSelectedInterestTalentKeywordCodes(selectedInterestCode);
+
+    updateUploadedUrls(matchingDetailPost.imageUrls);
   }
 }

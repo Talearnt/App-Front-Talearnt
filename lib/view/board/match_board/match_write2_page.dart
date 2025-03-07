@@ -35,7 +35,7 @@ class MatchWrite2Page extends StatelessWidget {
 
             if (matchWriteProvider.isTitleAndBoardEmpty) {
               matchWriteProvider.makePreviewImageList();
-              context.push('/match_preview');
+              context.push('/match-write-preview');
             } else {
               ToastMessage.show(
                   context: context,

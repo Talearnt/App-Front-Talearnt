@@ -34,7 +34,7 @@ class MatchEdit2Page extends StatelessWidget {
 
             if (matchEditProvider.isTitleAndBoardEmpty) {
               matchEditProvider.makePreviewImageList();
-              context.push('/match_preview');
+              context.push('/match-edit-preview');
             } else {
               ToastMessage.show(
                   context: context,
@@ -45,32 +45,32 @@ class MatchEdit2Page extends StatelessWidget {
           },
         ),
         first: PrimaryS(
-          content: '등록',
+          content: '완료',
           onPressed: () async {
-            await matchEditProvider.getUploadImagesInfo();
+            // await matchEditProvider.getUploadImagesInfo();
 
-            if (matchEditProvider.uploadImageInfos.isNotEmpty) {
-              await boardViewModel
-                  .getImageUploadUrl(matchEditProvider.uploadImageInfos);
+            // if (matchEditProvider.uploadImageInfos.isNotEmpty) {
+            //   await boardViewModel
+            //       .getImageUploadUrl(matchEditProvider.uploadImageInfos);
 
-              for (int idx = 0;
-                  idx < matchEditProvider.imageUploadUrls.length;
-                  idx++) {
-                await boardViewModel.uploadImage(
-                  matchEditProvider.imageUploadUrls[idx],
-                  matchEditProvider.uploadImageInfos[idx]["file"],
-                  matchEditProvider.uploadImageInfos[idx]["fileSize"],
-                  matchEditProvider.uploadImageInfos[idx]["fileType"],
-                );
-              }
-            }
+            //   for (int idx = 0;
+            //       idx < matchEditProvider.imageUploadUrls.length;
+            //       idx++) {
+            //     await boardViewModel.uploadImage(
+            //       matchEditProvider.imageUploadUrls[idx],
+            //       matchEditProvider.uploadImageInfos[idx]["file"],
+            //       matchEditProvider.uploadImageInfos[idx]["fileSize"],
+            //       matchEditProvider.uploadImageInfos[idx]["fileType"],
+            //     );
+            //   }
+            // }
 
             matchEditProvider.checkTitleAndBoard();
 
             if (matchEditProvider.isTitleAndBoardEmpty) {
               matchEditProvider.insertMatchBoard();
 
-              await boardViewModel.insertMatchBoard(
+              await boardViewModel.editMatchBoard(
                 matchEditProvider.titleController.text,
                 matchEditProvider.htmlContent,
                 matchEditProvider.selectedGiveTalentKeywordCodes,
@@ -79,6 +79,7 @@ class MatchEdit2Page extends StatelessWidget {
                 false,
                 matchEditProvider.selectedDuration,
                 matchEditProvider.imageUploadedUrls,
+                matchEditProvider.postNo,
               );
             } else {
               ToastMessage.show(
