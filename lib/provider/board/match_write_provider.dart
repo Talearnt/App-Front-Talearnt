@@ -604,7 +604,7 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
     notifyListeners();
   }
 
-  void exchangeImageUrl(String imageUploadUrl, String imagePath) {
+  Future<void> exchangeImageUrl(String imageUploadUrl, String imagePath) async {
     final delta = contentController.document.toDelta();
 
     String newImageUrl = imageUploadUrl.split('?')[0];
@@ -618,7 +618,9 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
     }
 
     _imageUploadedUrls.add(newImageUrl);
+  }
 
+  void finishImageUpload() {
     _isS3Upload = false;
     _uploadImageInfos.clear();
   }

@@ -20,7 +20,7 @@ class MatchEdit1Page extends StatelessWidget {
       appBar: TopAppBar(
         onPressed: () {
           matchEditProvider.clearProvider();
-          context.pop();
+          context.go('/match-board-detail-page');
         },
       ),
       bottomNavigationBar: Container(

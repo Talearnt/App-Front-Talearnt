@@ -39,7 +39,7 @@ class ModifyBoardBottomSheet extends StatelessWidget {
                     await keywordViewModel.getOfferedKeywords();
                     await matchEditProvider.setPostInfo(
                         matchBoardDetailProvider.matchingDetailPost);
-                    context.push('/match-edit1');
+                    context.go('/match-edit1');
                   },
                   child: Center(
                     // 가운데 정렬

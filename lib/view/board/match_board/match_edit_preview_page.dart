@@ -38,8 +38,8 @@ class MatchEditPreviewPage extends StatelessWidget {
             await matchEditProvider.getUploadImagesInfo();
 
             if (matchEditProvider.uploadImageInfos.isNotEmpty) {
-              await boardViewModel
-                  .getImageUploadUrl(matchEditProvider.uploadImageInfos);
+              await boardViewModel.getImageUploadUrl(
+                  matchEditProvider.uploadImageInfos, "E");
 
               for (int idx = 0;
                   idx < matchEditProvider.imageUploadUrls.length;
@@ -49,6 +49,7 @@ class MatchEditPreviewPage extends StatelessWidget {
                   matchEditProvider.uploadImageInfos[idx]["file"],
                   matchEditProvider.uploadImageInfos[idx]["fileSize"],
                   matchEditProvider.uploadImageInfos[idx]["fileType"],
+                  "E",
                 );
               }
             }

@@ -3,6 +3,7 @@ import 'package:app_front_talearnt/common/widget/button.dart';
 import 'package:app_front_talearnt/common/widget/toast_message.dart';
 import 'package:app_front_talearnt/common/widget/top_app_bar.dart';
 import 'package:app_front_talearnt/provider/board/match_edit_provider.dart';
+import 'package:app_front_talearnt/view/board/match_board/match_edit_editor_toolbar.dart';
 import 'package:app_front_talearnt/view/board/match_board/match_write_editor_toolbar.dart';
 import 'package:app_front_talearnt/view_model/board_view_model.dart';
 import 'package:flutter/material.dart';
@@ -47,23 +48,25 @@ class MatchEdit2Page extends StatelessWidget {
         first: PrimaryS(
           content: '완료',
           onPressed: () async {
-            // await matchEditProvider.getUploadImagesInfo();
+            await matchEditProvider.getUploadImagesInfo();
 
-            // if (matchEditProvider.uploadImageInfos.isNotEmpty) {
-            //   await boardViewModel
-            //       .getImageUploadUrl(matchEditProvider.uploadImageInfos);
+            if (matchEditProvider.uploadImageInfos.isNotEmpty) {
+              await boardViewModel.getImageUploadUrl(
+                  matchEditProvider.uploadImageInfos, "E");
 
-            //   for (int idx = 0;
-            //       idx < matchEditProvider.imageUploadUrls.length;
-            //       idx++) {
-            //     await boardViewModel.uploadImage(
-            //       matchEditProvider.imageUploadUrls[idx],
-            //       matchEditProvider.uploadImageInfos[idx]["file"],
-            //       matchEditProvider.uploadImageInfos[idx]["fileSize"],
-            //       matchEditProvider.uploadImageInfos[idx]["fileType"],
-            //     );
-            //   }
-            // }
+              for (int idx = 0;
+                  idx < matchEditProvider.imageUploadUrls.length;
+                  idx++) {
+                await boardViewModel.uploadImage(
+                    matchEditProvider.imageUploadUrls[idx],
+                    matchEditProvider.uploadImageInfos[idx]["file"],
+                    matchEditProvider.uploadImageInfos[idx]["fileSize"],
+                    matchEditProvider.uploadImageInfos[idx]["fileType"],
+                    "E");
+              }
+
+              matchEditProvider.finishImageUpload();
+            }
 
             matchEditProvider.checkTitleAndBoard();
 
@@ -106,7 +109,7 @@ class MatchEdit2Page extends StatelessWidget {
               ),
             ),
           ),
-          child: const MatchWriteEditorToolbar(),
+          child: const MatchEditEditorToolbar(),
         ),
       ),
       body: Padding(

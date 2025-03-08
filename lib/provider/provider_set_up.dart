@@ -118,6 +118,7 @@ class ProviderSetup extends StatelessWidget {
             context.read<MatchWriteProvider>(),
             context.read<MatchBoardProvider>(),
             context.read<MatchBoardDetailProvider>(),
+            context.read<MatchEditProvider>(),
           ),
         ),
         ChangeNotifierProvider<KeywordViewModel>(

@@ -51,8 +51,8 @@ class MatchWrite2Page extends StatelessWidget {
             await matchWriteProvider.getUploadImagesInfo();
 
             if (matchWriteProvider.uploadImageInfos.isNotEmpty) {
-              await boardViewModel
-                  .getImageUploadUrl(matchWriteProvider.uploadImageInfos);
+              await boardViewModel.getImageUploadUrl(
+                  matchWriteProvider.uploadImageInfos, "W");
 
               for (int idx = 0;
                   idx < matchWriteProvider.imageUploadUrls.length;
@@ -62,6 +62,7 @@ class MatchWrite2Page extends StatelessWidget {
                   matchWriteProvider.uploadImageInfos[idx]["file"],
                   matchWriteProvider.uploadImageInfos[idx]["fileSize"],
                   matchWriteProvider.uploadImageInfos[idx]["fileType"],
+                  "W",
                 );
               }
             }

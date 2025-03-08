@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:app_front_talearnt/common/widget/button.dart';
 import 'package:app_front_talearnt/common/widget/dialog.dart';
-import 'package:app_front_talearnt/data/model/respone/keyword_category.dart';
 import 'package:app_front_talearnt/data/model/respone/matching_detail_post.dart';
 import 'package:app_front_talearnt/provider/common/custom_ticker_provider.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +13,7 @@ import 'package:path/path.dart' as path;
 import 'package:vsc_quill_delta_to_html/vsc_quill_delta_to_html.dart';
 import 'package:flutter_quill_delta_from_html/parser/html_to_delta.dart';
 import 'package:mime/mime.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../constants/global_value_constants.dart';
 import '../clear_text.dart';
@@ -65,6 +65,8 @@ class MatchEditProvider extends ChangeNotifier with ClearText {
   String _htmlContent = "";
 
   double _totalImageSize = 0;
+
+  int _totalImageCount = 0;
 
   final ImagePicker _picker = ImagePicker();
 
@@ -156,7 +158,7 @@ class MatchEditProvider extends ChangeNotifier with ClearText {
 
   List<String> _imageUploadUrls = [];
 
-  List<String> _imageUploadedUrls = [];
+  final List<String> _imageUploadedUrls = [];
 
   final List<File> _previewImageList = []; // 이미지 미리보기
 
@@ -258,6 +260,8 @@ class MatchEditProvider extends ChangeNotifier with ClearText {
 
   double get totalImageSize => _totalImageSize;
 
+  int get totalImageCount => _totalImageCount;
+
   List<File> get previewImageList => _previewImageList; // 이미지 미리보기
 
   int get previeImageIndex => _previeImageIndex; // 이미지 미리보기
@@ -304,6 +308,7 @@ class MatchEditProvider extends ChangeNotifier with ClearText {
 
     _htmlContent = "";
     _totalImageSize = 0;
+    _totalImageCount = 0;
 
     _previewImageList.clear();
     _isS3Upload = false;
@@ -333,6 +338,12 @@ class MatchEditProvider extends ChangeNotifier with ClearText {
   }
 
   void _onChanged() {
+    final int textLength = contentController.document.toPlainText().length - 1;
+
+    if (textLength > 100) {
+      contentController.undo(); // 마지막 입력 취소
+    }
+
     notifyListeners(); // Focus 상태 변경 시 UI 갱신
   }
 
@@ -520,18 +531,31 @@ class MatchEditProvider extends ChangeNotifier with ClearText {
         final int finalSizeInBytes = await processedImage.length();
         final double finalSizeInMB = finalSizeInBytes / (1024 * 1024);
 
-        // 총 용량 초과 체크
-        if (_totalImageSize + finalSizeInMB > 5) {
+        if (finalSizeInMB > 3.0) {
           SingleBtnDialog.show(context,
-              content: '이미지는 최대 5MB까지 업로드 가능합니다.',
-              button: const PrimaryM(
+              content: '각 이미지 용량은 3MB 이하만 업로드 가능합니다.',
+              button: PrimaryM(
                 content: '확인',
+                onPressed: () {
+                  context.pop();
+                },
               ));
           break;
         }
 
-        // 압축 후 이미지 크기 추가
-        _totalImageSize += finalSizeInMB;
+        if (_totalImageCount == 5) {
+          SingleBtnDialog.show(context,
+              content: '이미지는 최대 5장까지 업로드 가능합니다.',
+              button: PrimaryM(
+                content: '확인',
+                onPressed: () {
+                  context.pop();
+                },
+              ));
+          break;
+        }
+
+        _totalImageCount++;
 
         contentController.insertImageBlock(imageSource: processedImage.path);
       }
@@ -589,31 +613,36 @@ class MatchEditProvider extends ChangeNotifier with ClearText {
 
   Future<void> getUploadImagesInfo() async {
     final delta = contentController.document.toDelta();
-    uploadImageInfos.clear();
+    _uploadImageInfos.clear();
+    _imageUploadedUrls.clear(); // 기존 리스트 초기화
 
     for (var op in delta.toList()) {
       if (op.value is Map<String, dynamic> && op.value.containsKey('image')) {
         final imagePath = op.value['image'];
 
-        final imageFile = File(imagePath);
-        final int sizeInBytes = await imageFile.length();
+        if (imagePath.startsWith('http://') ||
+            imagePath.startsWith('https://')) {
+          _imageUploadedUrls.add(imagePath);
+        } else {
+          final imageFile = File(imagePath);
+          final int sizeInBytes = await imageFile.length();
+          final mimeType =
+              lookupMimeType(imagePath) ?? "application/octet-stream";
 
-        final mimeType =
-            lookupMimeType(imagePath) ?? "application/octet-stream";
-
-        uploadImageInfos.add({
-          "file": imageFile,
-          "fileName": path.basename(imagePath),
-          "fileType": mimeType,
-          "fileSize": sizeInBytes,
-        });
+          uploadImageInfos.add({
+            "file": imageFile,
+            "fileName": path.basename(imagePath),
+            "fileType": mimeType,
+            "fileSize": sizeInBytes,
+          });
+        }
       }
     }
 
     notifyListeners();
   }
 
-  void exchangeImageUrl(String imageUploadUrl, String imagePath) {
+  Future<void> exchangeImageUrl(String imageUploadUrl, String imagePath) async {
     final delta = contentController.document.toDelta();
 
     String newImageUrl = imageUploadUrl.split('?')[0];
@@ -627,7 +656,9 @@ class MatchEditProvider extends ChangeNotifier with ClearText {
     }
 
     _imageUploadedUrls.add(newImageUrl);
+  }
 
+  void finishImageUpload() {
     _isS3Upload = false;
     _uploadImageInfos.clear();
   }
@@ -714,8 +745,14 @@ class MatchEditProvider extends ChangeNotifier with ClearText {
     notifyListeners();
   }
 
-  void updateUploadedUrls(List<String> imageUrls) {
-    _imageUploadedUrls = imageUrls;
+  void countImage() {
+    final delta = contentController.document.toDelta();
+
+    for (var op in delta.toList()) {
+      if (op.value is Map<String, dynamic> && op.value.containsKey('image')) {
+        _totalImageCount++;
+      }
+    }
 
     notifyListeners();
   }
@@ -750,6 +787,6 @@ class MatchEditProvider extends ChangeNotifier with ClearText {
     updateInterestKeywordList(selectedInterestCode);
     updateSelectedInterestTalentKeywordCodes(selectedInterestCode);
 
-    updateUploadedUrls(matchingDetailPost.imageUrls);
+    countImage();
   }
 }
