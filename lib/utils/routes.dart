@@ -5,6 +5,9 @@ import 'package:app_front_talearnt/view/auth/find_password_page.dart';
 import 'package:app_front_talearnt/view/auth/find_password_success_page.dart';
 import 'package:app_front_talearnt/view/auth/reset_password_page.dart';
 import 'package:app_front_talearnt/view/auth/sign_up_success_page.dart';
+import 'package:app_front_talearnt/view/board/match_board/match_edit1_page.dart';
+import 'package:app_front_talearnt/view/board/match_board/match_edit2_page.dart';
+import 'package:app_front_talearnt/view/board/match_board/match_edit_preview_page.dart';
 import 'package:app_front_talearnt/view/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -112,7 +115,7 @@ class Routes {
             },
           ),
           GoRoute(
-            path: '/match_preview',
+            path: '/match-write-preview',
             builder: (BuildContext context, GoRouterState state) {
               return const MatchWritePreviewPage();
             },
@@ -160,23 +163,43 @@ class Routes {
             },
           ),
           GoRoute(
-              path: '/match-board-detail-page',
-              builder: (BuildContext context, GoRouterState state) {
-                return const MatchBoardDetailPage();
-              },
-              routes: <RouteBase>[
-                GoRoute(
-                  path: 'match-image-view',
-                  builder: (BuildContext context, GoRouterState state) {
-                    return const MatchBoardImageViewPage();
-                  },
-                ), GoRoute(
-                  path: 'match-image-view-detail',
-                  builder: (BuildContext context, GoRouterState state) {
-                    return const MatchBoardImageViewDetailPage();
-                  },
-                ),
-              ]),
+            path: '/match-board-detail-page',
+            builder: (BuildContext context, GoRouterState state) {
+              return const MatchBoardDetailPage();
+            },
+            routes: <RouteBase>[
+              GoRoute(
+                path: 'match-image-view',
+                builder: (BuildContext context, GoRouterState state) {
+                  return const MatchBoardImageViewPage();
+                },
+              ),
+              GoRoute(
+                path: 'match-image-view-detail',
+                builder: (BuildContext context, GoRouterState state) {
+                  return const MatchBoardImageViewDetailPage();
+                },
+              ),
+            ],
+          ),
+          GoRoute(
+            path: '/match-edit1',
+            builder: (BuildContext context, GoRouterState state) {
+              return const MatchEdit1Page();
+            },
+          ),
+          GoRoute(
+            path: '/match-edit2',
+            builder: (BuildContext context, GoRouterState state) {
+              return const MatchEdit2Page();
+            },
+          ),
+          GoRoute(
+            path: '/match-edit-preview',
+            builder: (BuildContext context, GoRouterState state) {
+              return const MatchEditPreviewPage();
+            },
+          ),
         ],
       ),
     ],

@@ -325,12 +325,13 @@ class MatchBoardDetailPage extends StatelessWidget {
                                   child: GestureDetector(
                                     onTap: () {
                                       if (index == 3) {
-                                        context.push('/match-board-detail-page/match-image-view');
+                                        context.push(
+                                            '/match-board-detail-page/match-image-view');
                                       } else {
                                         matchBoardDetailProvider
                                             .setPreviewImageIndex(index);
-                                        context
-                                            .push('/match-board-detail-page/match-image-view-detail');
+                                        context.push(
+                                            '/match-board-detail-page/match-image-view-detail');
                                       }
                                     },
                                     child: Stack(
@@ -358,8 +359,8 @@ class MatchBoardDetailPage extends StatelessWidget {
                                         if (index == 3)
                                           Positioned.fill(
                                             child: GestureDetector(
-                                              onTap: () => context
-                                                  .push('/match-board-detail-page/match-image-view'),
+                                              onTap: () => context.push(
+                                                  '/match-board-detail-page/match-image-view'),
                                               child: Center(
                                                 child: Text(
                                                   "이미지\n더보기",

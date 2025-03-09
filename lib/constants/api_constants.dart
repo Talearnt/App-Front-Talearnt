@@ -39,4 +39,8 @@ abstract class ApiConstants {
   static String getChangeUserPwUrl(String no, String uuid) {
     return "$baseUrl/v1/auth/$no/password/$uuid";
   }
+
+  static String editMatchBoard(int postNo) {
+    return "$baseUrl/v1/posts/exchanges/$postNo";
+  }
 }

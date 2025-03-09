@@ -2,6 +2,11 @@ import 'package:app_front_talearnt/common/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:app_front_talearnt/view_model/keyword_view_model.dart';
+import 'package:app_front_talearnt/provider/board/match_edit_provider.dart';
+import '../../../provider/board/match_board_detail_provider.dart';
+import 'package:provider/provider.dart';
+
 class ModifyBoardBottomSheet extends StatelessWidget {
   final bool isMine;
 
@@ -12,6 +17,10 @@ class ModifyBoardBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final keywordViewModel = Provider.of<KeywordViewModel>(context);
+    final matchBoardDetailProvider =
+        Provider.of<MatchBoardDetailProvider>(context);
+    final matchEditProvider = Provider.of<MatchEditProvider>(context);
     return Wrap(children: [
       Padding(
         padding: const EdgeInsets.only(bottom: 44, top: 12),
@@ -26,8 +35,11 @@ class ModifyBoardBottomSheet extends StatelessWidget {
                   splashColor: Colors.transparent,
                   highlightColor: Colors.transparent,
                   hoverColor: Colors.transparent,
-                  onTap: () {
-                    context.pop();
+                  onTap: () async {
+                    await keywordViewModel.getOfferedKeywords();
+                    await matchEditProvider.setPostInfo(
+                        matchBoardDetailProvider.matchingDetailPost);
+                    context.go('/match-edit1');
                   },
                   child: Center(
                     // 가운데 정렬
