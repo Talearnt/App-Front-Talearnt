@@ -86,6 +86,9 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
                 GestureDetector(
+                  onTap: () {
+                    context.push('/community-write1');
+                  },
                   child: Column(
                     children: [
                       SvgPicture.asset('assets/icons/chat_off.svg'),

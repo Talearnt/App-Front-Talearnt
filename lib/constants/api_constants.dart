@@ -25,6 +25,7 @@ abstract class ApiConstants {
   static const String getOfferedKeywords =
       "$baseUrl/v1/posts/exchange/talents/offered";
   static const String insertMatchBoard = "$baseUrl/v1/posts/exchanges";
+  static const String setCommunityBoard = "$baseUrl/v1/posts/communities";
 
   static const String getUploadImagesUrl = "$baseUrl/v1/uploads";
 
