@@ -46,13 +46,21 @@ class BoardRepository {
     return result.fold(left, (response) => right(Success.fromJson(response)));
   }
 
+  Future<Either<Failure, Success>> editMatchBoard(
+      MatchBoardParam body, int postNo) async {
+    final result =
+        await dio.put(ApiConstants.editMatchBoard(postNo), body.toJson());
+
+    return result.fold(left, (response) => right(Success.fromJson(response)));
+  }
+
   Future<Either<Failure, Map<String, dynamic>>> getTalentExchangePosts(
       TalentExchangePostsFilterParam body) async {
     final response =
         await dio.get(ApiConstants.getTalentBoardListUrl, null, body.toJson());
     return response.fold(left, (response) {
-      final posts = List<MatchingPost>.from(
-          response['data']['results'].map((data) => MatchingPost.fromJson(data)));
+      final posts = List<MatchingPost>.from(response['data']['results']
+          .map((data) => MatchingPost.fromJson(data)));
       final pagination = Pagination.fromJson(response['data']['pagination']);
       return right({'posts': posts, 'pagination': pagination});
     });

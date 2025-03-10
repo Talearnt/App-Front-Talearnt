@@ -7,6 +7,7 @@ import 'package:app_front_talearnt/common/widget/state_badge.dart';
 import 'package:app_front_talearnt/common/widget/toast_message.dart';
 import 'package:app_front_talearnt/common/widget/top_app_bar.dart';
 import 'package:app_front_talearnt/constants/global_value_constants.dart';
+import 'package:app_front_talearnt/provider/board/match_edit_provider.dart';
 import 'package:app_front_talearnt/view_model/board_view_model.dart';
 import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
 import 'package:flutter/material.dart';
@@ -15,14 +16,12 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../../../provider/board/match_write_provider.dart';
-
-class MatchWritePreviewPage extends StatelessWidget {
-  const MatchWritePreviewPage({super.key});
+class MatchEditPreviewPage extends StatelessWidget {
+  const MatchEditPreviewPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final matchWriteProvider = Provider.of<MatchWriteProvider>(context);
+    final matchEditProvider = Provider.of<MatchEditProvider>(context);
     final boardViewModel = Provider.of<BoardViewModel>(context);
 
     String today = DateFormat('yyyy.MM.dd').format(DateTime.now());
@@ -30,52 +29,52 @@ class MatchWritePreviewPage extends StatelessWidget {
     return Scaffold(
       appBar: TopAppBar(
         onPressed: () {
-          matchWriteProvider.previewImageListclear();
+          matchEditProvider.previewImageListclear();
           context.pop();
         },
         first: PrimaryS(
-          content: '등록',
+          content: '완료',
           onPressed: () async {
-            await matchWriteProvider.getUploadImagesInfo();
+            await matchEditProvider.getUploadImagesInfo();
 
-            if (matchWriteProvider.uploadImageInfos.isNotEmpty) {
+            if (matchEditProvider.uploadImageInfos.isNotEmpty) {
               await boardViewModel.getImageUploadUrl(
-                  matchWriteProvider.uploadImageInfos, "W");
+                  matchEditProvider.uploadImageInfos, "E");
 
               for (int idx = 0;
-                  idx < matchWriteProvider.imageUploadUrls.length;
+                  idx < matchEditProvider.imageUploadUrls.length;
                   idx++) {
                 await boardViewModel.uploadImage(
-                  matchWriteProvider.imageUploadUrls[idx],
-                  matchWriteProvider.uploadImageInfos[idx]["file"],
-                  matchWriteProvider.uploadImageInfos[idx]["fileSize"],
-                  matchWriteProvider.uploadImageInfos[idx]["fileType"],
-                  "W",
+                  matchEditProvider.imageUploadUrls[idx],
+                  matchEditProvider.uploadImageInfos[idx]["file"],
+                  matchEditProvider.uploadImageInfos[idx]["fileSize"],
+                  matchEditProvider.uploadImageInfos[idx]["fileType"],
+                  "E",
                 );
               }
 
-              matchWriteProvider.finishImageUpload();
+              matchEditProvider.finishImageUpload();
             }
 
-            matchWriteProvider.checkTitleAndBoard();
+            matchEditProvider.checkTitleAndBoard();
 
-            if (matchWriteProvider.isTitleAndBoardEmpty) {
-              matchWriteProvider.insertMatchBoard();
+            if (matchEditProvider.isTitleAndBoardEmpty) {
+              matchEditProvider.insertMatchBoard();
 
               await boardViewModel.insertMatchBoard(
-                matchWriteProvider.titleController.text,
-                matchWriteProvider.htmlContent,
-                matchWriteProvider.selectedGiveTalentKeywordCodes,
-                matchWriteProvider.selectedInterestTalentKeywordCodes,
-                matchWriteProvider.selectedExchangeType,
+                matchEditProvider.titleController.text,
+                matchEditProvider.htmlContent,
+                matchEditProvider.selectedGiveTalentKeywordCodes,
+                matchEditProvider.selectedInterestTalentKeywordCodes,
+                matchEditProvider.selectedExchangeType,
                 false,
-                matchWriteProvider.selectedDuration,
-                matchWriteProvider.imageUploadedUrls,
+                matchEditProvider.selectedDuration,
+                matchEditProvider.imageUploadedUrls,
               );
             } else {
               ToastMessage.show(
                 context: context,
-                message: matchWriteProvider.boardToastMessage,
+                message: matchEditProvider.boardToastMessage,
                 type: 2,
                 bottom: 50,
               );
@@ -107,7 +106,7 @@ class MatchWritePreviewPage extends StatelessWidget {
                   Wrap(
                     children: [
                       Text(
-                        matchWriteProvider.titleController.text,
+                        matchEditProvider.titleController.text,
                         style: TextTypes.heading2(
                           color: Palette.text01,
                         ),
@@ -173,7 +172,7 @@ class MatchWritePreviewPage extends StatelessWidget {
                   ),
                   Wrap(
                     children: [
-                      ...matchWriteProvider.selectedGiveTalentKeywordCodes.map(
+                      ...matchEditProvider.selectedGiveTalentKeywordCodes.map(
                         (item) {
                           String labelText = '';
                           for (var category
@@ -230,7 +229,7 @@ class MatchWritePreviewPage extends StatelessWidget {
                   ),
                   Wrap(
                     children: [
-                      ...matchWriteProvider.selectedInterestTalentKeywordCodes
+                      ...matchEditProvider.selectedInterestTalentKeywordCodes
                           .map(
                         (item) {
                           String labelText = '';
@@ -296,7 +295,7 @@ class MatchWritePreviewPage extends StatelessWidget {
                         width: 24,
                       ),
                       Text(
-                        matchWriteProvider.selectedDuration,
+                        matchEditProvider.selectedDuration,
                         style: TextTypes.body02(
                           color: Palette.text02,
                         ),
@@ -318,7 +317,7 @@ class MatchWritePreviewPage extends StatelessWidget {
                         width: 24,
                       ),
                       Text(
-                        matchWriteProvider.selectedExchangeType,
+                        matchEditProvider.selectedExchangeType,
                         style: TextTypes.body02(
                           color: Palette.text02,
                         ),
@@ -345,17 +344,21 @@ class MatchWritePreviewPage extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      ...matchWriteProvider.previewImageList
+                      ...matchEditProvider.previewImageList
                           .asMap()
                           .entries
                           .take(4)
                           .map(
                         (entry) {
                           int index = entry.key;
-                          var item = entry.value;
+                          File file = entry.value;
+                          String path = file.path;
 
                           double imageSize =
                               (MediaQuery.of(context).size.width - 92) / 4;
+
+                          bool isNetworkImage = path.startsWith('http://') ||
+                              path.startsWith('https://');
 
                           return Padding(
                             padding: EdgeInsets.only(right: index < 3 ? 12 : 0),
@@ -372,18 +375,19 @@ class MatchWritePreviewPage extends StatelessWidget {
                                           width: 1,
                                         ),
                                       ),
-                                      child: Image.file(
-                                        item,
-                                        width: imageSize,
-                                        height: imageSize,
-                                        fit: BoxFit.cover,
-                                        color: index == 3
-                                            ? Colors.black.withOpacity(0.6)
-                                            : null,
-                                        colorBlendMode: index == 3
-                                            ? BlendMode.darken
-                                            : null,
-                                      ),
+                                      child: isNetworkImage
+                                          ? Image.network(
+                                              path,
+                                              width: imageSize,
+                                              height: imageSize,
+                                              fit: BoxFit.cover,
+                                            )
+                                          : Image.file(
+                                              file,
+                                              width: imageSize,
+                                              height: imageSize,
+                                              fit: BoxFit.cover,
+                                            ),
                                     ),
                                     if (index == 3)
                                       Positioned.fill(
@@ -412,7 +416,7 @@ class MatchWritePreviewPage extends StatelessWidget {
                     height: 50,
                   ),
                   QuillEditor.basic(
-                    controller: matchWriteProvider.contentController,
+                    controller: matchEditProvider.contentController,
                     configurations: QuillEditorConfigurations(
                       showCursor: false,
                       readOnlyMouseCursor: MouseCursor.uncontrolled,

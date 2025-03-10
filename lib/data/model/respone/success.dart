@@ -1,5 +1,5 @@
 class Success {
-  final String? data;
+  final dynamic data;
   final String? errorCode;
   final String? errorMessage;
   final bool success;

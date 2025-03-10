@@ -1,6 +1,7 @@
 import 'package:app_front_talearnt/data/model/param/my_talent_keywords_param.dart';
 import 'package:app_front_talearnt/data/repositories/keyword_repository.dart';
 import 'package:app_front_talearnt/provider/board/match_board_provider.dart';
+import 'package:app_front_talearnt/provider/board/match_edit_provider.dart';
 import 'package:flutter/material.dart';
 
 import '../common/common_navigator.dart';
@@ -14,6 +15,7 @@ class KeywordViewModel extends ChangeNotifier {
   final KeywordProvider keywordProvider;
   final MatchWriteProvider matchWriteProvider;
   final MatchBoardProvider talentBoardProvider;
+  final MatchEditProvider matchEditProvider;
 
   KeywordViewModel(
     this.commonNavigator,
@@ -21,6 +23,7 @@ class KeywordViewModel extends ChangeNotifier {
     this.keywordProvider,
     this.matchWriteProvider,
     this.talentBoardProvider,
+    this.matchEditProvider,
   );
 
   // Future<void> getKeywords() async {
@@ -53,6 +56,7 @@ class KeywordViewModel extends ChangeNotifier {
         (failure) => commonNavigator.showSingleDialog(
             content: ErrorMessages.getMessage(failure.errorCode)), (response) {
       matchWriteProvider.setGiveTalentKeyword(response);
+      matchEditProvider.setGiveTalentKeyword(response);
       //commonNavigator.goRoute('/match_write1');
     });
   }

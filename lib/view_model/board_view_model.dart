@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:app_front_talearnt/data/model/param/match_board_param.dart';
+import 'package:app_front_talearnt/provider/board/match_edit_provider.dart';
 import 'package:flutter/material.dart';
 
 import '../common/common_navigator.dart';
@@ -20,18 +21,19 @@ class BoardViewModel extends ChangeNotifier {
   final MatchWriteProvider matchWriteProvider;
   final MatchBoardProvider talentBoardProvider;
   final MatchBoardDetailProvider talentBoardDetailProvider;
+  final MatchEditProvider matchEditProvider;
 
   BoardViewModel(
-    this.commonNavigator,
-    this.boardRepository,
-    this.keywordProvider,
-    this.matchWriteProvider,
-    this.talentBoardProvider,
-    this.talentBoardDetailProvider,
-  );
+      this.commonNavigator,
+      this.boardRepository,
+      this.keywordProvider,
+      this.matchWriteProvider,
+      this.talentBoardProvider,
+      this.talentBoardDetailProvider,
+      this.matchEditProvider);
 
   Future<void> getImageUploadUrl(
-      List<Map<String, dynamic>> uploadImageInfos) async {
+      List<Map<String, dynamic>> uploadImageInfos, String type) async {
     List<S3FileParam> fileParams = uploadImageInfos.map((imageInfo) {
       return S3FileParam(
         fileName: imageInfo["fileName"],
@@ -48,12 +50,16 @@ class BoardViewModel extends ChangeNotifier {
         (failure) => commonNavigator.showSingleDialog(
             content: ErrorMessages.getMessage(failure.errorCode)),
         (result) async {
-      matchWriteProvider.setImageUploadUrl(result.data);
+      if (type == "W") {
+        matchWriteProvider.setImageUploadUrl(result.data);
+      } else if (type == "E") {
+        matchEditProvider.setImageUploadUrl(result.data);
+      }
     });
   }
 
   Future<void> uploadImage(String imageUploadUrl, File image, int fileSize,
-      String contentType) async {
+      String contentType, String type) async {
     final result = await boardRepository.uploadImage(
         imageUploadUrl, image, fileSize, contentType);
 
@@ -61,8 +67,12 @@ class BoardViewModel extends ChangeNotifier {
       commonNavigator.showSingleDialog(
           content: ErrorMessages.getMessage(failure.errorCode));
       matchWriteProvider.clearInfos();
-    }, (result) {
-      matchWriteProvider.exchangeImageUrl(imageUploadUrl, image.path);
+    }, (result) async {
+      if (type == "W") {
+        await matchWriteProvider.exchangeImageUrl(imageUploadUrl, image.path);
+      } else if (type == "E") {
+        await matchEditProvider.exchangeImageUrl(imageUploadUrl, image.path);
+      }
     });
   }
 
@@ -97,9 +107,42 @@ class BoardViewModel extends ChangeNotifier {
     });
   }
 
+  Future<void> editMatchBoard(
+    String title,
+    String content,
+    List<int> giveTalents,
+    List<int> receiveTalents,
+    String exchangeType,
+    bool? requiredBadge,
+    String duration,
+    List<String>? imageUrls,
+    int postNo,
+  ) async {
+    final badge = requiredBadge ?? false;
+    final urlList = imageUrls ?? [];
+    MatchBoardParam param = MatchBoardParam(
+      title: title,
+      content: content,
+      giveTalents: giveTalents,
+      receiveTalents: receiveTalents,
+      exchangeType: exchangeType,
+      requiredBadge: badge,
+      duration: duration,
+      imageUrls: urlList,
+    );
+
+    final result = await boardRepository.editMatchBoard(param, postNo);
+
+    result.fold(
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)),
+        (result) async {
+      await getEditedPostData(postNo);
+    });
+  }
+
   Future<void> getInitTalentExchangePosts() async {
-    TalentExchangePostsFilterParam param =
-        TalentExchangePostsFilterParam.empty();
+    TalentExchangePostsFilterParam param = TalentExchangePostsFilterParam();
     final result = await boardRepository.getTalentExchangePosts(param);
     result.fold(
         (failure) => commonNavigator.showSingleDialog(
@@ -185,6 +228,16 @@ class BoardViewModel extends ChangeNotifier {
             content: ErrorMessages.getMessage(failure.errorCode)), (post) {
       talentBoardDetailProvider.updateTalentDetailPost(post);
       commonNavigator.pushRoute('/match-board-detail-page');
+    });
+  }
+
+  Future<void> getEditedPostData(int postNo) async {
+    final result = await boardRepository.getTalentDetailPost(postNo);
+    result.fold(
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)), (post) {
+      talentBoardDetailProvider.updateTalentDetailPost(post);
+      commonNavigator.goRoute('/match-board-detail-page');
     });
   }
 }

@@ -78,7 +78,7 @@ class DioService {
     }
   }
 
-  Future<Either<Failure, String>> put(String path, dynamic data,
+  Future<Either<Failure, dynamic>> put(String path, dynamic data,
       {int? size, String? contentType}) async {
     try {
       final response = await _dio.put(
@@ -92,13 +92,13 @@ class DioService {
         ),
       );
 
-      return right(response.statusCode.toString());
+      return right(response.data as dynamic);
     } on DioException catch (e) {
       if (e.response?.statusCode == 401) {
         var result = await handleAuthResponse(e.response, () {
           return put(path, data, size: size, contentType: contentType);
         });
-        return right(result.statusCode.toString());
+        return right(result.data as dynamic);
       }
       return left(Failure(
         data: e.response?.data,
