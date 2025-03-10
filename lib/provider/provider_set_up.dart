@@ -55,6 +55,7 @@ class ProviderSetup extends StatelessWidget {
             tokenManager: context.read<TokenManager>(),
             loginProvider: context.read<LoginProvider>(),
             matchWriteProvider: context.read<MatchWriteProvider>(),
+            matchEditProvider: context.read<MatchEditProvider>(),
           ),
         ),
 

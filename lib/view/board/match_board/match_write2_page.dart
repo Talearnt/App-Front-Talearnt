@@ -65,6 +65,8 @@ class MatchWrite2Page extends StatelessWidget {
                   "W",
                 );
               }
+
+              matchWriteProvider.finishImageUpload();
             }
 
             matchWriteProvider.checkTitleAndBoard();

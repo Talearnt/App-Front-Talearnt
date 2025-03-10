@@ -52,6 +52,8 @@ class MatchEditPreviewPage extends StatelessWidget {
                   "E",
                 );
               }
+
+              matchEditProvider.finishImageUpload();
             }
 
             matchEditProvider.checkTitleAndBoard();

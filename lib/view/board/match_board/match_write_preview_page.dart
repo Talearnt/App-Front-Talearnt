@@ -53,6 +53,8 @@ class MatchWritePreviewPage extends StatelessWidget {
                   "W",
                 );
               }
+
+              matchWriteProvider.finishImageUpload();
             }
 
             matchWriteProvider.checkTitleAndBoard();

@@ -156,7 +156,7 @@ class MatchEditProvider extends ChangeNotifier with ClearText {
 
   final List<Map<String, dynamic>> _uploadImageInfos = [];
 
-  List<String> _imageUploadUrls = [];
+  final List<String> _imageUploadUrls = [];
 
   final List<String> _imageUploadedUrls = [];
 
@@ -606,7 +606,7 @@ class MatchEditProvider extends ChangeNotifier with ClearText {
   }
 
   void setImageUploadUrl(List<String> data) {
-    _imageUploadUrls = data;
+    _imageUploadUrls.addAll(data);
     _isS3Upload = true;
     notifyListeners();
   }
@@ -614,7 +614,8 @@ class MatchEditProvider extends ChangeNotifier with ClearText {
   Future<void> getUploadImagesInfo() async {
     final delta = contentController.document.toDelta();
     _uploadImageInfos.clear();
-    _imageUploadedUrls.clear(); // 기존 리스트 초기화
+    _imageUploadUrls.clear();
+    _imageUploadedUrls.clear();
 
     for (var op in delta.toList()) {
       if (op.value is Map<String, dynamic> && op.value.containsKey('image')) {
@@ -745,7 +746,7 @@ class MatchEditProvider extends ChangeNotifier with ClearText {
     notifyListeners();
   }
 
-  void countImage() {
+  Future<void> countImage() async {
     final delta = contentController.document.toDelta();
 
     for (var op in delta.toList()) {
@@ -787,6 +788,6 @@ class MatchEditProvider extends ChangeNotifier with ClearText {
     updateInterestKeywordList(selectedInterestCode);
     updateSelectedInterestTalentKeywordCodes(selectedInterestCode);
 
-    countImage();
+    await countImage();
   }
 }
