@@ -142,10 +142,7 @@ class BoardViewModel extends ChangeNotifier {
   }
 
   Future<void> getInitTalentExchangePosts() async {
-    TalentExchangePostsFilterParam param = TalentExchangePostsFilterParam(
-      status: "모집중",
-      type: "온/오프라인",
-    );
+    TalentExchangePostsFilterParam param = TalentExchangePostsFilterParam();
     final result = await boardRepository.getTalentExchangePosts(param);
     result.fold(
         (failure) => commonNavigator.showSingleDialog(
