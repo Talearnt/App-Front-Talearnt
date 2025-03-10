@@ -12,10 +12,19 @@ class CommonProvider with ChangeNotifier {
   bool _isLoadingPage = false;
   final CustomTickerProvider _tickerProvider;
   late AnimationController _animationController;
+  OverlayEntry? _currentEntry;
+  bool _isEntryUpdate = false;
+  bool _isBackGesture = false;
 
   bool get isLoadingPage => _isLoadingPage;
 
   AnimationController get animationController => _animationController;
+
+  OverlayEntry? get currentEntry => _currentEntry;
+
+  bool get isEntryUpdate => _isEntryUpdate;
+
+  bool get isBackGesture => _isBackGesture;
 
   void changeIsLoading(bool loadingType) {
     _isLoadingPage = loadingType;
@@ -131,6 +140,26 @@ class CommonProvider with ChangeNotifier {
   //다른거 확인하는거..
   void checkBeforeValid(Function() callback) {
     callback();
+    notifyListeners();
+  }
+
+  void updateEntry(OverlayEntry overlayEntry) {
+    _currentEntry = overlayEntry;
+    _isEntryUpdate = true;
+    notifyListeners();
+  }
+
+  void removeToast() {
+    _currentEntry?.remove();
+    _currentEntry = null;
+    _isEntryUpdate = false;
+
+    notifyListeners();
+  }
+
+  void updateBackGesture(bool gesture) {
+    _isBackGesture = gesture;
+
     notifyListeners();
   }
 }

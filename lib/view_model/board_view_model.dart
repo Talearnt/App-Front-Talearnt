@@ -5,6 +5,7 @@ import 'package:app_front_talearnt/provider/board/match_edit_provider.dart';
 import 'package:flutter/material.dart';
 
 import '../common/common_navigator.dart';
+import '../data/model/param/community_board_param.dart';
 import '../data/model/param/s3_controller_param.dart';
 import '../data/model/param/talent_exchange_posts_filter_param.dart';
 import '../data/repositories/board_repository.dart';
@@ -103,7 +104,7 @@ class BoardViewModel extends ChangeNotifier {
     result.fold(
         (failure) => commonNavigator.showSingleDialog(
             content: ErrorMessages.getMessage(failure.errorCode)), (result) {
-      commonNavigator.goRoute('/match_write_success');
+      commonNavigator.goRoute('/write-success');
     });
   }
 
@@ -238,6 +239,25 @@ class BoardViewModel extends ChangeNotifier {
             content: ErrorMessages.getMessage(failure.errorCode)), (post) {
       talentBoardDetailProvider.updateTalentDetailPost(post);
       commonNavigator.goRoute('/match-board-detail-page');
+    });
+  }
+
+  Future<void> setCommunityBoard(String title, String content, String postType,
+      List<String>? imageUrls) async {
+    final urlList = imageUrls ?? [];
+    CommunityBoardParam param = CommunityBoardParam(
+      title: title,
+      content: content,
+      postType: postType,
+      imageUrls: urlList,
+    );
+
+    final result = await boardRepository.setCommunityBoard(param);
+
+    result.fold(
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)), (result) {
+      commonNavigator.goRoute('/write-success');
     });
   }
 }

@@ -2,6 +2,8 @@ import 'package:app_front_talearnt/common/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../provider/common/common_provider.dart';
+
 class ToastMessage {
   static Widget _buildFirstToast(String message, BuildContext context) {
     return Container(
@@ -86,5 +88,40 @@ class ToastMessage {
     Future.delayed(const Duration(seconds: 2), () {
       entry.remove();
     });
+  }
+
+  static void infinityShow(
+      {required BuildContext context,
+      required String message,
+      required int type,
+      required double bottom,
+      required CommonProvider commonProvider}) {
+    commonProvider.removeToast();
+
+    final overlay = Overlay.of(context);
+
+    final entry = OverlayEntry(
+      builder: (context) {
+        return Stack(
+          children: [
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: EdgeInsets.only(bottom: bottom), // 수정된 bottom 값 사용
+                child: Material(
+                  color: Colors.transparent,
+                  child: type == 1
+                      ? _buildFirstToast(message, context)
+                      : _buildSecondToast(message),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+    commonProvider.updateEntry(entry);
+
+    overlay.insert(commonProvider.currentEntry!);
   }
 }
