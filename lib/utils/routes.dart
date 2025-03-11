@@ -19,13 +19,16 @@ import '../view/auth/agreement/terms_agreement_required.dart';
 import '../view/auth/login_page.dart';
 import '../view/auth/sign_up_main_page.dart';
 import '../view/board/board_list.dart';
+import '../view/board/community_board/community_write1_page.dart';
+import '../view/board/community_board/community_write2_page.dart';
+import '../view/board/community_board/community_write_preview_page.dart';
 import '../view/board/match_board/match_board_detail_page.dart';
 import '../view/board/match_board/match_board_image_view_detail_page.dart';
 import '../view/board/match_board/match_board_image_view_page.dart';
 import '../view/board/match_board/match_write1_page.dart';
 import '../view/board/match_board/match_write2_page.dart';
 import '../view/board/match_board/match_write_preview_page.dart';
-import '../view/board/match_board/match_write_success_page.dart';
+import '../view/board/write_success_page.dart';
 import '../view/keyword/set_talent_keyword_main_page.dart';
 import '../view/keyword/set_talent_keyword_success_page.dart';
 
@@ -121,9 +124,9 @@ class Routes {
             },
           ),
           GoRoute(
-            path: '/match_write_success',
+            path: '/write-success',
             builder: (BuildContext context, GoRouterState state) {
-              return const MatchWriteSuccessPage();
+              return const WriteSuccessPage();
             },
           ),
           GoRoute(
@@ -181,6 +184,24 @@ class Routes {
                 },
               ),
             ],
+          ),
+          GoRoute(
+            path: '/community-write1',
+            builder: (BuildContext context, GoRouterState state) {
+              return const CommunityWrite1Page();
+            },
+          ),
+          GoRoute(
+            path: '/community-write2',
+            builder: (BuildContext context, GoRouterState state) {
+              return const CommunityWrite2Page();
+            },
+          ),
+          GoRoute(
+            path: '/community-preview',
+            builder: (BuildContext context, GoRouterState state) {
+              return const CommunityWritePreviewPage();
+            },
           ),
           GoRoute(
             path: '/match-edit1',

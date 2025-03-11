@@ -3,17 +3,19 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import '../../../common/theme.dart';
-import '../../../common/widget/button.dart';
-import '../../../common/widget/top_app_bar.dart';
-import '../../../provider/board/match_write_provider.dart';
+import '../../common/theme.dart';
+import '../../common/widget/button.dart';
+import '../../common/widget/top_app_bar.dart';
+import '../../provider/board/community_write_provider.dart';
+import '../../provider/board/match_write_provider.dart';
 
-class MatchWriteSuccessPage extends StatelessWidget {
-  const MatchWriteSuccessPage({super.key});
+class WriteSuccessPage extends StatelessWidget {
+  const WriteSuccessPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     final matchWriteProvider = Provider.of<MatchWriteProvider>(context);
+    final communityWriteProvider = Provider.of<CommunityWriteProvider>(context);
 
     return Scaffold(
       backgroundColor: Palette.bgBackGround,
@@ -60,6 +62,7 @@ class MatchWriteSuccessPage extends StatelessWidget {
               child: PrimaryM(
                 content: '내가 쓴 글 확인하기',
                 onPressed: () {
+                  communityWriteProvider.clearProvider();
                   matchWriteProvider.clearProvider();
                   context.pop();
                 },
@@ -71,6 +74,7 @@ class MatchWriteSuccessPage extends StatelessWidget {
               child: SecondaryMGray(
                 content: '홈으로 돌아가기',
                 onPressed: () {
+                  communityWriteProvider.clearProvider();
                   matchWriteProvider.clearProvider();
                   context.pop();
                 },
