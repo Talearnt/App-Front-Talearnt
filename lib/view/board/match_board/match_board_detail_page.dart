@@ -343,7 +343,7 @@ class MatchBoardDetailPage extends StatelessWidget {
                                               width: 1,
                                             ),
                                           ),
-                                          child: Image.file(
+                                          child: Image.network(
                                             item,
                                             width: imageSize,
                                             height: imageSize,

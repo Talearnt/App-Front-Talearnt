@@ -37,7 +37,7 @@ class MatchBoardImageViewPage extends StatelessWidget {
                       .push('/match-board-detail-page/match-image-view-detail');
                 },
                 child: Container(
-                  child: Image.file(
+                  child: Image.network(
                     item,
                     width: imageSize,
                     height: imageSize,
