@@ -30,7 +30,7 @@ class MatchBoardDetailProvider extends ChangeNotifier {
       openedChatRoomCount: 2,
       chatRoomNo: 1);
 
-  final List<File> _previewImageList = [];
+  final List<String> _previewImageList = [];
 
   int _previewImageIndex = 0;
 
@@ -40,7 +40,7 @@ class MatchBoardDetailProvider extends ChangeNotifier {
 
   QuillController get contentController => _contentController;
 
-  List<File> get previewImageList => _previewImageList;
+  List<String> get previewImageList => _previewImageList;
 
   int get previewImageIndex => _previewImageIndex;
 
@@ -54,9 +54,7 @@ class MatchBoardDetailProvider extends ChangeNotifier {
       if (op.value is Map<String, dynamic> && op.value.containsKey('image')) {
         final imagePath = op.value['image'];
 
-        final imageFile = File(imagePath);
-
-        _previewImageList.add(imageFile);
+        _previewImageList.add(imagePath);
       }
     }
   }
