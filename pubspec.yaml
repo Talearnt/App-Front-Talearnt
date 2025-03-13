@@ -169,6 +169,7 @@ flutter:
     - assets/icons/my_on.svg
     - assets/icons/next_arrow.svg
     - assets/img/profile.svg
+    - assets/icons/ranking_badge.svg
     - assets/icons/reset.svg
     - assets/icons/search.svg
     - assets/icons/search_small.svg
