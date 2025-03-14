@@ -80,6 +80,7 @@ flutter:
   assets:
     - assets/icons/fail_helper.svg
     - assets/icons/success_helper.svg
+    - assets/icons/add_more_arrow.svg
     - assets/icons/add_square.svg
     - assets/icons/background_color.svg
     - assets/icons/back_arrow.svg
@@ -163,10 +164,12 @@ flutter:
     - assets/icons/list_before.svg
     - assets/icons/listnumber_after.svg
     - assets/icons/listnumber_before.svg
+    - assets/img/main_banner1.svg
     - assets/icons/my_off.svg
     - assets/icons/my_on.svg
     - assets/icons/next_arrow.svg
     - assets/img/profile.svg
+    - assets/icons/ranking_badge.svg
     - assets/icons/reset.svg
     - assets/icons/search.svg
     - assets/icons/search_small.svg
