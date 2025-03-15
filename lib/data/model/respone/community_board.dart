@@ -1,59 +1,67 @@
 import 'package:intl/intl.dart';
 
-class CommunityPost {
-  final String category;
-  final String profileImg;
+class CommunityBoard {
+  final String postType;
+  final String? profileImg;
   final String nickname;
   final String authority;
-  final int exchangePostNo;
+  final int communityPostNo;
   final String title;
   final String content;
+  final int count;
+  final int commentCount;
+  final int likeCount;
+  final bool isLike;
   final String createdAt;
-  final int favoriteCount;
-  final bool isFavorite;
 
-  CommunityPost({
+  CommunityBoard({
     required this.profileImg,
-    required this.category,
+    required this.postType,
     required this.nickname,
     required this.authority,
-    required this.exchangePostNo,
+    required this.communityPostNo,
     required this.title,
     required this.content,
+    required this.count,
+    required this.commentCount,
+    required this.likeCount,
+    required this.isLike,
     required this.createdAt,
-    required this.favoriteCount,
-    required this.isFavorite,
   });
 
-  factory CommunityPost.fromJson(Map<String, dynamic> json) {
+  factory CommunityBoard.fromJson(Map<String, dynamic> json) {
     DateTime dateTime = DateTime.parse(json['createdAt']);
     String formattedDate = DateFormat('yyyy.MM.dd').format(dateTime);
-    return CommunityPost(
-      category: json['category'],
+    return CommunityBoard(
+      postType: json['postType'],
       profileImg: json['profileImg'],
       nickname: json['nickname'],
       authority: json['authority'],
-      exchangePostNo: json['exchangePostNo'],
+      communityPostNo: json['communityPostNo'],
       title: json['title'],
       content: json['content'],
+      count: json['count'],
+      commentCount: json['commentCount'],
+      likeCount: json['likeCount'],
+      isLike: json['isLike'],
       createdAt: formattedDate,
-      favoriteCount: json['favoriteCount'],
-      isFavorite: json['isFavorite'],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'category': category,
+      'postType': postType,
       'profileImg': profileImg,
       'nickname': nickname,
       'authority': authority,
-      'exchangePostNo': exchangePostNo,
+      'communityPostNo ': communityPostNo,
       'title': title,
       'content': content,
+      'count': count,
+      'commentCount': commentCount,
+      'likeCount': likeCount,
+      'isLike': isLike,
       'createdAt': createdAt,
-      'favoriteCount': favoriteCount,
-      'isFavorite': isFavorite,
     };
   }
 }

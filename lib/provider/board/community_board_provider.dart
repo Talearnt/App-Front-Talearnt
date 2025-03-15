@@ -2,7 +2,8 @@ import 'package:app_front_talearnt/data/model/respone/pagination.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants/global_value_constants.dart';
-import '../../data/model/respone/community_post.dart';
+import '../../data/model/respone/community_board.dart';
+import '../../view_model/board_view_model.dart';
 import '../common/custom_ticker_provider.dart';
 
 class CommunityBoardProvider extends ChangeNotifier {
@@ -10,121 +11,70 @@ class CommunityBoardProvider extends ChangeNotifier {
     _communityTabController = TabController(
         length: GlobalValueConstants.communityCategoryTypes.length,
         vsync: _tickerProvider);
-    //_scrollController.addListener(_onScroll);
+    _scrollController.addListener(_onScroll);
   }
 
-  //bool _isFetching = false;
+  bool _isFetching = false;
+  String _selectedPostType = '';
   String _selectedOrderType = 'recent';
-  Pagination _talentPage = Pagination.empty();
+  String _lastNo = '-1';
+  Pagination _communityPage = Pagination.empty();
   final ScrollController _scrollController = ScrollController();
   late TabController _communityTabController;
   final CustomTickerProvider _tickerProvider;
-  final List<CommunityPost> _communityPosts = [
-    CommunityPost(
-        category: "질문 게시판",
-        profileImg: "유저 이미지",
-        nickname: "테스트",
-        authority: "ROLE_USER",
-        exchangePostNo: 7,
-        title: "일곱 번째 게시글 타이틀 입니다.",
-        content: "일곱 번째 글은 엔터키가 없고 HTML 태그만 있는 겁니다.",
-        createdAt: "2024-12-29T20:38:09.267246",
-        favoriteCount: 0,
-        isFavorite: false),
-    CommunityPost(
-        category: "질문 게시판",
-        profileImg: "유저 이미지",
-        nickname: "테스트",
-        authority: "ROLE_USER",
-        exchangePostNo: 7,
-        title: "일곱 번째 게시글 타이틀 입니다.",
-        content: "일곱 번째 글은 엔터키가 없고 HTML 태그만 있는 겁니다.",
-        createdAt: "2024-12-29T20:38:09.267246",
-        favoriteCount: 0,
-        isFavorite: false),
-    CommunityPost(
-        category: "질문 게시판",
-        profileImg: "유저 이미지",
-        nickname: "테스트",
-        authority: "ROLE_USER",
-        exchangePostNo: 7,
-        title: "일곱 번째 게시글 타이틀 입니다.",
-        content: "일곱 번째 글은 엔터키가 없고 HTML 태그만 있는 겁니다.",
-        createdAt: "2024-12-29T20:38:09.267246",
-        favoriteCount: 0,
-        isFavorite: false),
-    CommunityPost(
-        category: "질문 게시판",
-        profileImg: "유저 이미지",
-        nickname: "테스트",
-        authority: "ROLE_USER",
-        exchangePostNo: 7,
-        title: "일곱 번째 게시글 타이틀 입니다.",
-        content: "일곱 번째 글은 엔터키가 없고 HTML 태그만 있는 겁니다.",
-        createdAt: "2024-12-29T20:38:09.267246",
-        favoriteCount: 0,
-        isFavorite: false),
-    CommunityPost(
-        category: "질문 게시판",
-        profileImg: "유저 이미지",
-        nickname: "테스트",
-        authority: "ROLE_USER",
-        exchangePostNo: 7,
-        title: "일곱 번째 게시글 타이틀 입니다.",
-        content: "일곱 번째 글은 엔터키가 없고 HTML 태그만 있는 겁니다.",
-        createdAt: "2024-12-29T20:38:09.267246",
-        favoriteCount: 0,
-        isFavorite: false),
-    CommunityPost(
-        category: "질문 게시판",
-        profileImg: "유저 이미지",
-        nickname: "테스트",
-        authority: "ROLE_USER",
-        exchangePostNo: 7,
-        title: "일곱 번째 게시글 타이틀 입니다.",
-        content: "일곱 번째 글은 엔터키가 없고 HTML 태그만 있는 겁니다.",
-        createdAt: "2024-12-29T20:38:09.267246",
-        favoriteCount: 0,
-        isFavorite: false),
-  ];
+  final List<CommunityBoard> _communityBoardList = [];
 
-  // late BoardViewModel _viewModel;
+  late BoardViewModel _viewModel;
+
+  String get selectedPostType => _selectedPostType;
 
   String get selectedOrderType => _selectedOrderType;
 
-  List<CommunityPost> get communityPosts => _communityPosts;
+  List<CommunityBoard> get communityBoardList => _communityBoardList;
 
-  Pagination get talentPage => _talentPage;
+  Pagination get communityPage => _communityPage;
 
   ScrollController get scrollController => _scrollController;
 
   TabController get communityTabController => _communityTabController;
 
-  // void setViewModel(BoardViewModel viewModel) {
-  //   _viewModel = viewModel;
-  // }
+  void setViewModel(BoardViewModel viewModel) {
+    _viewModel = viewModel;
+  }
 
   void updateOrderType(String newType) {
     _selectedOrderType = newType;
     notifyListeners();
   }
 
-  void addCommunityPosts(List<CommunityPost> addCommunityPosts) {
-    _communityPosts.addAll(addCommunityPosts);
+  void updatePostType(String newType) {
+    _selectedPostType = newType;
     notifyListeners();
   }
 
-  void updateCommunityPosts(List<CommunityPost> addCommunityPosts) {
-    _communityPosts.clear();
-    _communityPosts.addAll(addCommunityPosts);
+  void addCommunityBoardList(List<CommunityBoard> addCommunityBoards) {
+    _communityBoardList.addAll(addCommunityBoards);
+    updateCommunityBoardListLastNo();
+    notifyListeners();
+  }
+
+  void updateCommunityBoardList(List<CommunityBoard> addCommunityBoards) {
+    _communityBoardList.clear();
+    _communityBoardList.addAll(addCommunityBoards);
     if (_scrollController.hasClients) {
       _scrollController.jumpTo(0);
     }
+    updateCommunityBoardListLastNo();
     notifyListeners();
   }
 
-  void updateCommunityPostsPage(Pagination paging) {
-    _talentPage = paging;
+  void updateCommunityBoardListPage(Pagination paging) {
+    _communityPage = paging;
+    notifyListeners();
+  }
+
+  void updateCommunityBoardListLastNo() {
+    _lastNo = _communityBoardList.last.communityPostNo.toString();
     notifyListeners();
   }
 
@@ -133,24 +83,18 @@ class CommunityBoardProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-//api 생성 후 처리
-// void _onScroll() {
-//   if (!_isFetching &&
-//       _scrollController.position.pixels >=
-//           _scrollController.position.maxScrollExtent - 200) {
-//     _fetchMoreData();
-//   }
-// }
+  void _onScroll() {
+    if (!_isFetching &&
+        _scrollController.position.pixels >=
+            _scrollController.position.maxScrollExtent - 200) {
+      _fetchMoreData();
+    }
+  }
 
-// Future<void> _fetchMoreData() async {
-//   _isFetching = true;
-//   await _viewModel.addCommunityPosts(
-//       selectedOrderType,
-//       null,
-//       null,
-//       (_talentPage.currentPage + 1).toString(),
-//       null,
-//       null);
-//   _isFetching = false;
-// }
+  Future<void> _fetchMoreData() async {
+    _isFetching = true;
+    await _viewModel.addCommunityBoardList(
+        _selectedPostType, _selectedOrderType, null, null, null, _lastNo);
+    _isFetching = false;
+  }
 }

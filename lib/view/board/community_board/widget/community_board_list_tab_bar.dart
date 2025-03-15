@@ -4,16 +4,17 @@ import 'package:provider/provider.dart';
 import '../../../../common/theme.dart';
 import '../../../../constants/global_value_constants.dart';
 import '../../../../provider/board/community_board_provider.dart';
+import '../../../../view_model/board_view_model.dart';
 
 class CommunityBoardListTabBar extends SliverPersistentHeaderDelegate {
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
     final communityBoardProvider = Provider.of<CommunityBoardProvider>(context);
+    final boardViewModel = Provider.of<BoardViewModel>(context);
 
     return Container(
         height: maxExtent,
-        padding: const EdgeInsets.only(left: 16),
         color: Colors.white,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -38,7 +39,7 @@ class CommunityBoardListTabBar extends SliverPersistentHeaderDelegate {
               labelStyle: TextTypes.bodyMedium03(color: Palette.text01),
               unselectedLabelStyle:
                   TextTypes.bodyMedium03(color: Palette.text03),
-              padding: EdgeInsets.zero,
+              padding: const EdgeInsets.only(left: 16.0),
               tabs: GlobalValueConstants.communityCategoryTypes.map(
                 (tabText) {
                   return Container(
@@ -53,6 +54,18 @@ class CommunityBoardListTabBar extends SliverPersistentHeaderDelegate {
                   );
                 },
               ).toList(),
+              onTap: (index) async {
+                communityBoardProvider.updatePostType(GlobalValueConstants
+                    .communityCategoryTypes[index]['code']!);
+                await boardViewModel.getCommunityBoardList(
+                  communityBoardProvider.selectedPostType,
+                  communityBoardProvider.selectedOrderType,
+                  null,
+                  null,
+                  null,
+                  null,
+                );
+              },
             ),
             const SizedBox(
               height: 12,
@@ -71,28 +84,4 @@ class CommunityBoardListTabBar extends SliverPersistentHeaderDelegate {
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
     return true;
   }
-
-// Future<void> getList(
-//     CommonProvider commonProvider,
-//     BoardViewModel boardViewModel,
-//     MatchBoardProvider talentBoardProvider) async {
-//   commonProvider.changeIsLoading(true);
-//   await boardViewModel
-//       .getTalentExchangePosts(
-//           talentBoardProvider.selectedGiveTalentKeywordCodes
-//               .map((e) => e.toString())
-//               .toList(),
-//           talentBoardProvider.selectedInterestTalentKeywordCodes
-//               .map((e) => e.toString())
-//               .toList(),
-//           talentBoardProvider.selectedOrderType,
-//           talentBoardProvider.selectedDurationType,
-//           talentBoardProvider.selectedOperationType,
-//           null,
-//           null,
-//           null,
-//           null,
-//           null)
-//       .whenComplete(() => commonProvider.changeIsLoading(false));
-// }
 }

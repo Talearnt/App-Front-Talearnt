@@ -2,10 +2,10 @@ import 'package:app_front_talearnt/common/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../../../data/model/respone/community_post.dart';
+import '../../../../data/model/respone/community_board.dart';
 
 class CommunityBoardListCardBottom extends StatelessWidget {
-  final CommunityPost post;
+  final CommunityBoard post;
   final int index;
 
   const CommunityBoardListCardBottom(
@@ -64,7 +64,7 @@ class CommunityBoardListCardBottom extends StatelessWidget {
                 SvgPicture.asset('assets/icons/thumb_up_off.svg'),
                 const SizedBox(width: 4),
                 Text(
-                  "${post.favoriteCount}",
+                  "${post.likeCount}",
                   style: TextTypes.captionMedium02(color: Palette.text03),
                 ),
               ],

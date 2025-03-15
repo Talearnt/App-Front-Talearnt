@@ -10,8 +10,10 @@ import 'package:app_front_talearnt/data/services/dio_service.dart';
 import 'package:dartz/dartz.dart';
 
 import '../../constants/api_constants.dart';
+import '../model/param/community_board_list_search_param.dart';
 import '../model/param/community_board_param.dart';
 import '../model/param/talent_exchange_posts_filter_param.dart';
+import '../model/respone/community_board.dart';
 import '../model/respone/matching_detail_post.dart';
 import '../model/respone/matching_post.dart';
 
@@ -77,8 +79,20 @@ class BoardRepository {
 
   Future<Either<Failure, Success>> setCommunityBoard(
       CommunityBoardParam body) async {
-    final result =
-        await dio.post(ApiConstants.setCommunityBoard, body.toJson(), null);
+    final result = await dio.post(
+        ApiConstants.handleCommunityBoardUrl, body.toJson(), null);
     return result.fold(left, (response) => right(Success.fromJson(response)));
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> getCommunityBoardList(
+      CommunityBoardListSearchParam body) async {
+    final response = await dio.get(
+        ApiConstants.handleCommunityBoardUrl, null, body.toJson());
+    return response.fold(left, (response) {
+      final posts = List<CommunityBoard>.from(response['data']['results']
+          .map((data) => CommunityBoard.fromJson(data)));
+      final pagination = Pagination.fromJson(response['data']['pagination']);
+      return right({'posts': posts, 'pagination': pagination});
+    });
   }
 }
