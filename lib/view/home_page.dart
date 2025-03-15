@@ -73,7 +73,7 @@ class HomePage extends StatelessWidget {
                     loginProvider.isLoggedIn
                         ? () async {
                             await keywordViewModel.getOfferedKeywords();
-                            context.push('/match_write1');
+                            context.push('/match-write1');
                           }
                         : () {
                             context.push("/login");

@@ -39,16 +39,18 @@ class LoginPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-          elevation: 0.0,
-          backgroundColor: Colors.transparent,
-          surfaceTintColor: Colors.transparent,
-          actions: [
-            IconButton(
-                onPressed: () {
-                  context.pop();
-                },
-                icon: const Icon(Icons.close))
-          ]),
+        elevation: 0.0,
+        backgroundColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
+        actions: [
+          IconButton(
+            onPressed: () {
+              context.pop();
+            },
+            icon: const Icon(Icons.close),
+          ),
+        ],
+      ),
       body: Stack(
         children: [
           Center(

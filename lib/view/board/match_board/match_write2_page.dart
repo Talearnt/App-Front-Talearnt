@@ -26,7 +26,7 @@ class MatchWrite2Page extends StatelessWidget {
       resizeToAvoidBottomInset: true,
       appBar: TopAppBar(
         onPressed: () {
-          context.go('/match_write1');
+          context.go('/match-write1');
         },
         second: TextBtnM(
           content: '미리보기',

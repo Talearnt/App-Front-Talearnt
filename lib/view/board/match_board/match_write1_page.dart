@@ -55,7 +55,7 @@ class MatchWrite1Page extends StatelessWidget {
                     onPressed: () async {
                       matchWriteProvider.checkChipsSelected();
                       matchWriteProvider.isChipsSelected
-                          ? context.go('/match_write2')
+                          ? context.go('/match-write2')
                           : null;
                     },
                   ),
