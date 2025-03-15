@@ -5,10 +5,12 @@ import 'package:app_front_talearnt/provider/board/match_edit_provider.dart';
 import 'package:flutter/material.dart';
 
 import '../common/common_navigator.dart';
+import '../data/model/param/community_board_list_search_param.dart';
 import '../data/model/param/community_board_param.dart';
 import '../data/model/param/s3_controller_param.dart';
 import '../data/model/param/talent_exchange_posts_filter_param.dart';
 import '../data/repositories/board_repository.dart';
+import '../provider/board/community_board_provider.dart';
 import '../provider/board/match_board_detail_provider.dart';
 import '../provider/board/match_board_provider.dart';
 import '../provider/board/match_write_provider.dart';
@@ -23,6 +25,7 @@ class BoardViewModel extends ChangeNotifier {
   final MatchBoardProvider talentBoardProvider;
   final MatchBoardDetailProvider talentBoardDetailProvider;
   final MatchEditProvider matchEditProvider;
+  final CommunityBoardProvider communityBoardProvider;
 
   BoardViewModel(
       this.commonNavigator,
@@ -31,7 +34,8 @@ class BoardViewModel extends ChangeNotifier {
       this.matchWriteProvider,
       this.talentBoardProvider,
       this.talentBoardDetailProvider,
-      this.matchEditProvider);
+      this.matchEditProvider,
+      this.communityBoardProvider);
 
   Future<void> getImageUploadUrl(
       List<Map<String, dynamic>> uploadImageInfos, String type) async {
@@ -258,6 +262,46 @@ class BoardViewModel extends ChangeNotifier {
         (failure) => commonNavigator.showSingleDialog(
             content: ErrorMessages.getMessage(failure.errorCode)), (result) {
       commonNavigator.goRoute('/write-success');
+    });
+  }
+
+  Future<void> getCommunityBoardList(String? postType, String? order,
+      String? path, String? page, String? size, String? lastNo) async {
+    CommunityBoardListSearchParam param = CommunityBoardListSearchParam(
+        postType: postType,
+        order: order,
+        path: path,
+        page: page,
+        size: size,
+        lastNo: lastNo);
+    final result = await boardRepository.getCommunityBoardList(param);
+    result.fold(
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)), (result) {
+      final posts = result['posts'];
+      final pagination = result['pagination'];
+      communityBoardProvider.updateCommunityBoardList(posts);
+      communityBoardProvider.updateCommunityBoardListPage(pagination);
+    });
+  }
+
+  Future<void> addCommunityBoardList(String? postType, String? order,
+      String? path, String? page, String? size, String? lastNo) async {
+    CommunityBoardListSearchParam param = CommunityBoardListSearchParam(
+        postType: postType,
+        order: order,
+        path: path,
+        page: page,
+        size: size,
+        lastNo: lastNo);
+    final result = await boardRepository.getCommunityBoardList(param);
+    result.fold(
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)), (result) {
+      final posts = result['posts'];
+      final pagination = result['pagination'];
+      communityBoardProvider.addCommunityBoardList(posts);
+      communityBoardProvider.updateCommunityBoardListPage(pagination);
     });
   }
 }

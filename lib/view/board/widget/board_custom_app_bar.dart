@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
 import '../../../provider/board/common_board_provider.dart';
+import '../../../provider/board/community_board_provider.dart';
 import '../../../provider/board/match_board_provider.dart';
 import '../../../view_model/board_view_model.dart';
 
@@ -19,19 +20,20 @@ class BoardCustomAppBar extends StatelessWidget {
     final viewModel = Provider.of<BoardViewModel>(context);
     final MatchBoardProvider matchBoardProvider =
         Provider.of<MatchBoardProvider>(context);
-    // final CommunityBoardProvider communityBoardProvider =
-    //     Provider.of<CommunityBoardProvider>(context);
-    matchBoardProvider.setViewModel(viewModel);
+    final CommunityBoardProvider communityBoardProvider =
+        Provider.of<CommunityBoardProvider>(context);
     return Container(
       height: kToolbarHeight,
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         color: Palette.bgBackGround,
-        border: Border(
-          bottom: BorderSide(
-            color: Palette.line02,
-            width: 1.0,
-          ),
-        ),
+        border: type == "match"
+            ? const Border(
+                bottom: BorderSide(
+                  color: Palette.line02,
+                  width: 1.0,
+                ),
+              )
+            : null,
       ),
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Row(
@@ -72,21 +74,13 @@ class BoardCustomAppBar extends StatelessWidget {
               const SizedBox(width: 20),
               TextButton(
                 onPressed: () {
-                  // viewModel.getCommunityPosts(
-                  //     matchBoardProvider.selectedGiveTalentKeywordCodes
-                  //         .map((e) => e.toString())
-                  //         .toList(),
-                  //     matchBoardProvider.selectedInterestTalentKeywordCodes
-                  //         .map((e) => e.toString())
-                  //         .toList(),
-                  //     matchBoardProvider.selectedOrderType,
-                  //     matchBoardProvider.selectedDurationType,
-                  //     matchBoardProvider.selectedOperationType,
-                  //     null,
-                  //     null,
-                  //     null,
-                  //     null,
-                  //     null);
+                  viewModel.getCommunityBoardList(
+                      communityBoardProvider.selectedPostType,
+                      communityBoardProvider.selectedOrderType,
+                      null,
+                      null,
+                      null,
+                      null);
                   commonBoardProvider.setBoardType("community");
                   commonBoardProvider.updateInitState(true);
                 },
