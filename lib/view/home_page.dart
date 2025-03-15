@@ -42,7 +42,7 @@ class HomePage extends StatelessWidget {
               horizontal: 24,
             ),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 GestureDetector(
                   child: Column(
@@ -70,8 +70,14 @@ class HomePage extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () async {
-                    await keywordViewModel.getOfferedKeywords();
-                    context.push('/match_write1');
+                    loginProvider.isLoggedIn
+                        ? () async {
+                            await keywordViewModel.getOfferedKeywords();
+                            context.push('/match-write1');
+                          }
+                        : () {
+                            context.push("/login");
+                          };
                   },
                   child: Column(
                     children: [
@@ -289,8 +295,11 @@ class HomePage extends StatelessWidget {
                                 ],
                               ),
                             ),
-                            const PrimaryS(
+                            PrimaryS(
                               content: "로그인",
+                              onPressed: () {
+                                context.push("/login");
+                              },
                             ),
                           ],
                         ),

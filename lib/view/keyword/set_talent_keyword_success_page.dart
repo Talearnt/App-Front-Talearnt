@@ -61,7 +61,7 @@ class SetTalentKeywordSuccessPage extends StatelessWidget {
               child: PrimaryM(
                 content: '매칭 게시물 보러가기',
                 onPressed: () {
-                  context.go('/home');
+                  context.go('/');
                 },
               ),
             ),

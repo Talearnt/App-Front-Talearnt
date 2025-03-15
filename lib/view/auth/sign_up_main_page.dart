@@ -30,7 +30,7 @@ class SignUpMainPage extends StatelessWidget {
           // 뒤로가기가 처리되지 않았을 때
           if (context.mounted) {
             signUpProvider.resetSignUp(); // 초기화 작업 수행
-            Navigator.pop(context); // 화면 종료
+            context.pop();
           }
         }
       },
