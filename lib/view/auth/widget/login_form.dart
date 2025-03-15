@@ -179,7 +179,7 @@ class LoginForm extends StatelessWidget {
               ),
               TextButton(
                 onPressed: () {
-                  context.go('/sign-up');
+                  context.push('/sign-up');
                 },
                 style: ButtonStyle(
                   padding: WidgetStateProperty.all(EdgeInsets.zero),

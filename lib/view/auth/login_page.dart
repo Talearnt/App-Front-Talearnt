@@ -1,8 +1,10 @@
+import 'package:app_front_talearnt/common/common_navigator.dart';
 import 'package:app_front_talearnt/view/auth/widget/login_form.dart';
 import 'package:app_front_talearnt/view/auth/widget/simple_login_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../common/widget/loading.dart';
 import '../../data/services/secure_storage_service.dart';
@@ -41,7 +43,11 @@ class LoginPage extends StatelessWidget {
           backgroundColor: Colors.transparent,
           surfaceTintColor: Colors.transparent,
           actions: [
-            IconButton(onPressed: () async {}, icon: const Icon(Icons.close))
+            IconButton(
+                onPressed: () {
+                  context.pop();
+                },
+                icon: const Icon(Icons.close))
           ]),
       body: Stack(
         children: [

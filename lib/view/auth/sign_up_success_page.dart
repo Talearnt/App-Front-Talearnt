@@ -65,7 +65,7 @@ class SignUpSuccessPage extends StatelessWidget {
                 content: '로그인 하기',
                 onPressed: () {
                   signUpProvider.resetSignUp();
-                  context.go('/');
+                  context.pop();
                 },
               ),
             ),
@@ -75,7 +75,7 @@ class SignUpSuccessPage extends StatelessWidget {
               child: SecondaryMGray(
                 content: '홈으로 돌아가기',
                 onPressed: () {
-                  //여기 홈 router 넣기 -> 홈이 뭐가 될지 아직 모름
+                  context.go("/");
                 },
               ),
             )

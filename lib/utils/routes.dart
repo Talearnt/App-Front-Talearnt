@@ -39,7 +39,7 @@ class Routes {
       GoRoute(
         path: '/',
         builder: (BuildContext context, GoRouterState state) {
-          return const LoginPage();
+          return const HomePage();
         },
         // redirect: (context, state) async {
         //   final secureStorageService = context.read<SecureStorageService>();
@@ -52,6 +52,12 @@ class Routes {
         //   return null;
         // },
         routes: <RouteBase>[
+          GoRoute(
+            path: '/login',
+            builder: (BuildContext context, GoRouterState state) {
+              return const LoginPage();
+            },
+          ),
           GoRoute(
             path: '/find-id',
             builder: (BuildContext context, GoRouterState state) {
@@ -106,13 +112,13 @@ class Routes {
             },
           ),
           GoRoute(
-            path: '/match_write1',
+            path: '/match-write1',
             builder: (BuildContext context, GoRouterState state) {
               return const MatchWrite1Page();
             },
           ),
           GoRoute(
-            path: '/match_write2',
+            path: '/match-write2',
             builder: (BuildContext context, GoRouterState state) {
               return const MatchWrite2Page();
             },
@@ -157,12 +163,6 @@ class Routes {
             path: '/board-list',
             builder: (BuildContext context, GoRouterState state) {
               return const BoardList();
-            },
-          ),
-          GoRoute(
-            path: '/home',
-            builder: (BuildContext context, GoRouterState state) {
-              return const HomePage();
             },
           ),
           GoRoute(
