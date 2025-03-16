@@ -63,7 +63,7 @@ class CommunityWritePreviewPage extends StatelessWidget {
 
               if (communityWriteProvider.uploadImageInfo.isNotEmpty) {
                 await boardViewModel.getImageUploadUrl(
-                    communityWriteProvider.uploadImageInfo, "W");
+                    communityWriteProvider.uploadImageInfo, "CW");
 
                 for (int idx = 0;
                     idx < communityWriteProvider.imageUploadUrls.length;
@@ -73,8 +73,10 @@ class CommunityWritePreviewPage extends StatelessWidget {
                       communityWriteProvider.uploadImageInfo[idx]["file"],
                       communityWriteProvider.uploadImageInfo[idx]["fileSize"],
                       communityWriteProvider.uploadImageInfo[idx]["fileType"],
-                      "W");
+                      "CW");
                 }
+
+                communityWriteProvider.finishImageUpload();
               }
 
               communityWriteProvider.checkTitleAndBoard();

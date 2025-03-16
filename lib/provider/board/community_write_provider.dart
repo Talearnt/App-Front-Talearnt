@@ -380,7 +380,6 @@ class CommunityWriteProvider extends ChangeNotifier with ClearText {
       processedImage =
           img.copyResize(originalImage, width: newWidth, height: maxHeight);
     }
-    ;
 
     final String newPath = path.join(
       imageFile.parent.path,
@@ -435,7 +434,7 @@ class CommunityWriteProvider extends ChangeNotifier with ClearText {
     notifyListeners();
   }
 
-  void exchangeImageUrl(String imageUploadUrl, String imagePath) {
+  Future<void> exchangeImageUrl(String imageUploadUrl, String imagePath) async {
     final delta = contentController.document.toDelta();
 
     String newImageUrl = imageUploadUrl.split('?')[0];
@@ -449,9 +448,6 @@ class CommunityWriteProvider extends ChangeNotifier with ClearText {
     }
 
     _imageUploadedUrls.add(newImageUrl);
-
-    _isS3Upload = false;
-    _uploadImageInfo.clear();
   }
 
   void clearInfo() {
@@ -500,5 +496,10 @@ class CommunityWriteProvider extends ChangeNotifier with ClearText {
     }
 
     notifyListeners();
+  }
+
+  void finishImageUpload() {
+    _isS3Upload = false;
+    _uploadImageInfo.clear();
   }
 }
