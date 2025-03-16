@@ -9,6 +9,7 @@ import 'package:app_front_talearnt/provider/auth/storage_provider.dart';
 import 'package:app_front_talearnt/provider/board/common_board_provider.dart';
 import 'package:app_front_talearnt/provider/board/match_board_provider.dart';
 import 'package:app_front_talearnt/provider/board/match_edit_provider.dart';
+import 'package:app_front_talearnt/provider/home/home_provider.dart';
 import 'package:app_front_talearnt/provider/keyword/keyword_provider.dart';
 import 'package:app_front_talearnt/provider/profile/profile_provider.dart';
 import 'package:app_front_talearnt/view_model/keyword_view_model.dart';
@@ -47,6 +48,7 @@ class ProviderSetup extends StatelessWidget {
         Provider<TokenManager>(
           create: (_) => TokenManager(Token.empty()),
         ),
+        ChangeNotifierProvider<HomeProvider>(create: (_) => HomeProvider()),
         ChangeNotifierProvider<LoginProvider>(create: (_) => LoginProvider()),
         ChangeNotifierProvider<MatchWriteProvider>(
             create: (_) => MatchWriteProvider()),
@@ -130,6 +132,7 @@ class ProviderSetup extends StatelessWidget {
             context.read<CommunityBoardProvider>(),
             context.read<CommunityWriteProvider>(),
             context.read<CommunityBoardDetailProvider>(),
+            context.read<HomeProvider>(),
           ),
         ),
         ChangeNotifierProvider<KeywordViewModel>(

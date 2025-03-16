@@ -1,16 +1,24 @@
 import 'package:app_front_talearnt/common/theme.dart';
+import 'package:app_front_talearnt/data/model/respone/community_board.dart';
+import 'package:app_front_talearnt/data/model/respone/matching_post.dart';
 import 'package:app_front_talearnt/view/board/match_board/widget/match_board_selected_chip_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 
 class HomeMatchBoardCard extends StatelessWidget {
-  const HomeMatchBoardCard({super.key});
+  final MatchingPost post;
+
+  const HomeMatchBoardCard({
+    super.key,
+    required this.post,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: 308,
-      height: 346,
+      height: 342,
       decoration: BoxDecoration(
         color: Palette.bgBackGround,
         border: Border.all(
@@ -43,7 +51,7 @@ class HomeMatchBoardCard extends StatelessWidget {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      "잭재기",
+                      post.nickname,
                       style: TextTypes.body02(
                         color: Palette.text01,
                       ),
@@ -71,7 +79,7 @@ class HomeMatchBoardCard extends StatelessWidget {
                       width: 4,
                     ),
                     Text(
-                      "12",
+                      post.favoriteCount.toString(),
                       style: TextTypes.bodySemi03(
                         color: Palette.text03,
                       ),
@@ -84,6 +92,7 @@ class HomeMatchBoardCard extends StatelessWidget {
               height: 20,
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Container(
                   padding:
@@ -93,7 +102,7 @@ class HomeMatchBoardCard extends StatelessWidget {
                     color: Palette.primaryBG04,
                   ),
                   child: Text(
-                    "모집중",
+                    post.status,
                     style: TextTypes.captionSemi02(color: Palette.primary01),
                   ),
                 ),
@@ -106,7 +115,7 @@ class HomeMatchBoardCard extends StatelessWidget {
                     color: Palette.bgUp01,
                   ),
                   child: Text(
-                    "온라인",
+                    post.exchangeType,
                     style: TextTypes.captionSemi02(color: Palette.text02),
                   ),
                 ),
@@ -119,7 +128,7 @@ class HomeMatchBoardCard extends StatelessWidget {
                     color: Palette.bgUp01,
                   ),
                   child: Text(
-                    "2개월",
+                    post.duration,
                     style: TextTypes.captionSemi02(color: Palette.text02),
                   ),
                 ),
@@ -128,22 +137,36 @@ class HomeMatchBoardCard extends StatelessWidget {
             const SizedBox(
               height: 12,
             ),
-            Text(
-              "Java와 C++, 보안에 관심 있는 분 있나요?",
-              style: TextTypes.heading2(
-                color: Palette.text01,
+            SizedBox(
+              height: 58,
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: Text(
+                  post.title,
+                  style: TextTypes.heading2(
+                    color: Palette.text01,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
             ),
             const SizedBox(
               height: 6,
             ),
-            Text(
-              "안녕하세요~ 어쩌구 저쩌구~ 전 보안 잘 하는데 디자인이 꽝이에여",
-              style: TextTypes.bodyMedium03(
-                color: Palette.text03,
+            SizedBox(
+              height: 36,
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: Text(
+                  post.content,
+                  style: TextTypes.bodyMedium03(
+                    color: Palette.text03,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
             ),
             const SizedBox(
               height: 32,
@@ -160,8 +183,8 @@ class HomeMatchBoardCard extends StatelessWidget {
                           color: Palette.text04,
                         ),
                       ),
-                      const MatchBoardSelectedChipList(
-                        keywordNames: ["JAVA", "JAVA", "JAVA"],
+                      MatchBoardSelectedChipList(
+                        keywordNames: post.giveTalents,
                       ),
                     ],
                   ),
@@ -179,8 +202,8 @@ class HomeMatchBoardCard extends StatelessWidget {
                           color: Palette.text04,
                         ),
                       ),
-                      const MatchBoardSelectedChipList(
-                        keywordNames: ["JAVA", "JAVA", "JAVA"],
+                      MatchBoardSelectedChipList(
+                        keywordNames: post.receiveTalents,
                       ),
                     ],
                   ),
@@ -195,7 +218,14 @@ class HomeMatchBoardCard extends StatelessWidget {
 }
 
 class HomeCommunityCard extends StatelessWidget {
-  const HomeCommunityCard({super.key});
+  final CommunityBoard post;
+  final int ranking;
+
+  const HomeCommunityCard({
+    super.key,
+    required this.post,
+    required this.ranking,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -234,17 +264,17 @@ class HomeCommunityCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "당찬 돼지",
+                          post.nickname,
                           style: TextTypes.body02(
                             color: Palette.text01,
                           ),
                         ),
                         Text(
-                          "2025. 03. 02",
+                          post.createdAt,
                           style: TextTypes.captionSemi02(
                             color: Palette.text04,
                           ),
-                        ),
+                        )
                       ],
                     ),
                   ],
@@ -258,25 +288,37 @@ class HomeCommunityCard extends StatelessWidget {
                     color: Palette.primaryBG04,
                   ),
                   child: Text(
-                    "자유게시판",
+                    post.postType,
                     style: TextTypes.captionSemi02(color: Palette.primary01),
                   ),
                 ),
                 const SizedBox(height: 12),
-                Text(
-                  "재능 어쩌구 저쩌구해서\n또 어쩌구 저쩌구 한 경우 있나요?",
-                  style: TextTypes.bodySemi01(
-                    color: Palette.text01,
+                SizedBox(
+                  height: 46,
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      post.title,
+                      style: TextTypes.bodySemi01(
+                        color: Palette.text01,
+                      ),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 6),
-                Text(
-                  "안녕하세요~ 어쩌구 저쩌구~ 전 보안 잘 하는데 디자인이 꽝이에여",
-                  style: TextTypes.bodyMedium03(
-                    color: Palette.text03,
+                SizedBox(
+                  height: 36,
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      post.content,
+                      style: TextTypes.bodyMedium03(
+                        color: Palette.text03,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 28),
                 Row(
@@ -287,7 +329,7 @@ class HomeCommunityCard extends StatelessWidget {
                         SvgPicture.asset('assets/icons/thumb_up_off.svg'),
                         const SizedBox(width: 4),
                         Text(
-                          "21",
+                          post.likeCount.toString(),
                           style: TextTypes.bodySemi03(
                             color: Palette.text03,
                           ),
@@ -296,7 +338,7 @@ class HomeCommunityCard extends StatelessWidget {
                         SvgPicture.asset('assets/icons/comment.svg'),
                         const SizedBox(width: 4),
                         Text(
-                          "12",
+                          post.commentCount.toString(),
                           style: TextTypes.bodySemi03(
                             color: Palette.text03,
                           ),
@@ -309,7 +351,7 @@ class HomeCommunityCard extends StatelessWidget {
                         SvgPicture.asset('assets/icons/eye_open_grey.svg'),
                         const SizedBox(width: 4),
                         Text(
-                          "20",
+                          post.count.toString(),
                           style: TextTypes.bodySemi03(
                             color: Palette.text03,
                           ),
@@ -325,9 +367,50 @@ class HomeCommunityCard extends StatelessWidget {
         Positioned(
           top: -14,
           right: 12,
-          child: SvgPicture.asset('assets/icons/ranking_badge.svg'),
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              SvgPicture.asset('assets/icons/ranking_badge.svg'),
+              Text(
+                ranking.toString(),
+                style: TextTypes.body02(
+                  color: Palette.bgBackGround,
+                ),
+              ),
+            ],
+          ),
         ),
       ],
+    );
+  }
+}
+
+class HomeNullCard extends StatelessWidget {
+  const HomeNullCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 308,
+      height: 280,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            offset: const Offset(0, 2),
+            blurRadius: 8,
+            spreadRadius: 2,
+          ),
+        ],
+      ),
+      child: const Padding(
+        padding: EdgeInsets.all(24),
+        child: Column(
+          children: [],
+        ),
+      ),
     );
   }
 }
