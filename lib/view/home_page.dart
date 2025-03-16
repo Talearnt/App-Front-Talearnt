@@ -84,14 +84,12 @@ class HomePage extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () async {
-                    loginProvider.isLoggedIn
-                        ? () async {
-                            await keywordViewModel.getOfferedKeywords();
-                            context.push('/match-write1');
-                          }
-                        : () {
-                            context.push("/login");
-                          };
+                    if (loginProvider.isLoggedIn) {
+                      await keywordViewModel.getOfferedKeywords();
+                      context.push('/match-write1');
+                    } else {
+                      context.push("/login");
+                    }
                   },
                   child: Column(
                     children: [

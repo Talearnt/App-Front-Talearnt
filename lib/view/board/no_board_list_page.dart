@@ -43,8 +43,8 @@ class NoBoardListPage extends StatelessWidget {
               content: '게시물 작성하기',
               onPressed: () {
                 boardType == 'match'
-                    ? context.push('/match_write1')
-                    : context.push('/match_write1');//이후에 커뮤니티 작성 으로 변경해야됨
+                    ? context.push('/match-write1')
+                    : context.push('/match-write1'); //이후에 커뮤니티 작성 으로 변경해야됨
               },
             ),
           ),
