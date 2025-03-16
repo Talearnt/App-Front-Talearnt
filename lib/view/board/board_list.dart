@@ -4,6 +4,7 @@ import 'package:app_front_talearnt/view/board/community_board/widget/community_b
 import 'package:app_front_talearnt/view/board/community_board/widget/community_board_list_tab_bar.dart';
 import 'package:app_front_talearnt/view/board/match_board/widget/match_board_list_card.dart';
 import 'package:app_front_talearnt/view/board/match_board/widget/match_board_list_tab_bar.dart';
+import 'package:app_front_talearnt/view/board/widget/board_custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -12,7 +13,6 @@ import '../../../provider/board/match_board_provider.dart';
 import '../../../view_model/board_view_model.dart';
 import '../../provider/board/community_board_provider.dart';
 import 'no_board_list_page.dart';
-import 'widget/board_custom_app_bar.dart';
 
 class BoardList extends StatelessWidget {
   const BoardList({super.key});
@@ -25,12 +25,13 @@ class BoardList extends StatelessWidget {
     final CommunityBoardProvider communityBoardProvider =
         Provider.of<CommunityBoardProvider>(context);
     matchBoardProvider.setViewModel(viewModel);
+    communityBoardProvider.setViewModel(viewModel);
     return Scaffold(body: SafeArea(
       child: Consumer<CommonBoardProvider>(
         builder: (subContext, commonBoardProvider, child) {
           final int childCount = (commonBoardProvider.boardType == 'match'
               ? matchBoardProvider.talentExchangePosts.length
-              : communityBoardProvider.communityPosts.length);
+              : communityBoardProvider.communityBoardList.length);
 
           return CustomScrollView(
             controller: commonBoardProvider.boardType == 'match'
@@ -62,7 +63,7 @@ class BoardList extends StatelessWidget {
                     List<dynamic> posts =
                         commonBoardProvider.boardType == 'match'
                             ? matchBoardProvider.talentExchangePosts
-                            : communityBoardProvider.communityPosts;
+                            : communityBoardProvider.communityBoardList;
                     if (posts.isEmpty) {
                       if (commonBoardProvider.initState) {
                         return NoBoardListPage(
@@ -85,7 +86,8 @@ class BoardList extends StatelessWidget {
                                           .talentExchangePosts[index]
                                           .exchangePostNo
                                       : communityBoardProvider
-                                          .communityPosts[index].exchangePostNo;
+                                          .communityBoardList[index]
+                                          .communityPostNo;
                               await viewModel.getTalentDetailPost(postNo);
                             },
                             child: MatchBoardListCard(

@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../../../common/theme.dart';
-import '../../../../data/model/respone/community_post.dart';
+import '../../../../data/model/respone/community_board.dart';
 import 'community_board_list_card_bottom.dart';
 
 class CommunityBoardListCard extends StatelessWidget {
-  final CommunityPost post;
+  final CommunityBoard post;
   final int index;
 
   const CommunityBoardListCard({
@@ -27,7 +27,7 @@ class CommunityBoardListCard extends StatelessWidget {
             children: [
               const SizedBox(height: 8),
               Text(
-                post.category,
+                post.postType,
                 style: TextTypes.captionMedium02(color: Palette.primary01),
               ),
               const SizedBox(height: 4),

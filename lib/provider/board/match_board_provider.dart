@@ -182,7 +182,7 @@ class MatchBoardProvider extends ChangeNotifier {
         selectedOperationType,
         null,
         null,
-        (_talentPage.currentPage + 1).toString(),
+        null,
         null,
         null);
     _isFetching = false;
