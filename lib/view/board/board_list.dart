@@ -80,20 +80,23 @@ class BoardList extends StatelessWidget {
                             overlayColor:
                                 WidgetStateProperty.all(Colors.transparent),
                             onTap: () async {
-                              int postNo =
-                                  commonBoardProvider.boardType == 'match'
-                                      ? matchBoardProvider
-                                          .talentExchangePosts[index]
-                                          .exchangePostNo
-                                      : communityBoardProvider
-                                          .communityBoardList[index]
-                                          .communityPostNo;
-                              await viewModel.getTalentDetailPost(postNo);
+                              await viewModel.getTalentDetailPost(
+                                  matchBoardProvider.talentExchangePosts[index]
+                                      .exchangePostNo);
                             },
                             child: MatchBoardListCard(
                                 post: posts[index], index: index))
-                        : CommunityBoardListCard(
-                            post: posts[index], index: index);
+                        : InkWell(
+                            overlayColor:
+                                WidgetStateProperty.all(Colors.transparent),
+                            onTap: () async {
+                              await viewModel.getCommunityDetailBoard(
+                                  communityBoardProvider
+                                      .communityBoardList[index]
+                                      .communityPostNo);
+                            },
+                            child: CommunityBoardListCard(
+                                post: posts[index], index: index));
                   },
                   childCount: childCount == 0 ? 1 : childCount,
                 ),
