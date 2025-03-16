@@ -1,3 +1,4 @@
+import 'package:app_front_talearnt/constants/global_value_constants.dart';
 import 'package:app_front_talearnt/data/model/respone/community_board.dart';
 import 'package:app_front_talearnt/data/model/respone/matching_post.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,14 @@ class HomeProvider extends ChangeNotifier {
   void setBestCommunityBoardList(List<CommunityBoard> addCommunityBoards) {
     _bestCommunityPosts.clear();
     _bestCommunityPosts.addAll(addCommunityBoards);
+
+    notifyListeners();
+  }
+
+  void setUserMatchingTalentExchangePosts(
+      List<MatchingPost> addTalentExchangePosts) {
+    _userMatchingTalentExchangePosts.clear();
+    _userMatchingTalentExchangePosts.addAll(addTalentExchangePosts);
 
     notifyListeners();
   }

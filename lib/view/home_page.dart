@@ -25,16 +25,50 @@ class HomePage extends StatelessWidget {
     final viewModel = Provider.of<BoardViewModel>(context);
 
     WidgetsBinding.instance.addPostFrameCallback(
-      (_) {
+      (_) async {
         if (homeProvider.newTalentExchangePosts.isEmpty) {
-          context.read<BoardViewModel>().getNewTalentExchangePosts(
-              [], [], '', '', '', '', '', '', '10', '');
+          await context.read<BoardViewModel>().getNewTalentExchangePosts(
+            [],
+            [],
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '10',
+            '',
+          );
         }
 
         if (homeProvider.bestCommunityPosts.isEmpty) {
-          context
+          await context.read<BoardViewModel>().getBestCommunityBoardList(
+                "",
+                "hot",
+                "",
+                "",
+                "10",
+                "",
+              );
+        }
+
+        if (homeProvider.userMatchingTalentExchangePosts.isEmpty &&
+            loginProvider.isLoggedIn) {
+          await context
               .read<BoardViewModel>()
-              .getBestCommunityBoardList("", "hot", "", "", "10", "");
+              .getUserMatchingTalentExchangePosts(
+                  homeProvider.userMatchingTalentExchangePosts
+                      .map((e) => e.toString())
+                      .toList(),
+                  [],
+                  '',
+                  '',
+                  '',
+                  '',
+                  '',
+                  '',
+                  '10',
+                  '');
         }
       },
     );
@@ -251,18 +285,19 @@ class HomePage extends StatelessWidget {
                       const SizedBox(
                         height: 12,
                       ),
-                      const SingleChildScrollView(
+                      SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
-                        padding: EdgeInsets.symmetric(vertical: 12),
+                        padding: const EdgeInsets.symmetric(vertical: 12),
                         child: Row(
                           children: [
-                            SizedBox(width: 24),
-                            // ...matchBoardList.map((match) {
-                            //   return const Padding(
-                            //     padding: EdgeInsets.only(right: 14),
-                            //     child: HomeMatchBoardCard(),
-                            //   );
-                            // }).toList(),
+                            const SizedBox(width: 24),
+                            ...homeProvider.userMatchingTalentExchangePosts
+                                .map((post) {
+                              return Padding(
+                                padding: const EdgeInsets.only(right: 14),
+                                child: HomeMatchBoardCard(post: post),
+                              );
+                            }).toList(),
                           ],
                         ),
                       )
@@ -289,6 +324,7 @@ class HomePage extends StatelessWidget {
                           horizontal: 24,
                         ),
                         child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text.rich(
@@ -326,7 +362,7 @@ class HomePage extends StatelessWidget {
                     ],
                   ),
             const SizedBox(
-              height: 24,
+              height: 44,
             ),
             homeProvider.newTalentExchangePosts.isEmpty
                 ? const SizedBox.shrink()
@@ -387,7 +423,7 @@ class HomePage extends StatelessWidget {
                     ],
                   ),
             const SizedBox(
-              height: 24,
+              height: 44,
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -431,7 +467,12 @@ class HomePage extends StatelessWidget {
                   height: 12,
                 ),
                 homeProvider.bestCommunityPosts.isEmpty
-                    ? const HomeNullCard()
+                    ? const Row(
+                        children: [
+                          SizedBox(width: 24),
+                          HomeNullCard(),
+                        ],
+                      )
                     : SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         padding: const EdgeInsets.symmetric(vertical: 12),
