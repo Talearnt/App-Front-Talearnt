@@ -1,8 +1,9 @@
 import 'package:app_front_talearnt/common/theme.dart';
 import 'package:app_front_talearnt/common/widget/button.dart';
 import 'package:app_front_talearnt/provider/auth/login_provider.dart';
+import 'package:app_front_talearnt/provider/home/home_provider.dart';
 import 'package:app_front_talearnt/provider/profile/profile_provider.dart';
-import 'package:app_front_talearnt/view/board/match_board/widget/match_board_selected_chip_list.dart';
+import 'package:app_front_talearnt/data/model/respone/matching_post.dart';
 import 'package:app_front_talearnt/view/widget/home_board_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -17,13 +18,26 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final homeProvider = Provider.of<HomeProvider>(context);
     final keywordViewModel = Provider.of<KeywordViewModel>(context);
     final loginProvider = Provider.of<LoginProvider>(context);
     final profileProvider = Provider.of<ProfileProvider>(context);
     final viewModel = Provider.of<BoardViewModel>(context);
 
-    final List<String> matchBoardList =
-        List.generate(10, (index) => 'Match $index');
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) {
+        if (homeProvider.newTalentExchangePosts.isEmpty) {
+          context.read<BoardViewModel>().getNewTalentExchangePosts(
+              [], [], '', '', '', '', '', '', '10', '');
+        }
+
+        if (homeProvider.bestCommunityPosts.isEmpty) {
+          context
+              .read<BoardViewModel>()
+              .getBestCommunityBoardList("", "hot", "", "", "10", "");
+        }
+      },
+    );
 
     return Scaffold(
       bottomNavigationBar: Container(
@@ -239,18 +253,18 @@ class HomePage extends StatelessWidget {
                       const SizedBox(
                         height: 12,
                       ),
-                      SingleChildScrollView(
+                      const SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
-                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        padding: EdgeInsets.symmetric(vertical: 12),
                         child: Row(
                           children: [
-                            const SizedBox(width: 24),
-                            ...matchBoardList.map((match) {
-                              return const Padding(
-                                padding: EdgeInsets.only(right: 14),
-                                child: HomeMatchBoardCard(),
-                              );
-                            }).toList(),
+                            SizedBox(width: 24),
+                            // ...matchBoardList.map((match) {
+                            //   return const Padding(
+                            //     padding: EdgeInsets.only(right: 14),
+                            //     child: HomeMatchBoardCard(),
+                            //   );
+                            // }).toList(),
                           ],
                         ),
                       )
@@ -314,68 +328,68 @@ class HomePage extends StatelessWidget {
                     ],
                   ),
             const SizedBox(
-              height: 44,
+              height: 24,
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 24,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            homeProvider.newTalentExchangePosts.isEmpty
+                ? const SizedBox.shrink()
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        '신규 매칭 게시물이 올라왔어요!',
-                        style: TextTypes.bodySemi01(
-                          color: Palette.text01,
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () {},
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 24),
                         child: Row(
-                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              '더보기',
-                              style: TextTypes.caption01(
-                                color: Palette.text03,
+                              '신규 매칭 게시물이 올라왔어요!',
+                              style:
+                                  TextTypes.bodySemi01(color: Palette.text01),
+                            ),
+                            GestureDetector(
+                              onTap: () async {
+                                await viewModel.getInitTalentExchangePosts();
+                              },
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    '더보기',
+                                    style: TextTypes.caption01(
+                                        color: Palette.text03),
+                                  ),
+                                  SvgPicture.asset(
+                                    'assets/icons/add_more_arrow.svg',
+                                    width: 24,
+                                    height: 24,
+                                  ),
+                                ],
                               ),
                             ),
-                            SvgPicture.asset(
-                              'assets/icons/add_more_arrow.svg',
-                              width: 24,
-                              height: 24,
-                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 12,
+                      ),
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        child: Row(
+                          children: [
+                            const SizedBox(width: 24),
+                            ...homeProvider.newTalentExchangePosts.map((post) {
+                              return Padding(
+                                padding: const EdgeInsets.only(right: 14),
+                                child: HomeMatchBoardCard(post: post),
+                              );
+                            }).toList(),
                           ],
                         ),
                       ),
                     ],
                   ),
-                ),
-                const SizedBox(
-                  height: 12,
-                ),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  child: Row(
-                    children: [
-                      const SizedBox(width: 24),
-                      ...matchBoardList.map((match) {
-                        return const Padding(
-                          padding: EdgeInsets.only(right: 14),
-                          child: HomeMatchBoardCard(),
-                        );
-                      }).toList(),
-                    ],
-                  ),
-                )
-              ],
-            ),
             const SizedBox(
-              height: 44,
+              height: 24,
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -418,21 +432,32 @@ class HomePage extends StatelessWidget {
                 const SizedBox(
                   height: 12,
                 ),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  child: Row(
-                    children: [
-                      const SizedBox(width: 24),
-                      ...matchBoardList.map((match) {
-                        return const Padding(
-                          padding: EdgeInsets.only(right: 14),
-                          child: HomeCommunityCard(),
-                        );
-                      }).toList(),
-                    ],
-                  ),
-                )
+                homeProvider.bestCommunityPosts.isEmpty
+                    ? const HomeNullCard()
+                    : SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        child: Row(
+                          children: [
+                            const SizedBox(width: 24),
+                            ...homeProvider.bestCommunityPosts
+                                .asMap()
+                                .entries
+                                .map((entry) {
+                              final ranking = entry.key + 1;
+                              final post = entry.value;
+
+                              return Padding(
+                                padding: const EdgeInsets.only(right: 14),
+                                child: HomeCommunityCard(
+                                  post: post,
+                                  ranking: ranking,
+                                ),
+                              );
+                            }).toList(),
+                          ],
+                        ),
+                      )
               ],
             ),
             const SizedBox(
