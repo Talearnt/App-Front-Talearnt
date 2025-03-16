@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:app_front_talearnt/data/model/param/match_board_param.dart';
+import 'package:app_front_talearnt/provider/board/community_write_provider.dart';
 import 'package:app_front_talearnt/provider/board/match_edit_provider.dart';
 import 'package:flutter/material.dart';
 
@@ -26,6 +27,7 @@ class BoardViewModel extends ChangeNotifier {
   final MatchBoardDetailProvider talentBoardDetailProvider;
   final MatchEditProvider matchEditProvider;
   final CommunityBoardProvider communityBoardProvider;
+  final CommunityWriteProvider communityWriteProvider;
 
   BoardViewModel(
       this.commonNavigator,
@@ -35,7 +37,8 @@ class BoardViewModel extends ChangeNotifier {
       this.talentBoardProvider,
       this.talentBoardDetailProvider,
       this.matchEditProvider,
-      this.communityBoardProvider);
+      this.communityBoardProvider,
+      this.communityWriteProvider);
 
   Future<void> getImageUploadUrl(
       List<Map<String, dynamic>> uploadImageInfos, String type) async {
@@ -55,10 +58,12 @@ class BoardViewModel extends ChangeNotifier {
         (failure) => commonNavigator.showSingleDialog(
             content: ErrorMessages.getMessage(failure.errorCode)),
         (result) async {
-      if (type == "W") {
+      if (type == "MW") {
         matchWriteProvider.setImageUploadUrl(result.data);
-      } else if (type == "E") {
+      } else if (type == "ME") {
         matchEditProvider.setImageUploadUrl(result.data);
+      } else if (type == "CW") {
+        communityWriteProvider.setImageUploadUrl(result.data);
       }
     });
   }
@@ -73,10 +78,13 @@ class BoardViewModel extends ChangeNotifier {
           content: ErrorMessages.getMessage(failure.errorCode));
       matchWriteProvider.clearInfos();
     }, (result) async {
-      if (type == "W") {
+      if (type == "MW") {
         await matchWriteProvider.exchangeImageUrl(imageUploadUrl, image.path);
-      } else if (type == "E") {
+      } else if (type == "ME") {
         await matchEditProvider.exchangeImageUrl(imageUploadUrl, image.path);
+      } else if (type == "CW") {
+        await communityWriteProvider.exchangeImageUrl(
+            imageUploadUrl, image.path);
       }
     });
   }

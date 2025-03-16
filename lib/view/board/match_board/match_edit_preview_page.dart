@@ -39,7 +39,7 @@ class MatchEditPreviewPage extends StatelessWidget {
 
             if (matchEditProvider.uploadImageInfos.isNotEmpty) {
               await boardViewModel.getImageUploadUrl(
-                  matchEditProvider.uploadImageInfos, "E");
+                  matchEditProvider.uploadImageInfos, "ME");
 
               for (int idx = 0;
                   idx < matchEditProvider.imageUploadUrls.length;

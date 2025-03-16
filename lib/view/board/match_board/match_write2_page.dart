@@ -52,7 +52,7 @@ class MatchWrite2Page extends StatelessWidget {
 
             if (matchWriteProvider.uploadImageInfos.isNotEmpty) {
               await boardViewModel.getImageUploadUrl(
-                  matchWriteProvider.uploadImageInfos, "W");
+                  matchWriteProvider.uploadImageInfos, "MW");
 
               for (int idx = 0;
                   idx < matchWriteProvider.imageUploadUrls.length;

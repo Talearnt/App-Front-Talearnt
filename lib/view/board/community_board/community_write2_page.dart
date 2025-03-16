@@ -55,7 +55,7 @@ class CommunityWrite2Page extends StatelessWidget {
 
             if (communityWriteProvider.uploadImageInfo.isNotEmpty) {
               await boardViewModel.getImageUploadUrl(
-                  communityWriteProvider.uploadImageInfo, 'W');
+                  communityWriteProvider.uploadImageInfo, 'CW');
 
               for (int idx = 0;
                   idx < communityWriteProvider.imageUploadUrls.length;
@@ -67,6 +67,8 @@ class CommunityWrite2Page extends StatelessWidget {
                     communityWriteProvider.uploadImageInfo[idx]["fileType"],
                     "W");
               }
+
+              communityWriteProvider.finishImageUpload();
             }
 
             communityWriteProvider.checkTitleAndBoard();
