@@ -318,16 +318,17 @@ class BoardViewModel extends ChangeNotifier {
   }
 
   Future<void> getNewTalentExchangePosts(
-      List<String>? giveTalents,
-      List<String>? receiveTalents,
-      String? order,
-      String? duration,
-      String? type,
-      String? badge,
-      String? status,
-      String? page,
-      String? size,
-      String? search) async {
+    List<String>? giveTalents,
+    List<String>? receiveTalents,
+    String? order,
+    String? duration,
+    String? type,
+    String? badge,
+    String? status,
+    String? page,
+    String? size,
+    String? search,
+  ) async {
     TalentExchangePostsFilterParam param = TalentExchangePostsFilterParam(
         giveTalents: giveTalents,
         receiveTalents: receiveTalents,
@@ -363,6 +364,38 @@ class BoardViewModel extends ChangeNotifier {
             content: ErrorMessages.getMessage(failure.errorCode)), (result) {
       final posts = result['posts'];
       homeProvider.setBestCommunityBoardList(posts);
+    });
+  }
+
+  Future<void> getUserMatchingTalentExchangePosts(
+    List<String>? giveTalents,
+    List<String>? receiveTalents,
+    String? order,
+    String? duration,
+    String? type,
+    String? badge,
+    String? status,
+    String? page,
+    String? size,
+    String? search,
+  ) async {
+    TalentExchangePostsFilterParam param = TalentExchangePostsFilterParam(
+        giveTalents: giveTalents,
+        receiveTalents: receiveTalents,
+        order: order,
+        duration: duration,
+        type: type,
+        badge: badge,
+        status: status,
+        page: page,
+        size: size,
+        search: search);
+    final result = await boardRepository.getTalentExchangePosts(param);
+    result.fold(
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)), (result) {
+      final posts = result['posts'];
+      homeProvider.setUserMatchingTalentExchangePosts(posts);
     });
   }
 
