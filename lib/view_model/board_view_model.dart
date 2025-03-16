@@ -11,6 +11,7 @@ import '../data/model/param/community_board_param.dart';
 import '../data/model/param/s3_controller_param.dart';
 import '../data/model/param/talent_exchange_posts_filter_param.dart';
 import '../data/repositories/board_repository.dart';
+import '../provider/board/community_board_detail_provider.dart';
 import '../provider/board/community_board_provider.dart';
 import '../provider/board/match_board_detail_provider.dart';
 import '../provider/board/match_board_provider.dart';
@@ -28,6 +29,7 @@ class BoardViewModel extends ChangeNotifier {
   final MatchEditProvider matchEditProvider;
   final CommunityBoardProvider communityBoardProvider;
   final CommunityWriteProvider communityWriteProvider;
+  final CommunityBoardDetailProvider communityBoardDetailProvider;
 
   BoardViewModel(
       this.commonNavigator,
@@ -38,7 +40,8 @@ class BoardViewModel extends ChangeNotifier {
       this.talentBoardDetailProvider,
       this.matchEditProvider,
       this.communityBoardProvider,
-      this.communityWriteProvider);
+      this.communityWriteProvider,
+      this.communityBoardDetailProvider);
 
   Future<void> getImageUploadUrl(
       List<Map<String, dynamic>> uploadImageInfos, String type) async {
@@ -263,9 +266,7 @@ class BoardViewModel extends ChangeNotifier {
       postType: postType,
       imageUrls: urlList,
     );
-
     final result = await boardRepository.setCommunityBoard(param);
-
     result.fold(
         (failure) => commonNavigator.showSingleDialog(
             content: ErrorMessages.getMessage(failure.errorCode)), (result) {
@@ -310,6 +311,16 @@ class BoardViewModel extends ChangeNotifier {
       final pagination = result['pagination'];
       communityBoardProvider.addCommunityBoardList(posts);
       communityBoardProvider.updateCommunityBoardListPage(pagination);
+    });
+  }
+
+  Future<void> getCommunityDetailBoard(int postNo) async {
+    final result = await boardRepository.getCommunityDetailBoard(postNo);
+    result.fold(
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)), (post) {
+      communityBoardDetailProvider.updateCommunityDetailBoard(post);
+      commonNavigator.pushRoute('/community-board-detail');
     });
   }
 }

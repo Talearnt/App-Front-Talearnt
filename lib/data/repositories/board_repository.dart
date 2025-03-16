@@ -14,6 +14,7 @@ import '../model/param/community_board_list_search_param.dart';
 import '../model/param/community_board_param.dart';
 import '../model/param/talent_exchange_posts_filter_param.dart';
 import '../model/respone/community_board.dart';
+import '../model/respone/community_detail_board.dart';
 import '../model/respone/matching_detail_post.dart';
 import '../model/respone/matching_post.dart';
 
@@ -94,5 +95,13 @@ class BoardRepository {
       final pagination = Pagination.fromJson(response['data']['pagination']);
       return right({'posts': posts, 'pagination': pagination});
     });
+  }
+
+  Future<Either<Failure, CommunityDetailBoard>> getCommunityDetailBoard(
+      int postNo) async {
+    final response =
+        await dio.get(ApiConstants.getCommunityDetailBoard(postNo), null, null);
+    return response.fold(
+        left, (result) => right(CommunityDetailBoard.fromJson(result["data"])));
   }
 }
