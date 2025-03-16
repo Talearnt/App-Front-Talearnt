@@ -62,7 +62,7 @@ class MatchWrite2Page extends StatelessWidget {
                   matchWriteProvider.uploadImageInfos[idx]["file"],
                   matchWriteProvider.uploadImageInfos[idx]["fileSize"],
                   matchWriteProvider.uploadImageInfos[idx]["fileType"],
-                  "W",
+                  "MW",
                 );
               }
 

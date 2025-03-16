@@ -65,7 +65,7 @@ class CommunityWrite2Page extends StatelessWidget {
                     communityWriteProvider.uploadImageInfo[idx]["file"],
                     communityWriteProvider.uploadImageInfo[idx]["fileSize"],
                     communityWriteProvider.uploadImageInfo[idx]["fileType"],
-                    "W");
+                    "CW");
               }
 
               communityWriteProvider.finishImageUpload();
