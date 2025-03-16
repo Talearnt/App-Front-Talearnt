@@ -36,7 +36,7 @@ class CommunityBoardImageViewPage extends StatelessWidget {
                   context.push(
                       '/community-board-detail/community-image-view-detail');
                 },
-                child: Image.file(
+                child: Image.network(
                   item,
                   width: imageSize,
                   height: imageSize,

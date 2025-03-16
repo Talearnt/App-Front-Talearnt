@@ -109,7 +109,7 @@ class CommunityWriteProvider extends ChangeNotifier with ClearText {
 
   final List<String> _imageUploadedUrls = [];
 
-  final List<File> _previewImageList = [];
+  final List<String> _previewImageList = [];
 
   final TextEditingController _linkTextController = TextEditingController();
 
@@ -173,7 +173,7 @@ class CommunityWriteProvider extends ChangeNotifier with ClearText {
 
   List<String> get imageUploadedUrls => _imageUploadedUrls;
 
-  List<File> get previewImageList => _previewImageList;
+  List<String> get previewImageList => _previewImageList;
 
   bool get isS3Upload => _isS3Upload;
 
@@ -468,9 +468,7 @@ class CommunityWriteProvider extends ChangeNotifier with ClearText {
       if (op.value is Map<String, dynamic> && op.value.containsKey('image')) {
         final imagePath = op.value['image'];
 
-        final imageFile = File(imagePath);
-
-        _previewImageList.add(imageFile);
+        _previewImageList.add(imagePath);
       }
     }
   }

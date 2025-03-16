@@ -27,7 +27,7 @@ class CommunityBoardImageViewDetailPage extends StatelessWidget {
           children: [
             Align(
               alignment: Alignment.center,
-              child: Image.file(
+              child: Image.network(
                 communityBoardDetailProvider.previewImageList[
                     communityBoardDetailProvider.previewImageIndex],
                 width: double.infinity,
@@ -137,7 +137,7 @@ class CommunityBoardImageViewDetailPage extends StatelessWidget {
                                       width: 1,
                                     ),
                                   ),
-                                  child: Image.file(
+                                  child: Image.network(
                                     item,
                                     width: imageSize,
                                     height: imageSize,

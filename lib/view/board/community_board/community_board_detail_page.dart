@@ -113,7 +113,7 @@ class CommunityBoardDetailPage extends StatelessWidget {
                                 width: 12,
                               ),
                               Text(
-                                "조회 2",
+                                "조회 ${communityBoardDetailProvider.communityDetailBoard.count}",
                                 style: TextTypes.caption01(
                                   color: Palette.text04,
                                 ),
@@ -184,7 +184,7 @@ class CommunityBoardDetailPage extends StatelessWidget {
                                               width: 1,
                                             ),
                                           ),
-                                          child: Image.file(
+                                          child: Image.network(
                                             item,
                                             width: imageSize,
                                             height: imageSize,
