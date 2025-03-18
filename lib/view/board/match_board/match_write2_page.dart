@@ -1,7 +1,9 @@
 import 'package:app_front_talearnt/common/theme.dart';
 import 'package:app_front_talearnt/common/widget/button.dart';
+import 'package:app_front_talearnt/common/widget/loading.dart';
 import 'package:app_front_talearnt/common/widget/toast_message.dart';
 import 'package:app_front_talearnt/common/widget/top_app_bar.dart';
+import 'package:app_front_talearnt/provider/common/common_provider.dart';
 import 'package:app_front_talearnt/view/board/match_board/match_write_editor_toolbar.dart';
 import 'package:app_front_talearnt/view_model/board_view_model.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +21,7 @@ class MatchWrite2Page extends StatelessWidget {
   Widget build(BuildContext context) {
     final matchWriteProvider = Provider.of<MatchWriteProvider>(context);
     final boardViewModel = Provider.of<BoardViewModel>(context);
+    final commonProvider = Provider.of<CommonProvider>(context);
 
     ScrollController scrollController = ScrollController();
 
@@ -48,6 +51,7 @@ class MatchWrite2Page extends StatelessWidget {
         first: PrimaryS(
           content: '등록',
           onPressed: () async {
+            commonProvider.changeIsLoading(true);
             await matchWriteProvider.getUploadImagesInfo();
 
             if (matchWriteProvider.uploadImageInfos.isNotEmpty) {
@@ -92,6 +96,7 @@ class MatchWrite2Page extends StatelessWidget {
                 bottom: 50,
               );
             }
+            commonProvider.changeIsLoading(false);
           },
         ),
       ),
@@ -112,63 +117,68 @@ class MatchWrite2Page extends StatelessWidget {
           child: const MatchWriteEditorToolbar(),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.only(
-          top: 8,
-          left: 24,
-          right: 24,
-        ),
-        child: Column(
-          children: [
-            // 제목 입력 필드
-            TextField(
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                hintText: "제목을 입력해주세요",
-                hintStyle: TextTypes.heading2(
-                  color: Palette.text04,
+      body: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(
+              top: 8,
+              left: 24,
+              right: 24,
+            ),
+            child: Column(
+              children: [
+                // 제목 입력 필드
+                TextField(
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    hintText: "제목을 입력해주세요",
+                    hintStyle: TextTypes.heading2(
+                      color: Palette.text04,
+                    ),
+                  ),
+                  style: TextTypes.heading2(
+                    color: Palette.text02,
+                  ),
+                  controller: matchWriteProvider.titleController,
+                  focusNode: matchWriteProvider.titleFocusNode,
                 ),
-              ),
-              style: TextTypes.heading2(
-                color: Palette.text02,
-              ),
-              controller: matchWriteProvider.titleController,
-              focusNode: matchWriteProvider.titleFocusNode,
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            const Divider(
-              color: Palette.bgUp02,
-              thickness: 1.0,
-            ),
-            const SizedBox(
-              height: 16,
-            ),
+                const SizedBox(
+                  height: 16,
+                ),
+                const Divider(
+                  color: Palette.bgUp02,
+                  thickness: 1.0,
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
 
-            Expanded(
-              child: QuillEditor(
-                controller: matchWriteProvider.contentController,
-                focusNode: matchWriteProvider.contentFocusNode,
-                scrollController: scrollController,
-                configurations: QuillEditorConfigurations(
-                  embedBuilders: FlutterQuillEmbeds.editorBuilders(),
-                  placeholder: "내용을 입력해주세요",
-                  expands: true,
-                  customStyles: DefaultStyles(
-                    placeHolder: DefaultTextBlockStyle(
-                      TextTypes.body02(color: Palette.text04),
-                      const HorizontalSpacing(10, 10),
-                      const VerticalSpacing(10, 10),
-                      const VerticalSpacing(10, 10),
-                      null,
+                Expanded(
+                  child: QuillEditor(
+                    controller: matchWriteProvider.contentController,
+                    focusNode: matchWriteProvider.contentFocusNode,
+                    scrollController: scrollController,
+                    configurations: QuillEditorConfigurations(
+                      embedBuilders: FlutterQuillEmbeds.editorBuilders(),
+                      placeholder: "내용을 입력해주세요",
+                      expands: true,
+                      customStyles: DefaultStyles(
+                        placeHolder: DefaultTextBlockStyle(
+                          TextTypes.body02(color: Palette.text04),
+                          const HorizontalSpacing(10, 10),
+                          const VerticalSpacing(10, 10),
+                          const VerticalSpacing(10, 10),
+                          null,
+                        ),
+                      ),
                     ),
                   ),
                 ),
-              ),
+              ],
             ),
-          ],
-        ),
+          ),
+          if (commonProvider.isLoadingPage) const Loading()
+        ],
       ),
     );
   }
