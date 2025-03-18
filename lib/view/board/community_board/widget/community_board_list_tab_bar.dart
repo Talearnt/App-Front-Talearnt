@@ -1,3 +1,4 @@
+import 'package:app_front_talearnt/provider/common/common_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -12,6 +13,7 @@ class CommunityBoardListTabBar extends SliverPersistentHeaderDelegate {
       BuildContext context, double shrinkOffset, bool overlapsContent) {
     final communityBoardProvider = Provider.of<CommunityBoardProvider>(context);
     final boardViewModel = Provider.of<BoardViewModel>(context);
+    final commonProvider = Provider.of<CommonProvider>(context);
 
     return Container(
         height: maxExtent,
@@ -55,6 +57,7 @@ class CommunityBoardListTabBar extends SliverPersistentHeaderDelegate {
                 },
               ).toList(),
               onTap: (index) async {
+                commonProvider.changeIsLoading(true);
                 communityBoardProvider.updatePostType(GlobalValueConstants
                     .communityCategoryTypes[index]['code']!);
                 await boardViewModel.getCommunityBoardList(
@@ -65,6 +68,7 @@ class CommunityBoardListTabBar extends SliverPersistentHeaderDelegate {
                   null,
                   null,
                 );
+                commonProvider.changeIsLoading(false);
               },
             ),
             const SizedBox(
