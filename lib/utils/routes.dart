@@ -8,7 +8,6 @@ import 'package:app_front_talearnt/view/auth/sign_up_success_page.dart';
 import 'package:app_front_talearnt/view/board/match_board/match_edit1_page.dart';
 import 'package:app_front_talearnt/view/board/match_board/match_edit2_page.dart';
 import 'package:app_front_talearnt/view/board/match_board/match_edit_preview_page.dart';
-import 'package:app_front_talearnt/view/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -32,8 +31,10 @@ import '../view/board/match_board/match_write1_page.dart';
 import '../view/board/match_board/match_write2_page.dart';
 import '../view/board/match_board/match_write_preview_page.dart';
 import '../view/board/write_success_page.dart';
+import '../view/home_page.dart';
 import '../view/keyword/set_talent_keyword_main_page.dart';
 import '../view/keyword/set_talent_keyword_success_page.dart';
+import '../view/profile/profile_page.dart';
 
 class Routes {
   static final GoRouter router = GoRouter(
@@ -243,6 +244,12 @@ class Routes {
                 },
               ),
             ],
+          ),
+          GoRoute(
+            path: '/profile',
+            builder: (BuildContext context, GoRouterState state) {
+              return const ProfilePage();
+            },
           ),
         ],
       ),

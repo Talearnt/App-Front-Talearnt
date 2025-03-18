@@ -231,6 +231,12 @@ flutter:
     - assets/icons/thumb_up_on.svg
     - assets/icons/add_board_large_logo.svg
     - assets/icons/no_board_list_logo.svg
+    - assets/icons/bell.svg
+    - assets/icons/license.svg
+    - assets/icons/notice.svg
+    - assets/icons/send.svg
+    - assets/icons/setting.svg
+    - assets/icons/update.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
