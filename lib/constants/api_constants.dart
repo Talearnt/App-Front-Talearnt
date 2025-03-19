@@ -33,6 +33,10 @@ abstract class ApiConstants {
     return "$baseUrl/v1/posts/exchanges/$postNo";
   }
 
+  static String getCommunityDetailBoard(int postNo) {
+    return "$baseUrl/v1/posts/communities/$postNo";
+  }
+
   static String getFineUserPwUrl(String userId) {
     return "$baseUrl/v1/auth/password/$userId/email";
   }

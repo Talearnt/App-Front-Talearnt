@@ -109,7 +109,7 @@ class CommunityWriteProvider extends ChangeNotifier with ClearText {
 
   final List<String> _imageUploadedUrls = [];
 
-  final List<File> _previewImageList = [];
+  final List<String> _previewImageList = [];
 
   final TextEditingController _linkTextController = TextEditingController();
 
@@ -173,7 +173,7 @@ class CommunityWriteProvider extends ChangeNotifier with ClearText {
 
   List<String> get imageUploadedUrls => _imageUploadedUrls;
 
-  List<File> get previewImageList => _previewImageList;
+  List<String> get previewImageList => _previewImageList;
 
   bool get isS3Upload => _isS3Upload;
 
@@ -380,7 +380,6 @@ class CommunityWriteProvider extends ChangeNotifier with ClearText {
       processedImage =
           img.copyResize(originalImage, width: newWidth, height: maxHeight);
     }
-    ;
 
     final String newPath = path.join(
       imageFile.parent.path,
@@ -435,7 +434,7 @@ class CommunityWriteProvider extends ChangeNotifier with ClearText {
     notifyListeners();
   }
 
-  void exchangeImageUrl(String imageUploadUrl, String imagePath) {
+  Future<void> exchangeImageUrl(String imageUploadUrl, String imagePath) async {
     final delta = contentController.document.toDelta();
 
     String newImageUrl = imageUploadUrl.split('?')[0];
@@ -449,9 +448,6 @@ class CommunityWriteProvider extends ChangeNotifier with ClearText {
     }
 
     _imageUploadedUrls.add(newImageUrl);
-
-    _isS3Upload = false;
-    _uploadImageInfo.clear();
   }
 
   void clearInfo() {
@@ -472,9 +468,7 @@ class CommunityWriteProvider extends ChangeNotifier with ClearText {
       if (op.value is Map<String, dynamic> && op.value.containsKey('image')) {
         final imagePath = op.value['image'];
 
-        final imageFile = File(imagePath);
-
-        _previewImageList.add(imageFile);
+        _previewImageList.add(imagePath);
       }
     }
   }
@@ -500,5 +494,10 @@ class CommunityWriteProvider extends ChangeNotifier with ClearText {
     }
 
     notifyListeners();
+  }
+
+  void finishImageUpload() {
+    _isS3Upload = false;
+    _uploadImageInfo.clear();
   }
 }

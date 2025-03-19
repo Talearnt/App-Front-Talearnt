@@ -28,6 +28,7 @@ import '../view_model/auth_view_model.dart';
 import '../view_model/board_view_model.dart';
 import '../view_model/profile_view_model.dart';
 import 'auth/kakao_provider.dart';
+import 'board/community_board_detail_provider.dart';
 import 'board/community_board_provider.dart';
 import 'board/community_write_provider.dart';
 import 'board/match_board_detail_provider.dart';
@@ -53,12 +54,15 @@ class ProviderSetup extends StatelessWidget {
             create: (_) => MatchWriteProvider()),
         ChangeNotifierProvider<MatchEditProvider>(
             create: (_) => MatchEditProvider()),
+        ChangeNotifierProvider<CommunityWriteProvider>(
+            create: (_) => CommunityWriteProvider()),
         Provider<AuthorizationInterceptor>(
           create: (context) => AuthorizationInterceptor(
             tokenManager: context.read<TokenManager>(),
             loginProvider: context.read<LoginProvider>(),
             matchWriteProvider: context.read<MatchWriteProvider>(),
             matchEditProvider: context.read<MatchEditProvider>(),
+            communityWriteProvider: context.read<CommunityWriteProvider>(),
           ),
         ),
 
@@ -114,8 +118,8 @@ class ProviderSetup extends StatelessWidget {
             create: (_) => CommunityBoardProvider()),
         ChangeNotifierProvider<MatchBoardDetailProvider>(
             create: (_) => MatchBoardDetailProvider()),
-        ChangeNotifierProvider<CommunityWriteProvider>(
-            create: (_) => CommunityWriteProvider()),
+        ChangeNotifierProvider<CommunityBoardDetailProvider>(
+            create: (_) => CommunityBoardDetailProvider()),
         ChangeNotifierProvider<BoardViewModel>(
           create: (context) => BoardViewModel(
             CommonNavigator(navigatorKey),
@@ -127,6 +131,8 @@ class ProviderSetup extends StatelessWidget {
             context.read<MatchEditProvider>(),
             context.read<CommunityBoardProvider>(),
             context.read<HomeProvider>(),
+            context.read<CommunityWriteProvider>(),
+            context.read<CommunityBoardDetailProvider>(),
           ),
         ),
         ChangeNotifierProvider<KeywordViewModel>(

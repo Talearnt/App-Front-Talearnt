@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:app_front_talearnt/common/theme.dart';
 import 'package:app_front_talearnt/common/widget/button.dart';
 import 'package:app_front_talearnt/common/widget/profile.dart';
@@ -8,9 +6,9 @@ import 'package:app_front_talearnt/common/widget/toast_message.dart';
 import 'package:app_front_talearnt/common/widget/top_app_bar.dart';
 import 'package:app_front_talearnt/constants/global_value_constants.dart';
 import 'package:app_front_talearnt/view_model/board_view_model.dart';
-import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
+import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -40,7 +38,7 @@ class MatchWritePreviewPage extends StatelessWidget {
 
             if (matchWriteProvider.uploadImageInfos.isNotEmpty) {
               await boardViewModel.getImageUploadUrl(
-                  matchWriteProvider.uploadImageInfos, "W");
+                  matchWriteProvider.uploadImageInfos, "MW");
 
               for (int idx = 0;
                   idx < matchWriteProvider.imageUploadUrls.length;
@@ -50,7 +48,7 @@ class MatchWritePreviewPage extends StatelessWidget {
                   matchWriteProvider.uploadImageInfos[idx]["file"],
                   matchWriteProvider.uploadImageInfos[idx]["fileSize"],
                   matchWriteProvider.uploadImageInfos[idx]["fileType"],
-                  "W",
+                  "MW",
                 );
               }
 

@@ -19,6 +19,9 @@ import '../view/auth/agreement/terms_agreement_required.dart';
 import '../view/auth/login_page.dart';
 import '../view/auth/sign_up_main_page.dart';
 import '../view/board/board_list.dart';
+import '../view/board/community_board/community_board_detail_page.dart';
+import '../view/board/community_board/community_board_image_view_detail_page.dart';
+import '../view/board/community_board/community_board_image_view_page.dart';
 import '../view/board/community_board/community_write1_page.dart';
 import '../view/board/community_board/community_write2_page.dart';
 import '../view/board/community_board/community_write_preview_page.dart';
@@ -220,6 +223,26 @@ class Routes {
             builder: (BuildContext context, GoRouterState state) {
               return const MatchEditPreviewPage();
             },
+          ),
+          GoRoute(
+            path: '/community-board-detail',
+            builder: (BuildContext context, GoRouterState state) {
+              return const CommunityBoardDetailPage();
+            },
+            routes: <RouteBase>[
+              GoRoute(
+                path: 'community-image-view',
+                builder: (BuildContext context, GoRouterState state) {
+                  return const CommunityBoardImageViewPage();
+                },
+              ),
+              GoRoute(
+                path: 'community-image-view-detail',
+                builder: (BuildContext context, GoRouterState state) {
+                  return const CommunityBoardImageViewDetailPage();
+                },
+              ),
+            ],
           ),
         ],
       ),
