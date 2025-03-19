@@ -42,7 +42,7 @@ class BoardViewModel extends ChangeNotifier {
       this.talentBoardDetailProvider,
       this.matchEditProvider,
       this.communityBoardProvider,
-      this.homeProvider);
+      this.homeProvider,
       this.communityWriteProvider,
       this.communityBoardDetailProvider);
 
@@ -396,10 +396,9 @@ class BoardViewModel extends ChangeNotifier {
             content: ErrorMessages.getMessage(failure.errorCode)), (result) {
       final posts = result['posts'];
       homeProvider.setUserMatchingTalentExchangePosts(posts);
-   });
+    });
   }
-          
-          
+
   Future<void> getCommunityDetailBoard(int postNo) async {
     final result = await boardRepository.getCommunityDetailBoard(postNo);
     result.fold(
