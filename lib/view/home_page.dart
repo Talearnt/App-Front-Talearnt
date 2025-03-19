@@ -122,7 +122,7 @@ class HomePage extends StatelessWidget {
                       await keywordViewModel.getOfferedKeywords();
                       context.push('/match-write1');
                     } else {
-                      context.push("/login");
+                      context.go("/login");
                     }
                   },
                   child: Column(
