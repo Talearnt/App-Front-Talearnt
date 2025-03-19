@@ -1,6 +1,8 @@
 import 'package:app_front_talearnt/common/theme.dart';
 import 'package:app_front_talearnt/common/widget/button.dart';
+import 'package:app_front_talearnt/common/widget/loading.dart';
 import 'package:app_front_talearnt/provider/auth/login_provider.dart';
+import 'package:app_front_talearnt/provider/common/common_provider.dart';
 import 'package:app_front_talearnt/provider/home/home_provider.dart';
 import 'package:app_front_talearnt/provider/profile/profile_provider.dart';
 import 'package:app_front_talearnt/data/model/respone/matching_post.dart';
@@ -23,6 +25,7 @@ class HomePage extends StatelessWidget {
     final loginProvider = Provider.of<LoginProvider>(context);
     final profileProvider = Provider.of<ProfileProvider>(context);
     final viewModel = Provider.of<BoardViewModel>(context);
+    final commonProvider = Provider.of<CommonProvider>(context);
 
     WidgetsBinding.instance.addPostFrameCallback(
       (_) async {
@@ -74,169 +77,274 @@ class HomePage extends StatelessWidget {
     );
 
     return Scaffold(
-      bottomNavigationBar: Container(
-        decoration: const BoxDecoration(
-          border: Border(
-            top: BorderSide(
-              color: Palette.line01,
-              width: 1.0,
-            ),
-          ),
-        ),
-        child: BottomAppBar(
-          color: Palette.bgBackGround,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 24,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                GestureDetector(
-                  child: Column(
-                    children: [
-                      SvgPicture.asset('assets/icons/home_on.svg'),
-                      const Text('홈'),
-                    ],
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () async {
-                    await viewModel.getInitTalentExchangePosts();
-                  },
-                  child: Column(
-                    children: [
-                      SvgPicture.asset('assets/icons/post_off.svg'),
-                      const Text(
-                        '게시글',
-                        style: TextStyle(
-                          color: Color(0xFFA6B0B5),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () async {
-                    if (loginProvider.isLoggedIn) {
-                      await keywordViewModel.getOfferedKeywords();
-                      context.push('/match-write1');
-                    } else {
-                      context.go("/login");
-                    }
-                  },
-                  child: Column(
-                    children: [
-                      SvgPicture.asset('assets/icons/write_off.svg'),
-                      const Text(
-                        '글쓰기',
-                        style: TextStyle(
-                          color: Color(0xFFA6B0B5),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    context.push('/community-write1');
-                  },
-                  child: Column(
-                    children: [
-                      SvgPicture.asset('assets/icons/chat_off.svg'),
-                      const Text(
-                        '채팅',
-                        style: TextStyle(
-                          color: Color(0xFFA6B0B5),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                GestureDetector(
-                  child: Column(
-                    children: [
-                      SvgPicture.asset('assets/icons/my_off.svg'),
-                      const Text(
-                        '마이',
-                        style: TextStyle(
-                          color: Color(0xFFA6B0B5),
-                        ),
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
-          ),
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
+      body: SafeArea(
+        child: Stack(
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 20,
-                vertical: 16,
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            SingleChildScrollView(
+              child: Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(
-                      top: 1,
-                      bottom: 1,
-                      left: 8,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 16,
                     ),
-                    child: SvgPicture.asset(
-                      'assets/icons/default_logo.svg',
-                      width: 112,
-                      height: 22,
-                    ),
-                  ),
-                  SvgPicture.asset(
-                    'assets/icons/bell_off.svg',
-                    width: 18,
-                    height: 20,
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              width: double.infinity,
-              child: AspectRatio(
-                aspectRatio: 375 / 188,
-                child: FittedBox(
-                  fit: BoxFit.cover,
-                  child: SvgPicture.asset(
-                    'assets/img/main_banner1.svg',
-                    width: MediaQuery.of(context).size.width,
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 36,
-            ),
-            loginProvider.isLoggedIn
-                ? Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 24,
-                        ),
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            "관심있는 키워드를 반영했어요",
-                            style: TextTypes.captionMedium02(
-                              color: Palette.text02,
-                            ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            top: 1,
+                            bottom: 1,
+                            left: 8,
+                          ),
+                          child: SvgPicture.asset(
+                            'assets/icons/default_logo.svg',
+                            width: 112,
+                            height: 22,
                           ),
                         ),
+                        SvgPicture.asset(
+                          'assets/icons/bell_off.svg',
+                          width: 18,
+                          height: 20,
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: AspectRatio(
+                      aspectRatio: 375 / 188,
+                      child: FittedBox(
+                        fit: BoxFit.cover,
+                        child: SvgPicture.asset(
+                          'assets/img/main_banner1.svg',
+                          width: MediaQuery.of(context).size.width,
+                        ),
                       ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 36,
+                  ),
+                  loginProvider.isLoggedIn
+                      ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 24,
+                              ),
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  "관심있는 키워드를 반영했어요",
+                                  style: TextTypes.captionMedium02(
+                                    color: Palette.text02,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 24,
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text.rich(
+                                    TextSpan(
+                                      text:
+                                          profileProvider.userProfile.nickname,
+                                      style: TextTypes.bodySemi01(
+                                        color: Palette.primary01,
+                                      ),
+                                      children: <TextSpan>[
+                                        TextSpan(
+                                          text: '님을 위한 맞춤 매칭',
+                                          style: TextTypes.bodySemi01(
+                                            color: Palette.text01,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {},
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text(
+                                          '더보기',
+                                          style: TextTypes.caption01(
+                                            color: Palette.text03,
+                                          ),
+                                        ),
+                                        SvgPicture.asset(
+                                          'assets/icons/add_more_arrow.svg',
+                                          width: 24,
+                                          height: 24,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 12,
+                            ),
+                            SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              child: Row(
+                                children: [
+                                  const SizedBox(width: 24),
+                                  ...homeProvider
+                                      .userMatchingTalentExchangePosts
+                                      .map((post) {
+                                    return Padding(
+                                      padding: const EdgeInsets.only(right: 14),
+                                      child: HomeMatchBoardCard(post: post),
+                                    );
+                                  }).toList(),
+                                ],
+                              ),
+                            )
+                          ],
+                        )
+                      : Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 24,
+                              ),
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  "단 3초! 로그인하고 확인해보세요",
+                                  style: TextTypes.captionMedium02(
+                                    color: Palette.text02,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 24,
+                              ),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text.rich(
+                                    TextSpan(
+                                      text: '회원',
+                                      style: TextTypes.bodySemi01(
+                                        color: Palette.primary01,
+                                      ),
+                                      children: <TextSpan>[
+                                        TextSpan(
+                                          text: '님을 위한 맞춤 매칭',
+                                          style: TextTypes.bodySemi01(
+                                            color: Palette.text01,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  PrimaryS(
+                                    content: "로그인",
+                                    onPressed: () {
+                                      context.push("/login");
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 24,
+                            ),
+                            const Divider(
+                              thickness: 8,
+                              color: Palette.line02,
+                            )
+                          ],
+                        ),
+                  const SizedBox(
+                    height: 44,
+                  ),
+                  homeProvider.newTalentExchangePosts.isEmpty
+                      ? const SizedBox.shrink()
+                      : Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 24),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    '신규 매칭 게시물이 올라왔어요!',
+                                    style: TextTypes.bodySemi01(
+                                        color: Palette.text01),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () async {
+                                      await viewModel
+                                          .getInitTalentExchangePosts();
+                                    },
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text(
+                                          '더보기',
+                                          style: TextTypes.caption01(
+                                              color: Palette.text03),
+                                        ),
+                                        SvgPicture.asset(
+                                          'assets/icons/add_more_arrow.svg',
+                                          width: 24,
+                                          height: 24,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 12,
+                            ),
+                            SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              child: Row(
+                                children: [
+                                  const SizedBox(width: 24),
+                                  ...homeProvider.newTalentExchangePosts
+                                      .map((post) {
+                                    return Padding(
+                                      padding: const EdgeInsets.only(right: 14),
+                                      child: HomeMatchBoardCard(post: post),
+                                    );
+                                  }).toList(),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                  const SizedBox(
+                    height: 44,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
                       Padding(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 24,
@@ -244,20 +352,10 @@ class HomePage extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text.rich(
-                              TextSpan(
-                                text: profileProvider.userProfile.nickname,
-                                style: TextTypes.bodySemi01(
-                                  color: Palette.primary01,
-                                ),
-                                children: <TextSpan>[
-                                  TextSpan(
-                                    text: '님을 위한 맞춤 매칭',
-                                    style: TextTypes.bodySemi01(
-                                      color: Palette.text01,
-                                    ),
-                                  ),
-                                ],
+                            Text(
+                              'BEST 커뮤니티 글만 모아봤어요!',
+                              style: TextTypes.bodySemi01(
+                                color: Palette.text01,
                               ),
                             ),
                             GestureDetector(
@@ -285,223 +383,150 @@ class HomePage extends StatelessWidget {
                       const SizedBox(
                         height: 12,
                       ),
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        child: Row(
-                          children: [
-                            const SizedBox(width: 24),
-                            ...homeProvider.userMatchingTalentExchangePosts
-                                .map((post) {
-                              return Padding(
-                                padding: const EdgeInsets.only(right: 14),
-                                child: HomeMatchBoardCard(post: post),
-                              );
-                            }).toList(),
-                          ],
-                        ),
-                      )
+                      homeProvider.bestCommunityPosts.isEmpty
+                          ? const Row(
+                              children: [
+                                SizedBox(width: 24),
+                                HomeNullCard(),
+                              ],
+                            )
+                          : SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              child: Row(
+                                children: [
+                                  const SizedBox(width: 24),
+                                  ...homeProvider.bestCommunityPosts
+                                      .asMap()
+                                      .entries
+                                      .map((entry) {
+                                    final ranking = entry.key + 1;
+                                    final post = entry.value;
+
+                                    return Padding(
+                                      padding: const EdgeInsets.only(right: 14),
+                                      child: HomeCommunityCard(
+                                        post: post,
+                                        ranking: ranking,
+                                      ),
+                                    );
+                                  }).toList(),
+                                ],
+                              ),
+                            )
                     ],
-                  )
-                : Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 24,
-                        ),
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            "단 3초! 로그인하고 확인해보세요",
-                            style: TextTypes.captionMedium02(
-                              color: Palette.text02,
-                            ),
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                ],
+              ),
+            ),
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                decoration: const BoxDecoration(
+                  border: Border(
+                    top: BorderSide(
+                      color: Palette.line01,
+                      width: 1.0,
+                    ),
+                  ),
+                ),
+                child: BottomAppBar(
+                  color: Palette.bgBackGround,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 24,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        GestureDetector(
+                          child: Column(
+                            children: [
+                              SvgPicture.asset('assets/icons/home_on.svg'),
+                              const Text('홈'),
+                            ],
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 24,
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text.rich(
-                              TextSpan(
-                                text: '회원',
-                                style: TextTypes.bodySemi01(
-                                  color: Palette.primary01,
+                        GestureDetector(
+                          onTap: () async {
+                            commonProvider.changeIsLoading(true);
+                            await viewModel.getInitTalentExchangePosts();
+                            commonProvider.changeIsLoading(false);
+                          },
+                          child: Column(
+                            children: [
+                              SvgPicture.asset('assets/icons/post_off.svg'),
+                              const Text(
+                                '게시글',
+                                style: TextStyle(
+                                  color: Color(0xFFA6B0B5),
                                 ),
-                                children: <TextSpan>[
-                                  TextSpan(
-                                    text: '님을 위한 맞춤 매칭',
-                                    style: TextTypes.bodySemi01(
-                                      color: Palette.text01,
-                                    ),
-                                  ),
-                                ],
                               ),
-                            ),
-                            PrimaryS(
-                              content: "로그인",
-                              onPressed: () {
-                                context.push("/login");
-                              },
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                      const SizedBox(
-                        height: 24,
-                      ),
-                      const Divider(
-                        thickness: 8,
-                        color: Palette.line02,
-                      )
-                    ],
-                  ),
-            const SizedBox(
-              height: 44,
-            ),
-            homeProvider.newTalentExchangePosts.isEmpty
-                ? const SizedBox.shrink()
-                : Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 24),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              '신규 매칭 게시물이 올라왔어요!',
-                              style:
-                                  TextTypes.bodySemi01(color: Palette.text01),
-                            ),
-                            GestureDetector(
-                              onTap: () async {
-                                await viewModel.getInitTalentExchangePosts();
-                              },
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    '더보기',
-                                    style: TextTypes.caption01(
-                                        color: Palette.text03),
-                                  ),
-                                  SvgPicture.asset(
-                                    'assets/icons/add_more_arrow.svg',
-                                    width: 24,
-                                    height: 24,
-                                  ),
-                                ],
+                        GestureDetector(
+                          onTap: () async {
+                            if (loginProvider.isLoggedIn) {
+                              await keywordViewModel.getOfferedKeywords();
+                              context.push('/match-write1');
+                            } else {
+                              context.go("/login");
+                            }
+                          },
+                          child: Column(
+                            children: [
+                              SvgPicture.asset('assets/icons/write_off.svg'),
+                              const Text(
+                                '글쓰기',
+                                style: TextStyle(
+                                  color: Color(0xFFA6B0B5),
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                      const SizedBox(
-                        height: 12,
-                      ),
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        child: Row(
-                          children: [
-                            const SizedBox(width: 24),
-                            ...homeProvider.newTalentExchangePosts.map((post) {
-                              return Padding(
-                                padding: const EdgeInsets.only(right: 14),
-                                child: HomeMatchBoardCard(post: post),
-                              );
-                            }).toList(),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-            const SizedBox(
-              height: 44,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 24,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'BEST 커뮤니티 글만 모아봤어요!',
-                        style: TextTypes.bodySemi01(
-                          color: Palette.text01,
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () {},
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              '더보기',
-                              style: TextTypes.caption01(
-                                color: Palette.text03,
+                        GestureDetector(
+                          onTap: () {
+                            context.push('/community-write1');
+                          },
+                          child: Column(
+                            children: [
+                              SvgPicture.asset('assets/icons/chat_off.svg'),
+                              const Text(
+                                '채팅',
+                                style: TextStyle(
+                                  color: Color(0xFFA6B0B5),
+                                ),
                               ),
-                            ),
-                            SvgPicture.asset(
-                              'assets/icons/add_more_arrow.svg',
-                              width: 24,
-                              height: 24,
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                        GestureDetector(
+                          child: Column(
+                            children: [
+                              SvgPicture.asset('assets/icons/my_off.svg'),
+                              const Text(
+                                '마이',
+                                style: TextStyle(
+                                  color: Color(0xFFA6B0B5),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
-                const SizedBox(
-                  height: 12,
-                ),
-                homeProvider.bestCommunityPosts.isEmpty
-                    ? const Row(
-                        children: [
-                          SizedBox(width: 24),
-                          HomeNullCard(),
-                        ],
-                      )
-                    : SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        child: Row(
-                          children: [
-                            const SizedBox(width: 24),
-                            ...homeProvider.bestCommunityPosts
-                                .asMap()
-                                .entries
-                                .map((entry) {
-                              final ranking = entry.key + 1;
-                              final post = entry.value;
-
-                              return Padding(
-                                padding: const EdgeInsets.only(right: 14),
-                                child: HomeCommunityCard(
-                                  post: post,
-                                  ranking: ranking,
-                                ),
-                              );
-                            }).toList(),
-                          ],
-                        ),
-                      )
-              ],
+              ),
             ),
-            const SizedBox(
-              height: 16,
-            ),
+            if (commonProvider.isLoadingPage) const LoadingWithCharacter()
           ],
         ),
       ),

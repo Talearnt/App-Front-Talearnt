@@ -282,7 +282,7 @@ class CommunityWritePreviewPage extends StatelessWidget {
                 ],
               ),
             ),
-            if (commonProvider.isLoadingPage) const Loading()
+            if (commonProvider.isLoadingPage) const LoadingWithCharacter()
           ],
         ),
       ),

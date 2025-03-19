@@ -177,7 +177,7 @@ class MatchWrite2Page extends StatelessWidget {
               ],
             ),
           ),
-          if (commonProvider.isLoadingPage) const Loading()
+          if (commonProvider.isLoadingPage) const LoadingWithCharacter()
         ],
       ),
     );
