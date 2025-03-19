@@ -436,7 +436,7 @@ class MatchWritePreviewPage extends StatelessWidget {
               ],
             ),
           ),
-          if (commonProvider.isLoadingPage) const Loading()
+          if (commonProvider.isLoadingPage) const LoadingWithCharacter()
         ],
       ),
     );
