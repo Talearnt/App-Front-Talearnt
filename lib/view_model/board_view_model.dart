@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:app_front_talearnt/data/model/param/match_board_param.dart';
 import 'package:app_front_talearnt/provider/board/community_write_provider.dart';
 import 'package:app_front_talearnt/provider/board/match_edit_provider.dart';
+import 'package:app_front_talearnt/provider/home/home_provider.dart';
 import 'package:flutter/material.dart';
 
 import '../common/common_navigator.dart';
@@ -28,6 +29,7 @@ class BoardViewModel extends ChangeNotifier {
   final MatchBoardDetailProvider talentBoardDetailProvider;
   final MatchEditProvider matchEditProvider;
   final CommunityBoardProvider communityBoardProvider;
+  final HomeProvider homeProvider;
   final CommunityWriteProvider communityWriteProvider;
   final CommunityBoardDetailProvider communityBoardDetailProvider;
 
@@ -40,6 +42,7 @@ class BoardViewModel extends ChangeNotifier {
       this.talentBoardDetailProvider,
       this.matchEditProvider,
       this.communityBoardProvider,
+      this.homeProvider);
       this.communityWriteProvider,
       this.communityBoardDetailProvider);
 
@@ -314,6 +317,89 @@ class BoardViewModel extends ChangeNotifier {
     });
   }
 
+  Future<void> getNewTalentExchangePosts(
+    List<String>? giveTalents,
+    List<String>? receiveTalents,
+    String? order,
+    String? duration,
+    String? type,
+    String? badge,
+    String? status,
+    String? page,
+    String? size,
+    String? search,
+  ) async {
+    TalentExchangePostsFilterParam param = TalentExchangePostsFilterParam(
+        giveTalents: giveTalents,
+        receiveTalents: receiveTalents,
+        order: order,
+        duration: duration,
+        type: type,
+        badge: badge,
+        status: status,
+        page: page,
+        size: size,
+        search: search);
+    final result = await boardRepository.getTalentExchangePosts(param);
+    result.fold(
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)), (result) {
+      final posts = result['posts'];
+      homeProvider.setNewTalentExchangePosts(posts);
+    });
+  }
+
+  Future<void> getBestCommunityBoardList(String? postType, String? order,
+      String? path, String? page, String? size, String? lastNo) async {
+    CommunityBoardListSearchParam param = CommunityBoardListSearchParam(
+        postType: postType,
+        order: order,
+        path: path,
+        page: page,
+        size: size,
+        lastNo: lastNo);
+    final result = await boardRepository.getCommunityBoardList(param);
+    result.fold(
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)), (result) {
+      final posts = result['posts'];
+      homeProvider.setBestCommunityBoardList(posts);
+    });
+  }
+
+  Future<void> getUserMatchingTalentExchangePosts(
+    List<String>? giveTalents,
+    List<String>? receiveTalents,
+    String? order,
+    String? duration,
+    String? type,
+    String? badge,
+    String? status,
+    String? page,
+    String? size,
+    String? search,
+  ) async {
+    TalentExchangePostsFilterParam param = TalentExchangePostsFilterParam(
+        giveTalents: giveTalents,
+        receiveTalents: receiveTalents,
+        order: order,
+        duration: duration,
+        type: type,
+        badge: badge,
+        status: status,
+        page: page,
+        size: size,
+        search: search);
+    final result = await boardRepository.getTalentExchangePosts(param);
+    result.fold(
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)), (result) {
+      final posts = result['posts'];
+      homeProvider.setUserMatchingTalentExchangePosts(posts);
+   });
+  }
+          
+          
   Future<void> getCommunityDetailBoard(int postNo) async {
     final result = await boardRepository.getCommunityDetailBoard(postNo);
     result.fold(
