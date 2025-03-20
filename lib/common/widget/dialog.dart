@@ -56,9 +56,7 @@ class DoubleBtnDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 40),
-      child: Dialog(
+    return  Dialog(
         backgroundColor: Palette.bgBackGround,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
@@ -123,8 +121,7 @@ class DoubleBtnDialog extends StatelessWidget {
             ],
           ),
         ),
-      ),
-    );
+      );
   }
 }
 

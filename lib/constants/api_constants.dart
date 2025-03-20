@@ -29,11 +29,11 @@ abstract class ApiConstants {
 
   static const String getUploadImagesUrl = "$baseUrl/v1/uploads";
 
-  static String getTalentBoard(int postNo) {
+  static String handleMatchDetailBoard(int postNo) {
     return "$baseUrl/v1/posts/exchanges/$postNo";
   }
 
-  static String getCommunityDetailBoard(int postNo) {
+  static String handleCommunityDetailBoard(int postNo) {
     return "$baseUrl/v1/posts/communities/$postNo";
   }
 
