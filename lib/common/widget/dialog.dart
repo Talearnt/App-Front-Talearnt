@@ -56,72 +56,69 @@ class DoubleBtnDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 40),
-      child: Dialog(
-        backgroundColor: Palette.bgBackGround,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: SizedBox(
-          height: 195,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(
-                  top: 24,
-                  left: 16,
-                  right: 16,
-                ),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: Text(
-                        content,
-                        style: TextTypes.body02(
-                          color: Palette.text01,
-                        ),
-                        textAlign: TextAlign.center,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 24,
-                      child: timer ? TimeSet(timerSeconds: timeSeconds) : null,
-                    ),
-                  ],
-                ),
+    return Dialog(
+      backgroundColor: Palette.bgBackGround,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: SizedBox(
+        height: 195,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(
+                top: 24,
+                left: 16,
+                right: 16,
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 16,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: SecondaryMGray(
-                        content: leftText,
-                        onPressed: leftFun,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Text(
+                      content,
+                      style: TextTypes.body02(
+                        color: Palette.text01,
                       ),
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
                     ),
-                    const SizedBox(
-                      width: 8,
-                    ),
-                    Expanded(
-                        child: PrimaryM(
-                      content: rightText,
-                      onPressed: rightFun,
-                    )),
-                  ],
-                ),
+                  ),
+                  SizedBox(
+                    height: 24,
+                    child: timer ? TimeSet(timerSeconds: timeSeconds) : null,
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 16,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: SecondaryMGray(
+                      content: leftText,
+                      onPressed: leftFun,
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 8,
+                  ),
+                  Expanded(
+                      child: PrimaryM(
+                    content: rightText,
+                    onPressed: rightFun,
+                  )),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
