@@ -1,27 +1,35 @@
 import 'package:app_front_talearnt/common/theme.dart';
 import 'package:app_front_talearnt/provider/common/common_provider.dart';
+import 'package:app_front_talearnt/provider/board/match_edit_provider.dart';
+import 'package:app_front_talearnt/view_model/keyword_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
-import 'package:app_front_talearnt/view_model/keyword_view_model.dart';
-import 'package:app_front_talearnt/provider/board/match_edit_provider.dart';
-import '../../../provider/board/match_board_detail_provider.dart';
 import 'package:provider/provider.dart';
+
+import '../../../common/common_navigator.dart';
+import '../../../provider/board/match_board_detail_provider.dart';
+import '../../../view_model/board_view_model.dart';
 
 class ModifyBoardBottomSheet extends StatelessWidget {
   final bool isMine;
+  final String boardType;
+  final int postNo;
 
   const ModifyBoardBottomSheet({
     super.key,
     required this.isMine,
+    required this.boardType,
+    required this.postNo,
   });
 
   @override
   Widget build(BuildContext context) {
     final keywordViewModel = Provider.of<KeywordViewModel>(context);
+    final viewModel = Provider.of<BoardViewModel>(context);
     final matchBoardDetailProvider =
         Provider.of<MatchBoardDetailProvider>(context);
     final matchEditProvider = Provider.of<MatchEditProvider>(context);
+    final commonNavigator = Provider.of<CommonNavigator>(context);
     final commonProvider = Provider.of<CommonProvider>(context);
 
     return Wrap(children: [
@@ -47,9 +55,8 @@ class ModifyBoardBottomSheet extends StatelessWidget {
                     commonProvider.changeIsLoading(false);
                   },
                   child: Center(
-                    // 가운데 정렬
                     child: Text(
-                      "수정하기", // 문자열은 따옴표로 감싸야 함
+                      "수정하기",
                       style: TextTypes.body02(
                         color: Palette.text01,
                       ),
@@ -68,12 +75,27 @@ class ModifyBoardBottomSheet extends StatelessWidget {
                   highlightColor: Colors.transparent,
                   hoverColor: Colors.transparent,
                   onTap: () {
-                    context.pop();
+                    if (context.mounted) {
+                      context.pop();
+                    }
+                    commonNavigator.showDoubleDialog(
+                        content: "정말 게시물을 삭제하시겠어요?\n삭제한 게시물은 되돌릴 수 없어요",
+                        leftText: '취소',
+                        rightText: '삭제',
+                        leftFun: () {
+                          commonNavigator.goBack();
+                        },
+                        rightFun: () async {
+                          if (boardType == "match") {
+                            await viewModel.deleteMatchBoard(postNo);
+                          } else {
+                            await viewModel.deleteCommunityBoard(postNo);
+                          }
+                        });
                   },
                   child: Center(
-                    // 가운데 정렬
                     child: Text(
-                      "삭제하기", // 문자열은 따옴표로 감싸야 함
+                      "삭제하기",
                       style: TextTypes.body02(
                         color: Palette.error01,
                       ),
@@ -97,9 +119,8 @@ class ModifyBoardBottomSheet extends StatelessWidget {
                   context.pop();
                 },
                 child: Center(
-                  // 가운데 정렬
                   child: Text(
-                    "취소", // 문자열은 따옴표로 감싸야 함
+                    "취소",
                     style: TextTypes.body02(
                       color: Palette.text04,
                     ),

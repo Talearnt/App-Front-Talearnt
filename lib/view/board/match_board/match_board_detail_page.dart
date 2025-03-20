@@ -43,9 +43,12 @@ class MatchBoardDetailPage extends StatelessWidget {
               clipBehavior: Clip.antiAlias,
               builder: (BuildContext context) {
                 return ModifyBoardBottomSheet(
-                  isMine: matchBoardDetailProvider.matchingDetailPost.userNo ==
-                      profileProvider.userProfile.userNo,
-                );
+                    isMine:
+                        matchBoardDetailProvider.matchingDetailPost.userNo ==
+                            profileProvider.userProfile.userNo,
+                    boardType: 'match',
+                    postNo: matchBoardDetailProvider
+                        .matchingDetailPost.exchangePostNo);
               },
             );
           },

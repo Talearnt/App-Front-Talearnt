@@ -240,8 +240,8 @@ class BoardViewModel extends ChangeNotifier {
     });
   }
 
-  Future<void> getTalentDetailPost(int postNo) async {
-    final result = await boardRepository.getTalentDetailPost(postNo);
+  Future<void> getMatchDetailBoard(int postNo) async {
+    final result = await boardRepository.getMatchDetailBoard(postNo);
     result.fold(
         (failure) => commonNavigator.showSingleDialog(
             content: ErrorMessages.getMessage(failure.errorCode)), (post) {
@@ -251,7 +251,7 @@ class BoardViewModel extends ChangeNotifier {
   }
 
   Future<void> getEditedPostData(int postNo) async {
-    final result = await boardRepository.getTalentDetailPost(postNo);
+    final result = await boardRepository.getMatchDetailBoard(postNo);
     result.fold(
         (failure) => commonNavigator.showSingleDialog(
             content: ErrorMessages.getMessage(failure.errorCode)), (post) {
@@ -406,6 +406,45 @@ class BoardViewModel extends ChangeNotifier {
             content: ErrorMessages.getMessage(failure.errorCode)), (post) {
       communityBoardDetailProvider.updateCommunityDetailBoard(post);
       commonNavigator.pushRoute('/community-board-detail');
+    });
+  }
+
+  Future<void> deleteMatchBoard(int postNo) async {
+    final result = await boardRepository.deleteMatchBoard(postNo);
+    result.fold(
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)),
+        (success) async {
+      await getTalentExchangePosts(
+          talentBoardProvider.selectedGiveTalentKeywordCodes
+              .map((e) => e.toString())
+              .toList(),
+          talentBoardProvider.selectedInterestTalentKeywordCodes
+              .map((e) => e.toString())
+              .toList(),
+          talentBoardProvider.selectedOrderType,
+          talentBoardProvider.selectedDurationType,
+          talentBoardProvider.selectedOperationType,
+          null,
+          null,
+          null,
+          null,
+          null);
+      commonNavigator.goBack();
+      commonNavigator.goBack();
+    });
+  }
+
+  Future<void> deleteCommunityBoard(int postNo) async {
+    final result = await boardRepository.deleteCommunityBoard(postNo);
+    result.fold(
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)),
+        (success) async {
+      await getCommunityBoardList(communityBoardProvider.selectedPostType,
+          communityBoardProvider.selectedOrderType, null, null, null, null);
+      commonNavigator.goBack();
+      commonNavigator.goBack();
     });
   }
 }

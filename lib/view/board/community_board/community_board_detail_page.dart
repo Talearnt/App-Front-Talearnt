@@ -46,6 +46,9 @@ class CommunityBoardDetailPage extends StatelessWidget {
                   isMine: communityBoardDetailProvider
                           .communityDetailBoard.userNo ==
                       profileProvider.userProfile.userNo,
+                  boardType: 'community',
+                  postNo: communityBoardDetailProvider
+                      .communityDetailBoard.communityPostNo,
                 );
               },
             );
