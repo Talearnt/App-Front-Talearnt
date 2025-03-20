@@ -1,3 +1,4 @@
+import 'package:app_front_talearnt/common/widget/toast_message.dart';
 import 'package:app_front_talearnt/provider/auth/sign_up_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -103,8 +104,20 @@ class SignUpSub2Page extends StatelessWidget {
                             await authViewModel
                                 .reSendCertNum(context, 'signUp', null,
                                     signUpProvider.phoneNumController.text)
-                                .whenComplete(() =>
-                                    commonProvider.changeIsLoading(false));
+                                .whenComplete(
+                              () {
+                                commonProvider.changeIsLoading(false);
+                              },
+                            ).then(
+                              (value) {
+                                ToastMessage.show(
+                                  context: context,
+                                  message: '인증번호를 재요청 하였습니다.',
+                                  type: 2,
+                                  bottom: 62,
+                                );
+                              },
+                            );
                           },
                         )
                       ],

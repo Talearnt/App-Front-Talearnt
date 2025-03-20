@@ -1,6 +1,7 @@
 import 'package:app_front_talearnt/common/widget/default_text_field.dart';
 import 'package:app_front_talearnt/common/widget/obscure_text_field.dart';
 import 'package:app_front_talearnt/common/widget/text_field_label.dart';
+import 'package:app_front_talearnt/common/widget/toast_message.dart';
 import 'package:app_front_talearnt/provider/common/common_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -122,9 +123,23 @@ class LoginForm extends StatelessWidget {
           onPressed: () async {
             loginProvider.testAutoLogin();
             commonProvider.changeIsLoading(true);
-            await authViewModel.login(loginProvider.emailController.text,
-                loginProvider.passwordController.text);
-            commonProvider.changeIsLoading(false);
+            await authViewModel
+                .login(loginProvider.emailController.text,
+                    loginProvider.passwordController.text)
+                .whenComplete(
+              () {
+                commonProvider.changeIsLoading(false);
+              },
+            ).then(
+              (value) {
+                ToastMessage.show(
+                  context: context,
+                  message: "로그인에 성공하였습니다.",
+                  type: 1,
+                  bottom: 50,
+                );
+              },
+            );
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xFF1B76FF),

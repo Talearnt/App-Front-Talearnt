@@ -77,7 +77,8 @@ class MatchEdit2Page extends StatelessWidget {
             if (matchEditProvider.isTitleAndBoardEmpty) {
               matchEditProvider.insertMatchBoard();
 
-              await boardViewModel.editMatchBoard(
+              await boardViewModel
+                  .editMatchBoard(
                 matchEditProvider.titleController.text,
                 matchEditProvider.htmlContent,
                 matchEditProvider.selectedGiveTalentKeywordCodes,
@@ -87,6 +88,16 @@ class MatchEdit2Page extends StatelessWidget {
                 matchEditProvider.selectedDuration,
                 matchEditProvider.imageUploadedUrls,
                 matchEditProvider.postNo,
+              )
+                  .then(
+                (value) {
+                  ToastMessage.show(
+                    context: context,
+                    message: '수정이 완료되었습니다.',
+                    type: 1,
+                    bottom: 42,
+                  );
+                },
               );
             } else {
               ToastMessage.show(
