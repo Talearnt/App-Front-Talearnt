@@ -221,8 +221,9 @@ flutter:
     - assets/icons/set_talent_keyword_success_logo.svg
     - assets/icons/search_small_disabled.svg
     - assets/icons/loading_animation.svg
-    - assets/icons/loading_character_animation_off.svg
-    - assets/icons/loading_character_animation_on.svg
+    - assets/icons/loading_character_animation1.svg
+    - assets/icons/loading_character_animation2.svg
+    - assets/icons/loading_character_animation3.svg
     - assets/icons/bookmark_on.svg
     - assets/icons/bookmark_off.svg
     - assets/icons/comment.svg

@@ -43,19 +43,17 @@ class LoadingWithCharacter extends StatelessWidget {
     return Container(
       color: Colors.white70,
       child: Center(
-        child: ValueListenableBuilder<bool>(
-          valueListenable: commonProvider.isOnImage,
-          builder: (context, isOn, child) {
+        child: ValueListenableBuilder<int>(
+          valueListenable: commonProvider.onImageType,
+          builder: (context, onType, child) {
             return AnimatedSwitcher(
               duration: const Duration(milliseconds: 500),
               transitionBuilder: (Widget child, Animation<double> animation) {
                 return FadeTransition(opacity: animation, child: child);
               },
               child: SvgPicture.asset(
-                isOn
-                    ? 'assets/icons/loading_character_animation_on.svg'
-                    : 'assets/icons/loading_character_animation_off.svg',
-                key: ValueKey<bool>(isOn),
+                'assets/icons/loading_character_animation$onType.svg',
+                key: ValueKey<int>(onType),
               ),
             );
           },

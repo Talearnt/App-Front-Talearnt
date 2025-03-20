@@ -11,10 +11,11 @@ class ToastMessage {
       padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 14.0),
       decoration: BoxDecoration(
         color: Palette.bgToast01,
-        borderRadius: BorderRadius.circular(8.0),
+        borderRadius: BorderRadius.circular(100),
       ),
-      width: MediaQuery.of(context).size.width,
       child: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SvgPicture.asset('assets/icons/finish.svg'),
           const SizedBox(

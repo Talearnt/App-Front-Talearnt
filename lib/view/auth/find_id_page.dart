@@ -2,6 +2,7 @@ import 'package:app_front_talearnt/common/theme.dart';
 import 'package:app_front_talearnt/common/widget/bottom_btn.dart';
 import 'package:app_front_talearnt/common/widget/button.dart';
 import 'package:app_front_talearnt/common/widget/default_text_field.dart';
+import 'package:app_front_talearnt/common/widget/toast_message.dart';
 import 'package:app_front_talearnt/common/widget/top_app_bar.dart';
 import 'package:app_front_talearnt/provider/auth/find_id_provider.dart';
 import 'package:app_front_talearnt/provider/auth/storage_provider.dart';
@@ -151,13 +152,25 @@ class FindIdPage extends StatelessWidget {
                               commonProvider.changeIsLoading(true);
                               await authViewModel
                                   .reSendCertNum(
-                                    context,
-                                    'findId',
-                                    findIdProvider.userNameController.text,
-                                    findIdProvider.phoneNumberController.text,
-                                  )
-                                  .whenComplete(() =>
-                                      commonProvider.changeIsLoading(false));
+                                context,
+                                'findId',
+                                findIdProvider.userNameController.text,
+                                findIdProvider.phoneNumberController.text,
+                              )
+                                  .whenComplete(
+                                () {
+                                  commonProvider.changeIsLoading(false);
+                                },
+                              ).then(
+                                (value) {
+                                  ToastMessage.show(
+                                    context: context,
+                                    message: '인증번호를 재요청 하였습니다.',
+                                    type: 2,
+                                    bottom: 62,
+                                  );
+                                },
+                              );
                             },
                           ),
                         ],
@@ -212,15 +225,25 @@ class FindIdPage extends StatelessWidget {
                                     commonProvider.changeIsLoading(true);
                                     await authViewModel
                                         .sendCertNum(
-                                          context,
-                                          'findId',
-                                          findIdProvider
-                                              .userNameController.text,
-                                          findIdProvider
-                                              .phoneNumberController.text,
-                                        )
-                                        .whenComplete(() => commonProvider
-                                            .changeIsLoading(false));
+                                      context,
+                                      'findId',
+                                      findIdProvider.userNameController.text,
+                                      findIdProvider.phoneNumberController.text,
+                                    )
+                                        .whenComplete(
+                                      () {
+                                        commonProvider.changeIsLoading(false);
+                                      },
+                                    ).then(
+                                      (value) {
+                                        ToastMessage.show(
+                                          context: context,
+                                          message: '인증번호를 요청하였습니다.',
+                                          type: 2,
+                                          bottom: 62,
+                                        );
+                                      },
+                                    );
                                   }
                                 : () {},
                           );

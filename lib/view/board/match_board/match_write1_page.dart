@@ -1,7 +1,9 @@
 import 'package:app_front_talearnt/common/theme.dart';
 import 'package:app_front_talearnt/common/widget/button.dart';
+import 'package:app_front_talearnt/common/widget/toast_message.dart';
 import 'package:app_front_talearnt/common/widget/top_app_bar.dart';
 import 'package:app_front_talearnt/constants/global_value_constants.dart';
+import 'package:app_front_talearnt/provider/common/common_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
@@ -16,6 +18,7 @@ class MatchWrite1Page extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final matchWriteProvider = Provider.of<MatchWriteProvider>(context);
+    final commonProvider = Provider.of<CommonProvider>(context);
 
     return Scaffold(
       appBar: TopAppBar(
@@ -56,7 +59,15 @@ class MatchWrite1Page extends StatelessWidget {
                       matchWriteProvider.checkChipsSelected();
                       matchWriteProvider.isChipsSelected
                           ? context.go('/match-write2')
-                          : null;
+                          : {
+                              ToastMessage.infinityShow(
+                                context: context,
+                                message: matchWriteProvider.errorMessage,
+                                type: 2,
+                                bottom: 42,
+                                commonProvider: commonProvider,
+                              )
+                            };
                     },
                   ),
                 ),
@@ -188,6 +199,23 @@ class MatchWrite1Page extends StatelessWidget {
                                 matchWriteProvider
                                     .updateSelectedGiveTalentKeywordCodes
                                     .call(updatedFilter);
+
+                                if (!matchWriteProvider.isChipsSelected) {
+                                  matchWriteProvider.checkChipsSelected();
+
+                                  if (matchWriteProvider.isChipsSelected) {
+                                    commonProvider.removeToast();
+                                  } else {
+                                    commonProvider.removeToast();
+                                    ToastMessage.infinityShow(
+                                        context: context,
+                                        message:
+                                            matchWriteProvider.errorMessage,
+                                        type: 2,
+                                        bottom: 42,
+                                        commonProvider: commonProvider);
+                                  }
+                                }
                               },
                             ),
                           );
@@ -278,6 +306,22 @@ class MatchWrite1Page extends StatelessWidget {
                                 matchWriteProvider
                                     .updateSelectedInterestTalentKeywordCodes
                                     .call(updatedFilter);
+
+                                if (!matchWriteProvider.isChipsSelected) {
+                                  matchWriteProvider.checkChipsSelected();
+                                  if (matchWriteProvider.isChipsSelected) {
+                                    commonProvider.removeToast();
+                                  } else {
+                                    commonProvider.removeToast();
+                                    ToastMessage.infinityShow(
+                                      context: context,
+                                      message: matchWriteProvider.errorMessage,
+                                      type: 2,
+                                      bottom: 42,
+                                      commonProvider: commonProvider,
+                                    );
+                                  }
+                                }
                               },
                             ),
                           );
@@ -363,6 +407,22 @@ class MatchWrite1Page extends StatelessWidget {
                                   ? matchWriteProvider.removeSelectedDuration()
                                   : matchWriteProvider
                                       .updateSelectedDuration(item);
+
+                              if (!matchWriteProvider.isChipsSelected) {
+                                matchWriteProvider.checkChipsSelected();
+                                if (matchWriteProvider.isChipsSelected) {
+                                  commonProvider.removeToast();
+                                } else {
+                                  commonProvider.removeToast();
+                                  ToastMessage.infinityShow(
+                                    context: context,
+                                    message: matchWriteProvider.errorMessage,
+                                    type: 2,
+                                    bottom: 42,
+                                    commonProvider: commonProvider,
+                                  );
+                                }
+                              }
                             },
                           );
                         }).toList(),
@@ -429,6 +489,22 @@ class MatchWrite1Page extends StatelessWidget {
                                       .removeSelectedExchangeType()
                                   : matchWriteProvider
                                       .updateSelectedExhangeType(item);
+
+                              if (!matchWriteProvider.isChipsSelected) {
+                                matchWriteProvider.checkChipsSelected();
+                                if (matchWriteProvider.isChipsSelected) {
+                                  commonProvider.removeToast();
+                                } else {
+                                  commonProvider.removeToast();
+                                  ToastMessage.infinityShow(
+                                    context: context,
+                                    message: matchWriteProvider.errorMessage,
+                                    type: 2,
+                                    bottom: 42,
+                                    commonProvider: commonProvider,
+                                  );
+                                }
+                              }
                             },
                           );
                         }).toList(),

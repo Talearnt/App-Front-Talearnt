@@ -30,12 +30,17 @@ class CommonProvider with ChangeNotifier {
 
   bool get isBackGesture => _isBackGesture;
 
-  final ValueNotifier<bool> isOnImage = ValueNotifier<bool>(false);
+  final ValueNotifier<int> onImageType = ValueNotifier<int>(1);
+
   Timer? _timer;
 
   void _startImageToggle() {
     _timer = Timer.periodic(const Duration(milliseconds: 1000), (timer) {
-      isOnImage.value = !isOnImage.value;
+      if (onImageType.value < 3) {
+        onImageType.value = onImageType.value + 1;
+      } else {
+        onImageType.value = 1;
+      }
     });
   }
 

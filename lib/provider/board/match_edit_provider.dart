@@ -149,7 +149,7 @@ class MatchEditProvider extends ChangeNotifier with ClearText {
 
   String _alignType = "left";
 
-  bool _isChipsSelected = false;
+  bool _isChipsSelected = true;
   bool _isTitleAndBoardEmpty = false;
 
   String _boardToastMessage = "";
@@ -169,6 +169,8 @@ class MatchEditProvider extends ChangeNotifier with ClearText {
   final TextEditingController _linkTextController = TextEditingController();
 
   final TextEditingController _urlController = TextEditingController();
+
+  String _errorMessage = "";
 
   bool _isLinkTextNotEmpty = false;
 
@@ -274,6 +276,8 @@ class MatchEditProvider extends ChangeNotifier with ClearText {
 
   bool get isLinkTextNotEmpty => _isLinkTextNotEmpty;
 
+  String get errorMessage => _errorMessage;
+
   void clearProvider() {
     _titleController.clear();
     _contentController.clear();
@@ -302,7 +306,7 @@ class MatchEditProvider extends ChangeNotifier with ClearText {
     _fontColor = gray_100;
     _backGroundColor = white;
     _alignType = "left";
-    _isChipsSelected = false;
+    _isChipsSelected = true;
     _isTitleAndBoardEmpty = false;
     _boardToastMessage = "";
 
@@ -317,6 +321,8 @@ class MatchEditProvider extends ChangeNotifier with ClearText {
     _urlController.clear();
 
     _postNo = 0;
+
+    _errorMessage = "";
 
     reset();
     notifyListeners();
@@ -478,25 +484,30 @@ class MatchEditProvider extends ChangeNotifier with ClearText {
 
   void checkChipsSelected() {
     _isChipsSelected = true;
+    _errorMessage = "";
 
     if (_selectedGiveTalentKeywordCodes.isEmpty) {
       _giveTalentRequiredMessage = "*필수";
       _isChipsSelected = false;
+      _errorMessage = "주고 싶은 나의 재능을 선택해주세요";
     }
 
     if (_selectedInterestTalentKeywordCodes.isEmpty) {
       _interestTalentRequiredMessage = "*필수";
       _isChipsSelected = false;
+      _errorMessage == "" ? _errorMessage = "받고 싶은 나의 재능을 선택해주세요" : "";
     }
 
     if (_selectedDuration == "") {
       _durationRequiredMessage = "*필수";
       _isChipsSelected = false;
+      _errorMessage == "" ? _errorMessage = "진행기간을 선택해주세요" : "";
     }
 
     if (_selectedExchangeType == "") {
       _exchangeTypeRequiredMesage = "*필수";
       _isChipsSelected = false;
+      _errorMessage == "" ? _errorMessage = "진행방식을 선택해주세요" : "";
     }
 
     notifyListeners();
