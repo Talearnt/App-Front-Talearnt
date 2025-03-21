@@ -36,7 +36,6 @@ class BoardList extends StatelessWidget {
           final int childCount = (commonBoardProvider.boardType == 'match'
               ? matchBoardProvider.talentExchangePosts.length
               : communityBoardProvider.communityBoardList.length);
-
           return Stack(
             children: [
               CustomScrollView(

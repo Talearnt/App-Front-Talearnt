@@ -70,10 +70,10 @@ class BoardRepository {
     });
   }
 
-  Future<Either<Failure, MatchingDetailPost>> getTalentDetailPost(
+  Future<Either<Failure, MatchingDetailPost>> getMatchDetailBoard(
       int postNo) async {
     final response =
-        await dio.get(ApiConstants.getTalentBoard(postNo), null, null);
+        await dio.get(ApiConstants.handleMatchDetailBoard(postNo), null, null);
     return response.fold(
         left, (result) => right(MatchingDetailPost.fromJson(result["data"])));
   }
@@ -99,9 +99,21 @@ class BoardRepository {
 
   Future<Either<Failure, CommunityDetailBoard>> getCommunityDetailBoard(
       int postNo) async {
-    final response =
-        await dio.get(ApiConstants.getCommunityDetailBoard(postNo), null, null);
+    final response = await dio.get(
+        ApiConstants.handleCommunityDetailBoard(postNo), null, null);
     return response.fold(
         left, (result) => right(CommunityDetailBoard.fromJson(result["data"])));
+  }
+
+  Future<Either<Failure, Success>> deleteMatchBoard(int postNo) async {
+    final response =
+        await dio.delete(ApiConstants.handleMatchDetailBoard(postNo));
+    return response.fold(left, (result) => right(Success.fromJson(result)));
+  }
+
+  Future<Either<Failure, Success>> deleteCommunityBoard(int postNo) async {
+    final response =
+        await dio.delete(ApiConstants.handleCommunityDetailBoard(postNo));
+    return response.fold(left, (result) => right(Success.fromJson(result)));
   }
 }
