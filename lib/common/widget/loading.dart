@@ -32,3 +32,33 @@ class Loading extends StatelessWidget {
     );
   }
 }
+
+class LoadingWithCharacter extends StatelessWidget {
+  const LoadingWithCharacter({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final commonProvider = Provider.of<CommonProvider>(context);
+
+    return Container(
+      color: Colors.white70,
+      child: Center(
+        child: ValueListenableBuilder<int>(
+          valueListenable: commonProvider.onImageType,
+          builder: (context, onType, child) {
+            return AnimatedSwitcher(
+              duration: const Duration(milliseconds: 500),
+              transitionBuilder: (Widget child, Animation<double> animation) {
+                return FadeTransition(opacity: animation, child: child);
+              },
+              child: SvgPicture.asset(
+                'assets/icons/loading_character_animation$onType.svg',
+                key: ValueKey<int>(onType),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+}

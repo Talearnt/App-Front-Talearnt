@@ -17,10 +17,11 @@ class FindPasswordSuccessPage extends StatelessWidget {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!findPasswordProvider.loadFindPasswordSuccessPage) {
         ToastMessage.show(
-            context: context,
-            message: '이메일  인증이 완료되었습니다.',
-            type: 1,
-            bottom: 46);
+          context: context,
+          message: '이메일  인증이 완료되었습니다.',
+          type: 1,
+          bottom: 46,
+        );
         findPasswordProvider.afterLoad();
       }
     });

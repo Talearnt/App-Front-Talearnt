@@ -1,5 +1,6 @@
 import 'package:app_front_talearnt/common/theme.dart';
 import 'package:app_front_talearnt/common/widget/button.dart';
+import 'package:app_front_talearnt/common/widget/loading.dart';
 import 'package:app_front_talearnt/common/widget/toast_message.dart';
 import 'package:app_front_talearnt/common/widget/top_app_bar.dart';
 import 'package:app_front_talearnt/view_model/board_view_model.dart';
@@ -51,6 +52,7 @@ class CommunityWrite2Page extends StatelessWidget {
         first: PrimaryS(
           content: '등록',
           onPressed: () async {
+            commonProvider.changeIsLoading(true);
             await communityWriteProvider.getUploadImagesInfo();
 
             if (communityWriteProvider.uploadImageInfo.isNotEmpty) {
@@ -90,6 +92,7 @@ class CommunityWrite2Page extends StatelessWidget {
                 bottom: 50,
               );
             }
+            commonProvider.changeIsLoading(false);
           },
         ),
       ),
@@ -110,63 +113,68 @@ class CommunityWrite2Page extends StatelessWidget {
           child: const CommunityWriteEditorToolbar(),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.only(
-          top: 8,
-          left: 24,
-          right: 24,
-        ),
-        child: Column(
-          children: [
-            // 제목 입력 필드
-            TextField(
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                hintText: "제목을 입력해주세요",
-                hintStyle: TextTypes.heading2(
-                  color: Palette.text04,
+      body: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(
+              top: 8,
+              left: 24,
+              right: 24,
+            ),
+            child: Column(
+              children: [
+                // 제목 입력 필드
+                TextField(
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    hintText: "제목을 입력해주세요",
+                    hintStyle: TextTypes.heading2(
+                      color: Palette.text04,
+                    ),
+                  ),
+                  style: TextTypes.heading2(
+                    color: Palette.text02,
+                  ),
+                  controller: communityWriteProvider.titleController,
+                  focusNode: communityWriteProvider.titleFocusNode,
                 ),
-              ),
-              style: TextTypes.heading2(
-                color: Palette.text02,
-              ),
-              controller: communityWriteProvider.titleController,
-              focusNode: communityWriteProvider.titleFocusNode,
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            const Divider(
-              color: Palette.bgUp02,
-              thickness: 1.0,
-            ),
-            const SizedBox(
-              height: 16,
-            ),
+                const SizedBox(
+                  height: 16,
+                ),
+                const Divider(
+                  color: Palette.bgUp02,
+                  thickness: 1.0,
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
 
-            Expanded(
-              child: QuillEditor(
-                controller: communityWriteProvider.contentController,
-                focusNode: communityWriteProvider.contentFocusNode,
-                scrollController: scrollController,
-                configurations: QuillEditorConfigurations(
-                  embedBuilders: FlutterQuillEmbeds.editorBuilders(),
-                  placeholder: "내용을 입력해주세요",
-                  expands: true,
-                  customStyles: DefaultStyles(
-                    placeHolder: DefaultTextBlockStyle(
-                      TextTypes.body02(color: Palette.text04),
-                      const HorizontalSpacing(10, 10),
-                      const VerticalSpacing(10, 10),
-                      const VerticalSpacing(10, 10),
-                      null,
+                Expanded(
+                  child: QuillEditor(
+                    controller: communityWriteProvider.contentController,
+                    focusNode: communityWriteProvider.contentFocusNode,
+                    scrollController: scrollController,
+                    configurations: QuillEditorConfigurations(
+                      embedBuilders: FlutterQuillEmbeds.editorBuilders(),
+                      placeholder: "내용을 입력해주세요",
+                      expands: true,
+                      customStyles: DefaultStyles(
+                        placeHolder: DefaultTextBlockStyle(
+                          TextTypes.body02(color: Palette.text04),
+                          const HorizontalSpacing(10, 10),
+                          const VerticalSpacing(10, 10),
+                          const VerticalSpacing(10, 10),
+                          null,
+                        ),
+                      ),
                     ),
                   ),
                 ),
-              ),
+              ],
             ),
-          ],
-        ),
+          ),
+          if (commonProvider.isLoadingPage) const LoadingWithCharacter()
+        ],
       ),
     );
   }

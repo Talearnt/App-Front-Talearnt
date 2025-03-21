@@ -1,6 +1,8 @@
 import 'package:app_front_talearnt/common/theme.dart';
+import 'package:app_front_talearnt/provider/common/common_provider.dart';
 import 'package:app_front_talearnt/provider/board/match_edit_provider.dart';
 import 'package:app_front_talearnt/view_model/keyword_view_model.dart';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -28,7 +30,8 @@ class ModifyBoardBottomSheet extends StatelessWidget {
     final matchBoardDetailProvider =
         Provider.of<MatchBoardDetailProvider>(context);
     final matchEditProvider = Provider.of<MatchEditProvider>(context);
-    final commonNavigator = Provider.of<CommonNavigator>(context);
+    final commonProvider = Provider.of<CommonProvider>(context);
+
     return Wrap(children: [
       Padding(
         padding: const EdgeInsets.only(bottom: 44, top: 12),
@@ -44,10 +47,12 @@ class ModifyBoardBottomSheet extends StatelessWidget {
                   highlightColor: Colors.transparent,
                   hoverColor: Colors.transparent,
                   onTap: () async {
+                    commonProvider.changeIsLoading(true);
                     await keywordViewModel.getOfferedKeywords();
                     await matchEditProvider.setPostInfo(
                         matchBoardDetailProvider.matchingDetailPost);
                     context.go('/match-edit1');
+                    commonProvider.changeIsLoading(false);
                   },
                   child: Center(
                     child: Text(

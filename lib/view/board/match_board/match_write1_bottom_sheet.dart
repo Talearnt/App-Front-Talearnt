@@ -4,6 +4,7 @@ import 'package:app_front_talearnt/common/widget/button.dart';
 import 'package:app_front_talearnt/common/widget/talent_keyword_chip_list.dart';
 import 'package:app_front_talearnt/common/widget/toast_message.dart';
 import 'package:app_front_talearnt/constants/global_value_constants.dart';
+import 'package:app_front_talearnt/provider/common/common_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +18,8 @@ class MatchWrite1BottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final matchWriteProvider = Provider.of<MatchWriteProvider>(context);
+    final commonProvider = Provider.of<CommonProvider>(context);
+
     return Scaffold(
       bottomNavigationBar: SizedBox(
         height: 134,
@@ -53,6 +56,21 @@ class MatchWrite1BottomSheet extends StatelessWidget {
                   onPressed: () async {
                     matchWriteProvider.updateSelectedInterestTalentKeywordCodes(
                         matchWriteProvider.interestTalentKeywordCodes);
+                    if (!matchWriteProvider.isChipsSelected) {
+                      matchWriteProvider.checkChipsSelected();
+                      if (matchWriteProvider.isChipsSelected) {
+                        commonProvider.removeToast();
+                      } else {
+                        commonProvider.removeToast();
+                        ToastMessage.infinityShow(
+                          context: context,
+                          message: matchWriteProvider.errorMessage,
+                          type: 2,
+                          bottom: 42,
+                          commonProvider: commonProvider,
+                        );
+                      }
+                    }
                     context.pop();
                   },
                 ),

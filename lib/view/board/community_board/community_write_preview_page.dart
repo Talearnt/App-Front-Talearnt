@@ -1,5 +1,6 @@
 import 'package:app_front_talearnt/common/theme.dart';
 import 'package:app_front_talearnt/common/widget/button.dart';
+import 'package:app_front_talearnt/common/widget/loading.dart';
 import 'package:app_front_talearnt/common/widget/profile.dart';
 import 'package:app_front_talearnt/common/widget/state_badge.dart';
 import 'package:app_front_talearnt/common/widget/toast_message.dart';
@@ -58,6 +59,7 @@ class CommunityWritePreviewPage extends StatelessWidget {
           first: PrimaryS(
             content: '등록',
             onPressed: () async {
+              commonProvider.changeIsLoading(true);
               commonProvider.removeToast();
               await communityWriteProvider.getUploadImagesInfo();
 
@@ -98,180 +100,190 @@ class CommunityWritePreviewPage extends StatelessWidget {
                   bottom: 50,
                 );
               }
+              commonProvider.changeIsLoading(false);
             },
           ),
         ),
-        body: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 24,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(
-                      height: 8,
+        body: Stack(
+          children: [
+            SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 24,
                     ),
-                    StateBadge(
-                      state: true,
-                      content: GlobalValueConstants.communityCategoryTypes
-                          .firstWhere(
-                        (item) =>
-                            item['code']! ==
-                            communityWriteProvider.selectedCategory,
-                      )['value']!,
-                    ),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    Wrap(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          communityWriteProvider.titleController.text,
-                          style: TextTypes.heading2(
-                            color: Palette.text01,
-                          ),
-                        )
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Profile(nickName: "닉네임"),
-                        Row(
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        StateBadge(
+                          state: true,
+                          content: GlobalValueConstants.communityCategoryTypes
+                              .firstWhere(
+                            (item) =>
+                                item['code']! ==
+                                communityWriteProvider.selectedCategory,
+                          )['value']!,
+                        ),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        Wrap(
                           children: [
                             Text(
-                              today,
-                              style: TextTypes.caption01(
-                                color: Palette.text04,
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 12,
-                            ),
-                            Text(
-                              "조회 2",
-                              style: TextTypes.caption01(
-                                color: Palette.text04,
+                              communityWriteProvider.titleController.text,
+                              style: TextTypes.heading2(
+                                color: Palette.text01,
                               ),
                             )
                           ],
-                        )
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 18,
-                    ),
-                  ],
-                ),
-              ),
-              const Divider(
-                color: Palette.bgUp02,
-                thickness: 1.0,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                  left: 24,
-                  right: 24,
-                  bottom: 32,
-                ),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        ...communityWriteProvider.previewImageList
-                            .asMap()
-                            .entries
-                            .take(4)
-                            .map(
-                          (entry) {
-                            int index = entry.key;
-                            var item = entry.value;
-
-                            double imageSize =
-                                (MediaQuery.of(context).size.width - 92) / 4;
-
-                            return Padding(
-                              padding:
-                                  EdgeInsets.only(right: index < 3 ? 12 : 0),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(8),
-                                child: GestureDetector(
-                                  onTap: () {},
-                                  child: Stack(
-                                    children: [
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                            color: Palette.icon04,
-                                            width: 1,
-                                          ),
-                                        ),
-                                        child: Image.network(
-                                          item,
-                                          width: imageSize,
-                                          height: imageSize,
-                                          fit: BoxFit.cover,
-                                          color: index == 3
-                                              ? Colors.black.withOpacity(0.6)
-                                              : null,
-                                          colorBlendMode: index == 3
-                                              ? BlendMode.darken
-                                              : null,
-                                        ),
-                                      ),
-                                      if (index == 3)
-                                        Positioned.fill(
-                                          child: GestureDetector(
-                                            onTap: () {},
-                                            child: Center(
-                                              child: Text(
-                                                "이미지\n더보기",
-                                                style: TextTypes.bodyMedium03(
-                                                  color: Palette.bgBackGround,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                    ],
+                        ),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Profile(nickName: "닉네임"),
+                            Row(
+                              children: [
+                                Text(
+                                  today,
+                                  style: TextTypes.caption01(
+                                    color: Palette.text04,
                                   ),
                                 ),
-                              ),
-                            );
-                          },
+                                const SizedBox(
+                                  width: 12,
+                                ),
+                                Text(
+                                  "조회 2",
+                                  style: TextTypes.caption01(
+                                    color: Palette.text04,
+                                  ),
+                                )
+                              ],
+                            )
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 18,
                         ),
                       ],
                     ),
-                    const SizedBox(
-                      height: 50,
+                  ),
+                  const Divider(
+                    color: Palette.bgUp02,
+                    thickness: 1.0,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      left: 24,
+                      right: 24,
+                      bottom: 32,
                     ),
-                    QuillEditor.basic(
-                      controller: communityWriteProvider.contentController,
-                      configurations: QuillEditorConfigurations(
-                        showCursor: false,
-                        readOnlyMouseCursor: MouseCursor.uncontrolled,
-                        enableAlwaysIndentOnTab: false,
-                        enableInteractiveSelection: false,
-                        enableScribble: false,
-                        embedBuilders: FlutterQuillEmbeds.editorBuilders(),
-                      ),
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            ...communityWriteProvider.previewImageList
+                                .asMap()
+                                .entries
+                                .take(4)
+                                .map(
+                              (entry) {
+                                int index = entry.key;
+                                var item = entry.value;
+
+                                double imageSize =
+                                    (MediaQuery.of(context).size.width - 92) /
+                                        4;
+
+                                return Padding(
+                                  padding: EdgeInsets.only(
+                                      right: index < 3 ? 12 : 0),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(8),
+                                    child: GestureDetector(
+                                      onTap: () {},
+                                      child: Stack(
+                                        children: [
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              border: Border.all(
+                                                color: Palette.icon04,
+                                                width: 1,
+                                              ),
+                                            ),
+                                            child: Image.network(
+                                              item,
+                                              width: imageSize,
+                                              height: imageSize,
+                                              fit: BoxFit.cover,
+                                              color: index == 3
+                                                  ? Colors.black
+                                                      .withOpacity(0.6)
+                                                  : null,
+                                              colorBlendMode: index == 3
+                                                  ? BlendMode.darken
+                                                  : null,
+                                            ),
+                                          ),
+                                          if (index == 3)
+                                            Positioned.fill(
+                                              child: GestureDetector(
+                                                onTap: () {},
+                                                child: Center(
+                                                  child: Text(
+                                                    "이미지\n더보기",
+                                                    style:
+                                                        TextTypes.bodyMedium03(
+                                                      color:
+                                                          Palette.bgBackGround,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 50,
+                        ),
+                        QuillEditor.basic(
+                          controller: communityWriteProvider.contentController,
+                          configurations: QuillEditorConfigurations(
+                            showCursor: false,
+                            readOnlyMouseCursor: MouseCursor.uncontrolled,
+                            enableAlwaysIndentOnTab: false,
+                            enableInteractiveSelection: false,
+                            enableScribble: false,
+                            embedBuilders: FlutterQuillEmbeds.editorBuilders(),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                  const Divider(
+                    color: Palette.bgUp02,
+                    thickness: 12.0,
+                  ),
+                ],
               ),
-              const Divider(
-                color: Palette.bgUp02,
-                thickness: 12.0,
-              ),
-            ],
-          ),
+            ),
+            if (commonProvider.isLoadingPage) const LoadingWithCharacter()
+          ],
         ),
       ),
     );

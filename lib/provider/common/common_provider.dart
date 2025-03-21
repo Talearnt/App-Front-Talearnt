@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import 'custom_ticker_provider.dart';
@@ -7,6 +9,8 @@ class CommonProvider with ChangeNotifier {
     _animationController = AnimationController(
       vsync: _tickerProvider, duration: const Duration(seconds: 1), // 1초 동안 회전
     )..repeat();
+
+    _startImageToggle();
   }
 
   bool _isLoadingPage = false;
@@ -25,6 +29,20 @@ class CommonProvider with ChangeNotifier {
   bool get isEntryUpdate => _isEntryUpdate;
 
   bool get isBackGesture => _isBackGesture;
+
+  final ValueNotifier<int> onImageType = ValueNotifier<int>(1);
+
+  Timer? _timer;
+
+  void _startImageToggle() {
+    _timer = Timer.periodic(const Duration(milliseconds: 1000), (timer) {
+      if (onImageType.value < 3) {
+        onImageType.value = onImageType.value + 1;
+      } else {
+        onImageType.value = 1;
+      }
+    });
+  }
 
   void changeIsLoading(bool loadingType) {
     _isLoadingPage = loadingType;

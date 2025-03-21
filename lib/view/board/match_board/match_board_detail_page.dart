@@ -1,7 +1,9 @@
 import 'package:app_front_talearnt/common/theme.dart';
+import 'package:app_front_talearnt/common/widget/loading.dart';
 import 'package:app_front_talearnt/common/widget/profile.dart';
 import 'package:app_front_talearnt/common/widget/state_badge.dart';
 import 'package:app_front_talearnt/common/widget/top_app_bar.dart';
+import 'package:app_front_talearnt/provider/common/common_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
@@ -22,6 +24,8 @@ class MatchBoardDetailPage extends StatelessWidget {
     final matchBoardDetailProvider =
         Provider.of<MatchBoardDetailProvider>(context);
     final profileProvider = Provider.of<ProfileProvider>(context);
+    final commonProvider = Provider.of<CommonProvider>(context);
+
     return Scaffold(
       appBar: TopAppBar(
         onPressed: () {
@@ -58,360 +62,376 @@ class MatchBoardDetailPage extends StatelessWidget {
           ),
         ),
       ),
-      body: Column(children: [
-        Expanded(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 24,
-                  ),
+      body: Stack(
+        children: [
+          Column(
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      const SizedBox(
-                        height: 8,
-                      ),
-                      const StateBadge(
-                        state: true,
-                        content: "모집중",
-                      ),
-                      const SizedBox(
-                        height: 8,
-                      ),
-                      Wrap(
-                        children: [
-                          Text(
-                            matchBoardDetailProvider.matchingDetailPost.title,
-                            style: TextTypes.heading2(
-                              color: Palette.text01,
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 24,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(
+                              height: 8,
                             ),
-                          )
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 16,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Profile(
-                              nickName: matchBoardDetailProvider
-                                  .matchingDetailPost.nickname),
-                          Row(
-                            children: [
-                              Text(
-                                matchBoardDetailProvider
-                                    .matchingDetailPost.createdAt,
-                                style: TextTypes.caption01(
-                                  color: Palette.text04,
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 12,
-                              ),
-                              Text(
-                                "조회 2",
-                                style: TextTypes.caption01(
-                                  color: Palette.text04,
-                                ),
-                              )
-                            ],
-                          )
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 18,
-                      ),
-                    ],
-                  ),
-                ),
-                const Divider(
-                  color: Palette.bgUp02,
-                  thickness: 12.0,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 24,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(
-                        height: 28,
-                      ),
-                      Text(
-                        "주고 싶은 나의 재능",
-                        style: TextTypes.caption01(
-                          color: Palette.text03,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 8,
-                      ),
-                      Wrap(
-                        children: [
-                          ...matchBoardDetailProvider
-                              .matchingDetailPost.giveTalents
-                              .map(
-                            (item) {
-                              return Padding(
-                                padding: const EdgeInsets.only(
-                                  right: 8,
-                                  bottom: 8,
-                                ),
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 16,
-                                    vertical: 6,
+                            const StateBadge(
+                              state: true,
+                              content: "모집중",
+                            ),
+                            const SizedBox(
+                              height: 8,
+                            ),
+                            Wrap(
+                              children: [
+                                Text(
+                                  matchBoardDetailProvider
+                                      .matchingDetailPost.title,
+                                  style: TextTypes.heading2(
+                                    color: Palette.text01,
                                   ),
-                                  decoration: const BoxDecoration(
-                                    color: Palette.bgUp02,
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(
-                                        4,
+                                )
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 16,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Profile(
+                                    nickName: matchBoardDetailProvider
+                                        .matchingDetailPost.nickname),
+                                Row(
+                                  children: [
+                                    Text(
+                                      matchBoardDetailProvider
+                                          .matchingDetailPost.createdAt,
+                                      style: TextTypes.caption01(
+                                        color: Palette.text04,
                                       ),
                                     ),
-                                  ),
-                                  child: Text(
-                                    item,
-                                    style: TextTypes.body02(
-                                      color: Palette.text02,
+                                    const SizedBox(
+                                      width: 12,
                                     ),
-                                  ),
-                                ),
-                              );
-                            },
-                          )
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 16,
-                      ),
-                      Text(
-                        "받고 싶은 나의 재능",
-                        style: TextTypes.caption01(
-                          color: Palette.text03,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 8,
-                      ),
-                      Wrap(
-                        children: [
-                          ...matchBoardDetailProvider
-                              .matchingDetailPost.receiveTalents
-                              .map(
-                            (item) {
-                              return Padding(
-                                padding: const EdgeInsets.only(
-                                  right: 8,
-                                  bottom: 8,
-                                ),
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 16,
-                                    vertical: 6,
-                                  ),
-                                  decoration: const BoxDecoration(
-                                    color: Palette.bgUp02,
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(
-                                        4,
+                                    Text(
+                                      "조회 2",
+                                      style: TextTypes.caption01(
+                                        color: Palette.text04,
                                       ),
-                                    ),
-                                  ),
-                                  child: Text(
-                                    item,
-                                    style: TextTypes.body02(
-                                      color: Palette.text02,
-                                    ),
-                                  ),
-                                ),
-                              );
-                            },
-                          )
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 8,
+                                    )
+                                  ],
+                                )
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 18,
+                            ),
+                          ],
+                        ),
                       ),
                       const Divider(
                         color: Palette.bgUp02,
-                        thickness: 1.0,
+                        thickness: 12.0,
                       ),
-                      const SizedBox(
-                        height: 16,
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            "진행 방식",
-                            style: TextTypes.body02(
-                              color: Palette.text03,
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 24,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(
+                              height: 28,
                             ),
-                          ),
-                          const SizedBox(
-                            width: 24,
-                          ),
-                          Text(
-                            matchBoardDetailProvider
-                                .matchingDetailPost.exchangeType,
-                            style: TextTypes.body02(
-                              color: Palette.text02,
+                            Text(
+                              "주고 싶은 나의 재능",
+                              style: TextTypes.caption01(
+                                color: Palette.text03,
+                              ),
                             ),
-                          )
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 4,
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            "진행 기간",
-                            style: TextTypes.body02(
-                              color: Palette.text03,
+                            const SizedBox(
+                              height: 8,
                             ),
-                          ),
-                          const SizedBox(
-                            width: 24,
-                          ),
-                          Text(
-                            matchBoardDetailProvider
-                                .matchingDetailPost.duration,
-                            style: TextTypes.body02(
-                              color: Palette.text02,
-                            ),
-                          )
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 28,
-                      ),
-                    ],
-                  ),
-                ),
-                const Divider(
-                  color: Palette.bgUp02,
-                  thickness: 12.0,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 16,
-                    left: 24,
-                    right: 24,
-                  ),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          ...matchBoardDetailProvider.previewImageList
-                              .asMap()
-                              .entries
-                              .take(4)
-                              .map(
-                            (entry) {
-                              int index = entry.key;
-                              var item = entry.value;
-
-                              double imageSize =
-                                  (MediaQuery.of(context).size.width - 92) / 4;
-
-                              return Padding(
-                                padding:
-                                    EdgeInsets.only(right: index < 3 ? 12 : 0),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(8),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      if (index == 3) {
-                                        context.push(
-                                            '/match-board-detail-page/match-image-view');
-                                      } else {
-                                        matchBoardDetailProvider
-                                            .setPreviewImageIndex(index);
-                                        context.push(
-                                            '/match-board-detail-page/match-image-view-detail');
-                                      }
-                                    },
-                                    child: Stack(
-                                      children: [
-                                        Container(
-                                          decoration: BoxDecoration(
-                                            border: Border.all(
-                                              color: Palette.icon04,
-                                              width: 1,
+                            Wrap(
+                              children: [
+                                ...matchBoardDetailProvider
+                                    .matchingDetailPost.giveTalents
+                                    .map(
+                                  (item) {
+                                    return Padding(
+                                      padding: const EdgeInsets.only(
+                                        right: 8,
+                                        bottom: 8,
+                                      ),
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 16,
+                                          vertical: 6,
+                                        ),
+                                        decoration: const BoxDecoration(
+                                          color: Palette.bgUp02,
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(
+                                              4,
                                             ),
-                                          ),
-                                          child: Image.network(
-                                            item,
-                                            width: imageSize,
-                                            height: imageSize,
-                                            fit: BoxFit.cover,
-                                            color: index == 3
-                                                ? Colors.black.withOpacity(0.6)
-                                                : null,
-                                            colorBlendMode: index == 3
-                                                ? BlendMode.darken
-                                                : null,
                                           ),
                                         ),
-                                        if (index == 3)
-                                          Positioned.fill(
-                                            child: GestureDetector(
-                                              onTap: () => context.push(
-                                                  '/match-board-detail-page/match-image-view'),
-                                              child: Center(
-                                                child: Text(
-                                                  "이미지\n더보기",
-                                                  style: TextTypes.bodyMedium03(
-                                                    color: Palette.bgBackGround,
-                                                  ),
-                                                ),
-                                              ),
+                                        child: Text(
+                                          item,
+                                          style: TextTypes.body02(
+                                            color: Palette.text02,
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                )
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 16,
+                            ),
+                            Text(
+                              "받고 싶은 나의 재능",
+                              style: TextTypes.caption01(
+                                color: Palette.text03,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 8,
+                            ),
+                            Wrap(
+                              children: [
+                                ...matchBoardDetailProvider
+                                    .matchingDetailPost.receiveTalents
+                                    .map(
+                                  (item) {
+                                    return Padding(
+                                      padding: const EdgeInsets.only(
+                                        right: 8,
+                                        bottom: 8,
+                                      ),
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 16,
+                                          vertical: 6,
+                                        ),
+                                        decoration: const BoxDecoration(
+                                          color: Palette.bgUp02,
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(
+                                              4,
                                             ),
                                           ),
-                                      ],
-                                    ),
+                                        ),
+                                        child: Text(
+                                          item,
+                                          style: TextTypes.body02(
+                                            color: Palette.text02,
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                )
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 8,
+                            ),
+                            const Divider(
+                              color: Palette.bgUp02,
+                              thickness: 1.0,
+                            ),
+                            const SizedBox(
+                              height: 16,
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  "진행 방식",
+                                  style: TextTypes.body02(
+                                    color: Palette.text03,
                                   ),
                                 ),
-                              );
-                            },
-                          ),
-                        ],
+                                const SizedBox(
+                                  width: 24,
+                                ),
+                                Text(
+                                  matchBoardDetailProvider
+                                      .matchingDetailPost.exchangeType,
+                                  style: TextTypes.body02(
+                                    color: Palette.text02,
+                                  ),
+                                )
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 4,
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  "진행 기간",
+                                  style: TextTypes.body02(
+                                    color: Palette.text03,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 24,
+                                ),
+                                Text(
+                                  matchBoardDetailProvider
+                                      .matchingDetailPost.duration,
+                                  style: TextTypes.body02(
+                                    color: Palette.text02,
+                                  ),
+                                )
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 28,
+                            ),
+                          ],
+                        ),
                       ),
-                      const SizedBox(
-                        height: 50,
+                      const Divider(
+                        color: Palette.bgUp02,
+                        thickness: 12.0,
                       ),
-                      QuillEditor.basic(
-                        controller: matchBoardDetailProvider.contentController,
-                        configurations: QuillEditorConfigurations(
-                          showCursor: false,
-                          readOnlyMouseCursor: MouseCursor.uncontrolled,
-                          enableAlwaysIndentOnTab: false,
-                          enableInteractiveSelection: false,
-                          enableScribble: false,
-                          embedBuilders: FlutterQuillEmbeds.editorBuilders(),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          top: 16,
+                          left: 24,
+                          right: 24,
+                        ),
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                ...matchBoardDetailProvider.previewImageList
+                                    .asMap()
+                                    .entries
+                                    .take(4)
+                                    .map(
+                                  (entry) {
+                                    int index = entry.key;
+                                    var item = entry.value;
+
+                                    double imageSize =
+                                        (MediaQuery.of(context).size.width -
+                                                92) /
+                                            4;
+
+                                    return Padding(
+                                      padding: EdgeInsets.only(
+                                          right: index < 3 ? 12 : 0),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(8),
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            if (index == 3) {
+                                              context.push(
+                                                  '/match-board-detail-page/match-image-view');
+                                            } else {
+                                              matchBoardDetailProvider
+                                                  .setPreviewImageIndex(index);
+                                              context.push(
+                                                  '/match-board-detail-page/match-image-view-detail');
+                                            }
+                                          },
+                                          child: Stack(
+                                            children: [
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                    color: Palette.icon04,
+                                                    width: 1,
+                                                  ),
+                                                ),
+                                                child: Image.network(
+                                                  item,
+                                                  width: imageSize,
+                                                  height: imageSize,
+                                                  fit: BoxFit.cover,
+                                                  color: index == 3
+                                                      ? Colors.black
+                                                          .withOpacity(0.6)
+                                                      : null,
+                                                  colorBlendMode: index == 3
+                                                      ? BlendMode.darken
+                                                      : null,
+                                                ),
+                                              ),
+                                              if (index == 3)
+                                                Positioned.fill(
+                                                  child: GestureDetector(
+                                                    onTap: () => context.push(
+                                                        '/match-board-detail-page/match-image-view'),
+                                                    child: Center(
+                                                      child: Text(
+                                                        "이미지\n더보기",
+                                                        style: TextTypes
+                                                            .bodyMedium03(
+                                                          color: Palette
+                                                              .bgBackGround,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 50,
+                            ),
+                            QuillEditor.basic(
+                              controller:
+                                  matchBoardDetailProvider.contentController,
+                              configurations: QuillEditorConfigurations(
+                                showCursor: false,
+                                readOnlyMouseCursor: MouseCursor.uncontrolled,
+                                enableAlwaysIndentOnTab: false,
+                                enableInteractiveSelection: false,
+                                enableScribble: false,
+                                embedBuilders:
+                                    FlutterQuillEmbeds.editorBuilders(),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],
                   ),
                 ),
-              ],
-            ),
+              ),
+              BottomBtn(
+                otherSetting:
+                    SvgPicture.asset('assets/icons/bookmark_default.svg'),
+                mediaBottom: MediaQuery.of(context).viewInsets.bottom,
+                content: '채팅하기',
+                isEnabled: true,
+                onPressed: () async {},
+              )
+            ],
           ),
-        ),
-        BottomBtn(
-          otherSetting: SvgPicture.asset('assets/icons/bookmark_default.svg'),
-          mediaBottom: MediaQuery.of(context).viewInsets.bottom,
-          content: '채팅하기',
-          isEnabled: true,
-          onPressed: () async {},
-        )
-      ]),
+          if (commonProvider.isLoadingPage) const Loading()
+        ],
+      ),
     );
   }
 }

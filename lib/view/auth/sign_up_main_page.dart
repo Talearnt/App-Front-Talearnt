@@ -1,4 +1,5 @@
 import 'package:app_front_talearnt/common/theme.dart';
+import 'package:app_front_talearnt/common/widget/toast_message.dart';
 import 'package:app_front_talearnt/provider/auth/storage_provider.dart';
 import 'package:app_front_talearnt/provider/common/common_provider.dart';
 import 'package:app_front_talearnt/view/auth/sign_up_sub1_page.dart';
@@ -147,8 +148,20 @@ class SignUpMainPage extends StatelessWidget {
                                                 .phoneNumController.text,
                                             signUpProvider
                                                 .certNumController.text)
-                                        .whenComplete(() => commonProvider
-                                            .changeIsLoading(false));
+                                        .whenComplete(
+                                      () {
+                                        commonProvider.changeIsLoading(false);
+                                      },
+                                    ).then(
+                                      (value) {
+                                        ToastMessage.show(
+                                          context: context,
+                                          message: '인증번호를 요청하였습니다.',
+                                          type: 2,
+                                          bottom: 62,
+                                        );
+                                      },
+                                    );
 
                                     //인증 완료되면 다음 페이지로 넘어감
                                     if (signUpProvider.checkSmsValidation) {

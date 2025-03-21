@@ -1,8 +1,10 @@
 import 'package:app_front_talearnt/common/theme.dart';
 import 'package:app_front_talearnt/common/widget/button.dart';
+import 'package:app_front_talearnt/common/widget/toast_message.dart';
 import 'package:app_front_talearnt/common/widget/top_app_bar.dart';
 import 'package:app_front_talearnt/constants/global_value_constants.dart';
 import 'package:app_front_talearnt/provider/board/match_edit_provider.dart';
+import 'package:app_front_talearnt/provider/common/common_provider.dart';
 import 'package:app_front_talearnt/view/board/match_board/match_edit1_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -15,6 +17,7 @@ class MatchEdit1Page extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final matchEditProvider = Provider.of<MatchEditProvider>(context);
+    final commonProvider = Provider.of<CommonProvider>(context);
 
     return Scaffold(
       appBar: TopAppBar(
@@ -186,6 +189,22 @@ class MatchEdit1Page extends StatelessWidget {
                                 matchEditProvider
                                     .updateSelectedGiveTalentKeywordCodes
                                     .call(updatedFilter);
+
+                                if (!matchEditProvider.isChipsSelected) {
+                                  matchEditProvider.checkChipsSelected();
+                                  if (matchEditProvider.isChipsSelected) {
+                                    commonProvider.removeToast();
+                                  } else {
+                                    commonProvider.removeToast();
+                                    ToastMessage.infinityShow(
+                                      context: context,
+                                      message: matchEditProvider.errorMessage,
+                                      type: 2,
+                                      bottom: 42,
+                                      commonProvider: commonProvider,
+                                    );
+                                  }
+                                }
                               },
                             ),
                           );
@@ -276,6 +295,22 @@ class MatchEdit1Page extends StatelessWidget {
                                 matchEditProvider
                                     .updateSelectedInterestTalentKeywordCodes
                                     .call(updatedFilter);
+
+                                if (!matchEditProvider.isChipsSelected) {
+                                  matchEditProvider.checkChipsSelected();
+                                  if (matchEditProvider.isChipsSelected) {
+                                    commonProvider.removeToast();
+                                  } else {
+                                    commonProvider.removeToast();
+                                    ToastMessage.infinityShow(
+                                      context: context,
+                                      message: matchEditProvider.errorMessage,
+                                      type: 2,
+                                      bottom: 42,
+                                      commonProvider: commonProvider,
+                                    );
+                                  }
+                                }
                               },
                             ),
                           );
@@ -361,6 +396,22 @@ class MatchEdit1Page extends StatelessWidget {
                                   ? matchEditProvider.removeSelectedDuration()
                                   : matchEditProvider
                                       .updateSelectedDuration(item);
+
+                              if (!matchEditProvider.isChipsSelected) {
+                                matchEditProvider.checkChipsSelected();
+                                if (matchEditProvider.isChipsSelected) {
+                                  commonProvider.removeToast();
+                                } else {
+                                  commonProvider.removeToast();
+                                  ToastMessage.infinityShow(
+                                    context: context,
+                                    message: matchEditProvider.errorMessage,
+                                    type: 2,
+                                    bottom: 42,
+                                    commonProvider: commonProvider,
+                                  );
+                                }
+                              }
                             },
                           );
                         }).toList(),
@@ -426,6 +477,22 @@ class MatchEdit1Page extends StatelessWidget {
                                       .removeSelectedExchangeType()
                                   : matchEditProvider
                                       .updateSelectedExhangeType(item);
+
+                              if (!matchEditProvider.isChipsSelected) {
+                                matchEditProvider.checkChipsSelected();
+                                if (matchEditProvider.isChipsSelected) {
+                                  commonProvider.removeToast();
+                                } else {
+                                  commonProvider.removeToast();
+                                  ToastMessage.infinityShow(
+                                    context: context,
+                                    message: matchEditProvider.errorMessage,
+                                    type: 2,
+                                    bottom: 42,
+                                    commonProvider: commonProvider,
+                                  );
+                                }
+                              }
                             },
                           );
                         }).toList(),
