@@ -86,7 +86,7 @@ class BoardList extends StatelessWidget {
                                     WidgetStateProperty.all(Colors.transparent),
                                 onTap: () async {
                                   commonProvider.changeIsLoading(true);
-                                  await viewModel.getTalentDetailPost(
+                                  await viewModel.getMatchDetailBoard(
                                       matchBoardProvider
                                           .talentExchangePosts[index]
                                           .exchangePostNo);

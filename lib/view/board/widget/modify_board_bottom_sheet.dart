@@ -30,6 +30,7 @@ class ModifyBoardBottomSheet extends StatelessWidget {
     final matchBoardDetailProvider =
         Provider.of<MatchBoardDetailProvider>(context);
     final matchEditProvider = Provider.of<MatchEditProvider>(context);
+    final commonNavigator = Provider.of<CommonNavigator>(context);
     final commonProvider = Provider.of<CommonProvider>(context);
 
     return Wrap(children: [
