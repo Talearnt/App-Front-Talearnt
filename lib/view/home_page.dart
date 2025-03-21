@@ -2,6 +2,7 @@ import 'package:app_front_talearnt/common/theme.dart';
 import 'package:app_front_talearnt/common/widget/button.dart';
 import 'package:app_front_talearnt/common/widget/loading.dart';
 import 'package:app_front_talearnt/provider/auth/login_provider.dart';
+import 'package:app_front_talearnt/provider/board/match_write_provider.dart';
 import 'package:app_front_talearnt/provider/common/common_provider.dart';
 import 'package:app_front_talearnt/provider/home/home_provider.dart';
 import 'package:app_front_talearnt/provider/profile/profile_provider.dart';
@@ -26,6 +27,7 @@ class HomePage extends StatelessWidget {
     final profileProvider = Provider.of<ProfileProvider>(context);
     final viewModel = Provider.of<BoardViewModel>(context);
     final commonProvider = Provider.of<CommonProvider>(context);
+    final matchWriteProvider = Provider.of<MatchWriteProvider>(context);
 
     WidgetsBinding.instance.addPostFrameCallback(
       (_) async {
@@ -61,7 +63,7 @@ class HomePage extends StatelessWidget {
           await context
               .read<BoardViewModel>()
               .getUserMatchingTalentExchangePosts(
-                  homeProvider.userMatchingTalentExchangePosts
+                  profileProvider.userProfile.giveTalents
                       .map((e) => e.toString())
                       .toList(),
                   [],
@@ -487,7 +489,8 @@ class HomePage extends StatelessWidget {
                         GestureDetector(
                           onTap: () async {
                             if (loginProvider.isLoggedIn) {
-                              await keywordViewModel.getOfferedKeywords();
+                              matchWriteProvider.setGiveTalentKeyword(
+                                  profileProvider.userProfile.giveTalents);
                               context.push('/match-write1');
                             } else {
                               context.go("/login");
