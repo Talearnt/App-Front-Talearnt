@@ -10,6 +10,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:mime/mime.dart';
 import 'package:path/path.dart' as path;
 import 'package:vsc_quill_delta_to_html/vsc_quill_delta_to_html.dart';
+import 'package:go_router/go_router.dart';
 
 import '../clear_text.dart';
 
@@ -103,6 +104,8 @@ class CommunityWriteProvider extends ChangeNotifier with ClearText {
 
   String _boardToastMessage = "";
 
+  int _totalImageCount = 0;
+
   final List<Map<String, dynamic>> _uploadImageInfo = [];
 
   List<String> _imageUploadUrls = [];
@@ -187,6 +190,8 @@ class CommunityWriteProvider extends ChangeNotifier with ClearText {
 
   bool get isLinkTextNotEmpty => _isLinkTextNotEmpty;
 
+  int get totalImageCount => _totalImageCount;
+
   void clearProvider() {
     _titleController.clear();
     _contentController.clear();
@@ -210,6 +215,7 @@ class CommunityWriteProvider extends ChangeNotifier with ClearText {
 
     _htmlContent = "";
     _totalImageSize = 0;
+    _totalImageCount = 0;
 
     _isS3Upload = false;
     _previewImageList.clear();
@@ -341,18 +347,31 @@ class CommunityWriteProvider extends ChangeNotifier with ClearText {
         final int finalSizeInBytes = await processedImage.length();
         final double finalSizeInMB = finalSizeInBytes / (1024 * 1024);
 
-        // 총 용량 초과 체크
-        if (_totalImageSize + finalSizeInMB > 5) {
+        if (finalSizeInMB > 3.0) {
           SingleBtnDialog.show(context,
-              content: '이미지는 최대 5MB까지 업로드 가능합니다.',
-              button: const PrimaryM(
+              content: '각 이미지 용량은 3MB 이하만 업로드 가능합니다.',
+              button: PrimaryM(
                 content: '확인',
+                onPressed: () {
+                  context.pop();
+                },
               ));
           break;
         }
 
-        // 압축 후 이미지 크기 추가
-        _totalImageSize += finalSizeInMB;
+        if (_totalImageCount == 5) {
+          SingleBtnDialog.show(context,
+              content: '이미지는 최대 5장까지 업로드 가능합니다.',
+              button: PrimaryM(
+                content: '확인',
+                onPressed: () {
+                  context.pop();
+                },
+              ));
+          break;
+        }
+
+        _totalImageCount++;
 
         contentController.insertImageBlock(imageSource: processedImage.path);
       }
