@@ -454,12 +454,8 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
     notifyListeners();
   }
 
-  void setGiveTalentKeyword(List<dynamic> keywords) {
-    for (final keyword in keywords) {
-      if (!_giveTalentKeywordCodes.contains(keyword.code)) {
-        _giveTalentKeywordCodes.add(keyword.code);
-      }
-    }
+  void setGiveTalentKeyword(List<int> keywords) {
+    _giveTalentKeywordCodes.addAll(keywords);
   }
 
   void checkChipsSelected() {
