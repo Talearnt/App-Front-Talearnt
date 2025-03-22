@@ -12,7 +12,6 @@ import 'package:dartz/dartz.dart';
 import '../../constants/api_constants.dart';
 import '../model/param/community_board_list_search_param.dart';
 import '../model/param/community_board_param.dart';
-import '../model/param/match_board_list_search_param.dart';
 import '../model/respone/community_board.dart';
 import '../model/respone/community_detail_board.dart';
 import '../model/respone/match_board.dart';
@@ -63,8 +62,8 @@ class BoardRepository {
     final response =
         await dio.get(ApiConstants.getMatchBoardListUrl, null, body.toJson());
     return response.fold(left, (response) {
-      final posts = List<MatchBoard>.from(
-          response['data']['results'].map((data) => MatchBoard.fromJson(data)));
+      final posts = List<MatchBoard>.from(response['data']['results']
+          .map((data) => MatchBoard.fromJson(data)));
       final pagination = Pagination.fromJson(response['data']['pagination']);
       return right({'posts': posts, 'pagination': pagination});
     });
