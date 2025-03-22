@@ -2,10 +2,10 @@ import 'package:app_front_talearnt/common/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../../../data/model/respone/matching_post.dart';
+import '../../../../data/model/respone/match_board.dart';
 
 class MatchBoardListCardBottom extends StatelessWidget {
-  final MatchingPost post;
+  final MatchBoard post;
   final int index;
 
   const MatchBoardListCardBottom(

@@ -34,7 +34,7 @@ class BoardList extends StatelessWidget {
       child: Consumer<CommonBoardProvider>(
         builder: (subContext, commonBoardProvider, child) {
           final int childCount = (commonBoardProvider.boardType == 'match'
-              ? matchBoardProvider.talentExchangePosts.length
+              ? matchBoardProvider.matchBoardList.length
               : communityBoardProvider.communityBoardList.length);
           return Stack(
             children: [
@@ -67,7 +67,7 @@ class BoardList extends StatelessWidget {
                       (context, index) {
                         List<dynamic> posts =
                             commonBoardProvider.boardType == 'match'
-                                ? matchBoardProvider.talentExchangePosts
+                                ? matchBoardProvider.matchBoardList
                                 : communityBoardProvider.communityBoardList;
                         if (posts.isEmpty) {
                           if (commonBoardProvider.initState) {
@@ -87,8 +87,7 @@ class BoardList extends StatelessWidget {
                                 onTap: () async {
                                   commonProvider.changeIsLoading(true);
                                   await viewModel.getMatchDetailBoard(
-                                      matchBoardProvider
-                                          .talentExchangePosts[index]
+                                      matchBoardProvider.matchBoardList[index]
                                           .exchangePostNo);
                                   commonProvider.changeIsLoading(false);
                                 },

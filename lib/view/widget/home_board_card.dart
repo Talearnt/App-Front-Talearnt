@@ -1,13 +1,12 @@
 import 'package:app_front_talearnt/common/theme.dart';
 import 'package:app_front_talearnt/data/model/respone/community_board.dart';
-import 'package:app_front_talearnt/data/model/respone/matching_post.dart';
+import 'package:app_front_talearnt/data/model/respone/match_board.dart';
 import 'package:app_front_talearnt/view/board/match_board/widget/match_board_selected_chip_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:intl/intl.dart';
 
 class HomeMatchBoardCard extends StatelessWidget {
-  final MatchingPost post;
+  final MatchBoard post;
 
   const HomeMatchBoardCard({
     super.key,
