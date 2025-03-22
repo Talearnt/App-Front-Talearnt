@@ -20,6 +20,7 @@ import '../data/model/param/s3_controller_param.dart';
 import '../data/repositories/board_repository.dart';
 import '../provider/board/community_board_detail_provider.dart';
 import '../provider/board/community_board_provider.dart';
+import '../provider/board/community_edit_provider.dart';
 import '../provider/board/match_board_detail_provider.dart';
 import '../provider/board/match_board_provider.dart';
 import '../provider/board/match_write_provider.dart';
@@ -37,6 +38,7 @@ class BoardViewModel extends ChangeNotifier {
   final CommunityBoardProvider communityBoardProvider;
   final CommunityWriteProvider communityWriteProvider;
   final CommunityBoardDetailProvider communityBoardDetailProvider;
+  final CommunityEditProvider communityEditProvider;
   final HomeProvider homeProvider;
 
   BoardViewModel(
@@ -50,6 +52,7 @@ class BoardViewModel extends ChangeNotifier {
       this.communityBoardProvider,
       this.communityWriteProvider,
       this.communityBoardDetailProvider,
+      this.communityEditProvider,
       this.homeProvider);
 
   Future<void> getImageUploadUrl(
@@ -76,6 +79,8 @@ class BoardViewModel extends ChangeNotifier {
         matchEditProvider.setImageUploadUrl(result.data);
       } else if (type == "CW") {
         communityWriteProvider.setImageUploadUrl(result.data);
+      } else if (type == "CE") {
+        communityEditProvider.setImageUploadUrl(result.data);
       }
     });
   }
@@ -96,6 +101,9 @@ class BoardViewModel extends ChangeNotifier {
         await matchEditProvider.exchangeImageUrl(imageUploadUrl, image.path);
       } else if (type == "CW") {
         await communityWriteProvider.exchangeImageUrl(
+            imageUploadUrl, image.path);
+      } else if (type == "CE") {
+        await communityEditProvider.exchangeImageUrl(
             imageUploadUrl, image.path);
       }
     });
@@ -384,6 +392,31 @@ class BoardViewModel extends ChangeNotifier {
           communityBoardProvider.selectedOrderType, null, null, null, null);
       commonNavigator.goBack();
       commonNavigator.goBack();
+    });
+  }
+
+  Future<void> editCommunityBoard(
+    String title,
+    String content,
+    String postType,
+    List<String>? imageUrls,
+    int postNo,
+  ) async {
+    final urlList = imageUrls ?? [];
+    CommunityBoardParam param = CommunityBoardParam(
+      title: title,
+      content: content,
+      postType: postType,
+      imageUrls: urlList,
+    );
+
+    final result = await boardRepository.editCommunityBoard(param, postNo);
+
+    result.fold(
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)),
+        (result) async {
+      await getCommunityDetailBoard(postNo);
     });
   }
 
