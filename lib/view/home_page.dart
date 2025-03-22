@@ -5,7 +5,6 @@ import 'package:app_front_talearnt/provider/auth/login_provider.dart';
 import 'package:app_front_talearnt/provider/common/common_provider.dart';
 import 'package:app_front_talearnt/provider/home/home_provider.dart';
 import 'package:app_front_talearnt/provider/profile/profile_provider.dart';
-import 'package:app_front_talearnt/data/model/respone/matching_post.dart';
 import 'package:app_front_talearnt/view/widget/home_board_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -31,18 +30,8 @@ class HomePage extends StatelessWidget {
       (_) async {
         commonProvider.changeIsLoading(true);
         if (homeProvider.newTalentExchangePosts.isEmpty) {
-          await context.read<BoardViewModel>().getNewTalentExchangePosts(
-            [],
-            [],
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '10',
-            '',
-          );
+          await context.read<BoardViewModel>().getMatchBoardList(
+              [], [], '', '', '', '', '', '', '10', '', "new");
         }
 
         if (homeProvider.bestCommunityPosts.isEmpty) {
@@ -58,21 +47,20 @@ class HomePage extends StatelessWidget {
 
         if (homeProvider.userMatchingTalentExchangePosts.isEmpty &&
             loginProvider.isLoggedIn) {
-          await context
-              .read<BoardViewModel>()
-              .getUserMatchingTalentExchangePosts(
-                  homeProvider.userMatchingTalentExchangePosts
-                      .map((e) => e.toString())
-                      .toList(),
-                  [],
-                  '',
-                  '',
-                  '',
-                  '',
-                  '',
-                  '',
-                  '10',
-                  '');
+          await context.read<BoardViewModel>().getMatchBoardList(
+              homeProvider.userMatchingTalentExchangePosts
+                  .map((e) => e.toString())
+                  .toList(),
+              [],
+              '',
+              '',
+              '',
+              '',
+              '',
+              '',
+              '10',
+              '',
+              "userMatch");
         }
         commonProvider.changeIsLoading(false);
       },
@@ -84,7 +72,6 @@ class HomePage extends StatelessWidget {
           children: [
             LayoutBuilder(
               builder: (context, constraints) {
-                double screenHeight = MediaQuery.of(context).size.height;
                 return SingleChildScrollView(
                   child: Column(
                     children: [
@@ -305,7 +292,7 @@ class HomePage extends StatelessWidget {
                                       GestureDetector(
                                         onTap: () async {
                                           await viewModel
-                                              .getInitTalentExchangePosts();
+                                              .getInitMatchBoardList();
                                         },
                                         child: Row(
                                           mainAxisSize: MainAxisSize.min,
@@ -469,7 +456,7 @@ class HomePage extends StatelessWidget {
                         GestureDetector(
                           onTap: () async {
                             commonProvider.changeIsLoading(true);
-                            await viewModel.getInitTalentExchangePosts();
+                            await viewModel.getInitMatchBoardList();
                             commonProvider.changeIsLoading(false);
                           },
                           child: Column(

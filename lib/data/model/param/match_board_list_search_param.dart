@@ -1,4 +1,4 @@
-class TalentExchangePostsFilterParam {
+class MatchBoardListSearchParam {
   final List<String>? giveTalents; // 주고픈 재능 코드
   final List<String>? receiveTalents; // 받고픈 재능 코드
   final String? order; // 정렬 - recent: 최신순, popular: 인기순
@@ -8,9 +8,10 @@ class TalentExchangePostsFilterParam {
   final String? status; // 모집 상태 - 모집중, 모집_완료
   final String? page; // 기본값 1
   final String? size; // 기본값 15, 최대 50
-  final String? search; // 검색어
+  final String? lastNo;
+  final String? path;
 
-  TalentExchangePostsFilterParam({
+  MatchBoardListSearchParam({
     this.giveTalents,
     this.receiveTalents,
     this.order,
@@ -20,11 +21,13 @@ class TalentExchangePostsFilterParam {
     this.status,
     String? page,
     String? size,
-    this.search,
-  })  : page = page ?? '1',
+    this.lastNo,
+    String? path,
+  })  : path = path ?? 'mobile',
+        page = page ?? '1',
         size = size ?? '15';
 
-  TalentExchangePostsFilterParam.empty()
+  MatchBoardListSearchParam.empty()
       : giveTalents = [],
         receiveTalents = [],
         order = null,
@@ -34,7 +37,8 @@ class TalentExchangePostsFilterParam {
         status = null,
         page = '1',
         size = '15',
-        search = null;
+        lastNo = null,
+        path = "mobile";
 
   Map<String, dynamic> toJson() {
     return {
@@ -47,7 +51,8 @@ class TalentExchangePostsFilterParam {
       'status': status,
       'page': page,
       'size': size,
-      'search': search,
+      'lastNo': lastNo,
+      'path': path,
     };
   }
 }

@@ -1,6 +1,6 @@
 import 'package:intl/intl.dart';
 
-class MatchingPost {
+class MatchBoard {
   final String? profileImg;
   final String nickname;
   final String authority;
@@ -18,7 +18,7 @@ class MatchingPost {
   final int favoriteCount;
   final bool isFavorite;
 
-  MatchingPost({
+  MatchBoard({
     required this.profileImg,
     required this.nickname,
     required this.authority,
@@ -37,10 +37,10 @@ class MatchingPost {
     required this.isFavorite,
   });
 
-  factory MatchingPost.fromJson(Map<String, dynamic> json) {
+  factory MatchBoard.fromJson(Map<String, dynamic> json) {
     DateTime dateTime = DateTime.parse(json['createdAt']);
     String formattedDate = DateFormat('yyyy.MM.dd').format(dateTime);
-    return MatchingPost(
+    return MatchBoard(
       profileImg: json['profileImg'],
       nickname: json['nickname'],
       authority: json['authority'],
