@@ -1,21 +1,22 @@
-import 'package:app_front_talearnt/constants/global_value_constants.dart';
 import 'package:app_front_talearnt/data/model/respone/community_board.dart';
-import 'package:app_front_talearnt/data/model/respone/matching_post.dart';
+import 'package:app_front_talearnt/data/model/respone/match_board.dart';
 import 'package:flutter/material.dart';
 
 class HomeProvider extends ChangeNotifier {
   HomeProvider();
 
-  final List<MatchingPost> _newTalentExchangePosts = [];
+  final List<MatchBoard> _newTalentExchangePosts = [];
   final List<CommunityBoard> _bestCommunityPosts = [];
-  final List<MatchingPost> _userMatchingTalentExchangePosts = [];
+  final List<MatchBoard> _userMatchingTalentExchangePosts = [];
 
-  List<MatchingPost> get newTalentExchangePosts => _newTalentExchangePosts;
+  List<MatchBoard> get newTalentExchangePosts => _newTalentExchangePosts;
+
   List<CommunityBoard> get bestCommunityPosts => _bestCommunityPosts;
-  List<MatchingPost> get userMatchingTalentExchangePosts =>
+
+  List<MatchBoard> get userMatchingTalentExchangePosts =>
       _userMatchingTalentExchangePosts;
 
-  void setNewTalentExchangePosts(List<MatchingPost> addTalentExchangePosts) {
+  void setNewTalentExchangePosts(List<MatchBoard> addTalentExchangePosts) {
     _newTalentExchangePosts.clear();
     _newTalentExchangePosts.addAll(addTalentExchangePosts);
 
@@ -30,7 +31,7 @@ class HomeProvider extends ChangeNotifier {
   }
 
   void setUserMatchingTalentExchangePosts(
-      List<MatchingPost> addTalentExchangePosts) {
+      List<MatchBoard> addTalentExchangePosts) {
     _userMatchingTalentExchangePosts.clear();
     _userMatchingTalentExchangePosts.addAll(addTalentExchangePosts);
 

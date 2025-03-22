@@ -44,21 +44,23 @@ class BoardCustomAppBar extends StatelessWidget {
             children: [
               TextButton(
                 onPressed: () {
-                  viewModel.getTalentExchangePosts(
-                      matchBoardProvider.selectedGiveTalentKeywordCodes
-                          .map((e) => e.toString())
-                          .toList(),
-                      matchBoardProvider.selectedInterestTalentKeywordCodes
-                          .map((e) => e.toString())
-                          .toList(),
-                      matchBoardProvider.selectedOrderType,
-                      matchBoardProvider.selectedDurationType,
-                      matchBoardProvider.selectedOperationType,
-                      null,
-                      null,
-                      null,
-                      null,
-                      null);
+                  viewModel.getMatchBoardList(
+                    matchBoardProvider.selectedGiveTalentKeywordCodes
+                        .map((e) => e.toString())
+                        .toList(),
+                    matchBoardProvider.selectedInterestTalentKeywordCodes
+                        .map((e) => e.toString())
+                        .toList(),
+                    matchBoardProvider.selectedOrderType,
+                    matchBoardProvider.selectedDurationType,
+                    matchBoardProvider.selectedOperationType,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    "reset",
+                  );
                   commonBoardProvider.setBoardType("match");
                   commonBoardProvider.updateInitState(true);
                 },

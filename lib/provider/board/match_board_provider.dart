@@ -2,7 +2,7 @@ import 'package:app_front_talearnt/data/model/respone/pagination.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants/global_value_constants.dart';
-import '../../data/model/respone/matching_post.dart';
+import '../../data/model/respone/match_board.dart';
 import '../../view_model/board_view_model.dart';
 import '../common/custom_ticker_provider.dart';
 
@@ -28,7 +28,7 @@ class MatchBoardProvider extends ChangeNotifier {
   final List<int> _selectedGiveTalentKeywordCodes = []; //실제로 넘기는 값
   final List<int> _interestTalentKeywordCodes = [];
   final List<int> _selectedInterestTalentKeywordCodes = []; //실제로 넘기는 값
-  final List<MatchingPost> _talentExchangePosts = [];
+  final List<MatchBoard> _matchBoardList = [];
   Pagination _talentPage = Pagination.empty();
   final ScrollController _scrollController = ScrollController();
   late BoardViewModel _viewModel;
@@ -53,7 +53,7 @@ class MatchBoardProvider extends ChangeNotifier {
   List<int> get selectedInterestTalentKeywordCodes =>
       _selectedInterestTalentKeywordCodes;
 
-  List<MatchingPost> get talentExchangePosts => _talentExchangePosts;
+  List<MatchBoard> get matchBoardList => _matchBoardList;
 
   Pagination get talentPage => _talentPage;
 
@@ -134,14 +134,14 @@ class MatchBoardProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addTalentExchangePosts(List<MatchingPost> addTalentExchangePosts) {
-    _talentExchangePosts.addAll(addTalentExchangePosts);
+  void addTalentExchangePosts(List<MatchBoard> addTalentExchangePosts) {
+    _matchBoardList.addAll(addTalentExchangePosts);
     notifyListeners();
   }
 
-  void updateTalentExchangePosts(List<MatchingPost> addTalentExchangePosts) {
-    _talentExchangePosts.clear();
-    _talentExchangePosts.addAll(addTalentExchangePosts);
+  void updateTalentExchangePosts(List<MatchBoard> addTalentExchangePosts) {
+    _matchBoardList.clear();
+    _matchBoardList.addAll(addTalentExchangePosts);
     if (_scrollController.hasClients) {
       _scrollController.jumpTo(0);
     }
@@ -174,7 +174,7 @@ class MatchBoardProvider extends ChangeNotifier {
 
   Future<void> _fetchMoreData() async {
     _isFetching = true;
-    await _viewModel.addTalentExchangePosts(
+    await _viewModel.getMatchBoardList(
         selectedGiveTalentKeywordCodes.map((e) => e.toString()).toList(),
         selectedInterestTalentKeywordCodes.map((e) => e.toString()).toList(),
         selectedOrderType,
@@ -184,7 +184,8 @@ class MatchBoardProvider extends ChangeNotifier {
         null,
         null,
         null,
-        null);
+        _matchBoardList.last.exchangePostNo.toString(),
+        "add");
     _isFetching = false;
     notifyListeners();
   }

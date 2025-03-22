@@ -241,7 +241,7 @@ class MatchBoardListTabBar extends SliverPersistentHeaderDelegate {
       MatchBoardProvider matchBoardProvider) async {
     commonProvider.changeIsLoading(true);
     await boardViewModel
-        .getTalentExchangePosts(
+        .getMatchBoardList(
             matchBoardProvider.selectedGiveTalentKeywordCodes
                 .map((e) => e.toString())
                 .toList(),
@@ -255,7 +255,8 @@ class MatchBoardListTabBar extends SliverPersistentHeaderDelegate {
             null,
             null,
             null,
-            null)
+            null,
+            "reset")
         .whenComplete(() => commonProvider.changeIsLoading(false));
   }
 }

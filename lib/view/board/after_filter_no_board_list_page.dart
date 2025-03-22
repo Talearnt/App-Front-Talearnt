@@ -72,7 +72,7 @@ class AfterFilterNoBoardListPage extends StatelessWidget {
                   matchBoardProvider.resetFilter();
                   commonProvider.changeIsLoading(true);
                   await boardViewModel
-                      .getTalentExchangePosts(
+                      .getMatchBoardList(
                           matchBoardProvider.selectedGiveTalentKeywordCodes
                               .map((e) => e.toString())
                               .toList(),
@@ -86,7 +86,8 @@ class AfterFilterNoBoardListPage extends StatelessWidget {
                           null,
                           null,
                           null,
-                          null)
+                          null,
+                          "reset")
                       .whenComplete(
                           () => commonProvider.changeIsLoading(false));
                 } else {
