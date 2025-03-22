@@ -105,6 +105,14 @@ class BoardRepository {
         left, (result) => right(CommunityDetailBoard.fromJson(result["data"])));
   }
 
+  Future<Either<Failure, Success>> editCommunityBoard(
+      CommunityBoardParam body, int postNo) async {
+    final result = await dio.put(
+        ApiConstants.handleCommunityDetailBoard(postNo), body.toJson());
+
+    return result.fold(left, (response) => right(Success.fromJson(response)));
+  }
+
   Future<Either<Failure, Success>> deleteMatchBoard(int postNo) async {
     final response =
         await dio.delete(ApiConstants.handleMatchDetailBoard(postNo));

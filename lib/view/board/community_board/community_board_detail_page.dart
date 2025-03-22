@@ -29,7 +29,7 @@ class CommunityBoardDetailPage extends StatelessWidget {
     return Scaffold(
       appBar: TopAppBar(
         onPressed: () {
-          context.pop();
+          context.go('/board-list');
         },
         first: InkWell(
           onTap: () {
