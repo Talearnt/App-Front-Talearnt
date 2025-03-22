@@ -40,6 +40,7 @@ class BoardViewModel extends ChangeNotifier {
   final CommunityBoardDetailProvider communityBoardDetailProvider;
   final CommunityEditProvider communityEditProvider;
   final HomeProvider homeProvider;
+  final CommunityEditProvider communityEditProvider;
 
   BoardViewModel(
       this.commonNavigator,
@@ -54,6 +55,8 @@ class BoardViewModel extends ChangeNotifier {
       this.communityBoardDetailProvider,
       this.communityEditProvider,
       this.homeProvider);
+      this.communityBoardDetailProvider,
+      this.communityEditProvider);
 
   Future<void> getImageUploadUrl(
       List<Map<String, dynamic>> uploadImageInfos, String type) async {
@@ -570,6 +573,31 @@ class BoardViewModel extends ChangeNotifier {
       final pagination = result['pagination'];
       matchBoardProvider.updateTalentExchangePosts(posts);
       matchBoardProvider.updateTalentExchangePostsPage(pagination);
+    });
+  }
+
+  Future<void> editCommunityBoard(
+    String title,
+    String content,
+    String postType,
+    List<String>? imageUrls,
+    int postNo,
+  ) async {
+    final urlList = imageUrls ?? [];
+    CommunityBoardParam param = CommunityBoardParam(
+      title: title,
+      content: content,
+      postType: postType,
+      imageUrls: urlList,
+    );
+
+    final result = await boardRepository.editCommunityBoard(param, postNo);
+
+    result.fold(
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)),
+        (result) async {
+      await getCommunityDetailBoard(postNo);
     });
   }
 }

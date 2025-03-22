@@ -273,6 +273,24 @@ class Routes {
             },
           ),
           GoRoute(
+            path: '/community-edit1',
+            builder: (BuildContext context, GoRouterState state) {
+              return const CommunityEdit1Page();
+            },
+          ),
+          GoRoute(
+            path: '/community-edit2',
+            builder: (BuildContext context, GoRouterState state) {
+              return const CommunityEdit2Page();
+            },
+          ),
+          GoRoute(
+            path: '/community-edit-preview',
+            builder: (BuildContext context, GoRouterState state) {
+              return const CommunityEditPreviewPage();
+            },
+          ),
+          GoRoute(
             path: '/profile',
             builder: (BuildContext context, GoRouterState state) {
               return const ProfilePage();
