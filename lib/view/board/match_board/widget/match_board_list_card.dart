@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../../../common/theme.dart';
-import '../../../../data/model/respone/matching_post.dart';
+import '../../../../data/model/respone/match_board.dart';
 import 'match_board_list_card_bottom.dart';
 import 'match_board_selected_chip_list.dart';
 
 class MatchBoardListCard extends StatelessWidget {
-  final MatchingPost post;
+  final MatchBoard post;
   final int index;
 
   const MatchBoardListCard({
