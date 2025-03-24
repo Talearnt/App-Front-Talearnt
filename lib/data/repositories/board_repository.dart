@@ -62,8 +62,8 @@ class BoardRepository {
     final response =
         await dio.get(ApiConstants.getMatchBoardListUrl, null, body.toJson());
     return response.fold(left, (response) {
-      final posts = List<MatchBoard>.from(response['data']['results']
-          .map((data) => MatchBoard.fromJson(data)));
+      final posts = List<MatchBoard>.from(
+          response['data']['results'].map((data) => MatchBoard.fromJson(data)));
       final pagination = Pagination.fromJson(response['data']['pagination']);
       return right({'posts': posts, 'pagination': pagination});
     });
