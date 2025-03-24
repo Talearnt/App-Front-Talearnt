@@ -632,10 +632,8 @@ class MatchEditProvider extends ChangeNotifier with ClearText {
       if (op.value is Map<String, dynamic> && op.value.containsKey('image')) {
         final imagePath = op.value['image'];
 
-        if (imagePath.startsWith('http://') ||
-            imagePath.startsWith('https://')) {
-          _imageUploadedUrls.add(imagePath);
-        } else {
+        if (!imagePath.startsWith('http://') &&
+            !imagePath.startsWith('https://')) {
           final imageFile = File(imagePath);
           final int sizeInBytes = await imageFile.length();
           final mimeType =
@@ -666,13 +664,20 @@ class MatchEditProvider extends ChangeNotifier with ClearText {
         op.value['image'] = newImageUrl;
       }
     }
-
-    _imageUploadedUrls.add(newImageUrl);
   }
 
   void finishImageUpload() {
     _isS3Upload = false;
     _uploadImageInfos.clear();
+
+    final delta = contentController.document.toDelta();
+
+    for (var op in delta.toList()) {
+      if (op.value is Map<String, dynamic> && op.value.containsKey('image')) {
+        final imageUrl = op.value['image'] as String;
+        _imageUploadedUrls.add(imageUrl);
+      }
+    }
   }
 
   void clearInfos() {
