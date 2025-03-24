@@ -49,9 +49,8 @@ class HomePage extends StatelessWidget {
 
         if (homeProvider.userMatchingTalentExchangePosts.isEmpty &&
             loginProvider.isLoggedIn) {
-<<<<<<< HEAD
           await context.read<BoardViewModel>().getMatchBoardList(
-              homeProvider.userMatchingTalentExchangePosts
+              profileProvider.userProfile.giveTalents
                   .map((e) => e.toString())
                   .toList(),
               [],
@@ -64,23 +63,6 @@ class HomePage extends StatelessWidget {
               '10',
               '',
               "userMatch");
-=======
-          await context
-              .read<BoardViewModel>()
-              .getUserMatchingTalentExchangePosts(
-                  profileProvider.userProfile.giveTalents
-                      .map((e) => e.toString())
-                      .toList(),
-                  [],
-                  '',
-                  '',
-                  '',
-                  '',
-                  '',
-                  '',
-                  '10',
-                  '');
->>>>>>> ad3e1dc (fix : Update 테스트 오류 수정)
         }
         commonProvider.changeIsLoading(false);
       },
