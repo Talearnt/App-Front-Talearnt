@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:app_front_talearnt/common/widget/button.dart';
@@ -30,7 +31,36 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
     _giveTalentFocusNode.addListener(_onChanged);
     _interestTalentFocusNode.addListener(_onChanged);
     _contentController.addListener(_onChanged);
+
+    _subscription =
+        _contentController.document.changes.listen(_onDocumentChange);
   }
+
+  void _onDocumentChange(DocChange change) {
+    final ChangeSource source = change.source;
+    final Delta delDelta = change.change;
+    final delta = contentController.document.toDelta();
+
+    int imageCount = 0;
+
+    if (source == ChangeSource.local) {
+      for (var delOp in delDelta.toList()) {
+        if (delOp.isDelete) {
+          for (var op in delta.toList()) {
+            if (op.value is Map<String, dynamic> &&
+                op.value.containsKey('image')) {
+              imageCount++;
+            }
+          }
+          _totalImageCount = imageCount;
+        }
+      }
+    }
+
+    notifyListeners();
+  }
+
+  StreamSubscription? _subscription;
 
   final TextEditingController _titleController = TextEditingController();
   final FocusNode _titleFocusNode = FocusNode();
@@ -278,6 +308,9 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
   void clearProvider() {
     _titleController.clear();
     _contentController.clear();
+
+    _titleController.dispose();
+    _contentController.dispose();
 
     _titleFocusNode.unfocus();
     _contentFocusNode.unfocus();
