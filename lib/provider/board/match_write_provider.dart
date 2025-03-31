@@ -532,14 +532,14 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
   }
 
   void checkTitleAndBoard() {
-    if (_titleController.text.isEmpty) {
-      _boardToastMessage = "제목을 입력해 주세요";
+    if (_titleController.text.length < 2) {
+      _boardToastMessage = "제목을 2글자 이상 입력해 주세요";
       _isTitleAndBoardEmpty = false;
       return;
     }
 
-    if (_contentController.document.length - 1 == 0) {
-      _boardToastMessage = "내용을 입력해 주세요";
+    if (_contentController.document.length - 1 < 20) {
+      _boardToastMessage = "내용을 20자 이상 입력해 주세요";
       _isTitleAndBoardEmpty = false;
       return;
     }
