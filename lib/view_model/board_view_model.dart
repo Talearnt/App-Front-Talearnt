@@ -9,8 +9,8 @@ import 'package:flutter/material.dart';
 import '../common/common_navigator.dart';
 import '../data/model/param/community_board_list_search_param.dart';
 import '../data/model/param/community_board_param.dart';
+import '../data/model/param/match_board_list_search_param.dart';
 import '../data/model/param/s3_controller_param.dart';
-import '../data/model/param/talent_exchange_posts_filter_param.dart';
 import '../data/repositories/board_repository.dart';
 import '../provider/board/community_board_detail_provider.dart';
 import '../provider/board/community_board_provider.dart';
@@ -168,9 +168,9 @@ class BoardViewModel extends ChangeNotifier {
     });
   }
 
-  Future<void> getInitTalentExchangePosts() async {
-    TalentExchangePostsFilterParam param = TalentExchangePostsFilterParam();
-    final result = await boardRepository.getTalentExchangePosts(param);
+  Future<void> getInitMatchBoardList() async {
+    MatchBoardListSearchParam param = MatchBoardListSearchParam();
+    final result = await boardRepository.getMatchBoardList(param);
     result.fold(
         (failure) => commonNavigator.showSingleDialog(
             content: ErrorMessages.getMessage(failure.errorCode)), (result) {
@@ -182,7 +182,7 @@ class BoardViewModel extends ChangeNotifier {
     });
   }
 
-  Future<void> getTalentExchangePosts(
+  Future<void> getMatchBoardList(
       List<String>? giveTalents,
       List<String>? receiveTalents,
       String? order,
@@ -192,8 +192,11 @@ class BoardViewModel extends ChangeNotifier {
       String? status,
       String? page,
       String? size,
-      String? search) async {
-    TalentExchangePostsFilterParam param = TalentExchangePostsFilterParam(
+      String? lastNo,
+      String
+          searchType) // searchType : reset(새로고침), add(스크롤), new(홈화면), userMatch(유저한테 맞는거 추천)
+  async {
+    MatchBoardListSearchParam param = MatchBoardListSearchParam(
         giveTalents: giveTalents,
         receiveTalents: receiveTalents,
         order: order,
@@ -203,48 +206,25 @@ class BoardViewModel extends ChangeNotifier {
         status: status,
         page: page,
         size: size,
-        search: search);
-    final result = await boardRepository.getTalentExchangePosts(param);
+        lastNo: lastNo,
+        path: "mobile");
+    final result = await boardRepository.getMatchBoardList(param);
     result.fold(
         (failure) => commonNavigator.showSingleDialog(
             content: ErrorMessages.getMessage(failure.errorCode)), (result) {
       final posts = result['posts'];
       final pagination = result['pagination'];
-      talentBoardProvider.updateTalentExchangePosts(posts);
-      talentBoardProvider.updateTalentExchangePostsPage(pagination);
-    });
-  }
-
-  Future<void> addTalentExchangePosts(
-      List<String>? giveTalents,
-      List<String>? receiveTalents,
-      String? order,
-      String? duration,
-      String? type,
-      String? badge,
-      String? status,
-      String? page,
-      String? size,
-      String? search) async {
-    TalentExchangePostsFilterParam param = TalentExchangePostsFilterParam(
-        giveTalents: giveTalents,
-        receiveTalents: receiveTalents,
-        order: order,
-        duration: duration,
-        type: type,
-        badge: badge,
-        status: status,
-        page: page,
-        size: size,
-        search: search);
-    final result = await boardRepository.getTalentExchangePosts(param);
-    result.fold(
-        (failure) => commonNavigator.showSingleDialog(
-            content: ErrorMessages.getMessage(failure.errorCode)), (result) {
-      final posts = result['posts'];
-      final pagination = result['pagination'];
-      talentBoardProvider.addTalentExchangePosts(posts);
-      talentBoardProvider.updateTalentExchangePostsPage(pagination);
+      if (searchType == "reset") {
+        talentBoardProvider.updateTalentExchangePosts(posts);
+        talentBoardProvider.updateTalentExchangePostsPage(pagination);
+      } else if (searchType == "add") {
+        talentBoardProvider.addTalentExchangePosts(posts);
+        talentBoardProvider.updateTalentExchangePostsPage(pagination);
+      } else if (searchType == "new") {
+        homeProvider.setNewTalentExchangePosts(posts);
+      } else {
+        homeProvider.setUserMatchingTalentExchangePosts(posts);
+      }
     });
   }
 
@@ -325,38 +305,6 @@ class BoardViewModel extends ChangeNotifier {
     });
   }
 
-  Future<void> getNewTalentExchangePosts(
-    List<String>? giveTalents,
-    List<String>? receiveTalents,
-    String? order,
-    String? duration,
-    String? type,
-    String? badge,
-    String? status,
-    String? page,
-    String? size,
-    String? search,
-  ) async {
-    TalentExchangePostsFilterParam param = TalentExchangePostsFilterParam(
-        giveTalents: giveTalents,
-        receiveTalents: receiveTalents,
-        order: order,
-        duration: duration,
-        type: type,
-        badge: badge,
-        status: status,
-        page: page,
-        size: size,
-        search: search);
-    final result = await boardRepository.getTalentExchangePosts(param);
-    result.fold(
-        (failure) => commonNavigator.showSingleDialog(
-            content: ErrorMessages.getMessage(failure.errorCode)), (result) {
-      final posts = result['posts'];
-      homeProvider.setNewTalentExchangePosts(posts);
-    });
-  }
-
   Future<void> getBestCommunityBoardList(String? postType, String? order,
       String? path, String? page, String? size, String? lastNo) async {
     CommunityBoardListSearchParam param = CommunityBoardListSearchParam(
@@ -372,38 +320,6 @@ class BoardViewModel extends ChangeNotifier {
             content: ErrorMessages.getMessage(failure.errorCode)), (result) {
       final posts = result['posts'];
       homeProvider.setBestCommunityBoardList(posts);
-    });
-  }
-
-  Future<void> getUserMatchingTalentExchangePosts(
-    List<String>? giveTalents,
-    List<String>? receiveTalents,
-    String? order,
-    String? duration,
-    String? type,
-    String? badge,
-    String? status,
-    String? page,
-    String? size,
-    String? search,
-  ) async {
-    TalentExchangePostsFilterParam param = TalentExchangePostsFilterParam(
-        giveTalents: giveTalents,
-        receiveTalents: receiveTalents,
-        order: order,
-        duration: duration,
-        type: type,
-        badge: badge,
-        status: status,
-        page: page,
-        size: size,
-        search: search);
-    final result = await boardRepository.getTalentExchangePosts(param);
-    result.fold(
-        (failure) => commonNavigator.showSingleDialog(
-            content: ErrorMessages.getMessage(failure.errorCode)), (result) {
-      final posts = result['posts'];
-      homeProvider.setUserMatchingTalentExchangePosts(posts);
     });
   }
 
@@ -423,7 +339,7 @@ class BoardViewModel extends ChangeNotifier {
         (failure) => commonNavigator.showSingleDialog(
             content: ErrorMessages.getMessage(failure.errorCode)),
         (success) async {
-      await getTalentExchangePosts(
+      await getMatchBoardList(
           talentBoardProvider.selectedGiveTalentKeywordCodes
               .map((e) => e.toString())
               .toList(),
@@ -437,7 +353,8 @@ class BoardViewModel extends ChangeNotifier {
           null,
           null,
           null,
-          null);
+          null,
+          "mobile");
       commonNavigator.goBack();
       commonNavigator.goBack();
     });

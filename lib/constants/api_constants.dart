@@ -20,7 +20,7 @@ abstract class ApiConstants {
 
   static const String getTalentCategories = "$baseUrl/v1/keywords";
   static const String setMyTalentKeywordsUrl = "$baseUrl/v1/users/my-talents";
-  static const String getTalentBoardListUrl = "$baseUrl/v1/posts/exchanges";
+  static const String getMatchBoardListUrl = "$baseUrl/v1/posts/exchanges";
 
   static const String getOfferedKeywords =
       "$baseUrl/v1/posts/exchange/talents/offered";
