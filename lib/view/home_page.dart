@@ -2,6 +2,8 @@ import 'package:app_front_talearnt/common/theme.dart';
 import 'package:app_front_talearnt/common/widget/button.dart';
 import 'package:app_front_talearnt/common/widget/loading.dart';
 import 'package:app_front_talearnt/provider/auth/login_provider.dart';
+import 'package:app_front_talearnt/provider/board/community_board_provider.dart';
+import 'package:app_front_talearnt/provider/board/match_board_provider.dart';
 import 'package:app_front_talearnt/provider/board/match_write_provider.dart';
 import 'package:app_front_talearnt/provider/common/common_provider.dart';
 import 'package:app_front_talearnt/provider/home/home_provider.dart';
@@ -27,6 +29,10 @@ class HomePage extends StatelessWidget {
     final viewModel = Provider.of<BoardViewModel>(context);
     final commonProvider = Provider.of<CommonProvider>(context);
     final matchWriteProvider = Provider.of<MatchWriteProvider>(context);
+    final MatchBoardProvider matchBoardProvider =
+        Provider.of<MatchBoardProvider>(context);
+    final CommunityBoardProvider communityBoardProvider =
+        Provider.of<CommunityBoardProvider>(context);
 
     WidgetsBinding.instance.addPostFrameCallback(
       (_) async {
@@ -203,7 +209,23 @@ class HomePage extends StatelessWidget {
                                         return Padding(
                                           padding:
                                               const EdgeInsets.only(right: 14),
-                                          child: HomeMatchBoardCard(post: post),
+                                          child: GestureDetector(
+                                              onTap: () async {
+                                                commonProvider
+                                                    .changeIsLoading(true);
+                                                await viewModel
+                                                    .getMatchDetailBoard(
+                                                  post.exchangePostNo,
+                                                )
+                                                    .then(
+                                                  (value) {
+                                                    commonProvider
+                                                        .changeIsLoading(false);
+                                                  },
+                                                );
+                                              },
+                                              child: HomeMatchBoardCard(
+                                                  post: post)),
                                         );
                                       }).toList(),
                                     ],
@@ -293,8 +315,15 @@ class HomePage extends StatelessWidget {
                                       ),
                                       GestureDetector(
                                         onTap: () async {
+                                          commonProvider.changeIsLoading(true);
                                           await viewModel
-                                              .getInitMatchBoardList();
+                                              .getInitMatchBoardList()
+                                              .then(
+                                            (value) {
+                                              commonProvider
+                                                  .changeIsLoading(false);
+                                            },
+                                          );
                                         },
                                         child: Row(
                                           mainAxisSize: MainAxisSize.min,
@@ -330,7 +359,24 @@ class HomePage extends StatelessWidget {
                                         return Padding(
                                           padding:
                                               const EdgeInsets.only(right: 14),
-                                          child: HomeMatchBoardCard(post: post),
+                                          child: GestureDetector(
+                                            onTap: () async {
+                                              commonProvider
+                                                  .changeIsLoading(true);
+                                              await viewModel
+                                                  .getMatchDetailBoard(
+                                                post.exchangePostNo,
+                                              )
+                                                  .then(
+                                                (value) {
+                                                  commonProvider
+                                                      .changeIsLoading(false);
+                                                },
+                                              );
+                                            },
+                                            child:
+                                                HomeMatchBoardCard(post: post),
+                                          ),
                                         );
                                       }).toList(),
                                     ],
@@ -358,7 +404,7 @@ class HomePage extends StatelessWidget {
                                   ),
                                 ),
                                 GestureDetector(
-                                  onTap: () {},
+                                  onTap: () async {},
                                   child: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
@@ -406,9 +452,25 @@ class HomePage extends StatelessWidget {
                                         return Padding(
                                           padding:
                                               const EdgeInsets.only(right: 14),
-                                          child: HomeCommunityCard(
-                                            post: post,
-                                            ranking: ranking,
+                                          child: GestureDetector(
+                                            onTap: () async {
+                                              commonProvider
+                                                  .changeIsLoading(true);
+                                              await viewModel
+                                                  .getCommunityDetailBoard(
+                                                post.communityPostNo,
+                                              )
+                                                  .then(
+                                                (value) {
+                                                  commonProvider
+                                                      .changeIsLoading(false);
+                                                },
+                                              );
+                                            },
+                                            child: HomeCommunityCard(
+                                              post: post,
+                                              ranking: ranking,
+                                            ),
                                           ),
                                         );
                                       }).toList(),
@@ -418,7 +480,7 @@ class HomePage extends StatelessWidget {
                         ],
                       ),
                       const SizedBox(
-                        height: 16,
+                        height: 108,
                       ),
                     ],
                   ),
