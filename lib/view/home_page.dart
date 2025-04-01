@@ -2,8 +2,6 @@ import 'package:app_front_talearnt/common/theme.dart';
 import 'package:app_front_talearnt/common/widget/button.dart';
 import 'package:app_front_talearnt/common/widget/loading.dart';
 import 'package:app_front_talearnt/provider/auth/login_provider.dart';
-import 'package:app_front_talearnt/provider/board/community_board_provider.dart';
-import 'package:app_front_talearnt/provider/board/match_board_provider.dart';
 import 'package:app_front_talearnt/provider/board/match_write_provider.dart';
 import 'package:app_front_talearnt/provider/common/common_provider.dart';
 import 'package:app_front_talearnt/provider/home/home_provider.dart';
@@ -14,8 +12,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import '../provider/board/common_board_provider.dart';
 import '../view_model/board_view_model.dart';
-import '../view_model/keyword_view_model.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -23,16 +21,13 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final homeProvider = Provider.of<HomeProvider>(context);
-    final keywordViewModel = Provider.of<KeywordViewModel>(context);
     final loginProvider = Provider.of<LoginProvider>(context);
     final profileProvider = Provider.of<ProfileProvider>(context);
     final viewModel = Provider.of<BoardViewModel>(context);
     final commonProvider = Provider.of<CommonProvider>(context);
     final matchWriteProvider = Provider.of<MatchWriteProvider>(context);
-    final MatchBoardProvider matchBoardProvider =
-        Provider.of<MatchBoardProvider>(context);
-    final CommunityBoardProvider communityBoardProvider =
-        Provider.of<CommunityBoardProvider>(context);
+    final CommonBoardProvider commonBoardProvider =
+        Provider.of<CommonBoardProvider>(context);
 
     WidgetsBinding.instance.addPostFrameCallback(
       (_) async {
@@ -43,14 +38,9 @@ class HomePage extends StatelessWidget {
         }
 
         if (homeProvider.bestCommunityPosts.isEmpty) {
-          await context.read<BoardViewModel>().getBestCommunityBoardList(
-                "",
-                "hot",
-                "",
-                "",
-                "10",
-                "",
-              );
+          await context
+              .read<BoardViewModel>()
+              .getBestCommunityBoardList("", "hot", "", "", "10", "");
         }
 
         if (homeProvider.userMatchingTalentExchangePosts.isEmpty &&
@@ -404,7 +394,12 @@ class HomePage extends StatelessWidget {
                                   ),
                                 ),
                                 GestureDetector(
-                                  onTap: () async {},
+                                  onTap: () async {
+                                    viewModel.getInitCommunityBoardList();
+                                    commonBoardProvider
+                                        .setBoardType("community");
+                                    commonBoardProvider.updateInitState(true);
+                                  },
                                   child: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
