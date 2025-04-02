@@ -2,6 +2,7 @@ import 'package:app_front_talearnt/common/theme.dart';
 import 'package:app_front_talearnt/common/widget/button.dart';
 import 'package:app_front_talearnt/common/widget/loading.dart';
 import 'package:app_front_talearnt/provider/auth/login_provider.dart';
+import 'package:app_front_talearnt/provider/board/match_board_provider.dart';
 import 'package:app_front_talearnt/provider/board/match_write_provider.dart';
 import 'package:app_front_talearnt/provider/common/common_provider.dart';
 import 'package:app_front_talearnt/provider/home/home_provider.dart';
@@ -28,6 +29,8 @@ class HomePage extends StatelessWidget {
     final matchWriteProvider = Provider.of<MatchWriteProvider>(context);
     final CommonBoardProvider commonBoardProvider =
         Provider.of<CommonBoardProvider>(context);
+    final MatchBoardProvider matchBoardProvider =
+        Provider.of<MatchBoardProvider>(context);
 
     WidgetsBinding.instance.addPostFrameCallback(
       (_) async {
@@ -63,6 +66,31 @@ class HomePage extends StatelessWidget {
         commonProvider.changeIsLoading(false);
       },
     );
+
+    Future<void> getList(
+        CommonProvider commonProvider,
+        BoardViewModel boardViewModel,
+        MatchBoardProvider matchBoardProvider) async {
+      commonProvider.changeIsLoading(true);
+      await boardViewModel
+          .getMatchBoardList(
+              matchBoardProvider.selectedGiveTalentKeywordCodes
+                  .map((e) => e.toString())
+                  .toList(),
+              matchBoardProvider.selectedInterestTalentKeywordCodes
+                  .map((e) => e.toString())
+                  .toList(),
+              matchBoardProvider.selectedOrderType,
+              matchBoardProvider.selectedDurationType,
+              matchBoardProvider.selectedOperationType,
+              null,
+              null,
+              null,
+              null,
+              null,
+              "reset")
+          .whenComplete(() => commonProvider.changeIsLoading(false));
+    }
 
     return Scaffold(
       body: SafeArea(
@@ -162,7 +190,17 @@ class HomePage extends StatelessWidget {
                                         ),
                                       ),
                                       GestureDetector(
-                                        onTap: () {},
+                                        onTap: () {
+                                          matchBoardProvider
+                                              .setSelectedInterestTalentKeyword(
+                                                  profileProvider.userProfile
+                                                      .receiveTalents);
+                                          commonBoardProvider
+                                              .updateInitState(false);
+                                          getList(commonProvider, viewModel,
+                                              matchBoardProvider);
+                                          context.push('/board-list');
+                                        },
                                         child: Row(
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
@@ -395,10 +433,12 @@ class HomePage extends StatelessWidget {
                                 ),
                                 GestureDetector(
                                   onTap: () async {
-                                    viewModel.getInitCommunityBoardList();
+                                    commonProvider.changeIsLoading(true);
+                                    await viewModel.getInitCommunityBoardList();
                                     commonBoardProvider
                                         .setBoardType("community");
                                     commonBoardProvider.updateInitState(true);
+                                    commonProvider.changeIsLoading(false);
                                   },
                                   child: Row(
                                     mainAxisSize: MainAxisSize.min,
