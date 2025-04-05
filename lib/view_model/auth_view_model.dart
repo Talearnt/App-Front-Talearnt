@@ -256,7 +256,7 @@ class AuthViewModel extends ChangeNotifier {
       },
       (userIdInfo) {
         findIdProvider.setFindedUserIdInfo(
-            userIdInfo.userId, userIdInfo.createdAt);
+            userIdInfo.userId, userIdInfo.sentDate);
       },
     );
   }

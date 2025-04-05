@@ -2,6 +2,8 @@ import 'package:app_front_talearnt/common/theme.dart';
 import 'package:app_front_talearnt/common/widget/button.dart';
 import 'package:app_front_talearnt/common/widget/loading.dart';
 import 'package:app_front_talearnt/provider/auth/login_provider.dart';
+import 'package:app_front_talearnt/provider/board/match_board_provider.dart';
+import 'package:app_front_talearnt/provider/board/match_write_provider.dart';
 import 'package:app_front_talearnt/provider/common/common_provider.dart';
 import 'package:app_front_talearnt/provider/home/home_provider.dart';
 import 'package:app_front_talearnt/provider/profile/profile_provider.dart';
@@ -11,8 +13,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import '../provider/board/common_board_provider.dart';
 import '../view_model/board_view_model.dart';
-import '../view_model/keyword_view_model.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -20,11 +22,15 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final homeProvider = Provider.of<HomeProvider>(context);
-    final keywordViewModel = Provider.of<KeywordViewModel>(context);
     final loginProvider = Provider.of<LoginProvider>(context);
     final profileProvider = Provider.of<ProfileProvider>(context);
     final viewModel = Provider.of<BoardViewModel>(context);
     final commonProvider = Provider.of<CommonProvider>(context);
+    final matchWriteProvider = Provider.of<MatchWriteProvider>(context);
+    final CommonBoardProvider commonBoardProvider =
+        Provider.of<CommonBoardProvider>(context);
+    final MatchBoardProvider matchBoardProvider =
+        Provider.of<MatchBoardProvider>(context);
 
     WidgetsBinding.instance.addPostFrameCallback(
       (_) async {
@@ -35,20 +41,15 @@ class HomePage extends StatelessWidget {
         }
 
         if (homeProvider.bestCommunityPosts.isEmpty) {
-          await context.read<BoardViewModel>().getBestCommunityBoardList(
-                "",
-                "hot",
-                "",
-                "",
-                "10",
-                "",
-              );
+          await context
+              .read<BoardViewModel>()
+              .getBestCommunityBoardList("", "hot", "", "", "10", "");
         }
 
         if (homeProvider.userMatchingTalentExchangePosts.isEmpty &&
             loginProvider.isLoggedIn) {
           await context.read<BoardViewModel>().getMatchBoardList(
-              homeProvider.userMatchingTalentExchangePosts
+              profileProvider.userProfile.giveTalents
                   .map((e) => e.toString())
                   .toList(),
               [],
@@ -65,6 +66,31 @@ class HomePage extends StatelessWidget {
         commonProvider.changeIsLoading(false);
       },
     );
+
+    Future<void> getList(
+        CommonProvider commonProvider,
+        BoardViewModel boardViewModel,
+        MatchBoardProvider matchBoardProvider) async {
+      commonProvider.changeIsLoading(true);
+      await boardViewModel
+          .getMatchBoardList(
+              matchBoardProvider.selectedGiveTalentKeywordCodes
+                  .map((e) => e.toString())
+                  .toList(),
+              matchBoardProvider.selectedInterestTalentKeywordCodes
+                  .map((e) => e.toString())
+                  .toList(),
+              matchBoardProvider.selectedOrderType,
+              matchBoardProvider.selectedDurationType,
+              matchBoardProvider.selectedOperationType,
+              null,
+              null,
+              null,
+              null,
+              null,
+              "reset")
+          .whenComplete(() => commonProvider.changeIsLoading(false));
+    }
 
     return Scaffold(
       body: SafeArea(
@@ -164,7 +190,17 @@ class HomePage extends StatelessWidget {
                                         ),
                                       ),
                                       GestureDetector(
-                                        onTap: () {},
+                                        onTap: () {
+                                          matchBoardProvider
+                                              .setSelectedInterestTalentKeyword(
+                                                  profileProvider.userProfile
+                                                      .receiveTalents);
+                                          commonBoardProvider
+                                              .updateInitState(false);
+                                          getList(commonProvider, viewModel,
+                                              matchBoardProvider);
+                                          context.push('/board-list');
+                                        },
                                         child: Row(
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
@@ -201,7 +237,23 @@ class HomePage extends StatelessWidget {
                                         return Padding(
                                           padding:
                                               const EdgeInsets.only(right: 14),
-                                          child: HomeMatchBoardCard(post: post),
+                                          child: GestureDetector(
+                                              onTap: () async {
+                                                commonProvider
+                                                    .changeIsLoading(true);
+                                                await viewModel
+                                                    .getMatchDetailBoard(
+                                                  post.exchangePostNo,
+                                                )
+                                                    .then(
+                                                  (value) {
+                                                    commonProvider
+                                                        .changeIsLoading(false);
+                                                  },
+                                                );
+                                              },
+                                              child: HomeMatchBoardCard(
+                                                  post: post)),
                                         );
                                       }).toList(),
                                     ],
@@ -291,8 +343,15 @@ class HomePage extends StatelessWidget {
                                       ),
                                       GestureDetector(
                                         onTap: () async {
+                                          commonProvider.changeIsLoading(true);
                                           await viewModel
-                                              .getInitMatchBoardList();
+                                              .getInitMatchBoardList()
+                                              .then(
+                                            (value) {
+                                              commonProvider
+                                                  .changeIsLoading(false);
+                                            },
+                                          );
                                         },
                                         child: Row(
                                           mainAxisSize: MainAxisSize.min,
@@ -328,7 +387,24 @@ class HomePage extends StatelessWidget {
                                         return Padding(
                                           padding:
                                               const EdgeInsets.only(right: 14),
-                                          child: HomeMatchBoardCard(post: post),
+                                          child: GestureDetector(
+                                            onTap: () async {
+                                              commonProvider
+                                                  .changeIsLoading(true);
+                                              await viewModel
+                                                  .getMatchDetailBoard(
+                                                post.exchangePostNo,
+                                              )
+                                                  .then(
+                                                (value) {
+                                                  commonProvider
+                                                      .changeIsLoading(false);
+                                                },
+                                              );
+                                            },
+                                            child:
+                                                HomeMatchBoardCard(post: post),
+                                          ),
                                         );
                                       }).toList(),
                                     ],
@@ -356,7 +432,14 @@ class HomePage extends StatelessWidget {
                                   ),
                                 ),
                                 GestureDetector(
-                                  onTap: () {},
+                                  onTap: () async {
+                                    commonProvider.changeIsLoading(true);
+                                    await viewModel.getInitCommunityBoardList();
+                                    commonBoardProvider
+                                        .setBoardType("community");
+                                    commonBoardProvider.updateInitState(true);
+                                    commonProvider.changeIsLoading(false);
+                                  },
                                   child: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
@@ -404,9 +487,25 @@ class HomePage extends StatelessWidget {
                                         return Padding(
                                           padding:
                                               const EdgeInsets.only(right: 14),
-                                          child: HomeCommunityCard(
-                                            post: post,
-                                            ranking: ranking,
+                                          child: GestureDetector(
+                                            onTap: () async {
+                                              commonProvider
+                                                  .changeIsLoading(true);
+                                              await viewModel
+                                                  .getCommunityDetailBoard(
+                                                post.communityPostNo,
+                                              )
+                                                  .then(
+                                                (value) {
+                                                  commonProvider
+                                                      .changeIsLoading(false);
+                                                },
+                                              );
+                                            },
+                                            child: HomeCommunityCard(
+                                              post: post,
+                                              ranking: ranking,
+                                            ),
                                           ),
                                         );
                                       }).toList(),
@@ -416,7 +515,7 @@ class HomePage extends StatelessWidget {
                         ],
                       ),
                       const SizedBox(
-                        height: 16,
+                        height: 108,
                       ),
                     ],
                   ),
@@ -474,7 +573,8 @@ class HomePage extends StatelessWidget {
                         GestureDetector(
                           onTap: () async {
                             if (loginProvider.isLoggedIn) {
-                              await keywordViewModel.getOfferedKeywords();
+                              matchWriteProvider.setGiveTalentKeyword(
+                                  profileProvider.userProfile.giveTalents);
                               context.push('/match-write1');
                             } else {
                               context.go("/login");

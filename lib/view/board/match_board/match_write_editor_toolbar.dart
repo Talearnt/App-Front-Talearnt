@@ -1,4 +1,5 @@
 import 'package:app_front_talearnt/common/theme.dart';
+import 'package:app_front_talearnt/provider/common/common_provider.dart';
 import 'package:app_front_talearnt/view/board/match_board/match_write_link_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
@@ -13,15 +14,17 @@ class MatchWriteEditorToolbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final matchWriteProvider = Provider.of<MatchWriteProvider>(context);
+    final commonProvider = Provider.of<CommonProvider>(context);
 
     return BottomAppBar(
       color: Palette.bgBackGround,
-      child: getToolbar(context, matchWriteProvider),
+      child: getToolbar(context, matchWriteProvider, commonProvider),
     );
   }
 }
 
-Widget getToolbar(BuildContext context, MatchWriteProvider matchWriteProvider) {
+Widget getToolbar(BuildContext context, MatchWriteProvider matchWriteProvider,
+    CommonProvider commonProvider) {
   if (matchWriteProvider.onToolBar == "default") {
     return Row(
       children: [
@@ -46,7 +49,8 @@ Widget getToolbar(BuildContext context, MatchWriteProvider matchWriteProvider) {
         ),
         IconButton(
           onPressed: () async {
-            await matchWriteProvider.pickImagesAndInsert(context);
+            await matchWriteProvider.pickImagesAndInsert(
+                context, commonProvider);
           },
           icon: SvgPicture.asset('assets/icons/image_before.svg'),
         ),

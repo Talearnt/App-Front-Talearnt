@@ -1,22 +1,54 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:app_front_talearnt/common/widget/button.dart';
 import 'package:app_front_talearnt/common/widget/dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
+import 'package:flutter_quill/quill_delta.dart';
 import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
 import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
 import 'package:mime/mime.dart';
 import 'package:path/path.dart' as path;
 import 'package:vsc_quill_delta_to_html/vsc_quill_delta_to_html.dart';
+import 'package:go_router/go_router.dart';
 
 import '../clear_text.dart';
 
 class CommunityWriteProvider extends ChangeNotifier with ClearText {
   CommunityWriteProvider() {
     _contentController.addListener(_onChanged);
+
+    _subscription =
+        _contentController.document.changes.listen(_onDocumentChange);
   }
+
+  void _onDocumentChange(DocChange change) {
+    final ChangeSource source = change.source;
+    final Delta delDelta = change.change;
+    final delta = contentController.document.toDelta();
+
+    int imageCount = 0;
+
+    if (source == ChangeSource.local) {
+      for (var delOp in delDelta.toList()) {
+        if (delOp.isDelete) {
+          for (var op in delta.toList()) {
+            if (op.value is Map<String, dynamic> &&
+                op.value.containsKey('image')) {
+              imageCount++;
+            }
+          }
+          _totalImageCount = imageCount;
+        }
+      }
+    }
+
+    notifyListeners();
+  }
+
+  StreamSubscription? _subscription;
 
   final TextEditingController _titleController = TextEditingController();
   final FocusNode _titleFocusNode = FocusNode();
@@ -103,6 +135,8 @@ class CommunityWriteProvider extends ChangeNotifier with ClearText {
 
   String _boardToastMessage = "";
 
+  int _totalImageCount = 0;
+
   final List<Map<String, dynamic>> _uploadImageInfo = [];
 
   List<String> _imageUploadUrls = [];
@@ -187,6 +221,8 @@ class CommunityWriteProvider extends ChangeNotifier with ClearText {
 
   bool get isLinkTextNotEmpty => _isLinkTextNotEmpty;
 
+  int get totalImageCount => _totalImageCount;
+
   void clearProvider() {
     _titleController.clear();
     _contentController.clear();
@@ -210,6 +246,7 @@ class CommunityWriteProvider extends ChangeNotifier with ClearText {
 
     _htmlContent = "";
     _totalImageSize = 0;
+    _totalImageCount = 0;
 
     _isS3Upload = false;
     _previewImageList.clear();
@@ -313,14 +350,14 @@ class CommunityWriteProvider extends ChangeNotifier with ClearText {
   }
 
   void checkTitleAndBoard() {
-    if (_titleController.text.isEmpty) {
-      _boardToastMessage = "제목을 입력해 주세요";
+    if (_titleController.text.length < 2) {
+      _boardToastMessage = "제목을 2글자 이상 입력해 주세요";
       _isTitleAndBoardEmpty = false;
       return;
     }
 
-    if (_contentController.document.length - 1 == 0) {
-      _boardToastMessage = "내용을 입력해 주세요";
+    if (_contentController.document.length - 1 < 20) {
+      _boardToastMessage = "내용을 20자 이상 입력해 주세요";
       _isTitleAndBoardEmpty = false;
       return;
     }
@@ -341,18 +378,31 @@ class CommunityWriteProvider extends ChangeNotifier with ClearText {
         final int finalSizeInBytes = await processedImage.length();
         final double finalSizeInMB = finalSizeInBytes / (1024 * 1024);
 
-        // 총 용량 초과 체크
-        if (_totalImageSize + finalSizeInMB > 5) {
+        if (finalSizeInMB > 3.0) {
           SingleBtnDialog.show(context,
-              content: '이미지는 최대 5MB까지 업로드 가능합니다.',
-              button: const PrimaryM(
+              content: '각 이미지 용량은 3MB 이하만 업로드 가능합니다.',
+              button: PrimaryM(
                 content: '확인',
+                onPressed: () {
+                  context.pop();
+                },
               ));
           break;
         }
 
-        // 압축 후 이미지 크기 추가
-        _totalImageSize += finalSizeInMB;
+        if (_totalImageCount == 5) {
+          SingleBtnDialog.show(context,
+              content: '이미지는 최대 5장까지 업로드 가능합니다.',
+              button: PrimaryM(
+                content: '확인',
+                onPressed: () {
+                  context.pop();
+                },
+              ));
+          break;
+        }
+
+        _totalImageCount++;
 
         contentController.insertImageBlock(imageSource: processedImage.path);
       }
@@ -363,20 +413,19 @@ class CommunityWriteProvider extends ChangeNotifier with ClearText {
 
   Future<File> _processImage(File imageFile) async {
     final originalImage = img.decodeImage(await imageFile.readAsBytes());
-
     if (originalImage == null) {
       throw Exception('이미지를 디코딩할 수 없습니다.');
     }
 
-    const maxHeight = 1024;
-    const maxFileSizeInMB = 3;
-    const quality = 75;
+    const int maxHeight = 1024;
+    const int maxFileSizeInMB = 3;
+    int quality = 90; // 초기 품질 설정
 
     img.Image processedImage = originalImage;
 
     if (originalImage.height > maxHeight) {
-      final scaleFactor = maxHeight / originalImage.height;
-      final newWidth = (originalImage.width * scaleFactor).toInt();
+      final double scaleFactor = maxHeight / originalImage.height;
+      final int newWidth = (originalImage.width * scaleFactor).toInt();
       processedImage =
           img.copyResize(originalImage, width: newWidth, height: maxHeight);
     }
@@ -385,18 +434,24 @@ class CommunityWriteProvider extends ChangeNotifier with ClearText {
       imageFile.parent.path,
       'processed_${imageFile.uri.pathSegments.last}',
     );
-    final processedFile = File(newPath);
+    File processedFile = File(newPath);
 
-    await processedFile
-        .writeAsBytes(img.encodeJpg(processedImage, quality: quality));
-
-    final int finalSizeInBytes = await processedFile.length();
-    final double finalSizeInMB = finalSizeInBytes / (1024 * 1024);
-
-    if (finalSizeInMB > maxFileSizeInMB) {
-      const lowerQuality = 75;
+    while (true) {
       await processedFile
-          .writeAsBytes(img.encodeJpg(processedImage, quality: lowerQuality));
+          .writeAsBytes(img.encodeJpg(processedImage, quality: quality));
+
+      final int finalSizeInBytes = await processedFile.length();
+      final double finalSizeInMB = finalSizeInBytes / (1024 * 1024);
+
+      if (finalSizeInMB <= maxFileSizeInMB) {
+        break;
+      }
+
+      if (quality > 10) {
+        quality -= 10;
+      } else {
+        break;
+      }
     }
 
     return processedFile;

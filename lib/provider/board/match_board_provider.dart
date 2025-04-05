@@ -189,4 +189,11 @@ class MatchBoardProvider extends ChangeNotifier {
     _isFetching = false;
     notifyListeners();
   }
+
+  void setSelectedInterestTalentKeyword(list) {
+    selectedInterestTalentKeywordCodes.clear();
+    selectedInterestTalentKeywordCodes.addAll(list);
+
+    notifyListeners();
+  }
 }

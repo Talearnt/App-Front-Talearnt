@@ -66,7 +66,7 @@ class MatchEdit2Page extends StatelessWidget {
                     matchEditProvider.uploadImageInfos[idx]["file"],
                     matchEditProvider.uploadImageInfos[idx]["fileSize"],
                     matchEditProvider.uploadImageInfos[idx]["fileType"],
-                    "E");
+                    "ME");
               }
 
               matchEditProvider.finishImageUpload();

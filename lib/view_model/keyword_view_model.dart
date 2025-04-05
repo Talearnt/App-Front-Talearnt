@@ -55,9 +55,7 @@ class KeywordViewModel extends ChangeNotifier {
     result.fold(
         (failure) => commonNavigator.showSingleDialog(
             content: ErrorMessages.getMessage(failure.errorCode)), (response) {
-      matchWriteProvider.setGiveTalentKeyword(response);
       matchEditProvider.setGiveTalentKeyword(response);
-      //commonNavigator.goRoute('/match_write1');
     });
   }
 }

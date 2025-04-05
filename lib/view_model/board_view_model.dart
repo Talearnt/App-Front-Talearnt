@@ -257,6 +257,20 @@ class BoardViewModel extends ChangeNotifier {
     });
   }
 
+  Future<void> getInitCommunityBoardList() async {
+    CommunityBoardListSearchParam param = CommunityBoardListSearchParam();
+    final result = await boardRepository.getCommunityBoardList(param);
+    result.fold(
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)), (result) {
+      final posts = result['posts'];
+      final pagination = result['pagination'];
+      communityBoardProvider.updateCommunityBoardList(posts);
+      communityBoardProvider.updateCommunityBoardListPage(pagination);
+      commonNavigator.goRoute('/board-list');
+    });
+  }
+
   Future<void> getCommunityBoardList(String? postType, String? order,
       String? path, String? page, String? size, String? lastNo) async {
     CommunityBoardListSearchParam param = CommunityBoardListSearchParam(
