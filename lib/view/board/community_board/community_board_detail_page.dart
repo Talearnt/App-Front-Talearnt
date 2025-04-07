@@ -10,6 +10,7 @@ import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../provider/board/community_board_detail_provider.dart';
@@ -252,6 +253,145 @@ class CommunityBoardDetailPage extends StatelessWidget {
                           ],
                         ),
                       ),
+                      const SizedBox(
+                        height: 56,
+                      ),
+                      const Divider(
+                        color: Palette.bgUp02,
+                        height: 1,
+                        thickness: 12,
+                      ),
+                      Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              left: 24,
+                              top: 15,
+                              bottom: 15,
+                            ),
+                            child: Row(
+                              children: [
+                                Text.rich(
+                                  TextSpan(
+                                    text: '댓글',
+                                    style: TextTypes.bodyMedium03(
+                                      color: Palette.text04,
+                                    ),
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                        text: '(0)',
+                                        style: TextTypes.bodyMedium03(
+                                          color: Palette.text03,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const Divider(
+                            color: Palette.bgUp02,
+                            height: 1,
+                            thickness: 1.0,
+                          ),
+                          ListView.builder(
+                            itemCount: dummyComments.length,
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              final comment = dummyComments[index];
+                              final nickname = comment['nickname'];
+                              final content = comment['content'];
+                              final createdAt =
+                                  comment['createdAt'] as DateTime;
+                              final formattedDate =
+                                  DateFormat('yyyy.MM.dd HH:mm')
+                                      .format(createdAt);
+
+                              return Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                      top: 16,
+                                      bottom: 16,
+                                      left: 24,
+                                    ),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const SizedBox(width: 12),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  SizedBox(
+                                                    width: 32,
+                                                    height: 32,
+                                                    child: SvgPicture.asset(
+                                                        'assets/img/profile.svg'),
+                                                  ),
+                                                  const SizedBox(width: 10),
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                        nickname,
+                                                        style: TextTypes.body02(
+                                                          color: Palette.text01,
+                                                        ),
+                                                      ),
+                                                      Text(
+                                                        formattedDate,
+                                                        style: TextTypes
+                                                            .captionMedium02(
+                                                          color: Palette.text04,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                  top: 8,
+                                                  left: 40,
+                                                ),
+                                                child: Column(
+                                                  children: [
+                                                    Text(
+                                                      content,
+                                                      style: TextTypes
+                                                          .bodyMedium03(
+                                                        color: Palette.text02,
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  const Divider(
+                                    color: Palette.bgUp02,
+                                    height: 1,
+                                    thickness: 1.0,
+                                  ),
+                                ],
+                              );
+                            },
+                          )
+                        ],
+                      )
                     ],
                   ),
                 ),
@@ -266,3 +406,22 @@ class CommunityBoardDetailPage extends StatelessWidget {
     );
   }
 }
+
+// 클래스 밖에 위치
+final List<Map<String, dynamic>> dummyComments = [
+  {
+    'nickname': '잭재기',
+    'content': '정말 멋진 글이에요!',
+    'createdAt': DateTime(2025, 4, 7, 14, 30),
+  },
+  {
+    'nickname': '해커냥이',
+    'content': '저도 궁금했던 부분이네요.',
+    'createdAt': DateTime(2025, 4, 6, 10, 15),
+  },
+  {
+    'nickname': '코딩돌이',
+    'content': '설명 짱 명쾌!',
+    'createdAt': DateTime(2025, 4, 5, 20, 45),
+  },
+];
