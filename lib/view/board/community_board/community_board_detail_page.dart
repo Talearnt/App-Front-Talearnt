@@ -268,6 +268,7 @@ class CommunityBoardDetailPage extends StatelessWidget {
                               left: 24,
                               top: 15,
                               bottom: 15,
+                              right: 20,
                             ),
                             child: Row(
                               children: [
@@ -303,6 +304,7 @@ class CommunityBoardDetailPage extends StatelessWidget {
                               final comment = dummyComments[index];
                               final nickname = comment['nickname'];
                               final content = comment['content'];
+                              final reply = comment['replyCount'];
                               final createdAt =
                                   comment['createdAt'] as DateTime;
                               final formattedDate =
@@ -316,45 +318,67 @@ class CommunityBoardDetailPage extends StatelessWidget {
                                       top: 16,
                                       bottom: 16,
                                       left: 24,
+                                      right: 20,
                                     ),
                                     child: Row(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        const SizedBox(width: 12),
+                                        const SizedBox(
+                                          width: 12,
+                                        ),
                                         Expanded(
                                           child: Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: [
                                               Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
                                                 children: [
-                                                  SizedBox(
-                                                    width: 32,
-                                                    height: 32,
-                                                    child: SvgPicture.asset(
-                                                        'assets/img/profile.svg'),
-                                                  ),
-                                                  const SizedBox(width: 10),
-                                                  Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
+                                                  Row(
                                                     children: [
-                                                      Text(
-                                                        nickname,
-                                                        style: TextTypes.body02(
-                                                          color: Palette.text01,
-                                                        ),
+                                                      SizedBox(
+                                                        width: 32,
+                                                        height: 32,
+                                                        child: SvgPicture.asset(
+                                                            'assets/img/profile.svg'),
                                                       ),
-                                                      Text(
-                                                        formattedDate,
-                                                        style: TextTypes
-                                                            .captionMedium02(
-                                                          color: Palette.text04,
-                                                        ),
+                                                      const SizedBox(
+                                                        width: 10,
+                                                      ),
+                                                      Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Text(
+                                                            nickname,
+                                                            style: TextTypes
+                                                                .body02(
+                                                              color: Palette
+                                                                  .text01,
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                            formattedDate,
+                                                            style: TextTypes
+                                                                .captionMedium02(
+                                                              color: Palette
+                                                                  .text04,
+                                                            ),
+                                                          ),
+                                                        ],
                                                       ),
                                                     ],
+                                                  ),
+                                                  SizedBox(
+                                                    width: 16,
+                                                    height: 16,
+                                                    child: SvgPicture.asset(
+                                                      'assets/icons/kebab_menu.svg',
+                                                    ),
                                                   ),
                                                 ],
                                               ),
@@ -364,6 +388,8 @@ class CommunityBoardDetailPage extends StatelessWidget {
                                                   left: 40,
                                                 ),
                                                 child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
                                                   children: [
                                                     Text(
                                                       content,
@@ -371,10 +397,85 @@ class CommunityBoardDetailPage extends StatelessWidget {
                                                           .bodyMedium03(
                                                         color: Palette.text02,
                                                       ),
-                                                    )
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 8,
+                                                    ),
+                                                    Row(
+                                                      children: [
+                                                        SizedBox(
+                                                          width: 18,
+                                                          height: 18,
+                                                          child:
+                                                              SvgPicture.asset(
+                                                            'assets/icons/comment.svg',
+                                                          ),
+                                                        ),
+                                                        const SizedBox(
+                                                          width: 4,
+                                                        ),
+                                                        Text(
+                                                          '답글 달기',
+                                                          style: TextTypes
+                                                              .captionMedium02(
+                                                            color:
+                                                                Palette.text04,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    if (reply > 0)
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(top: 16),
+                                                        child: Container(
+                                                          width: 98,
+                                                          height: 40,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            border: Border.all(
+                                                              color: Palette
+                                                                  .icon03,
+                                                              width: 1.0,
+                                                            ),
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                              999,
+                                                            ),
+                                                          ),
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .only(
+                                                              top: 10,
+                                                              bottom: 10,
+                                                              right: 8,
+                                                              left: 12,
+                                                            ),
+                                                            child: Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                Text(
+                                                                    '답글 $reply개'),
+                                                                SizedBox(
+                                                                  width: 24,
+                                                                  height: 24,
+                                                                  child: SvgPicture
+                                                                      .asset(
+                                                                          'assets/icons/chevron_down_before.svg'),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
                                                   ],
                                                 ),
-                                              )
+                                              ),
                                             ],
                                           ),
                                         )
@@ -413,15 +514,18 @@ final List<Map<String, dynamic>> dummyComments = [
     'nickname': '잭재기',
     'content': '정말 멋진 글이에요!',
     'createdAt': DateTime(2025, 4, 7, 14, 30),
+    'replyCount': 0,
   },
   {
     'nickname': '해커냥이',
     'content': '저도 궁금했던 부분이네요.',
     'createdAt': DateTime(2025, 4, 6, 10, 15),
+    'replyCount': 2,
   },
   {
     'nickname': '코딩돌이',
     'content': '설명 짱 명쾌!',
     'createdAt': DateTime(2025, 4, 5, 20, 45),
+    'replyCount': 3,
   },
 ];
