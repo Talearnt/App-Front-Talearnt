@@ -429,46 +429,84 @@ class CommunityBoardDetailPage extends StatelessWidget {
                                                         padding:
                                                             const EdgeInsets
                                                                 .only(top: 16),
-                                                        child: Container(
-                                                          width: 98,
-                                                          height: 40,
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            border: Border.all(
-                                                              color: Palette
-                                                                  .icon03,
-                                                              width: 1.0,
+                                                        child: GestureDetector(
+                                                          onTap: () {
+                                                            communityBoardDetailProvider
+                                                                .toggleRepliesOpen(
+                                                                    comment[
+                                                                        'commentNo']);
+                                                          },
+                                                          child: Container(
+                                                            width: 88,
+                                                            height: 36,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              border:
+                                                                  Border.all(
+                                                                color: communityBoardDetailProvider.isRepliesOpen(
+                                                                        comment[
+                                                                            'commentNo'])
+                                                                    ? Palette
+                                                                        .primary01
+                                                                    : Palette
+                                                                        .icon03,
+                                                                width: 1.0,
+                                                              ),
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                999,
+                                                              ),
                                                             ),
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                              999,
-                                                            ),
-                                                          ),
-                                                          child: Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .only(
-                                                              top: 10,
-                                                              bottom: 10,
-                                                              right: 8,
-                                                              left: 12,
-                                                            ),
-                                                            child: Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .center,
-                                                              children: [
-                                                                Text(
-                                                                    '답글 $reply개'),
-                                                                SizedBox(
-                                                                  width: 24,
-                                                                  height: 24,
-                                                                  child: SvgPicture
-                                                                      .asset(
-                                                                          'assets/icons/chevron_down_before.svg'),
-                                                                ),
-                                                              ],
+                                                            child: Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .only(
+                                                                top: 10,
+                                                                bottom: 10,
+                                                                right: 6,
+                                                                left: 12,
+                                                              ),
+                                                              child: Row(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .center,
+                                                                children: [
+                                                                  Text(
+                                                                    '답글 $reply개',
+                                                                    style: communityBoardDetailProvider.isRepliesOpen(comment[
+                                                                            'commentNo'])
+                                                                        ? TextTypes
+                                                                            .captionMedium02(
+                                                                            color:
+                                                                                Palette.primary01,
+                                                                          )
+                                                                        : TextTypes
+                                                                            .captionMedium02(
+                                                                            color:
+                                                                                Palette.text02,
+                                                                          ),
+                                                                  ),
+                                                                  SizedBox(
+                                                                    width: 24,
+                                                                    height: 24,
+                                                                    child: communityBoardDetailProvider.isRepliesOpen(comment[
+                                                                            'commentNo'])
+                                                                        ? SvgPicture
+                                                                            .asset(
+                                                                            'assets/icons/chevron_up_before.svg',
+                                                                            color:
+                                                                                Palette.icon01,
+                                                                          )
+                                                                        : SvgPicture
+                                                                            .asset(
+                                                                            'assets/icons/chevron_down_before.svg',
+                                                                            color:
+                                                                                Palette.icon03,
+                                                                          ),
+                                                                  ),
+                                                                ],
+                                                              ),
                                                             ),
                                                           ),
                                                         ),
@@ -482,6 +520,81 @@ class CommunityBoardDetailPage extends StatelessWidget {
                                       ],
                                     ),
                                   ),
+                                  if (reply > 0 &&
+                                      communityBoardDetailProvider
+                                          .isRepliesOpen(comment['commentNo']))
+                                    ListView.builder(
+                                      itemCount: dummyReplies.length,
+                                      shrinkWrap: true,
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      itemBuilder: (context, index) {
+                                        final comment = dummyReplies[index];
+                                        final nickname = comment['nickname'];
+                                        final content = comment['content'];
+                                        final reply = comment['replyCount'];
+                                        final createdAt =
+                                            comment['createdAt'] as DateTime;
+                                        final formattedDate =
+                                            DateFormat('yyyy.MM.dd HH:mm')
+                                                .format(createdAt);
+
+                                        return Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 56, top: 16, bottom: 8),
+                                          child: Column(
+                                            children: [
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Row(
+                                                    children: [
+                                                      SizedBox(
+                                                        width: 32,
+                                                        height: 32,
+                                                        child: SvgPicture.asset(
+                                                            'assets/img/profile.svg'),
+                                                      ),
+                                                      const SizedBox(width: 10),
+                                                      Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Text(
+                                                            nickname,
+                                                            style: TextTypes
+                                                                .body02(
+                                                                    color: Palette
+                                                                        .text01),
+                                                          ),
+                                                          Text(
+                                                            formattedDate,
+                                                            style: TextTypes
+                                                                .captionMedium02(
+                                                                    color: Palette
+                                                                        .text04),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  SizedBox(
+                                                    width: 16,
+                                                    height: 16,
+                                                    child: SvgPicture.asset(
+                                                      'assets/icons/kebab_menu.svg',
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                    ),
                                   const Divider(
                                     color: Palette.bgUp02,
                                     height: 1,
@@ -508,8 +621,31 @@ class CommunityBoardDetailPage extends StatelessWidget {
   }
 }
 
-// 클래스 밖에 위치
 final List<Map<String, dynamic>> dummyComments = [
+  {
+    'commentNo': 1, // ✅ 고유 번호 추가
+    'nickname': '잭재기',
+    'content': '정말 멋진 글이에요!',
+    'createdAt': DateTime(2025, 4, 7, 14, 30),
+    'replyCount': 0,
+  },
+  {
+    'commentNo': 2,
+    'nickname': '해커냥이',
+    'content': '저도 궁금했던 부분이네요.',
+    'createdAt': DateTime(2025, 4, 6, 10, 15),
+    'replyCount': 3,
+  },
+  {
+    'commentNo': 3,
+    'nickname': '코딩돌이',
+    'content': '설명 짱 명쾌!',
+    'createdAt': DateTime(2025, 4, 5, 20, 45),
+    'replyCount': 3,
+  },
+];
+
+final List<Map<String, dynamic>> dummyReplies = [
   {
     'nickname': '잭재기',
     'content': '정말 멋진 글이에요!',

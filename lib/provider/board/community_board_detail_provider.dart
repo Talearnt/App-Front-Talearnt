@@ -13,6 +13,8 @@ class CommunityBoardDetailProvider extends ChangeNotifier {
 
   bool _isAppBarVisible = true;
 
+  final Map<int, bool> _replyOpenMap = {};
+
   CommunityDetailBoard get communityDetailBoard => _communityDetailBoard;
 
   QuillController get contentController => _contentController;
@@ -23,6 +25,15 @@ class CommunityBoardDetailProvider extends ChangeNotifier {
 
   bool get isAppBarVisible => _isAppBarVisible;
 
+  bool isRepliesOpen(int commentNo) {
+    return _replyOpenMap[commentNo] ?? false;
+  }
+
+  void toggleRepliesOpen(int commentNo) {
+    _replyOpenMap[commentNo] = !(isRepliesOpen(commentNo));
+    notifyListeners();
+  }
+
   void makePreviewImageList() async {
     _previewImageList.clear();
     final delta = contentController.document.toDelta();
@@ -30,7 +41,6 @@ class CommunityBoardDetailProvider extends ChangeNotifier {
     for (var op in delta.toList()) {
       if (op.value is Map<String, dynamic> && op.value.containsKey('image')) {
         final imagePath = op.value['image'];
-
         _previewImageList.add(imagePath);
       }
     }
@@ -56,9 +66,9 @@ class CommunityBoardDetailProvider extends ChangeNotifier {
     String content = _communityDetailBoard.content;
 
     var htmlToDelta = HtmlToDelta().convert(content);
-
     contentController.document = Document.fromDelta(htmlToDelta);
     contentController.readOnly = true;
+
     makePreviewImageList();
     notifyListeners();
   }
