@@ -4,12 +4,14 @@ import 'package:app_front_talearnt/common/widget/profile.dart';
 import 'package:app_front_talearnt/common/widget/state_badge.dart';
 import 'package:app_front_talearnt/common/widget/top_app_bar.dart';
 import 'package:app_front_talearnt/provider/common/common_provider.dart';
+import 'package:app_front_talearnt/view/board/community_board/community_commnet.dart';
 import 'package:app_front_talearnt/view/board/community_board/widget/community_detail_board_bottom.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../provider/board/community_board_detail_provider.dart';
@@ -252,6 +254,54 @@ class CommunityBoardDetailPage extends StatelessWidget {
                           ],
                         ),
                       ),
+                      const SizedBox(
+                        height: 56,
+                      ),
+                      const Divider(
+                        color: Palette.bgUp02,
+                        height: 1,
+                        thickness: 12,
+                      ),
+                      Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              left: 24,
+                              top: 15,
+                              bottom: 15,
+                              right: 20,
+                            ),
+                            child: Row(
+                              children: [
+                                Text.rich(
+                                  TextSpan(
+                                    text: '댓글',
+                                    style: TextTypes.bodyMedium03(
+                                      color: Palette.text04,
+                                    ),
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                        text: '(0)',
+                                        style: TextTypes.bodyMedium03(
+                                          color: Palette.text03,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const Divider(
+                            color: Palette.bgUp02,
+                            height: 1,
+                            thickness: 1.0,
+                          ),
+                          CommunityComment(
+                              communityBoardDetailProvider:
+                                  communityBoardDetailProvider)
+                        ],
+                      )
                     ],
                   ),
                 ),
