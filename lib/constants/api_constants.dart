@@ -48,4 +48,8 @@ abstract class ApiConstants {
   static String editMatchBoard(int postNo) {
     return "$baseUrl/v1/posts/exchanges/$postNo";
   }
+
+  static String getCommunityCommnet(int postNo) {
+    return "$baseUrl/v1/communities/$postNo/comments";
+  }
 }

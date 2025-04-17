@@ -4,9 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 
 class CommunityReplies extends StatelessWidget {
-  const CommunityReplies({
-    super.key,
-  });
+  const CommunityReplies({super.key, commentNo});
 
   @override
   Widget build(BuildContext context) {

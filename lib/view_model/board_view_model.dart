@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:app_front_talearnt/data/model/param/community_board_commnet.dart';
 import 'package:app_front_talearnt/data/model/param/match_board_param.dart';
 import 'package:app_front_talearnt/provider/board/community_write_provider.dart';
 import 'package:app_front_talearnt/provider/board/match_edit_provider.dart';
@@ -376,6 +377,23 @@ class BoardViewModel extends ChangeNotifier {
           communityBoardProvider.selectedOrderType, null, null, null, null);
       commonNavigator.goBack();
       commonNavigator.goBack();
+    });
+  }
+
+  Future<void> getComments(int postNo, int lastNo) async {
+    CommunityCommentParam param = CommunityCommentParam(
+        postNo: postNo.toString(), lastNo: lastNo.toString());
+    final result = await boardRepository.getCommunityComments(postNo, param);
+    result.fold(
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)), (result) {
+      if (lastNo == 0) {
+        communityBoardDetailProvider.setComments(result['comments'],
+            hasNextPage: result['hasNext']);
+      } else {
+        communityBoardDetailProvider.prependComments(result['comments'],
+            hasNextPage: result['hasNext']);
+      }
     });
   }
 }

@@ -102,6 +102,11 @@ class BoardList extends StatelessWidget {
                                       communityBoardProvider
                                           .communityBoardList[index]
                                           .communityPostNo);
+                                  await viewModel.getComments(
+                                      communityBoardProvider
+                                          .communityBoardList[index]
+                                          .communityPostNo,
+                                      0);
                                   commonProvider.changeIsLoading(false);
                                 },
                                 child: CommunityBoardListCard(
