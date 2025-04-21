@@ -9,11 +9,13 @@ class CommunityComment extends StatelessWidget {
   final CommunityBoardDetailProvider communityBoardDetailProvider;
 
   final Future<void> Function(int postNo, int lastNo) loadComments;
+  final Future<void> Function(int commentNo, int lastNo) loadReplies;
 
   const CommunityComment({
     Key? key,
     required this.communityBoardDetailProvider,
     required this.loadComments,
+    required this.loadReplies,
   }) : super(key: key);
 
   @override
@@ -23,7 +25,41 @@ class CommunityComment extends StatelessWidget {
 
     return Column(
       children: [
-        // 댓글 리스트
+        if (hasNext)
+          Container(
+            decoration: const BoxDecoration(
+              border: Border(
+                bottom: BorderSide(
+                  color: Palette.line02,
+                  width: 1.0,
+                ),
+              ),
+            ),
+            padding: const EdgeInsets.only(top: 16, bottom: 16, left: 24),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: TextButton(
+                onPressed: () {
+                  final lastNo =
+                      comments.isNotEmpty ? comments.first.commentNo : 0;
+                  loadComments(
+                    communityBoardDetailProvider
+                        .communityDetailBoard.communityPostNo,
+                    lastNo,
+                  );
+                },
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  minimumSize: Size.zero,
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
+                child: Text(
+                  '이전 댓글 보기...',
+                  style: TextTypes.captionMedium02(color: Palette.text01),
+                ),
+              ),
+            ),
+          ),
         ListView.builder(
           itemCount: comments.length,
           shrinkWrap: true,
@@ -48,7 +84,6 @@ class CommunityComment extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // 작성자 + 시간 + 옵션
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -116,18 +151,24 @@ class CommunityComment extends StatelessWidget {
                                       ),
                                     ],
                                   ),
-
-                                  // 답글 토글
                                   if (c.replyCount > 0)
                                     Padding(
                                       padding: const EdgeInsets.only(top: 16),
                                       child: GestureDetector(
                                         onTap: () {
+                                          final isOpen =
+                                              communityBoardDetailProvider
+                                                  .isRepliesOpen(c.commentNo);
+
+                                          if (!isOpen) {
+                                            loadReplies(c.commentNo, 0);
+                                          }
+
                                           communityBoardDetailProvider
                                               .toggleRepliesOpen(c.commentNo);
                                         },
                                         child: Container(
-                                          width: 88,
+                                          width: 90,
                                           height: 36,
                                           decoration: BoxDecoration(
                                             border: Border.all(
@@ -142,9 +183,11 @@ class CommunityComment extends StatelessWidget {
                                                 BorderRadius.circular(999),
                                           ),
                                           child: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                              vertical: 10,
-                                              horizontal: 12,
+                                            padding: const EdgeInsets.only(
+                                              top: 10,
+                                              bottom: 10,
+                                              left: 10,
+                                              right: 6,
                                             ),
                                             child: Row(
                                               mainAxisAlignment:
@@ -200,31 +243,16 @@ class CommunityComment extends StatelessWidget {
                 ),
                 if (c.replyCount > 0 &&
                     communityBoardDetailProvider.isRepliesOpen(c.commentNo))
-                  CommunityReplies(commentNo: c.commentNo),
+                  CommunityReplies(
+                    commentNo: c.commentNo,
+                    provider: communityBoardDetailProvider,
+                    loadReplies: loadReplies,
+                  ),
                 const Divider(color: Palette.bgUp02, height: 1, thickness: 1),
               ],
             );
           },
         ),
-
-        if (hasNext)
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 12),
-            child: TextButton(
-              onPressed: () {
-                final lastNo =
-                    comments.isNotEmpty ? comments.last.commentNo : 0;
-                loadComments(
-                    communityBoardDetailProvider
-                        .communityDetailBoard.communityPostNo,
-                    lastNo);
-              },
-              child: Text(
-                '이전 댓글 보기',
-                style: TextTypes.body02(color: Palette.primary01),
-              ),
-            ),
-          ),
       ],
     );
   }

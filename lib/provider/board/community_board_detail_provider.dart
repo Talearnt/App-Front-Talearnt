@@ -1,4 +1,5 @@
-import 'package:app_front_talearnt/data/model/respone/community_commnet.dart';
+import 'package:app_front_talearnt/data/model/respone/community_comment.dart';
+import 'package:app_front_talearnt/data/model/respone/community_reply.dart';
 import 'package:app_front_talearnt/view/board/community_board/community_comment.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
@@ -15,9 +16,13 @@ class CommunityBoardDetailProvider extends ChangeNotifier {
 
   bool _isAppBarVisible = true;
 
-  final Map<int, bool> _replyOpenMap = {};
+  Map<int, bool> _replyOpenMap = {};
 
-  List<CommunityCommentRespone> commentList = [];
+  List<CommunityCommentRespone> _commentList = [];
+
+  final Map<int, List<CommunityReplyResponse>> _replyMap = {};
+
+  final Map<int, bool> _replyHasNext = {};
 
   bool hasNext = false;
 
@@ -30,6 +35,18 @@ class CommunityBoardDetailProvider extends ChangeNotifier {
   int get previewImageIndex => _previewImageIndex;
 
   bool get isAppBarVisible => _isAppBarVisible;
+
+  List<CommunityCommentRespone> get commentList => _commentList;
+
+  Map<int, List<CommunityReplyResponse>> get replyMap => _replyMap;
+  Map<int, bool> get replyHasNext => _replyHasNext;
+
+  void clearProvider() {
+    _commentList = [];
+    _replyOpenMap = {};
+
+    notifyListeners();
+  }
 
   bool isRepliesOpen(int commentNo) {
     return _replyOpenMap[commentNo] ?? false;
@@ -81,16 +98,34 @@ class CommunityBoardDetailProvider extends ChangeNotifier {
 
   void setComments(List<CommunityCommentRespone> comments,
       {required bool hasNextPage}) {
-    commentList = comments;
+    _commentList = comments;
     hasNext = hasNextPage;
     notifyListeners();
   }
 
-  /// 이전 댓글 보기: 기존 리스트 앞에 삽입
   void prependComments(List<CommunityCommentRespone> olderComments,
       {required bool hasNextPage}) {
-    commentList.insertAll(0, olderComments);
+    _commentList.insertAll(0, olderComments);
     hasNext = hasNextPage;
     notifyListeners();
   }
+
+  void setReplies(int commentNo, List<CommunityReplyResponse> replies,
+      {required bool hasNextPage}) {
+    _replyMap[commentNo] = replies;
+    _replyHasNext[commentNo] = hasNextPage;
+    notifyListeners();
+  }
+
+  void prependReplies(int commentNo, List<CommunityReplyResponse> olderReplies,
+      {required bool hasNextPage}) {
+    final existing = _replyMap[commentNo] ?? [];
+    _replyMap[commentNo] = [...olderReplies, ...existing];
+    _replyHasNext[commentNo] = hasNextPage;
+    notifyListeners();
+  }
+
+  List<CommunityReplyResponse> getReplies(int commentNo) =>
+      _replyMap[commentNo] ?? [];
+  bool hasNextReplies(int commentNo) => _replyHasNext[commentNo] ?? false;
 }

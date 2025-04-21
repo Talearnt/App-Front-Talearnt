@@ -33,6 +33,7 @@ class CommunityBoardDetailPage extends StatelessWidget {
     return Scaffold(
       appBar: TopAppBar(
         onPressed: () {
+          communityBoardDetailProvider.clearProvider();
           context.pop();
         },
         first: InkWell(
@@ -283,7 +284,8 @@ class CommunityBoardDetailPage extends StatelessWidget {
                                     ),
                                     children: <TextSpan>[
                                       TextSpan(
-                                        text: '(0)',
+                                        text:
+                                            '(${communityBoardDetailProvider.communityDetailBoard.commentCount})',
                                         style: TextTypes.bodyMedium03(
                                           color: Palette.text03,
                                         ),
@@ -302,8 +304,11 @@ class CommunityBoardDetailPage extends StatelessWidget {
                           CommunityComment(
                             communityBoardDetailProvider:
                                 communityBoardDetailProvider,
-                            loadComments: viewModel.getComments,
-                          )
+                            loadComments: (postNo, lastNo) =>
+                                viewModel.getComments(postNo, lastNo),
+                            loadReplies: (commentNo, lastNo) =>
+                                viewModel.getReplies(commentNo, lastNo),
+                          ),
                         ],
                       )
                     ],
@@ -311,7 +316,7 @@ class CommunityBoardDetailPage extends StatelessWidget {
                 ),
               ),
               CommunityDetailBoardBottom(
-                  board: communityBoardDetailProvider.communityDetailBoard)
+                  board: communityBoardDetailProvider.communityDetailBoard),
             ],
           ),
           if (commonProvider.isLoadingPage) const Loading()
