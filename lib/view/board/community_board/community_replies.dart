@@ -29,7 +29,7 @@ class CommunityReplies extends StatelessWidget {
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (ctx, idx) {
-            final r = replies[replies.length - 1 - idx];
+            final r = replies[idx];
             final formatted =
                 DateFormat('yyyy.MM.dd HH:mm').format(r.createdAt);
 
@@ -110,30 +110,50 @@ class CommunityReplies extends StatelessWidget {
           },
         ),
         if (hasNext)
-          Padding(
-            padding: const EdgeInsets.only(left: 56, top: 12, bottom: 12),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: TextButton(
-                onPressed: () {
-                  final lastNo = replies.isNotEmpty ? replies.first.replyNo : 0;
-                  loadReplies(commentNo, lastNo);
-                },
-                style: TextButton.styleFrom(
-                  padding: EdgeInsets.zero,
-                  minimumSize: Size.zero,
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: 16,
+                  bottom: 16,
+                  left: 96,
                 ),
-                child: Text(
-                  '답글 더보기',
-                  style: TextTypes.captionMedium02(color: Palette.text01),
+                child: GestureDetector(
+                  onTap: () {
+                    final lastNo =
+                        replies.isNotEmpty ? replies.last.replyNo : 0;
+                    loadReplies(commentNo, lastNo);
+                  },
+                  child: Container(
+                    width: 90,
+                    height: 36,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Palette.icon03,
+                      ),
+                      borderRadius: BorderRadius.circular(999),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 10,
+                        horizontal: 12,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            '답글 더보기',
+                            style: TextTypes.captionMedium02(
+                                color: Palette.text02),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
               ),
-            ),
+            ],
           ),
-        const SizedBox(
-          height: 16,
-        )
       ],
     );
   }

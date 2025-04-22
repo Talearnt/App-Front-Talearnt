@@ -120,7 +120,7 @@ class CommunityBoardDetailProvider extends ChangeNotifier {
   void prependReplies(int commentNo, List<CommunityReplyResponse> olderReplies,
       {required bool hasNextPage}) {
     final existing = _replyMap[commentNo] ?? [];
-    _replyMap[commentNo] = [...olderReplies, ...existing];
+    _replyMap[commentNo] = [...existing, ...olderReplies];
     _replyHasNext[commentNo] = hasNextPage;
     notifyListeners();
   }
