@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../common/theme.dart';
 import 'create_setting_menu.dart';
@@ -20,7 +21,7 @@ class ProfileOtherSection extends StatelessWidget {
           iconPath: 'assets/icons/notice.svg',
           title: '이벤트',
           onTap: () {
-            // 이벤트 페이지 이동
+            context.push('/event-notice');
           },
         ),
         CreateSettingMenu(

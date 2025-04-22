@@ -509,6 +509,9 @@ class HomePage extends StatelessWidget {
                           ),
                         ),
                         GestureDetector(
+                          onTap: () {
+                            context.push('/profile');
+                          },
                           child: Column(
                             children: [
                               SvgPicture.asset('assets/icons/my_off.svg'),

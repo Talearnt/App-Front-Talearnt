@@ -12,6 +12,7 @@ import 'package:dartz/dartz.dart';
 import '../../constants/api_constants.dart';
 import '../model/param/community_board_list_search_param.dart';
 import '../model/param/community_board_param.dart';
+import '../model/param/match_board_list_search_param.dart';
 import '../model/respone/community_board.dart';
 import '../model/respone/community_detail_board.dart';
 import '../model/respone/match_board.dart';

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../../common/theme.dart';
@@ -26,7 +28,7 @@ class ProfileUserInfo extends StatelessWidget {
               TextSpan(
                 children: [
                   TextSpan(
-                    text: '닉네임 ',
+                    text: '${profileProvider.userProfile.nickname} ',
                     style: TextTypes.heading4(color: Palette.text01),
                   ),
                   TextSpan(
@@ -144,7 +146,6 @@ class ProfileUserInfo extends StatelessWidget {
                           );
                         }).toList(),
                       ),
-                      const SizedBox(height: 16),
                     ],
                   ),
                 ),
@@ -163,11 +164,18 @@ class ProfileUserInfo extends StatelessWidget {
                       ),
                     ),
                     onPressed: () {
-                      // 수정 버튼 클릭 시 동작 추가
+                      profileProvider.setUserEditProfile();
+                      context.push('/modify-user-info');
                     },
-                    child: Text(
-                      '프로필 수정',
-                      style: TextTypes.caption01(color: Palette.text03),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset('assets/icons/edit_my.svg'),
+                        Text(
+                          '프로필 수정',
+                          style: TextTypes.caption01(color: Palette.text03),
+                        ),
+                      ],
                     ),
                   ),
                 ),

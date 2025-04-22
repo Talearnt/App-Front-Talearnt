@@ -20,6 +20,6 @@ class InfoHelper extends StatelessWidget {
       textStyle = TextTypes.captionSemi02(color: Palette.text03);
     }
 
-    return Text('*$content', style: textStyle);
+    return Text(content, style: textStyle);
   }
 }

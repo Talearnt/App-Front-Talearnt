@@ -15,4 +15,11 @@ class ProfileRepository {
     return result.fold(
         left, (response) => right(UserProfile.fromJson(response["data"])));
   }
+
+  Future<Either<Failure, bool>> checkNickNameDuplication(
+      String nickName) async {
+    final result = await dio.get(
+        ApiConstants.checkNickNameAvailableUrl, null, {"nickname": nickName});
+    return result.fold(left, (response) => right(response["data"]));
+  }
 }

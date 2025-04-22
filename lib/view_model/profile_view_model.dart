@@ -35,4 +35,20 @@ class ProfileViewModel extends ChangeNotifier {
       },
     );
   }
+
+  Future<void> checkEditNickNameDuplication(String? nickName) async {
+    if (profileProvider.changeEditNickName) {
+      profileProvider.updateEditNickNameChange(false);
+      final result =
+          await profileRepository.checkNickNameDuplication(nickName!);
+      result.fold(
+        (failure) => commonNavigator.showSingleDialog(
+          content: ErrorMessages.getMessage(failure.errorCode),
+        ),
+        (isNickNameDuplication) {
+          profileProvider.checkEditNickNameDuplication(isNickNameDuplication);
+        },
+      );
+    }
+  }
 }

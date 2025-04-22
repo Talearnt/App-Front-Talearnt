@@ -150,7 +150,8 @@ class CommonProvider with ChangeNotifier {
 
   void setInfoNickName(bool hasFocus, Function(String, String) callback) {
     if (hasFocus) {
-      callback('2~12자 이내로 입력해 주세요', '한글, 영문, 숫자는 자유롭게 입력 가능하며, 특수문자는 #만 가능해요');
+      callback(
+          '*2~12자 이내로 입력해 주세요', '*한글, 영문, 숫자는 자유롭게 입력 가능하며, 특수문자는 #만 가능해요');
       notifyListeners();
     }
   }

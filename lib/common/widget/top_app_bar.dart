@@ -5,33 +5,38 @@ import 'package:flutter_svg/flutter_svg.dart';
 class TopAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String content;
   final bool leftIcon;
+  final Widget? leftWidget;
   final Widget? first;
   final Widget? second;
   final VoidCallback? onPressed;
+  final Color? bgColor;
 
   const TopAppBar({
     super.key,
     this.content = "",
     this.leftIcon = true,
+    this.leftWidget,
     this.first,
     this.second,
     this.onPressed,
+    this.bgColor,
   });
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
       scrolledUnderElevation: 0,
-      backgroundColor: Palette.bgBackGround,
+      backgroundColor: bgColor ?? Palette.bgBackGround,
       centerTitle: true,
       leading: leftIcon
-          ? IconButton(
-              hoverColor: Colors.transparent,
-              icon: SvgPicture.asset(
-                'assets/icons/back_arrow.svg', // SVG 파일 경로
-              ),
-              onPressed: onPressed ?? () {},
-            )
+          ? leftWidget ??
+              IconButton(
+                hoverColor: Colors.transparent,
+                icon: SvgPicture.asset(
+                  'assets/icons/back_arrow.svg', // SVG 파일 경로
+                ),
+                onPressed: onPressed ?? () {},
+              )
           : Container(),
       title: Text(
         content,
