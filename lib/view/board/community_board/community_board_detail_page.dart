@@ -4,8 +4,9 @@ import 'package:app_front_talearnt/common/widget/profile.dart';
 import 'package:app_front_talearnt/common/widget/state_badge.dart';
 import 'package:app_front_talearnt/common/widget/top_app_bar.dart';
 import 'package:app_front_talearnt/provider/common/common_provider.dart';
-import 'package:app_front_talearnt/view/board/community_board/community_commnet.dart';
+import 'package:app_front_talearnt/view/board/community_board/community_comment.dart';
 import 'package:app_front_talearnt/view/board/community_board/widget/community_detail_board_bottom.dart';
+import 'package:app_front_talearnt/view_model/board_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
@@ -27,10 +28,12 @@ class CommunityBoardDetailPage extends StatelessWidget {
         Provider.of<CommunityBoardDetailProvider>(context);
     final profileProvider = Provider.of<ProfileProvider>(context);
     final commonProvider = Provider.of<CommonProvider>(context);
+    final viewModel = Provider.of<BoardViewModel>(context);
 
     return Scaffold(
       appBar: TopAppBar(
         onPressed: () {
+          communityBoardDetailProvider.clearProvider();
           context.pop();
         },
         first: InkWell(
@@ -281,7 +284,8 @@ class CommunityBoardDetailPage extends StatelessWidget {
                                     ),
                                     children: <TextSpan>[
                                       TextSpan(
-                                        text: '(0)',
+                                        text:
+                                            '(${communityBoardDetailProvider.communityDetailBoard.commentCount})',
                                         style: TextTypes.bodyMedium03(
                                           color: Palette.text03,
                                         ),
@@ -298,8 +302,13 @@ class CommunityBoardDetailPage extends StatelessWidget {
                             thickness: 1.0,
                           ),
                           CommunityComment(
-                              communityBoardDetailProvider:
-                                  communityBoardDetailProvider)
+                            communityBoardDetailProvider:
+                                communityBoardDetailProvider,
+                            loadComments: (postNo, lastNo) =>
+                                viewModel.getComments(postNo, lastNo),
+                            loadReplies: (commentNo, lastNo) =>
+                                viewModel.getReplies(commentNo, lastNo),
+                          ),
                         ],
                       )
                     ],
@@ -307,7 +316,7 @@ class CommunityBoardDetailPage extends StatelessWidget {
                 ),
               ),
               CommunityDetailBoardBottom(
-                  board: communityBoardDetailProvider.communityDetailBoard)
+                  board: communityBoardDetailProvider.communityDetailBoard),
             ],
           ),
           if (commonProvider.isLoadingPage) const Loading()
