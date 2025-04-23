@@ -32,6 +32,7 @@ class CommunityReplies extends StatelessWidget {
             final r = replies[idx];
             final formatted =
                 DateFormat('yyyy.MM.dd HH:mm').format(r.createdAt);
+            final hasImage = (r.profileImg?.isNotEmpty ?? false);
 
             return Padding(
               padding: const EdgeInsets.only(
@@ -51,7 +52,26 @@ class CommunityReplies extends StatelessWidget {
                           SizedBox(
                             width: 32,
                             height: 32,
-                            child: SvgPicture.asset('assets/img/profile.svg'),
+                            child: hasImage
+                                ? Image.network(
+                                    r.profileImg!,
+                                    width: 32,
+                                    height: 32,
+                                    fit: BoxFit.cover,
+                                    errorBuilder: (_, __, ___) {
+                                      return SvgPicture.asset(
+                                        'assets/img/profile.svg',
+                                        width: 32,
+                                        height: 32,
+                                      );
+                                    },
+                                  )
+                                : SizedBox(
+                                    width: 32,
+                                    height: 32,
+                                    child: SvgPicture.asset(
+                                        'assets/img/profile.svg'),
+                                  ),
                           ),
                           const SizedBox(width: 10),
                           Column(

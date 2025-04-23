@@ -18,7 +18,7 @@ class CommunityBoardDetailProvider extends ChangeNotifier {
 
   Map<int, bool> _replyOpenMap = {};
 
-  List<CommunityCommentRespone> _commentList = [];
+  List<CommunityCommentResponse> _commentList = [];
 
   final Map<int, List<CommunityReplyResponse>> _replyMap = {};
 
@@ -36,7 +36,7 @@ class CommunityBoardDetailProvider extends ChangeNotifier {
 
   bool get isAppBarVisible => _isAppBarVisible;
 
-  List<CommunityCommentRespone> get commentList => _commentList;
+  List<CommunityCommentResponse> get commentList => _commentList;
 
   Map<int, List<CommunityReplyResponse>> get replyMap => _replyMap;
   Map<int, bool> get replyHasNext => _replyHasNext;
@@ -96,14 +96,14 @@ class CommunityBoardDetailProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setComments(List<CommunityCommentRespone> comments,
+  void setComments(List<CommunityCommentResponse> comments,
       {required bool hasNextPage}) {
     _commentList = comments;
     hasNext = hasNextPage;
     notifyListeners();
   }
 
-  void prependComments(List<CommunityCommentRespone> olderComments,
+  void prependComments(List<CommunityCommentResponse> olderComments,
       {required bool hasNextPage}) {
     _commentList.insertAll(0, olderComments);
     hasNext = hasNextPage;

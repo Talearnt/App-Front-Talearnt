@@ -139,7 +139,7 @@ class BoardRepository {
 
         final comments = rawList
             .map((e) =>
-                CommunityCommentRespone.fromJson(e as Map<String, dynamic>))
+                CommunityCommentResponse.fromJson(e as Map<String, dynamic>))
             .toList();
 
         final hasNext = (data['pagination']

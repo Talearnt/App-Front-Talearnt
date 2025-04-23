@@ -68,6 +68,7 @@ class CommunityComment extends StatelessWidget {
             final c = comments[index];
             final createdAt =
                 DateFormat('yyyy.MM.dd HH:mm').format(c.createdAt);
+            final hasImage = (c.profileImg?.isNotEmpty ?? false);
 
             return Column(
               children: [
@@ -89,12 +90,26 @@ class CommunityComment extends StatelessWidget {
                               children: [
                                 Row(
                                   children: [
-                                    SizedBox(
-                                      width: 32,
-                                      height: 32,
-                                      child: SvgPicture.asset(
-                                          'assets/img/profile.svg'),
-                                    ),
+                                    hasImage
+                                        ? Image.network(
+                                            c.profileImg!,
+                                            width: 32,
+                                            height: 32,
+                                            fit: BoxFit.cover,
+                                            errorBuilder: (_, __, ___) {
+                                              return SvgPicture.asset(
+                                                'assets/img/profile.svg',
+                                                width: 32,
+                                                height: 32,
+                                              );
+                                            },
+                                          )
+                                        : SizedBox(
+                                            width: 32,
+                                            height: 32,
+                                            child: SvgPicture.asset(
+                                                'assets/img/profile.svg'),
+                                          ),
                                     const SizedBox(width: 10),
                                     Column(
                                       crossAxisAlignment:
