@@ -1,13 +1,13 @@
 import 'package:app_front_talearnt/data/model/respone/community_comment.dart';
 import 'package:app_front_talearnt/data/model/respone/community_reply.dart';
-import 'package:app_front_talearnt/view/board/community_board/community_comment.dart';
+import 'package:app_front_talearnt/provider/clear_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_quill_delta_from_html/parser/html_to_delta.dart';
 
 import '../../data/model/respone/community_detail_board.dart';
 
-class CommunityBoardDetailProvider extends ChangeNotifier {
+class CommunityBoardDetailProvider extends ChangeNotifier with ClearText {
   final QuillController _contentController = QuillController.basic();
   CommunityDetailBoard _communityDetailBoard = CommunityDetailBoard.empty();
   final List<String> _previewImageList = [];
@@ -24,7 +24,12 @@ class CommunityBoardDetailProvider extends ChangeNotifier {
 
   final Map<int, bool> _replyHasNext = {};
 
-  bool hasNext = false;
+  bool _hasNext = false;
+
+  bool _isCommentInputActive = false;
+
+  final TextEditingController _commentController = TextEditingController();
+  final FocusNode _commentFocusNode = FocusNode();
 
   CommunityDetailBoard get communityDetailBoard => _communityDetailBoard;
 
@@ -39,12 +44,32 @@ class CommunityBoardDetailProvider extends ChangeNotifier {
   List<CommunityCommentResponse> get commentList => _commentList;
 
   Map<int, List<CommunityReplyResponse>> get replyMap => _replyMap;
+
   Map<int, bool> get replyHasNext => _replyHasNext;
+
+  bool get isCommentInputActive => _isCommentInputActive;
+
+  bool get hasNext => _hasNext;
+
+  TextEditingController get commentController => _commentController;
+
+  FocusNode get commentFocusNode => _commentFocusNode;
 
   void clearProvider() {
     _commentList = [];
     _replyOpenMap = {};
+    _isCommentInputActive = false;
+    _hasNext = false;
 
+    _commentController.clear();
+    _commentFocusNode.unfocus();
+
+    notifyListeners();
+  }
+
+  @override
+  void clearText(TextEditingController controller) {
+    controller.clear();
     notifyListeners();
   }
 
@@ -99,14 +124,14 @@ class CommunityBoardDetailProvider extends ChangeNotifier {
   void setComments(List<CommunityCommentResponse> comments,
       {required bool hasNextPage}) {
     _commentList = comments;
-    hasNext = hasNextPage;
+    _hasNext = hasNextPage;
     notifyListeners();
   }
 
   void prependComments(List<CommunityCommentResponse> olderComments,
       {required bool hasNextPage}) {
     _commentList.insertAll(0, olderComments);
-    hasNext = hasNextPage;
+    _hasNext = hasNextPage;
     notifyListeners();
   }
 
@@ -128,4 +153,10 @@ class CommunityBoardDetailProvider extends ChangeNotifier {
   List<CommunityReplyResponse> getReplies(int commentNo) =>
       _replyMap[commentNo] ?? [];
   bool hasNextReplies(int commentNo) => _replyHasNext[commentNo] ?? false;
+
+  void toggleCommentInputActive() {
+    _isCommentInputActive = !_isCommentInputActive;
+    _commentFocusNode.requestFocus();
+    notifyListeners();
+  }
 }

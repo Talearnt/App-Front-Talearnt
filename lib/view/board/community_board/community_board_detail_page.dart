@@ -6,6 +6,7 @@ import 'package:app_front_talearnt/common/widget/top_app_bar.dart';
 import 'package:app_front_talearnt/provider/common/common_provider.dart';
 import 'package:app_front_talearnt/view/board/community_board/community_comment.dart';
 import 'package:app_front_talearnt/view/board/community_board/widget/community_detail_board_bottom.dart';
+import 'package:app_front_talearnt/view/board/community_board/widget/community_detail_board_comment_input.dart';
 import 'package:app_front_talearnt/view_model/board_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
@@ -315,8 +316,15 @@ class CommunityBoardDetailPage extends StatelessWidget {
                   ),
                 ),
               ),
-              CommunityDetailBoardBottom(
-                  board: communityBoardDetailProvider.communityDetailBoard),
+              communityBoardDetailProvider.isCommentInputActive
+                  ? CommunityDetailBoardCommentInput(
+                      communityBoardDetailProvider:
+                          communityBoardDetailProvider,
+                    )
+                  : CommunityDetailBoardBottom(
+                      communityBoardDetailProvider:
+                          communityBoardDetailProvider,
+                    )
             ],
           ),
           if (commonProvider.isLoadingPage) const Loading()

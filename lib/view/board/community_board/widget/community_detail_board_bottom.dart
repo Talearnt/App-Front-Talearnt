@@ -1,13 +1,17 @@
 import 'package:app_front_talearnt/common/theme.dart';
+import 'package:app_front_talearnt/provider/board/community_board_detail_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../../data/model/respone/community_detail_board.dart';
 
 class CommunityDetailBoardBottom extends StatelessWidget {
-  final CommunityDetailBoard board;
+  final CommunityBoardDetailProvider communityBoardDetailProvider;
 
-  const CommunityDetailBoardBottom({super.key, required this.board});
+  const CommunityDetailBoardBottom({
+    super.key,
+    required this.communityBoardDetailProvider,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -24,14 +28,19 @@ class CommunityDetailBoardBottom extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "댓글 쓰기",
-                  style: TextTypes.captionMedium02(color: Palette.text03),
-                ),
-              ],
+            child: GestureDetector(
+              onTap: () {
+                communityBoardDetailProvider.toggleCommentInputActive();
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "댓글 쓰기",
+                    style: TextTypes.captionMedium02(color: Palette.text03),
+                  ),
+                ],
+              ),
             ),
           ),
           const VerticalDivider(
@@ -45,7 +54,7 @@ class CommunityDetailBoardBottom extends StatelessWidget {
                 SvgPicture.asset('assets/icons/comment.svg'),
                 const SizedBox(width: 4),
                 Text(
-                  "댓글수 ${board.commentCount}",
+                  "댓글수 ${communityBoardDetailProvider.communityDetailBoard.commentCount}",
                   style: TextTypes.captionMedium02(color: Palette.text03),
                 ),
               ],
@@ -62,7 +71,7 @@ class CommunityDetailBoardBottom extends StatelessWidget {
                 SvgPicture.asset('assets/icons/thumb_up_off.svg'),
                 const SizedBox(width: 4),
                 Text(
-                  "추천 ${board.likeCount}",
+                  "추천 ${communityBoardDetailProvider.communityDetailBoard.likeCount}",
                   style: TextTypes.captionMedium02(color: Palette.text03),
                 ),
               ],
