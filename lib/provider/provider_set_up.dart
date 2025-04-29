@@ -130,7 +130,6 @@ class ProviderSetup extends StatelessWidget {
             context.read<MatchBoardDetailProvider>(),
             context.read<MatchEditProvider>(),
             context.read<CommunityBoardProvider>(),
-            context.read<HomeProvider>(),
             context.read<CommunityWriteProvider>(),
             context.read<CommunityBoardDetailProvider>(),
             context.read<HomeProvider>(),
