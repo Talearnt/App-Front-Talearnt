@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:app_front_talearnt/common/widget/button.dart';
@@ -6,6 +7,7 @@ import 'package:app_front_talearnt/data/model/respone/matching_detail_post.dart'
 import 'package:app_front_talearnt/provider/common/custom_ticker_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
+import 'package:flutter_quill/quill_delta.dart';
 import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
 import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
@@ -29,7 +31,36 @@ class MatchEditProvider extends ChangeNotifier with ClearText {
     _giveTalentFocusNode.addListener(_onChanged);
     _interestTalentFocusNode.addListener(_onChanged);
     _contentController.addListener(_onChanged);
+
+    _subscription =
+        _contentController.document.changes.listen(_onDocumentChange);
   }
+
+  void _onDocumentChange(DocChange change) {
+    final ChangeSource source = change.source;
+    final Delta delDelta = change.change;
+    final delta = contentController.document.toDelta();
+
+    int imageCount = 0;
+
+    if (source == ChangeSource.local) {
+      for (var delOp in delDelta.toList()) {
+        if (delOp.isDelete) {
+          for (var op in delta.toList()) {
+            if (op.value is Map<String, dynamic> &&
+                op.value.containsKey('image')) {
+              imageCount++;
+            }
+          }
+          _totalImageCount = imageCount;
+        }
+      }
+    }
+
+    notifyListeners();
+  }
+
+  StreamSubscription? _subscription;
 
   int _postNo = 0;
 
@@ -514,14 +545,14 @@ class MatchEditProvider extends ChangeNotifier with ClearText {
   }
 
   void checkTitleAndBoard() {
-    if (_titleController.text.isEmpty) {
-      _boardToastMessage = "제목을 입력해 주세요";
+    if (_titleController.text.length < 2) {
+      _boardToastMessage = "제목을 2글자 이상 입력해 주세요";
       _isTitleAndBoardEmpty = false;
       return;
     }
 
-    if (_contentController.document.length - 1 == 0) {
-      _boardToastMessage = "내용을 입력해 주세요";
+    if (_contentController.document.length - 1 < 20) {
+      _boardToastMessage = "내용을 20자 이상 입력해 주세요";
       _isTitleAndBoardEmpty = false;
       return;
     }
@@ -577,20 +608,19 @@ class MatchEditProvider extends ChangeNotifier with ClearText {
 
   Future<File> _processImage(File imageFile) async {
     final originalImage = img.decodeImage(await imageFile.readAsBytes());
-
     if (originalImage == null) {
       throw Exception('이미지를 디코딩할 수 없습니다.');
     }
 
-    const maxHeight = 1024;
-    const maxFileSizeInMB = 3;
-    const quality = 75;
+    const int maxHeight = 1024;
+    const int maxFileSizeInMB = 3;
+    int quality = 90; // 초기 품질 설정
 
     img.Image processedImage = originalImage;
 
     if (originalImage.height > maxHeight) {
-      final scaleFactor = maxHeight / originalImage.height;
-      final newWidth = (originalImage.width * scaleFactor).toInt();
+      final double scaleFactor = maxHeight / originalImage.height;
+      final int newWidth = (originalImage.width * scaleFactor).toInt();
       processedImage =
           img.copyResize(originalImage, width: newWidth, height: maxHeight);
     }
@@ -599,18 +629,24 @@ class MatchEditProvider extends ChangeNotifier with ClearText {
       imageFile.parent.path,
       'processed_${imageFile.uri.pathSegments.last}',
     );
-    final processedFile = File(newPath);
+    File processedFile = File(newPath);
 
-    await processedFile
-        .writeAsBytes(img.encodeJpg(processedImage, quality: quality));
-
-    final int finalSizeInBytes = await processedFile.length();
-    final double finalSizeInMB = finalSizeInBytes / (1024 * 1024);
-
-    if (finalSizeInMB > maxFileSizeInMB) {
-      const lowerQuality = 75;
+    while (true) {
       await processedFile
-          .writeAsBytes(img.encodeJpg(processedImage, quality: lowerQuality));
+          .writeAsBytes(img.encodeJpg(processedImage, quality: quality));
+
+      final int finalSizeInBytes = await processedFile.length();
+      final double finalSizeInMB = finalSizeInBytes / (1024 * 1024);
+
+      if (finalSizeInMB <= maxFileSizeInMB) {
+        break;
+      }
+
+      if (quality > 10) {
+        quality -= 10;
+      } else {
+        break;
+      }
     }
 
     return processedFile;
@@ -632,10 +668,8 @@ class MatchEditProvider extends ChangeNotifier with ClearText {
       if (op.value is Map<String, dynamic> && op.value.containsKey('image')) {
         final imagePath = op.value['image'];
 
-        if (imagePath.startsWith('http://') ||
-            imagePath.startsWith('https://')) {
-          _imageUploadedUrls.add(imagePath);
-        } else {
+        if (!imagePath.startsWith('http://') &&
+            !imagePath.startsWith('https://')) {
           final imageFile = File(imagePath);
           final int sizeInBytes = await imageFile.length();
           final mimeType =
@@ -666,13 +700,20 @@ class MatchEditProvider extends ChangeNotifier with ClearText {
         op.value['image'] = newImageUrl;
       }
     }
-
-    _imageUploadedUrls.add(newImageUrl);
   }
 
   void finishImageUpload() {
     _isS3Upload = false;
     _uploadImageInfos.clear();
+
+    final delta = contentController.document.toDelta();
+
+    for (var op in delta.toList()) {
+      if (op.value is Map<String, dynamic> && op.value.containsKey('image')) {
+        final imageUrl = op.value['image'] as String;
+        _imageUploadedUrls.add(imageUrl);
+      }
+    }
   }
 
   void clearInfos() {

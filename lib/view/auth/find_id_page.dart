@@ -210,8 +210,9 @@ class FindIdPage extends StatelessWidget {
                                       commonProvider.changeIsLoading(false));
 
                               if (findIdProvider.userId.isNotEmpty) {
+                                findIdProvider.stopTimer();
                                 findIdProvider.resetTimer();
-                                context.go('/find-id-success');
+                                context.push('/find-id-success');
                               }
                             },
                           )

@@ -36,6 +36,7 @@ class FindIdSuccessPage extends StatelessWidget {
           onPressed: () {
             findIdProvider.clearProvider();
             context.pop();
+            context.pop();
           },
         ),
       ),
@@ -127,6 +128,7 @@ class FindIdSuccessPage extends StatelessWidget {
                     content: "로그인",
                     onPressed: () {
                       findIdProvider.clearProvider();
+                      context.pop();
                       context.pop();
                     },
                   ),

@@ -36,7 +36,6 @@ class BoardList extends StatelessWidget {
           final int childCount = (commonBoardProvider.boardType == 'match'
               ? matchBoardProvider.matchBoardList.length
               : communityBoardProvider.communityBoardList.length);
-
           return Stack(
             children: [
               CustomScrollView(
@@ -103,6 +102,11 @@ class BoardList extends StatelessWidget {
                                       communityBoardProvider
                                           .communityBoardList[index]
                                           .communityPostNo);
+                                  await viewModel.getComments(
+                                      communityBoardProvider
+                                          .communityBoardList[index]
+                                          .communityPostNo,
+                                      0);
                                   commonProvider.changeIsLoading(false);
                                 },
                                 child: CommunityBoardListCard(

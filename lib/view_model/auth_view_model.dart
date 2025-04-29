@@ -1,4 +1,5 @@
 import 'package:app_front_talearnt/common/widget/dialog.dart';
+import 'package:app_front_talearnt/common/widget/toast_message.dart';
 import 'package:app_front_talearnt/data/model/param/agree_req_dto.dart';
 import 'package:app_front_talearnt/data/model/param/login_param.dart';
 import 'package:app_front_talearnt/data/model/param/send_cert_number_param.dart';
@@ -256,7 +257,7 @@ class AuthViewModel extends ChangeNotifier {
       },
       (userIdInfo) {
         findIdProvider.setFindedUserIdInfo(
-            userIdInfo.userId, userIdInfo.createdAt);
+            userIdInfo.userId, userIdInfo.sentDate);
       },
     );
   }

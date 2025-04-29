@@ -1,7 +1,11 @@
 import 'dart:io';
 
+import 'package:app_front_talearnt/data/model/param/community_board_commnet.dart';
+import 'package:app_front_talearnt/data/model/param/community_board_reply.dart';
 import 'package:app_front_talearnt/data/model/param/match_board_param.dart';
 import 'package:app_front_talearnt/data/model/param/s3_controller_param.dart';
+import 'package:app_front_talearnt/data/model/respone/community_comment.dart';
+import 'package:app_front_talearnt/data/model/respone/community_reply.dart';
 import 'package:app_front_talearnt/data/model/respone/failure.dart';
 import 'package:app_front_talearnt/data/model/respone/pagination.dart';
 import 'package:app_front_talearnt/data/model/respone/s3_upload_url.dart';
@@ -115,5 +119,71 @@ class BoardRepository {
     final response =
         await dio.delete(ApiConstants.handleCommunityDetailBoard(postNo));
     return response.fold(left, (result) => right(Success.fromJson(result)));
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> getCommunityComments(
+    int postNo,
+    CommunityCommentParam body,
+  ) async {
+    final response = await dio.get(
+      ApiConstants.getCommunityCommnet(postNo),
+      null,
+      body.toJson(),
+    );
+
+    return response.fold(
+      left,
+      (result) {
+        final data = result['data'] as Map<String, dynamic>;
+        final rawList = data['results'] as List<dynamic>;
+
+        final comments = rawList
+            .map((e) =>
+                CommunityCommentResponse.fromJson(e as Map<String, dynamic>))
+            .toList();
+
+        final hasNext = (data['pagination']
+                as Map<String, dynamic>?)?['hasNext'] as bool? ??
+            false;
+
+        return right(<String, dynamic>{
+          'comments': comments,
+          'hasNext': hasNext,
+        });
+      },
+    );
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> getCommunityReplies(
+    int commentNo,
+    CommunityReplyParam body,
+  ) async {
+    final response = await dio.get(
+      ApiConstants.getCommunityReply(commentNo),
+      null,
+      body.toJson(),
+    );
+
+    return response.fold(
+      left,
+      (result) {
+        final data = result['data'] as Map<String, dynamic>;
+        final rawList = data['results'] as List<dynamic>;
+
+        final comments = rawList
+            .map((e) =>
+                CommunityReplyResponse.fromJson(e as Map<String, dynamic>))
+            .toList();
+
+        final hasNext = (data['pagination']
+                as Map<String, dynamic>?)?['hasNext'] as bool? ??
+            false;
+
+        return right(<String, dynamic>{
+          'comments': comments,
+          'hasNext': hasNext,
+        });
+      },
+    );
   }
 }

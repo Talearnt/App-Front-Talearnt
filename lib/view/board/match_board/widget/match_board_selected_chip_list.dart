@@ -47,14 +47,20 @@ class _MatchBoardSelectedChipListState
   }
 
   void _checkScrollable() {
-    final RenderBox renderBox = context.findRenderObject() as RenderBox;
+    if (!mounted) return;
+
+    final renderBox = context.findRenderObject() as RenderBox?;
+    if (renderBox == null) return;
+
     final containerWidth = renderBox.size.width;
     final contentWidth =
         _scrollController.position.maxScrollExtent + containerWidth;
 
-    setState(() {
-      _isScrollable = contentWidth > containerWidth;
-    });
+    if (mounted) {
+      setState(() {
+        _isScrollable = contentWidth > containerWidth;
+      });
+    }
   }
 
   @override
