@@ -19,16 +19,9 @@ class ProfileOtherSection extends StatelessWidget {
         ),
         CreateSettingMenu(
           iconPath: 'assets/icons/notice.svg',
-          title: '이벤트',
+          title: '이벤트/공지사항',
           onTap: () {
             context.push('/event-notice');
-          },
-        ),
-        CreateSettingMenu(
-          iconPath: 'assets/icons/notice.svg',
-          title: '공지사항',
-          onTap: () {
-            // 공지사항 페이지 이동
           },
         ),
         CreateSettingMenu(

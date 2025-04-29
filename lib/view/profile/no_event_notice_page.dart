@@ -22,16 +22,16 @@ class NoEventNoticePage extends StatelessWidget {
             children: [
               Text(
                 type == 'event' ? '등록된 이벤트가 없어요' : '등록된 공지사항이 없어요',
-                style: TextTypes.heading2(color: Palette.text01),
+                style: TextTypes.heading4(color: Palette.text01),
               ),
               const SizedBox(height: 8),
               Text(
                 type == 'event' ? '좋은 이벤트를 가져올게요' : '좋은 소식을 가져올게요',
-                style: TextTypes.bodyMedium01(color: Palette.text02),
+                style: TextTypes.body02(color: Palette.text03),
               ),
               Text(
                 '조금만 기다려 주세요',
-                style: TextTypes.bodyMedium01(color: Palette.text02),
+                style: TextTypes.body02(color: Palette.text03),
               ),
             ],
           ),

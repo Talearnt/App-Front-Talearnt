@@ -91,7 +91,8 @@ class ProfilePage extends StatelessWidget {
                                   ),
                                   PrimaryS(
                                     content: "로그인",
-                                    onPressed: () {
+                                    onPressed: () async {
+                                      await loginProvider.changeRoot('profile');
                                       context.go("/login");
                                     },
                                   ),

@@ -11,6 +11,7 @@ import '../../provider/profile/profile_provider.dart';
 class UserImagePreviewPage extends StatelessWidget {
   const UserImagePreviewPage({super.key});
 
+  //해당 페이지는 원 클립이 제대로 되지 않아 이후에 다시 확인 할 필요가 있음.
   @override
   Widget build(BuildContext context) {
     final profileProvider = Provider.of<ProfileProvider>(context);
@@ -38,39 +39,58 @@ class UserImagePreviewPage extends StatelessWidget {
             }),
         bgColor: Palette.text01,
       ),
-      body: Stack(
-        alignment: Alignment.center,
-        children: [
-          Container(
-            color: Colors.black, // 검정색 배경
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final containerWidth = MediaQuery.of(context).size.width;
+          final containerHeight = MediaQuery.of(context).size.height;
+
+          final imageWidth = profileProvider.tempImageSize!.width;
+          final imageHeight = profileProvider.tempImageSize!.height;
+
+          final widthScale = containerWidth / imageWidth;
+          final heightScale = containerHeight / imageHeight;
+          final scale = widthScale < heightScale ? widthScale : heightScale;
+
+          final cropRadius = (104 * scale) / 2;
+
+          return Stack(
             alignment: Alignment.center,
-            child: Image.file(
-              profileProvider.tempImageFile!,
-              fit: BoxFit.contain, // 비율 유지하면서 중앙 배치
-              width: double.infinity,
-              height: double.infinity,
-            ),
-          ),
-          Positioned.fill(
-            child: ClipPath(
-              clipper: CircleHoleClipper(),
-              child: Container(
-                color: Colors.black.withAlpha((0.6 * 255).toInt()),
+            children: [
+              Container(
+                color: Colors.black,
+                alignment: Alignment.center,
+                child: Image.file(
+                  profileProvider.tempImageFile!,
+                  fit: BoxFit.contain,
+                  width: double.infinity,
+                  height: double.infinity,
+                ),
               ),
-            ),
-          ),
-        ],
+              Positioned.fill(
+                child: ClipPath(
+                  clipper: CircleHoleClipper(radius: cropRadius),
+                  child: Container(
+                    color: Colors.black.withAlpha((0.6 * 255).toInt()),
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
 }
 
 class CircleHoleClipper extends CustomClipper<Path> {
+  final double radius;
+
+  CircleHoleClipper({required this.radius});
+
   @override
   Path getClip(Size size) {
     final outer = Path()..addRect(Rect.fromLTWH(0, 0, size.width, size.height));
     final center = Offset(size.width / 2, size.height / 2);
-    const radius = 208.0;
     final hole = Path()
       ..addOval(Rect.fromCircle(center: center, radius: radius));
 

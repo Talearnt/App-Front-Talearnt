@@ -1,6 +1,7 @@
 import 'package:app_front_talearnt/common/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 
 class TopAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String content;
@@ -35,7 +36,10 @@ class TopAppBar extends StatelessWidget implements PreferredSizeWidget {
                 icon: SvgPicture.asset(
                   'assets/icons/back_arrow.svg', // SVG 파일 경로
                 ),
-                onPressed: onPressed ?? () {},
+                onPressed: onPressed ??
+                    () {
+                      context.pop();
+                    },
               )
           : Container(),
       title: Text(

@@ -44,7 +44,8 @@ class AuthViewModel extends ChangeNotifier {
     this.profileViewModel,
   );
 
-  Future<void> login(String email, String pw) async {
+  Future<void> login(String email, String pw, String root) async {
+    // root - login or profile
     LoginParam param = LoginParam(userId: email, pw: pw);
     final result = await authRepository.login(param);
     result.fold(
@@ -53,7 +54,7 @@ class AuthViewModel extends ChangeNotifier {
       (token) {
         tokenManager.saveToken(token);
         loginProvider.updateLoginFormSuccess();
-        profileViewModel.getUserProfile();
+        profileViewModel.getUserProfile(root);
       },
     );
   }

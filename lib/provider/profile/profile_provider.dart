@@ -1,4 +1,7 @@
+import 'dart:async';
 import 'dart:io';
+import 'dart:typed_data' as typed_data;
+import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -36,11 +39,9 @@ class ProfileProvider extends ChangeNotifier with ClearText {
 
   Object? _imageFile;
   File? _tempImageFile;
+  Size? _tempImageSize;
   final ImagePicker _picker = ImagePicker();
 
-  Object? get imageFile => _imageFile;
-
-  File? get tempImageFile => _tempImageFile;
   bool _editNickNameValid = true;
   bool _checkEditNickNameDuplication = false; //중복체크 false - 중복아님
   String _editNickNameValidMessage = '';
@@ -52,7 +53,7 @@ class ProfileProvider extends ChangeNotifier with ClearText {
   String _editNickNameHelperType = '';
   bool _editNickNameHelper = false;
   bool _changeEditNickName = false; //닉네임 변경했는지
-  final String _errorMessage = "";
+  String _errorMessage = "";
 
   TabController get giveTalentTabController => _giveTalentTabController;
 
@@ -105,6 +106,12 @@ class ProfileProvider extends ChangeNotifier with ClearText {
   bool get changeEditNickName => _changeEditNickName;
 
   String get errorMessage => _errorMessage;
+
+  Object? get imageFile => _imageFile;
+
+  File? get tempImageFile => _tempImageFile;
+
+  Size? get tempImageSize => _tempImageSize;
 
   void setUserProfile(UserProfile userProfile) {
     _userProfile = userProfile;
@@ -196,6 +203,7 @@ class ProfileProvider extends ChangeNotifier with ClearText {
       _editNickNameValid = true;
       _editNickNameValidMessage = "사용가능한 닉네임 입니다.";
     }
+    notifyListeners();
   }
 
   void removeGiveTalentsList(int giveTalent) {
@@ -249,11 +257,27 @@ class ProfileProvider extends ChangeNotifier with ClearText {
   Future<void> pickImage(ImageSource source, BuildContext context) async {
     final pickedFile =
         await _picker.pickImage(source: source, imageQuality: 80);
+
     if (pickedFile != null) {
       _tempImageFile = File(pickedFile.path);
+
+      final bytes = await pickedFile.readAsBytes();
+      final imageSize = await _getImageSize(bytes);
+      _tempImageSize = imageSize;
       notifyListeners();
     }
     if (context.mounted) context.pop();
+  }
+
+  Future<Size> _getImageSize(typed_data.Uint8List imageBytes) {
+    final completer = Completer<Size>();
+
+    ui.decodeImageFromList(imageBytes, (ui.Image image) {
+      final size = Size(image.width.toDouble(), image.height.toDouble());
+      completer.complete(size);
+    });
+
+    return completer.future;
   }
 
   void resetImage() {
@@ -267,6 +291,29 @@ class ProfileProvider extends ChangeNotifier with ClearText {
       _tempImageFile = null;
       notifyListeners();
     }
+  }
+
+  void resetModifyProfile() {
+    _editNickNameController.clear();
+    _editNickNameFocusNode.unfocus();
+    _editGiveTalents.clear();
+    _editReceiveTalents.clear();
+    _imageFile = null;
+    _tempImageFile = null;
+    _tempImageSize = null;
+    _editNickNameValid = true;
+    _checkEditNickNameDuplication = false;
+    _editNickNameValidMessage = '';
+    _isEditNickNameInfoValid = false;
+    _editNickNameInfoValidMessage = '';
+    _isEditNickNameInfo = true;
+    _editNickNameInfoMessage = '';
+    _editNickNameInfoType = 'checkInfo';
+    _editNickNameHelperType = '';
+    _editNickNameHelper = false;
+    _changeEditNickName = false;
+    _errorMessage = "";
+    notifyListeners();
   }
 
   @override

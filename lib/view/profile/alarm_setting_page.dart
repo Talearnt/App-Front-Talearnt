@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../common/widget/custom_toggle.dart';
+import '../../common/widget/toast_message.dart';
 import '../../common/widget/top_app_bar.dart';
 import '../../provider/profile/profile_provider.dart';
 
@@ -52,6 +53,12 @@ class AlarmSettingPage extends StatelessWidget {
                       value: profileProvider.allAlarm,
                       onChanged: (alarm) {
                         profileProvider.changeAllAlarm(alarm);
+                        ToastMessage.show(
+                          context: context,
+                          message: "알림 설정이 변경되었습니다.",
+                          type: 1,
+                          bottom: 50,
+                        );
                       },
                     ),
                   ],
@@ -73,6 +80,12 @@ class AlarmSettingPage extends StatelessWidget {
                       value: profileProvider.commentAlarm,
                       onChanged: (alarm) {
                         profileProvider.changeCommentAlarm(alarm);
+                        ToastMessage.show(
+                          context: context,
+                          message: "알림 설정이 변경되었습니다.",
+                          type: 1,
+                          bottom: 50,
+                        );
                       },
                     ),
                   ],
@@ -90,6 +103,12 @@ class AlarmSettingPage extends StatelessWidget {
                       value: profileProvider.keywordAlarm,
                       onChanged: (alarm) {
                         profileProvider.changeKeywordAlarm(alarm);
+                        ToastMessage.show(
+                          context: context,
+                          message: "알림 설정이 변경되었습니다.",
+                          type: 1,
+                          bottom: 50,
+                        );
                       },
                     ),
                   ],

@@ -18,9 +18,19 @@ class ProfileUserInfo extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const CircleAvatar(
-            radius: 40,
-            // backgroundImage: AssetImage('assets/profile.png'), // 프로필 이미지 경로 설정
+          CircleAvatar(
+            radius: 52,
+            backgroundImage: profileProvider.userProfile.profileImg == ""
+                ? null
+                : NetworkImage(profileProvider.userProfile.profileImg)
+                    as ImageProvider,
+            child: profileProvider.userProfile.profileImg == ""
+                ? SvgPicture.asset(
+                    'assets/img/default_user_image.svg',
+                    width: 104,
+                    height: 104,
+                  )
+                : null,
           ),
           const SizedBox(height: 10),
           Center(

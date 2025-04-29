@@ -254,6 +254,7 @@ class HomePage extends StatelessWidget {
                                       PrimaryS(
                                         content: "로그인",
                                         onPressed: () {
+                                          loginProvider.changeRoot('login');
                                           context.push("/login");
                                         },
                                       ),

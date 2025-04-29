@@ -24,7 +24,7 @@ class CustomToggle extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 4),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(100),
-          color: value ? Palette.primary01 : Colors.grey,
+          color: value ? Palette.primary01 : Palette.icon03,
         ),
         child: AnimatedAlign(
           duration: const Duration(milliseconds: 230),

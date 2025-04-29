@@ -1,10 +1,9 @@
-import 'package:app_front_talearnt/common/common_navigator.dart';
 import 'package:app_front_talearnt/view/auth/widget/login_form.dart';
 import 'package:app_front_talearnt/view/auth/widget/simple_login_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 import '../../common/widget/loading.dart';
 import '../../data/services/secure_storage_service.dart';
@@ -30,7 +29,7 @@ class LoginPage extends StatelessWidget {
           final password = await secureStorageService.read(key: "password");
           if (email != null && password != null) {
             commonProvider.changeIsLoading(true);
-            await authViewModel.login(email, password);
+            await authViewModel.login(email, password, loginProvider.loginRoot);
             commonProvider.changeIsLoading(false);
           }
         }
