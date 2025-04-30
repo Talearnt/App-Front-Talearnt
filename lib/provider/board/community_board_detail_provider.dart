@@ -159,4 +159,19 @@ class CommunityBoardDetailProvider extends ChangeNotifier with ClearText {
     _commentFocusNode.requestFocus();
     notifyListeners();
   }
+
+  void mergeComments(List<CommunityCommentResponse> fetched) {
+    final existingIds = commentList.map((c) => c.commentNo).toSet();
+
+    final newOnes =
+        fetched.where((c) => !existingIds.contains(c.commentNo)).toList();
+
+    if (newOnes.isNotEmpty) {
+      commentList.addAll(newOnes);
+      toggleCommentInputActive();
+      commentController.clear();
+      commentFocusNode.unfocus();
+      notifyListeners();
+    }
+  }
 }

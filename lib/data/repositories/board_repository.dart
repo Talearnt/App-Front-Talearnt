@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:app_front_talearnt/data/model/param/community_board_commnet.dart';
 import 'package:app_front_talearnt/data/model/param/community_board_reply.dart';
 import 'package:app_front_talearnt/data/model/param/match_board_param.dart';
+import 'package:app_front_talearnt/data/model/param/post_comment.dart';
 import 'package:app_front_talearnt/data/model/param/s3_controller_param.dart';
 import 'package:app_front_talearnt/data/model/respone/community_comment.dart';
 import 'package:app_front_talearnt/data/model/respone/community_reply.dart';
@@ -173,6 +174,34 @@ class BoardRepository {
         final comments = rawList
             .map((e) =>
                 CommunityReplyResponse.fromJson(e as Map<String, dynamic>))
+            .toList();
+
+        final hasNext = (data['pagination']
+                as Map<String, dynamic>?)?['hasNext'] as bool? ??
+            false;
+
+        return right(<String, dynamic>{
+          'comments': comments,
+          'hasNext': hasNext,
+        });
+      },
+    );
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> insertCommunityComments(
+      PostComment body) async {
+    final response = await dio.post(
+        ApiConstants.insertCommunityComments, body.toJson(), null);
+
+    return response.fold(
+      left,
+      (result) {
+        final data = result['data'] as Map<String, dynamic>;
+        final rawList = data['results'] as List<dynamic>;
+
+        final comments = rawList
+            .map((e) =>
+                CommunityCommentResponse.fromJson(e as Map<String, dynamic>))
             .toList();
 
         final hasNext = (data['pagination']

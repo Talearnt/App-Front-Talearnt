@@ -320,6 +320,8 @@ class CommunityBoardDetailPage extends StatelessWidget {
                   ? CommunityDetailBoardCommentInput(
                       communityBoardDetailProvider:
                           communityBoardDetailProvider,
+                      insertComment: (postNo, content) =>
+                          viewModel.insertComment(postNo, content),
                     )
                   : CommunityDetailBoardBottom(
                       communityBoardDetailProvider:
