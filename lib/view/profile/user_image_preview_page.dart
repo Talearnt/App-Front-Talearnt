@@ -70,7 +70,7 @@ class UserImagePreviewPage extends StatelessWidget {
                 child: ClipPath(
                   clipper: CircleHoleClipper(radius: cropRadius),
                   child: Container(
-                    color: Colors.black.withAlpha((0.6 * 255).toInt()),
+                    color: Colors.black.withAlpha((0.7 * 255).toInt()),
                   ),
                 ),
               ),
