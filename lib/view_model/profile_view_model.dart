@@ -16,7 +16,7 @@ class ProfileViewModel extends ChangeNotifier {
     this.profileProvider,
   );
 
-  Future<void> getUserProfile() async {
+  Future<void> getUserProfile(String root) async {
     final result = await profileRepository.getUserProfile();
 
     result.fold(
@@ -30,9 +30,27 @@ class ProfileViewModel extends ChangeNotifier {
             userProfile.giveTalents.isEmpty) {
           commonNavigator.goRoute('/set-keyword');
         } else {
-          commonNavigator.goRoute('/');
+          root == "profile"
+              ? commonNavigator.goRoute('/profile')
+              : commonNavigator.goRoute('/');
         }
       },
     );
+  }
+
+  Future<void> checkEditNickNameDuplication(String? nickName) async {
+    if (profileProvider.changeEditNickName) {
+      profileProvider.updateEditNickNameChange(false);
+      final result =
+          await profileRepository.checkNickNameDuplication(nickName!);
+      result.fold(
+        (failure) => commonNavigator.showSingleDialog(
+          content: ErrorMessages.getMessage(failure.errorCode),
+        ),
+        (isNickNameDuplication) {
+          profileProvider.checkEditNickNameDuplication(isNickNameDuplication);
+        },
+      );
+    }
   }
 }

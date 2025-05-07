@@ -99,8 +99,10 @@ class LoginForm extends StatelessWidget {
                 secureStorageService.delete(key: "password");
               }
               commonProvider.changeIsLoading(true);
-              await authViewModel.login(loginProvider.emailController.text,
-                  loginProvider.passwordController.text);
+              await authViewModel.login(
+                  loginProvider.emailController.text,
+                  loginProvider.passwordController.text,
+                  loginProvider.loginRoot);
               commonProvider.changeIsLoading(false);
               // await talentBoardViewModel.getKeywords(); 하드코딩으로 대체
             }
@@ -124,8 +126,10 @@ class LoginForm extends StatelessWidget {
             loginProvider.testAutoLogin();
             commonProvider.changeIsLoading(true);
             await authViewModel
-                .login(loginProvider.emailController.text,
-                    loginProvider.passwordController.text)
+                .login(
+                    loginProvider.emailController.text,
+                    loginProvider.passwordController.text,
+                    loginProvider.loginRoot)
                 .whenComplete(
               () {
                 commonProvider.changeIsLoading(false);

@@ -31,9 +31,9 @@ class BoardViewModel extends ChangeNotifier {
   final MatchBoardDetailProvider talentBoardDetailProvider;
   final MatchEditProvider matchEditProvider;
   final CommunityBoardProvider communityBoardProvider;
-  final HomeProvider homeProvider;
   final CommunityWriteProvider communityWriteProvider;
   final CommunityBoardDetailProvider communityBoardDetailProvider;
+  final HomeProvider homeProvider;
 
   BoardViewModel(
       this.commonNavigator,
@@ -44,9 +44,9 @@ class BoardViewModel extends ChangeNotifier {
       this.talentBoardDetailProvider,
       this.matchEditProvider,
       this.communityBoardProvider,
-      this.homeProvider,
       this.communityWriteProvider,
-      this.communityBoardDetailProvider);
+      this.communityBoardDetailProvider,
+      this.homeProvider);
 
   Future<void> getImageUploadUrl(
       List<Map<String, dynamic>> uploadImageInfos, String type) async {

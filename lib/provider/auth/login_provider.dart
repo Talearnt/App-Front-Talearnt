@@ -6,6 +6,7 @@ class LoginProvider extends ChangeNotifier with ClearText {
   bool _initLoggedIn = true;
   bool _autoLoggedIn = false;
   bool _isLoggedIn = false;
+  String _loginRoot = 'login';
   final TextEditingController _emailController = TextEditingController();
   final FocusNode _emailFocusNode = FocusNode();
   bool _emailValid = true;
@@ -18,9 +19,12 @@ class LoginProvider extends ChangeNotifier with ClearText {
   String _passwordValidMessage = '';
 
   bool get initLoggedIn => _initLoggedIn;
+
   bool get autoLoggedIn => _autoLoggedIn;
 
   bool get isLoggedIn => _isLoggedIn;
+
+  String get loginRoot => _loginRoot;
 
   TextEditingController get emailController => _emailController;
 
@@ -114,10 +118,12 @@ class LoginProvider extends ChangeNotifier with ClearText {
     _isLoggedIn = false;
     notifyListeners();
   }
+
   void setAutoLogin() {
     _autoLoggedIn = !_autoLoggedIn;
     notifyListeners();
   }
+
   void updateInitLoggedIn(bool loggedIn) {
     _initLoggedIn = loggedIn;
     notifyListeners();
@@ -126,6 +132,11 @@ class LoginProvider extends ChangeNotifier with ClearText {
   void testAutoLogin() {
     _emailController.text = "test@test.com";
     _passwordController.text = "!1q2w3e4r";
+    notifyListeners();
+  }
+
+  Future<void> changeRoot(String newRoot) async {
+    _loginRoot = newRoot;
     notifyListeners();
   }
 }
