@@ -1,4 +1,5 @@
 class CommunityCommentResponse {
+  final int userNo;
   final int commentNo;
   final String nickname;
   final String? profileImg;
@@ -7,6 +8,7 @@ class CommunityCommentResponse {
   final int replyCount;
 
   CommunityCommentResponse({
+    required this.userNo,
     required this.commentNo,
     required this.nickname,
     this.profileImg,
@@ -17,6 +19,7 @@ class CommunityCommentResponse {
 
   factory CommunityCommentResponse.fromJson(Map<String, dynamic> json) {
     return CommunityCommentResponse(
+      userNo: json['userNo'] as int,
       commentNo: json['commentNo'] as int,
       nickname: json['nickname'] as String,
       profileImg: json['profileImg'] as String?,

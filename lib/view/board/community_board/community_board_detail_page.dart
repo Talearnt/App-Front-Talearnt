@@ -305,6 +305,7 @@ class CommunityBoardDetailPage extends StatelessWidget {
                           CommunityComment(
                             communityBoardDetailProvider:
                                 communityBoardDetailProvider,
+                            profileProvider: profileProvider,
                             loadComments: (postNo, lastNo) =>
                                 viewModel.getComments(postNo, lastNo),
                             loadReplies: (commentNo, lastNo) =>

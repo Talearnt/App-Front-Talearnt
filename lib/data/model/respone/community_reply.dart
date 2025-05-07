@@ -1,4 +1,5 @@
 class CommunityReplyResponse {
+  final int userNo;
   final int replyNo;
   final int commentNo;
   final String nickname;
@@ -7,6 +8,7 @@ class CommunityReplyResponse {
   final DateTime createdAt;
 
   CommunityReplyResponse({
+    required this.userNo,
     required this.replyNo,
     required this.commentNo,
     required this.nickname,
@@ -17,6 +19,7 @@ class CommunityReplyResponse {
 
   factory CommunityReplyResponse.fromJson(Map<String, dynamic> json) {
     return CommunityReplyResponse(
+      userNo: json['userNo'] as int,
       replyNo: json['replyNo'] as int,
       commentNo: json['commentNo'] as int,
       nickname: json['nickname'] as String,
