@@ -1,6 +1,5 @@
 import 'package:app_front_talearnt/common/theme.dart';
 import 'package:app_front_talearnt/common/widget/button.dart';
-import 'package:app_front_talearnt/common/widget/default_text_field.dart';
 import 'package:app_front_talearnt/common/widget/toast_message.dart';
 import 'package:app_front_talearnt/provider/board/community_board_detail_provider.dart';
 import 'package:flutter/material.dart';
@@ -8,11 +7,13 @@ import 'package:flutter/material.dart';
 class CommunityDetailBoardCommentInput extends StatelessWidget {
   final CommunityBoardDetailProvider communityBoardDetailProvider;
   final Future<void> Function(int postNo, String content) insertComment;
+  final Future<void> Function(String content) updateComment;
 
   const CommunityDetailBoardCommentInput({
     super.key,
     required this.communityBoardDetailProvider,
     required this.insertComment,
+    required this.updateComment,
   });
 
   @override
@@ -61,20 +62,36 @@ class CommunityDetailBoardCommentInput extends StatelessWidget {
               content: '등록',
               type: "B",
               onPressed: () {
-                insertComment(
-                  communityBoardDetailProvider
-                      .communityDetailBoard.communityPostNo,
-                  communityBoardDetailProvider.commentController.text,
-                ).then(
-                  (value) {
-                    ToastMessage.show(
-                      context: context,
-                      message: "댓글이 등록되었습니다.",
-                      type: 1,
-                      bottom: 50,
-                    );
-                  },
-                );
+                if (communityBoardDetailProvider.commentType == "insert") {
+                  insertComment(
+                    communityBoardDetailProvider
+                        .communityDetailBoard.communityPostNo,
+                    communityBoardDetailProvider.commentController.text,
+                  ).then(
+                    (value) {
+                      ToastMessage.show(
+                        context: context,
+                        message: "댓글이 등록되었습니다.",
+                        type: 1,
+                        bottom: 50,
+                      );
+                    },
+                  );
+                } else if (communityBoardDetailProvider.commentType ==
+                    "update") {
+                  updateComment(
+                          communityBoardDetailProvider.commentController.text)
+                      .then(
+                    (value) {
+                      ToastMessage.show(
+                        context: context,
+                        message: "댓글이 수정되었습니다.",
+                        type: 1,
+                        bottom: 50,
+                      );
+                    },
+                  );
+                }
               },
             ),
           ],

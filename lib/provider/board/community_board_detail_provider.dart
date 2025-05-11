@@ -24,6 +24,9 @@ class CommunityBoardDetailProvider extends ChangeNotifier with ClearText {
 
   final Map<int, bool> _replyHasNext = {};
 
+  String _commentType = 'insert';
+  int _targetcommnet = 0;
+
   bool _hasNext = false;
 
   bool _isCommentInputActive = false;
@@ -55,6 +58,10 @@ class CommunityBoardDetailProvider extends ChangeNotifier with ClearText {
 
   FocusNode get commentFocusNode => _commentFocusNode;
 
+  String get commentType => _commentType;
+
+  int get targetComment => _targetcommnet;
+
   void clearProvider() {
     _commentList = [];
     _replyOpenMap = {};
@@ -63,6 +70,9 @@ class CommunityBoardDetailProvider extends ChangeNotifier with ClearText {
 
     _commentController.clear();
     _commentFocusNode.unfocus();
+
+    _commentType = 'insert';
+    _targetcommnet = 0;
 
     notifyListeners();
   }
@@ -154,8 +164,8 @@ class CommunityBoardDetailProvider extends ChangeNotifier with ClearText {
       _replyMap[commentNo] ?? [];
   bool hasNextReplies(int commentNo) => _replyHasNext[commentNo] ?? false;
 
-  void toggleCommentInputActive() {
-    _isCommentInputActive = !_isCommentInputActive;
+  void toggleCommentInputActive(bool state) {
+    _isCommentInputActive = state;
     _commentFocusNode.requestFocus();
     notifyListeners();
   }
@@ -167,11 +177,59 @@ class CommunityBoardDetailProvider extends ChangeNotifier with ClearText {
         fetched.where((c) => !existingIds.contains(c.commentNo)).toList();
 
     if (newOnes.isNotEmpty) {
-      commentList.addAll(newOnes);
-      toggleCommentInputActive();
-      commentController.clear();
-      commentFocusNode.unfocus();
+      _commentList.addAll(newOnes);
+      toggleCommentInputActive(false);
+      _commentController.clear();
+      _commentFocusNode.unfocus();
       notifyListeners();
     }
+  }
+
+  void setInsertComment() {
+    toggleCommentInputActive(true);
+
+    _commentType = 'insert';
+    _targetcommnet = 0;
+
+    notifyListeners();
+  }
+
+  void setEditComment(int commnetNo) {
+    toggleCommentInputActive(true);
+
+    final idx = _commentList.indexWhere((c) => c.commentNo == commnetNo);
+    _commentController.text = _commentList[idx].content;
+
+    _commentType = 'update';
+    _targetcommnet = commnetNo;
+
+    notifyListeners();
+  }
+
+  void updateCommentContent(int commentNo, String newContent) {
+    for (var i = 0; i < _commentList.length; i++) {
+      if (_commentList[i].commentNo == commentNo) {
+        _commentList[i] = CommunityCommentResponse(
+          userNo: _commentList[i].userNo,
+          commentNo: _commentList[i].commentNo,
+          nickname: _commentList[i].nickname,
+          profileImg: _commentList[i].profileImg,
+          content: newContent,
+          createdAt: _commentList[i].createdAt,
+          replyCount: _commentList[i].replyCount,
+        );
+        break;
+      }
+    }
+
+    toggleCommentInputActive(false);
+
+    _commentController.clear();
+    _commentFocusNode.unfocus();
+
+    _commentType = 'insert';
+    _targetcommnet = 0;
+
+    notifyListeners();
   }
 }

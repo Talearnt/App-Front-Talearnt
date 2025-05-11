@@ -4,6 +4,7 @@ import 'package:app_front_talearnt/data/model/param/community_board_commnet.dart
 import 'package:app_front_talearnt/data/model/param/community_board_reply.dart';
 import 'package:app_front_talearnt/data/model/param/match_board_param.dart';
 import 'package:app_front_talearnt/data/model/param/post_comment.dart';
+import 'package:app_front_talearnt/data/model/param/put_comment.dart';
 import 'package:app_front_talearnt/provider/board/community_write_provider.dart';
 import 'package:app_front_talearnt/provider/board/match_edit_provider.dart';
 import 'package:app_front_talearnt/provider/home/home_provider.dart';
@@ -426,6 +427,20 @@ class BoardViewModel extends ChangeNotifier {
         (failure) => commonNavigator.showSingleDialog(
             content: ErrorMessages.getMessage(failure.errorCode)), (result) {
       communityBoardDetailProvider.mergeComments(result['comments']);
+    });
+  }
+
+  Future<void> updateComment(String content) async {
+    PutComment param = PutComment(content: content);
+
+    final result = await boardRepository.UpdateCommunityComments(
+        param, communityBoardDetailProvider.targetComment);
+
+    result.fold(
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)), (result) {
+      communityBoardDetailProvider.updateCommentContent(
+          communityBoardDetailProvider.targetComment, content);
     });
   }
 }

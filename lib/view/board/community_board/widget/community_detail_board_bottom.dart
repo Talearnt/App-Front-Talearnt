@@ -30,7 +30,7 @@ class CommunityDetailBoardBottom extends StatelessWidget {
           Expanded(
             child: GestureDetector(
               onTap: () {
-                communityBoardDetailProvider.toggleCommentInputActive();
+                communityBoardDetailProvider.setInsertComment();
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,

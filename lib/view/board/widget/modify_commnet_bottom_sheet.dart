@@ -1,4 +1,5 @@
 import 'package:app_front_talearnt/common/theme.dart';
+import 'package:app_front_talearnt/provider/board/community_board_detail_provider.dart';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -7,12 +8,14 @@ import 'package:provider/provider.dart';
 import '../../../common/common_navigator.dart';
 
 class ModifyCommnetBottomSheet extends StatelessWidget {
+  final CommunityBoardDetailProvider communityBoardDetailProvider;
   final bool isMine;
   final bool isWriter;
   final int commentNo;
 
   const ModifyCommnetBottomSheet({
     super.key,
+    required this.communityBoardDetailProvider,
     required this.isMine,
     required this.isWriter,
     required this.commentNo,
@@ -57,7 +60,10 @@ class ModifyCommnetBottomSheet extends StatelessWidget {
                   splashColor: Colors.transparent,
                   highlightColor: Colors.transparent,
                   hoverColor: Colors.transparent,
-                  onTap: () async {},
+                  onTap: () async {
+                    context.pop();
+                    communityBoardDetailProvider.setEditComment(commentNo);
+                  },
                   child: Center(
                     child: Text(
                       "수정하기",

@@ -1,5 +1,4 @@
 import 'package:app_front_talearnt/provider/profile/profile_provider.dart';
-import 'package:app_front_talearnt/view/board/widget/modify_board_bottom_sheet.dart';
 import 'package:app_front_talearnt/view/board/widget/modify_commnet_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -151,6 +150,8 @@ class CommunityComment extends StatelessWidget {
                                         clipBehavior: Clip.antiAlias,
                                         builder: (BuildContext context) {
                                           return ModifyCommnetBottomSheet(
+                                            communityBoardDetailProvider:
+                                                communityBoardDetailProvider,
                                             isMine: profileProvider
                                                     .userProfile.userNo ==
                                                 c.userNo,

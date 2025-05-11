@@ -4,6 +4,7 @@ import 'package:app_front_talearnt/data/model/param/community_board_commnet.dart
 import 'package:app_front_talearnt/data/model/param/community_board_reply.dart';
 import 'package:app_front_talearnt/data/model/param/match_board_param.dart';
 import 'package:app_front_talearnt/data/model/param/post_comment.dart';
+import 'package:app_front_talearnt/data/model/param/put_comment.dart';
 import 'package:app_front_talearnt/data/model/param/s3_controller_param.dart';
 import 'package:app_front_talearnt/data/model/respone/community_comment.dart';
 import 'package:app_front_talearnt/data/model/respone/community_reply.dart';
@@ -214,5 +215,13 @@ class BoardRepository {
         });
       },
     );
+  }
+
+  Future<Either<Failure, Success>> UpdateCommunityComments(
+      PutComment body, int commentNo) async {
+    final response = await dio.put(
+        ApiConstants.updateCommunityComments(commentNo), body.toJson());
+
+    return response.fold(left, (result) => right(Success.fromJson(result)));
   }
 }

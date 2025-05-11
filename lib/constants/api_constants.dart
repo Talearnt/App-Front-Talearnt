@@ -59,4 +59,8 @@ abstract class ApiConstants {
   static String getCommunityReply(int commentNo) {
     return "$baseUrl/v1/communities/$commentNo/replies";
   }
+
+  static String updateCommunityComments(int commentNo) {
+    return "$baseUrl/v1/communities/comments/$commentNo";
+  }
 }
