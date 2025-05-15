@@ -8,12 +8,14 @@ class CommunityDetailBoardCommentInput extends StatelessWidget {
   final CommunityBoardDetailProvider communityBoardDetailProvider;
   final Future<void> Function(int postNo, String content) insertComment;
   final Future<void> Function(String content) updateComment;
+  final Future<void> Function(int commentNo, String content) insertReplies;
 
   const CommunityDetailBoardCommentInput({
     super.key,
     required this.communityBoardDetailProvider,
     required this.insertComment,
     required this.updateComment,
+    required this.insertReplies,
   });
 
   @override
@@ -59,10 +61,16 @@ class CommunityDetailBoardCommentInput extends StatelessWidget {
               width: 8,
             ),
             PrimaryXs(
-              content: '등록',
+              content: communityBoardDetailProvider.commentType == 'insertC' ||
+                      communityBoardDetailProvider.commentType == 'insertR'
+                  ? '등록'
+                  : communityBoardDetailProvider.commentType == 'updateC' ||
+                          communityBoardDetailProvider.commentType == 'updateR'
+                      ? '수정'
+                      : '',
               type: "B",
               onPressed: () {
-                if (communityBoardDetailProvider.commentType == "insert") {
+                if (communityBoardDetailProvider.commentType == "insertC") {
                   insertComment(
                     communityBoardDetailProvider
                         .communityDetailBoard.communityPostNo,
@@ -78,7 +86,7 @@ class CommunityDetailBoardCommentInput extends StatelessWidget {
                     },
                   );
                 } else if (communityBoardDetailProvider.commentType ==
-                    "update") {
+                    "updateC") {
                   updateComment(
                           communityBoardDetailProvider.commentController.text)
                       .then(
@@ -86,6 +94,21 @@ class CommunityDetailBoardCommentInput extends StatelessWidget {
                       ToastMessage.show(
                         context: context,
                         message: "댓글이 수정되었습니다.",
+                        type: 1,
+                        bottom: 50,
+                      );
+                    },
+                  );
+                } else if (communityBoardDetailProvider.commentType ==
+                    "insertR") {
+                  insertReplies(
+                    communityBoardDetailProvider.targetComment,
+                    communityBoardDetailProvider.commentController.text,
+                  ).then(
+                    (value) {
+                      ToastMessage.show(
+                        context: context,
+                        message: "답글이 등록되었습니다.",
                         type: 1,
                         bottom: 50,
                       );

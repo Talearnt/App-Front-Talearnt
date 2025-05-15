@@ -24,8 +24,8 @@ class CommunityBoardDetailProvider extends ChangeNotifier with ClearText {
 
   final Map<int, bool> _replyHasNext = {};
 
-  String _commentType = 'insert';
-  int _targetcommnet = 0;
+  String _commentType = 'insertC';
+  int _targetcomment = 0;
 
   bool _hasNext = false;
 
@@ -60,7 +60,7 @@ class CommunityBoardDetailProvider extends ChangeNotifier with ClearText {
 
   String get commentType => _commentType;
 
-  int get targetComment => _targetcommnet;
+  int get targetComment => _targetcomment;
 
   void clearProvider() {
     _commentList = [];
@@ -71,8 +71,8 @@ class CommunityBoardDetailProvider extends ChangeNotifier with ClearText {
     _commentController.clear();
     _commentFocusNode.unfocus();
 
-    _commentType = 'insert';
-    _targetcommnet = 0;
+    _commentType = 'insertC';
+    _targetcomment = 0;
 
     notifyListeners();
   }
@@ -155,7 +155,7 @@ class CommunityBoardDetailProvider extends ChangeNotifier with ClearText {
   void prependReplies(int commentNo, List<CommunityReplyResponse> olderReplies,
       {required bool hasNextPage}) {
     final existing = _replyMap[commentNo] ?? [];
-    _replyMap[commentNo] = [...existing, ...olderReplies];
+    _replyMap[commentNo] = [...olderReplies, ...existing];
     _replyHasNext[commentNo] = hasNextPage;
     notifyListeners();
   }
@@ -188,8 +188,8 @@ class CommunityBoardDetailProvider extends ChangeNotifier with ClearText {
   void setInsertComment() {
     toggleCommentInputActive(true);
 
-    _commentType = 'insert';
-    _targetcommnet = 0;
+    _commentType = 'insertC';
+    _targetcomment = 0;
 
     notifyListeners();
   }
@@ -200,8 +200,8 @@ class CommunityBoardDetailProvider extends ChangeNotifier with ClearText {
     final idx = _commentList.indexWhere((c) => c.commentNo == commnetNo);
     _commentController.text = _commentList[idx].content;
 
-    _commentType = 'update';
-    _targetcommnet = commnetNo;
+    _commentType = 'updateC';
+    _targetcomment = commnetNo;
 
     notifyListeners();
   }
@@ -227,9 +227,37 @@ class CommunityBoardDetailProvider extends ChangeNotifier with ClearText {
     _commentController.clear();
     _commentFocusNode.unfocus();
 
-    _commentType = 'insert';
-    _targetcommnet = 0;
+    _commentType = 'insertC';
+    _targetcomment = 0;
 
     notifyListeners();
+  }
+
+  void setInsertReplies(int commentNo) {
+    toggleCommentInputActive(true);
+
+    _commentType = 'insertR';
+    _targetcomment = commentNo;
+
+    notifyListeners();
+  }
+
+  void mergeReplies(
+      int commentNo, List<CommunityReplyResponse> fetchedReplies) {
+    final existing = _replyMap[commentNo] ?? [];
+
+    final existingIds = existing.map((r) => r.replyNo).toSet();
+
+    final newReplies =
+        fetchedReplies.where((r) => !existingIds.contains(r.replyNo)).toList();
+
+    if (newReplies.isNotEmpty) {
+      _replyMap[commentNo] = [...existing, ...newReplies];
+      toggleCommentInputActive(false);
+      _commentController.clear();
+      _commentFocusNode.unfocus();
+      _commentType = 'insertR';
+      notifyListeners();
+    }
   }
 }

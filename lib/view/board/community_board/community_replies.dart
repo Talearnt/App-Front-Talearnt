@@ -24,6 +24,28 @@ class CommunityReplies extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        if (hasNext)
+          Container(
+            padding: const EdgeInsets.only(top: 16, bottom: 16, left: 64),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: TextButton(
+                onPressed: () {
+                  final lastNo = replies.isNotEmpty ? replies.first.replyNo : 0;
+                  loadReplies(commentNo, lastNo);
+                },
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  minimumSize: Size.zero,
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
+                child: Text(
+                  '이전 댓글 보기...',
+                  style: TextTypes.captionMedium02(color: Palette.text03),
+                ),
+              ),
+            ),
+          ),
         ListView.builder(
           itemCount: replies.length,
           shrinkWrap: true,
@@ -106,20 +128,25 @@ class CommunityReplies extends StatelessWidget {
                             style:
                                 TextTypes.bodyMedium03(color: Palette.text02)),
                         const SizedBox(height: 8),
-                        Row(
-                          children: [
-                            SizedBox(
-                              width: 18,
-                              height: 18,
-                              child: SvgPicture.asset(
-                                'assets/icons/comment.svg',
+                        InkWell(
+                          onTap: () {
+                            provider.setInsertReplies(r.commentNo);
+                          },
+                          child: Row(
+                            children: [
+                              SizedBox(
+                                width: 18,
+                                height: 18,
+                                child: SvgPicture.asset(
+                                  'assets/icons/comment.svg',
+                                ),
                               ),
-                            ),
-                            const SizedBox(width: 4),
-                            Text('답글 달기',
-                                style: TextTypes.captionMedium02(
-                                    color: Palette.text04)),
-                          ],
+                              const SizedBox(width: 4),
+                              Text('답글 달기',
+                                  style: TextTypes.captionMedium02(
+                                      color: Palette.text04)),
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -129,51 +156,6 @@ class CommunityReplies extends StatelessWidget {
             );
           },
         ),
-        if (hasNext)
-          Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(
-                  top: 16,
-                  bottom: 16,
-                  left: 96,
-                ),
-                child: GestureDetector(
-                  onTap: () {
-                    final lastNo =
-                        replies.isNotEmpty ? replies.last.replyNo : 0;
-                    loadReplies(commentNo, lastNo);
-                  },
-                  child: Container(
-                    width: 90,
-                    height: 36,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Palette.icon03,
-                      ),
-                      borderRadius: BorderRadius.circular(999),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 10,
-                        horizontal: 12,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            '답글 더보기',
-                            style: TextTypes.captionMedium02(
-                                color: Palette.text02),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
       ],
     );
   }

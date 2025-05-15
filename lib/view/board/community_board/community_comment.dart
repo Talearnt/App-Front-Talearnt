@@ -1,5 +1,5 @@
 import 'package:app_front_talearnt/provider/profile/profile_provider.dart';
-import 'package:app_front_talearnt/view/board/widget/modify_commnet_bottom_sheet.dart';
+import 'package:app_front_talearnt/view/board/widget/modify_comment_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_svg/flutter_svg.dart';

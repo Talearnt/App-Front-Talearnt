@@ -32,6 +32,9 @@ abstract class ApiConstants {
   static const String insertCommunityComments =
       "$baseUrl/v1/communities/comments";
 
+  static const String insertCommunityReplies =
+      "$baseUrl/v1/communities/replies";
+
   static String handleMatchDetailBoard(int postNo) {
     return "$baseUrl/v1/posts/exchanges/$postNo";
   }
