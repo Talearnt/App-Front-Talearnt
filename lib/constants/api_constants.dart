@@ -29,11 +29,10 @@ abstract class ApiConstants {
 
   static const String getUploadImagesUrl = "$baseUrl/v1/uploads";
 
-  static const String insertCommunityComments =
+  static const String insertCommunityComment =
       "$baseUrl/v1/communities/comments";
 
-  static const String insertCommunityReplies =
-      "$baseUrl/v1/communities/replies";
+  static const String insertCommunityReply = "$baseUrl/v1/communities/replies";
 
   static String handleMatchDetailBoard(int postNo) {
     return "$baseUrl/v1/posts/exchanges/$postNo";
@@ -63,7 +62,11 @@ abstract class ApiConstants {
     return "$baseUrl/v1/communities/$commentNo/replies";
   }
 
-  static String updateCommunityComments(int commentNo) {
+  static String updateCommunityComment(int commentNo) {
     return "$baseUrl/v1/communities/comments/$commentNo";
+  }
+
+  static String deleteCommnunityReply(int replyNo) {
+    return "$baseUrl/v1/communities/replies/$replyNo";
   }
 }

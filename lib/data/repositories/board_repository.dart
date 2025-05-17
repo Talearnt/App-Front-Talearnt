@@ -4,7 +4,7 @@ import 'package:app_front_talearnt/data/model/param/community_board_commnet.dart
 import 'package:app_front_talearnt/data/model/param/community_board_reply.dart';
 import 'package:app_front_talearnt/data/model/param/match_board_param.dart';
 import 'package:app_front_talearnt/data/model/param/post_comment.dart';
-import 'package:app_front_talearnt/data/model/param/post_replie.dart';
+import 'package:app_front_talearnt/data/model/param/post_reply.dart';
 import 'package:app_front_talearnt/data/model/param/put_comment.dart';
 import 'package:app_front_talearnt/data/model/param/s3_controller_param.dart';
 import 'package:app_front_talearnt/data/model/respone/community_comment.dart';
@@ -190,10 +190,10 @@ class BoardRepository {
     );
   }
 
-  Future<Either<Failure, Map<String, dynamic>>> insertCommunityComments(
+  Future<Either<Failure, Map<String, dynamic>>> insertCommunityComment(
       PostComment body) async {
     final response = await dio.post(
-        ApiConstants.insertCommunityComments, body.toJson(), null);
+        ApiConstants.insertCommunityComment, body.toJson(), null);
 
     return response.fold(
       left,
@@ -218,18 +218,18 @@ class BoardRepository {
     );
   }
 
-  Future<Either<Failure, Success>> UpdateCommunityComments(
+  Future<Either<Failure, Success>> UpdateCommunityComment(
       PutComment body, int commentNo) async {
     final response = await dio.put(
-        ApiConstants.updateCommunityComments(commentNo), body.toJson());
+        ApiConstants.updateCommunityComment(commentNo), body.toJson());
 
     return response.fold(left, (result) => right(Success.fromJson(result)));
   }
 
-  Future<Either<Failure, Map<String, dynamic>>> insertCommunityReplies(
-      PostReplie body) async {
-    final response = await dio.post(
-        ApiConstants.insertCommunityReplies, body.toJson(), null);
+  Future<Either<Failure, Map<String, dynamic>>> insertCommunityReply(
+      PostReply body) async {
+    final response =
+        await dio.post(ApiConstants.insertCommunityReply, body.toJson(), null);
 
     return response.fold(
       left,
@@ -252,5 +252,11 @@ class BoardRepository {
         });
       },
     );
+  }
+
+  Future<Either<Failure, Success>> deleteReply(int replyNo) async {
+    final response =
+        await dio.delete(ApiConstants.deleteCommnunityReply(replyNo));
+    return response.fold(left, (result) => right(Success.fromJson(result)));
   }
 }

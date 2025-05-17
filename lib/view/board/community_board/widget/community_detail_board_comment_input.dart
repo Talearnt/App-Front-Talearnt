@@ -8,14 +8,14 @@ class CommunityDetailBoardCommentInput extends StatelessWidget {
   final CommunityBoardDetailProvider communityBoardDetailProvider;
   final Future<void> Function(int postNo, String content) insertComment;
   final Future<void> Function(String content) updateComment;
-  final Future<void> Function(int commentNo, String content) insertReplies;
+  final Future<void> Function(int commentNo, String content) insertReply;
 
   const CommunityDetailBoardCommentInput({
     super.key,
     required this.communityBoardDetailProvider,
     required this.insertComment,
     required this.updateComment,
-    required this.insertReplies,
+    required this.insertReply,
   });
 
   @override
@@ -101,7 +101,7 @@ class CommunityDetailBoardCommentInput extends StatelessWidget {
                   );
                 } else if (communityBoardDetailProvider.commentType ==
                     "insertR") {
-                  insertReplies(
+                  insertReply(
                     communityBoardDetailProvider.targetComment,
                     communityBoardDetailProvider.commentController.text,
                   ).then(

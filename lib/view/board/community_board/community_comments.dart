@@ -7,19 +7,22 @@ import 'package:app_front_talearnt/common/theme.dart';
 import 'package:app_front_talearnt/provider/board/community_board_detail_provider.dart';
 import 'package:app_front_talearnt/view/board/community_board/community_replies.dart';
 
-class CommunityComment extends StatelessWidget {
+class CommunityComments extends StatelessWidget {
   final CommunityBoardDetailProvider communityBoardDetailProvider;
   final ProfileProvider profileProvider;
 
   final Future<void> Function(int postNo, int lastNo) loadComments;
   final Future<void> Function(int commentNo, int lastNo) loadReplies;
 
-  const CommunityComment({
+  final BuildContext detailPageContext;
+
+  const CommunityComments({
     Key? key,
     required this.communityBoardDetailProvider,
     required this.profileProvider,
     required this.loadComments,
     required this.loadReplies,
+    required this.detailPageContext,
   }) : super(key: key);
 
   @override
@@ -149,7 +152,8 @@ class CommunityComment extends StatelessWidget {
                                         ),
                                         clipBehavior: Clip.antiAlias,
                                         builder: (BuildContext context) {
-                                          return ModifyCommnetBottomSheet(
+                                          return ModifyCommentBottomSheet(
+                                            type: "comment",
                                             communityBoardDetailProvider:
                                                 communityBoardDetailProvider,
                                             isMine: profileProvider
@@ -161,6 +165,8 @@ class CommunityComment extends StatelessWidget {
                                                     .communityDetailBoard
                                                     .userNo,
                                             commentNo: c.commentNo,
+                                            detailPageContext:
+                                                detailPageContext,
                                           );
                                         },
                                       );
@@ -189,21 +195,27 @@ class CommunityComment extends StatelessWidget {
                                           color: Palette.text02),
                                     ),
                                     const SizedBox(height: 8),
-                                    Row(
-                                      children: [
-                                        SizedBox(
-                                          width: 18,
-                                          height: 18,
-                                          child: SvgPicture.asset(
-                                              'assets/icons/comment.svg'),
-                                        ),
-                                        const SizedBox(width: 4),
-                                        Text(
-                                          '답글 달기',
-                                          style: TextTypes.captionMedium02(
-                                              color: Palette.text04),
-                                        ),
-                                      ],
+                                    InkWell(
+                                      onTap: () {
+                                        communityBoardDetailProvider
+                                            .setInsertReplies(c.commentNo);
+                                      },
+                                      child: Row(
+                                        children: [
+                                          SizedBox(
+                                            width: 18,
+                                            height: 18,
+                                            child: SvgPicture.asset(
+                                                'assets/icons/comment.svg'),
+                                          ),
+                                          const SizedBox(width: 4),
+                                          Text(
+                                            '답글 달기',
+                                            style: TextTypes.captionMedium02(
+                                                color: Palette.text04),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                     if (c.replyCount > 0)
                                       Padding(
@@ -298,8 +310,10 @@ class CommunityComment extends StatelessWidget {
                     communityBoardDetailProvider.isRepliesOpen(c.commentNo))
                   CommunityReplies(
                     commentNo: c.commentNo,
-                    provider: communityBoardDetailProvider,
+                    communityBoardDetailProvider: communityBoardDetailProvider,
+                    profileProvider: profileProvider,
                     loadReplies: loadReplies,
+                    detailPageContext: detailPageContext,
                   ),
                 const Divider(color: Palette.bgUp02, height: 1, thickness: 1),
               ],

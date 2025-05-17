@@ -1,5 +1,7 @@
 import 'package:app_front_talearnt/common/theme.dart';
+import 'package:app_front_talearnt/common/widget/toast_message.dart';
 import 'package:app_front_talearnt/provider/board/community_board_detail_provider.dart';
+import 'package:app_front_talearnt/view_model/board_view_model.dart';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -7,23 +9,30 @@ import 'package:provider/provider.dart';
 
 import '../../../common/common_navigator.dart';
 
-class ModifyCommnetBottomSheet extends StatelessWidget {
+class ModifyCommentBottomSheet extends StatelessWidget {
   final CommunityBoardDetailProvider communityBoardDetailProvider;
+  final String type;
   final bool isMine;
   final bool isWriter;
   final int commentNo;
+  final int replyNo;
+  final BuildContext detailPageContext;
 
-  const ModifyCommnetBottomSheet({
+  const ModifyCommentBottomSheet({
     super.key,
+    required this.type,
     required this.communityBoardDetailProvider,
     required this.isMine,
     required this.isWriter,
     required this.commentNo,
+    this.replyNo = 0,
+    required this.detailPageContext,
   });
 
   @override
   Widget build(BuildContext context) {
     final commonNavigator = Provider.of<CommonNavigator>(context);
+    final viewModel = Provider.of<BoardViewModel>(context);
 
     return Wrap(children: [
       Padding(
@@ -62,7 +71,9 @@ class ModifyCommnetBottomSheet extends StatelessWidget {
                   hoverColor: Colors.transparent,
                   onTap: () async {
                     context.pop();
-                    communityBoardDetailProvider.setEditComment(commentNo);
+                    if (type == "comment") {
+                      communityBoardDetailProvider.setEditComment(commentNo);
+                    }
                   },
                   child: Center(
                     child: Text(
@@ -95,7 +106,22 @@ class ModifyCommnetBottomSheet extends StatelessWidget {
                         leftFun: () {
                           commonNavigator.goBack();
                         },
-                        rightFun: () async {});
+                        rightFun: () async {
+                          if (type == "comment") {
+                          } else if (type == "reply") {
+                            viewModel
+                                .deleteReply(commentNo, replyNo)
+                                .then((value) {
+                              ToastMessage.show(
+                                context: detailPageContext,
+                                message: "댓글이 삭제되었습니다.",
+                                type: 1,
+                                bottom: 50,
+                              );
+                            });
+                            Navigator.of(detailPageContext).pop();
+                          }
+                        });
                   },
                   child: Center(
                     child: Text(

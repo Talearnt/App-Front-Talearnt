@@ -1,8 +1,8 @@
-class PostReplie {
+class PostReply {
   final int commentNo;
   final String content;
 
-  PostReplie({
+  PostReply({
     required this.commentNo,
     required this.content,
   });

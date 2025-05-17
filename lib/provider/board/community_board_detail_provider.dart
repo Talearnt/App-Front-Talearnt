@@ -254,10 +254,42 @@ class CommunityBoardDetailProvider extends ChangeNotifier with ClearText {
     if (newReplies.isNotEmpty) {
       _replyMap[commentNo] = [...existing, ...newReplies];
       toggleCommentInputActive(false);
+      setReplyCount(commentNo, 1);
       _commentController.clear();
       _commentFocusNode.unfocus();
       _commentType = 'insertR';
+
       notifyListeners();
     }
+  }
+
+  void setReplyCount(int commentNo, int num) {
+    final idx = _commentList.indexWhere((c) => c.commentNo == commentNo);
+    if (idx == -1) return;
+
+    final old = _commentList[idx];
+
+    _commentList[idx] = CommunityCommentResponse(
+      userNo: old.userNo,
+      commentNo: old.commentNo,
+      nickname: old.nickname,
+      profileImg: old.profileImg,
+      content: old.content,
+      createdAt: old.createdAt,
+      replyCount: old.replyCount + num,
+    );
+
+    notifyListeners();
+  }
+
+  void removeReply(int commentNo, int replyNo) {
+    final existing = _replyMap[commentNo];
+    if (existing == null) return;
+
+    _replyMap[commentNo] = existing.where((r) => r.replyNo != replyNo).toList();
+
+    setReplyCount(commentNo, -1);
+
+    notifyListeners();
   }
 }

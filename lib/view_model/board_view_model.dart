@@ -4,7 +4,7 @@ import 'package:app_front_talearnt/data/model/param/community_board_commnet.dart
 import 'package:app_front_talearnt/data/model/param/community_board_reply.dart';
 import 'package:app_front_talearnt/data/model/param/match_board_param.dart';
 import 'package:app_front_talearnt/data/model/param/post_comment.dart';
-import 'package:app_front_talearnt/data/model/param/post_replie.dart';
+import 'package:app_front_talearnt/data/model/param/post_reply.dart';
 import 'package:app_front_talearnt/data/model/param/put_comment.dart';
 import 'package:app_front_talearnt/provider/board/community_write_provider.dart';
 import 'package:app_front_talearnt/provider/board/match_edit_provider.dart';
@@ -422,7 +422,7 @@ class BoardViewModel extends ChangeNotifier {
   Future<void> insertComment(int postNo, String content) async {
     PostComment param = PostComment(communityPostNo: postNo, content: content);
 
-    final result = await boardRepository.insertCommunityComments(param);
+    final result = await boardRepository.insertCommunityComment(param);
 
     result.fold(
         (failure) => commonNavigator.showSingleDialog(
@@ -434,7 +434,7 @@ class BoardViewModel extends ChangeNotifier {
   Future<void> updateComment(String content) async {
     PutComment param = PutComment(content: content);
 
-    final result = await boardRepository.UpdateCommunityComments(
+    final result = await boardRepository.UpdateCommunityComment(
         param, communityBoardDetailProvider.targetComment);
 
     result.fold(
@@ -445,15 +445,25 @@ class BoardViewModel extends ChangeNotifier {
     });
   }
 
-  Future<void> insertReplies(int commentNo, String content) async {
-    PostReplie param = PostReplie(commentNo: commentNo, content: content);
+  Future<void> insertReply(int commentNo, String content) async {
+    PostReply param = PostReply(commentNo: commentNo, content: content);
 
-    final result = await boardRepository.insertCommunityReplies(param);
+    final result = await boardRepository.insertCommunityReply(param);
 
     result.fold(
         (failure) => commonNavigator.showSingleDialog(
             content: ErrorMessages.getMessage(failure.errorCode)), (result) {
       communityBoardDetailProvider.mergeReplies(commentNo, result['comments']);
+    });
+  }
+
+  Future<void> deleteReply(int commentNo, int replyNo) async {
+    final result = await boardRepository.deleteReply(replyNo);
+    result.fold(
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)),
+        (success) async {
+      communityBoardDetailProvider.removeReply(commentNo, replyNo);
     });
   }
 }
