@@ -328,6 +328,7 @@ class CommunityBoardDetailPage extends StatelessWidget {
                           viewModel.updateComment(content),
                       insertReply: (commentNo, content) =>
                           viewModel.insertReply(commentNo, content),
+                      updateReply: (content) => viewModel.updateReply(content),
                     )
                   : CommunityDetailBoardBottom(
                       communityBoardDetailProvider:

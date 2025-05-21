@@ -25,7 +25,8 @@ class CommunityBoardDetailProvider extends ChangeNotifier with ClearText {
   final Map<int, bool> _replyHasNext = {};
 
   String _commentType = 'insertC';
-  int _targetcomment = 0;
+  int _targetComment = 0;
+  int _targetReply = 0;
 
   bool _hasNext = false;
 
@@ -60,7 +61,8 @@ class CommunityBoardDetailProvider extends ChangeNotifier with ClearText {
 
   String get commentType => _commentType;
 
-  int get targetComment => _targetcomment;
+  int get targetComment => _targetComment;
+  int get targetReply => _targetReply;
 
   void clearProvider() {
     _commentList = [];
@@ -72,7 +74,8 @@ class CommunityBoardDetailProvider extends ChangeNotifier with ClearText {
     _commentFocusNode.unfocus();
 
     _commentType = 'insertC';
-    _targetcomment = 0;
+    _targetComment = 0;
+    _targetReply = 0;
 
     notifyListeners();
   }
@@ -189,7 +192,7 @@ class CommunityBoardDetailProvider extends ChangeNotifier with ClearText {
     toggleCommentInputActive(true);
 
     _commentType = 'insertC';
-    _targetcomment = 0;
+    _targetComment = 0;
 
     notifyListeners();
   }
@@ -201,7 +204,9 @@ class CommunityBoardDetailProvider extends ChangeNotifier with ClearText {
     _commentController.text = _commentList[idx].content;
 
     _commentType = 'updateC';
-    _targetcomment = commnetNo;
+    _targetComment = commnetNo;
+
+    _commentFocusNode.requestFocus();
 
     notifyListeners();
   }
@@ -228,7 +233,7 @@ class CommunityBoardDetailProvider extends ChangeNotifier with ClearText {
     _commentFocusNode.unfocus();
 
     _commentType = 'insertC';
-    _targetcomment = 0;
+    _targetComment = 0;
 
     notifyListeners();
   }
@@ -237,7 +242,7 @@ class CommunityBoardDetailProvider extends ChangeNotifier with ClearText {
     toggleCommentInputActive(true);
 
     _commentType = 'insertR';
-    _targetcomment = commentNo;
+    _targetComment = commentNo;
 
     notifyListeners();
   }
@@ -282,6 +287,26 @@ class CommunityBoardDetailProvider extends ChangeNotifier with ClearText {
     notifyListeners();
   }
 
+  void setEditReply(int commentNo, int replyNo) {
+    toggleCommentInputActive(true);
+
+    final replies = _replyMap[commentNo] ?? [];
+
+    final idx = replies.indexWhere((r) => r.replyNo == replyNo);
+
+    final reply = replies[idx];
+
+    commentController.text = reply.content;
+
+    _commentType = 'updateR';
+    _targetComment = commentNo;
+    _targetReply = replyNo;
+
+    _commentFocusNode.requestFocus();
+
+    notifyListeners();
+  }
+
   void removeReply(int commentNo, int replyNo) {
     final existing = _replyMap[commentNo];
     if (existing == null) return;
@@ -289,6 +314,39 @@ class CommunityBoardDetailProvider extends ChangeNotifier with ClearText {
     _replyMap[commentNo] = existing.where((r) => r.replyNo != replyNo).toList();
 
     setReplyCount(commentNo, -1);
+
+    notifyListeners();
+  }
+
+  void updateReplyContent(int commentNo, int replyNo, String newContent) {
+    // 1) 해당 댓글의 답글 리스트 가져오기
+    final replies = _replyMap[commentNo];
+    if (replies == null) return;
+
+    // 2) 인덱스 찾기
+    final idx = replies.indexWhere((r) => r.replyNo == replyNo);
+    if (idx == -1) return;
+
+    // 3) 새 인스턴스로 교체 (content만 교체)
+    replies[idx] = CommunityReplyResponse(
+      replyNo: replies[idx].replyNo,
+      commentNo: replies[idx].commentNo,
+      userNo: replies[idx].userNo,
+      nickname: replies[idx].nickname,
+      profileImg: replies[idx].profileImg,
+      content: newContent, // 여기만 새 내용
+      createdAt: replies[idx].createdAt,
+    );
+
+    // 4) 편집 모드 해제 및 컨트롤러·포커스 정리
+    toggleCommentInputActive(false); // 입력창 닫기
+    _commentController.clear();
+    _commentFocusNode.unfocus();
+
+    // 5) 상태 초기화
+    _commentType = 'insertC';
+    _targetComment = 0;
+    _targetReply = 0;
 
     notifyListeners();
   }

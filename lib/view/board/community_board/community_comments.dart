@@ -234,7 +234,7 @@ class CommunityComments extends StatelessWidget {
                                                 .toggleRepliesOpen(c.commentNo);
                                           },
                                           child: Container(
-                                            width: 90,
+                                            width: 93,
                                             height: 36,
                                             decoration: BoxDecoration(
                                               border: Border.all(
@@ -252,7 +252,7 @@ class CommunityComments extends StatelessWidget {
                                               padding: const EdgeInsets.only(
                                                 top: 10,
                                                 bottom: 10,
-                                                left: 10,
+                                                left: 12,
                                                 right: 6,
                                               ),
                                               child: Row(
@@ -273,7 +273,7 @@ class CommunityComments extends StatelessWidget {
                                                                 color: Palette
                                                                     .text02),
                                                   ),
-                                                  const SizedBox(width: 4),
+                                                  const SizedBox(width: 2),
                                                   SizedBox(
                                                     width: 24,
                                                     height: 24,

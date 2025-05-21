@@ -69,4 +69,8 @@ abstract class ApiConstants {
   static String deleteCommnunityReply(int replyNo) {
     return "$baseUrl/v1/communities/replies/$replyNo";
   }
+
+  static String updateCommunityReply(int replyNo) {
+    return "$baseUrl/v1/communities/replies/$replyNo";
+  }
 }

@@ -259,4 +259,12 @@ class BoardRepository {
         await dio.delete(ApiConstants.deleteCommnunityReply(replyNo));
     return response.fold(left, (result) => right(Success.fromJson(result)));
   }
+
+  Future<Either<Failure, Success>> UpdateCommunityReply(
+      PutComment body, int replyNo) async {
+    final response = await dio.put(
+        ApiConstants.updateCommunityReply(replyNo), body.toJson());
+
+    return response.fold(left, (result) => right(Success.fromJson(result)));
+  }
 }

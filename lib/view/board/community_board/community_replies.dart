@@ -69,7 +69,7 @@ class CommunityReplies extends StatelessWidget {
                   : null,
               child: Padding(
                 padding: const EdgeInsets.only(
-                  left: 56,
+                  left: 64,
                   top: 16,
                   bottom: 8,
                   right: 20,

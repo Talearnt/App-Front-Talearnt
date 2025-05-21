@@ -9,6 +9,7 @@ class CommunityDetailBoardCommentInput extends StatelessWidget {
   final Future<void> Function(int postNo, String content) insertComment;
   final Future<void> Function(String content) updateComment;
   final Future<void> Function(int commentNo, String content) insertReply;
+  final Future<void> Function(String content) updateReply;
 
   const CommunityDetailBoardCommentInput({
     super.key,
@@ -16,6 +17,7 @@ class CommunityDetailBoardCommentInput extends StatelessWidget {
     required this.insertComment,
     required this.updateComment,
     required this.insertReply,
+    required this.updateReply,
   });
 
   @override
@@ -109,6 +111,20 @@ class CommunityDetailBoardCommentInput extends StatelessWidget {
                       ToastMessage.show(
                         context: context,
                         message: "답글이 등록되었습니다.",
+                        type: 1,
+                        bottom: 50,
+                      );
+                    },
+                  );
+                } else if (communityBoardDetailProvider.commentType ==
+                    "updateR") {
+                  updateReply(
+                          communityBoardDetailProvider.commentController.text)
+                      .then(
+                    (value) {
+                      ToastMessage.show(
+                        context: context,
+                        message: "답글이 수정되었습니다.",
                         type: 1,
                         bottom: 50,
                       );

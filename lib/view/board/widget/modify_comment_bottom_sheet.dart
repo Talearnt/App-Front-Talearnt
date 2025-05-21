@@ -73,6 +73,9 @@ class ModifyCommentBottomSheet extends StatelessWidget {
                     context.pop();
                     if (type == "comment") {
                       communityBoardDetailProvider.setEditComment(commentNo);
+                    } else if (type == "reply") {
+                      communityBoardDetailProvider.setEditReply(
+                          commentNo, replyNo);
                     }
                   },
                   child: Center(

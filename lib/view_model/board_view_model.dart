@@ -466,4 +466,20 @@ class BoardViewModel extends ChangeNotifier {
       communityBoardDetailProvider.removeReply(commentNo, replyNo);
     });
   }
+
+  Future<void> updateReply(String content) async {
+    PutComment param = PutComment(content: content);
+
+    final result = await boardRepository.UpdateCommunityReply(
+        param, communityBoardDetailProvider.targetReply);
+
+    result.fold(
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)), (result) {
+      communityBoardDetailProvider.updateReplyContent(
+          communityBoardDetailProvider.targetComment,
+          communityBoardDetailProvider.targetReply,
+          content);
+    });
+  }
 }
