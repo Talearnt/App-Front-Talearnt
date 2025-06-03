@@ -221,6 +221,7 @@ class CommunityBoardDetailProvider extends ChangeNotifier with ClearText {
           profileImg: _commentList[i].profileImg,
           content: newContent,
           createdAt: _commentList[i].createdAt,
+          isDeleted: _commentList[i].isDeleted,
           replyCount: _commentList[i].replyCount,
         );
         break;
@@ -243,6 +244,26 @@ class CommunityBoardDetailProvider extends ChangeNotifier with ClearText {
 
     _commentType = 'insertR';
     _targetComment = commentNo;
+
+    notifyListeners();
+  }
+
+  void removeComment(int commentNo) {
+    final idx = _commentList.indexWhere((c) => c.commentNo == commentNo);
+    if (idx == -1) return;
+
+    final old = _commentList[idx];
+
+    _commentList[idx] = CommunityCommentResponse(
+      userNo: old.userNo,
+      commentNo: old.commentNo,
+      nickname: old.nickname,
+      profileImg: old.profileImg,
+      content: old.content,
+      createdAt: old.createdAt,
+      replyCount: old.replyCount,
+      isDeleted: true,
+    );
 
     notifyListeners();
   }
@@ -281,6 +302,7 @@ class CommunityBoardDetailProvider extends ChangeNotifier with ClearText {
       profileImg: old.profileImg,
       content: old.content,
       createdAt: old.createdAt,
+      isDeleted: old.isDeleted,
       replyCount: old.replyCount + num,
     );
 

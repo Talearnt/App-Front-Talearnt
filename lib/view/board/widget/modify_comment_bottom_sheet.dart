@@ -111,6 +111,15 @@ class ModifyCommentBottomSheet extends StatelessWidget {
                         },
                         rightFun: () async {
                           if (type == "comment") {
+                            viewModel.deleteComment(commentNo).then((value) {
+                              ToastMessage.show(
+                                context: detailPageContext,
+                                message: "댓글이 삭제되었습니다.",
+                                type: 1,
+                                bottom: 50,
+                              );
+                            });
+                            Navigator.of(detailPageContext).pop();
                           } else if (type == "reply") {
                             viewModel
                                 .deleteReply(commentNo, replyNo)

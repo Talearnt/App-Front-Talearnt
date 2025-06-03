@@ -5,6 +5,7 @@ class CommunityCommentResponse {
   final String? profileImg;
   final String content;
   final DateTime createdAt;
+  final bool isDeleted;
   final int replyCount;
 
   CommunityCommentResponse({
@@ -14,6 +15,7 @@ class CommunityCommentResponse {
     this.profileImg,
     required this.content,
     required this.createdAt,
+    required this.isDeleted,
     required this.replyCount,
   });
 
@@ -25,6 +27,7 @@ class CommunityCommentResponse {
       profileImg: json['profileImg'] as String?,
       content: json['content'] as String,
       createdAt: DateTime.parse(json['createdAt'] as String),
+      isDeleted: json['isDeleted'] as bool,
       replyCount: json['replyCount'] as int,
     );
   }

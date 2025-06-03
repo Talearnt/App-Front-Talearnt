@@ -445,6 +445,16 @@ class BoardViewModel extends ChangeNotifier {
     });
   }
 
+  Future<void> deleteComment(int commentNo) async {
+    final result = await boardRepository.deleteCommunityComment(commentNo);
+    result.fold(
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)),
+        (success) async {
+      communityBoardDetailProvider.removeReply(commentNo, commentNo);
+    });
+  }
+
   Future<void> insertReply(int commentNo, String content) async {
     PostReply param = PostReply(commentNo: commentNo, content: content);
 
