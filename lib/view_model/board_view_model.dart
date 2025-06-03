@@ -451,7 +451,7 @@ class BoardViewModel extends ChangeNotifier {
         (failure) => commonNavigator.showSingleDialog(
             content: ErrorMessages.getMessage(failure.errorCode)),
         (success) async {
-      communityBoardDetailProvider.removeReply(commentNo, commentNo);
+      communityBoardDetailProvider.removeComment(commentNo);
     });
   }
 
