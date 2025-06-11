@@ -4,8 +4,9 @@ import 'package:app_front_talearnt/common/widget/profile.dart';
 import 'package:app_front_talearnt/common/widget/state_badge.dart';
 import 'package:app_front_talearnt/common/widget/top_app_bar.dart';
 import 'package:app_front_talearnt/provider/common/common_provider.dart';
-import 'package:app_front_talearnt/view/board/community_board/community_comment.dart';
+import 'package:app_front_talearnt/view/board/community_board/community_comments.dart';
 import 'package:app_front_talearnt/view/board/community_board/widget/community_detail_board_bottom.dart';
+import 'package:app_front_talearnt/view/board/community_board/widget/community_detail_board_comment_input.dart';
 import 'package:app_front_talearnt/view_model/board_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
@@ -301,13 +302,15 @@ class CommunityBoardDetailPage extends StatelessWidget {
                             height: 1,
                             thickness: 1.0,
                           ),
-                          CommunityComment(
+                          CommunityComments(
                             communityBoardDetailProvider:
                                 communityBoardDetailProvider,
+                            profileProvider: profileProvider,
                             loadComments: (postNo, lastNo) =>
                                 viewModel.getComments(postNo, lastNo),
                             loadReplies: (commentNo, lastNo) =>
                                 viewModel.getReplies(commentNo, lastNo),
+                            detailPageContext: context,
                           ),
                         ],
                       )
@@ -315,8 +318,22 @@ class CommunityBoardDetailPage extends StatelessWidget {
                   ),
                 ),
               ),
-              CommunityDetailBoardBottom(
-                  board: communityBoardDetailProvider.communityDetailBoard),
+              communityBoardDetailProvider.isCommentInputActive
+                  ? CommunityDetailBoardCommentInput(
+                      communityBoardDetailProvider:
+                          communityBoardDetailProvider,
+                      insertComment: (postNo, content) =>
+                          viewModel.insertComment(postNo, content),
+                      updateComment: (content) =>
+                          viewModel.updateComment(content),
+                      insertReply: (commentNo, content) =>
+                          viewModel.insertReply(commentNo, content),
+                      updateReply: (content) => viewModel.updateReply(content),
+                    )
+                  : CommunityDetailBoardBottom(
+                      communityBoardDetailProvider:
+                          communityBoardDetailProvider,
+                    )
             ],
           ),
           if (commonProvider.isLoadingPage) const Loading()

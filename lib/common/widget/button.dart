@@ -5,11 +5,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 class PrimaryXs extends StatelessWidget {
   final String content;
   final VoidCallback? onPressed;
+  final String type;
 
   const PrimaryXs({
     super.key,
     required this.content,
     this.onPressed,
+    this.type = "A",
   });
 
   @override
@@ -20,7 +22,9 @@ class PrimaryXs extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(6),
         ),
-        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 16),
+        padding: type == "A"
+            ? const EdgeInsets.symmetric(vertical: 5, horizontal: 16)
+            : const EdgeInsets.symmetric(vertical: 9, horizontal: 14),
         minimumSize: Size.zero,
       ).copyWith(
         elevation: WidgetStateProperty.resolveWith<double>((states) {
@@ -30,9 +34,13 @@ class PrimaryXs extends StatelessWidget {
       onPressed: onPressed ?? () {},
       child: Text(
         content,
-        style: TextTypes.body02(
-          color: Palette.bgBackGround,
-        ),
+        style: type == "A"
+            ? TextTypes.body02(
+                color: Palette.bgBackGround,
+              )
+            : TextTypes.bodySemi03(
+                color: Palette.bgBackGround,
+              ),
       ),
     );
   }

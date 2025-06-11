@@ -3,6 +3,9 @@ import 'dart:io';
 import 'package:app_front_talearnt/data/model/param/community_board_commnet.dart';
 import 'package:app_front_talearnt/data/model/param/community_board_reply.dart';
 import 'package:app_front_talearnt/data/model/param/match_board_param.dart';
+import 'package:app_front_talearnt/data/model/param/post_comment.dart';
+import 'package:app_front_talearnt/data/model/param/post_reply.dart';
+import 'package:app_front_talearnt/data/model/param/put_comment.dart';
 import 'package:app_front_talearnt/data/model/param/s3_controller_param.dart';
 import 'package:app_front_talearnt/data/model/respone/community_comment.dart';
 import 'package:app_front_talearnt/data/model/respone/community_reply.dart';
@@ -185,5 +188,89 @@ class BoardRepository {
         });
       },
     );
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> insertCommunityComment(
+      PostComment body) async {
+    final response = await dio.post(
+        ApiConstants.insertCommunityComment, body.toJson(), null);
+
+    return response.fold(
+      left,
+      (result) {
+        final data = result['data'] as Map<String, dynamic>;
+        final rawList = data['results'] as List<dynamic>;
+
+        final comments = rawList
+            .map((e) =>
+                CommunityCommentResponse.fromJson(e as Map<String, dynamic>))
+            .toList();
+
+        final hasNext = (data['pagination']
+                as Map<String, dynamic>?)?['hasNext'] as bool? ??
+            false;
+
+        return right(<String, dynamic>{
+          'comments': comments,
+          'hasNext': hasNext,
+        });
+      },
+    );
+  }
+
+  Future<Either<Failure, Success>> UpdateCommunityComment(
+      PutComment body, int commentNo) async {
+    final response = await dio.put(
+        ApiConstants.updateCommunityComment(commentNo), body.toJson());
+
+    return response.fold(left, (result) => right(Success.fromJson(result)));
+  }
+
+  Future<Either<Failure, Success>> deleteCommunityComment(int commentNo) async {
+    final response =
+        await dio.delete(ApiConstants.deleteCommnunityComment(commentNo));
+    return response.fold(left, (result) => right(Success.fromJson(result)));
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> insertCommunityReply(
+      PostReply body) async {
+    final response =
+        await dio.post(ApiConstants.insertCommunityReply, body.toJson(), null);
+
+    return response.fold(
+      left,
+      (result) {
+        final data = result['data'] as Map<String, dynamic>;
+        final rawList = data['results'] as List<dynamic>;
+
+        final comments = rawList
+            .map((e) =>
+                CommunityReplyResponse.fromJson(e as Map<String, dynamic>))
+            .toList();
+
+        final hasNext = (data['pagination']
+                as Map<String, dynamic>?)?['hasNext'] as bool? ??
+            false;
+
+        return right(<String, dynamic>{
+          'comments': comments,
+          'hasNext': hasNext,
+        });
+      },
+    );
+  }
+
+  Future<Either<Failure, Success>> deleteReply(int replyNo) async {
+    final response =
+        await dio.delete(ApiConstants.deleteCommnunityReply(replyNo));
+    return response.fold(left, (result) => right(Success.fromJson(result)));
+  }
+
+  Future<Either<Failure, Success>> UpdateCommunityReply(
+      PutComment body, int replyNo) async {
+    final response = await dio.put(
+        ApiConstants.updateCommunityReply(replyNo), body.toJson());
+
+    return response.fold(left, (result) => right(Success.fromJson(result)));
   }
 }
