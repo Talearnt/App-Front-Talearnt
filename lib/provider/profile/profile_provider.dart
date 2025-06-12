@@ -6,6 +6,8 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mime/mime.dart';
+import 'package:path/path.dart' as path;
 
 import '../../constants/global_value_constants.dart';
 import '../../data/model/respone/user_profile.dart';
@@ -54,6 +56,12 @@ class ProfileProvider extends ChangeNotifier with ClearText {
   bool _editNickNameHelper = false;
   bool _changeEditNickName = false; //닉네임 변경했는지
   String _errorMessage = "";
+
+  String _imageUploadS3Url = "";
+  bool _isS3Upload = false;
+  Map<String, dynamic> _uploadUserImageInfo = {};
+  String _editImageUploadUrl = "";
+  bool _changeImage = false;
 
   TabController get giveTalentTabController => _giveTalentTabController;
 
@@ -113,7 +121,17 @@ class ProfileProvider extends ChangeNotifier with ClearText {
 
   Size? get tempImageSize => _tempImageSize;
 
-  void setUserProfile(UserProfile userProfile) {
+  String get imageUploadS3Url => _imageUploadS3Url;
+
+  String get editImageUploadUrl => _editImageUploadUrl;
+
+  bool get isS3Upload => _isS3Upload;
+
+  Map<String, dynamic> get uploadUserImageInfo => _uploadUserImageInfo;
+
+  bool get changeImage => _changeImage;
+
+  Future<void> setUserProfile(UserProfile userProfile) async {
     _userProfile = userProfile;
     notifyListeners();
   }
@@ -146,6 +164,7 @@ class ProfileProvider extends ChangeNotifier with ClearText {
   }
 
   void setUserEditProfile() {
+    _imageFile = _userProfile.profileImg;
     _editNickNameController.text = _userProfile.nickname;
     _giveTalents.clear();
     _giveTalents.addAll(_userProfile.giveTalents);
@@ -289,8 +308,58 @@ class ProfileProvider extends ChangeNotifier with ClearText {
     if (_tempImageFile != null) {
       _imageFile = _tempImageFile;
       _tempImageFile = null;
+      _changeImage = true;
       notifyListeners();
     }
+  }
+
+  void clearInfo() {
+    _uploadUserImageInfo.clear();
+    notifyListeners();
+  }
+
+  //s3올리기 전 서버에 넣어 s3 url 받아오기 위한 세팅용
+  Future<void> getUploadImagesInfo() async {
+    _uploadUserImageInfo.clear();
+
+    if (_imageFile != null && _imageFile is File) {
+      final file = _imageFile as File;
+      final int sizeInBytes = await file.length();
+
+      final mimeType = lookupMimeType(file.path) ?? "application/octet-stream";
+
+      _uploadUserImageInfo = {
+        "file": _imageFile,
+        "fileName": path.basename(file.path),
+        "fileType": mimeType,
+        "fileSize": sizeInBytes,
+      };
+    }
+
+    notifyListeners();
+  }
+
+  //s3에 올라가기전 s3에 올릴 url 받아오는 함수
+  Future<void> setImageUploadUrl(String newUrl) async {
+    _imageUploadS3Url = newUrl;
+    _isS3Upload = true;
+    notifyListeners();
+  }
+
+  //유저 수정할때 사용될 url 변수에 set하는 함수
+  Future<void> finishImageUpload(String imageUploadUrl) async {
+    String newImageUrl = imageUploadUrl.split('?')[0];
+    _editImageUploadUrl = newImageUrl;
+    _isS3Upload = false;
+    notifyListeners();
+  }
+
+  Future<void> finishEditUserInfo() async {
+    _editImageUploadUrl = "";
+    _imageUploadS3Url = "";
+    _changeImage = false;
+    _uploadUserImageInfo.clear();
+    notifyListeners();
   }
 
   void resetModifyProfile() {
@@ -313,6 +382,10 @@ class ProfileProvider extends ChangeNotifier with ClearText {
     _editNickNameHelper = false;
     _changeEditNickName = false;
     _errorMessage = "";
+    _editImageUploadUrl = "";
+    _imageUploadS3Url = "";
+    _isS3Upload = false;
+    _uploadUserImageInfo.clear();
     notifyListeners();
   }
 
