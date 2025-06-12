@@ -56,6 +56,8 @@ class ProviderSetup extends StatelessWidget {
             create: (_) => MatchEditProvider()),
         ChangeNotifierProvider<CommunityWriteProvider>(
             create: (_) => CommunityWriteProvider()),
+        ChangeNotifierProvider<ProfileProvider>(
+            create: (_) => ProfileProvider()),
         Provider<AuthorizationInterceptor>(
           create: (context) => AuthorizationInterceptor(
             tokenManager: context.read<TokenManager>(),
@@ -63,6 +65,7 @@ class ProviderSetup extends StatelessWidget {
             matchWriteProvider: context.read<MatchWriteProvider>(),
             matchEditProvider: context.read<MatchEditProvider>(),
             communityWriteProvider: context.read<CommunityWriteProvider>(),
+            profileProvider: context.read<ProfileProvider>(),
           ),
         ),
 
@@ -85,8 +88,6 @@ class ProviderSetup extends StatelessWidget {
             create: (_) => StorageProvider()),
         ChangeNotifierProvider<FindPasswordProvider>(
             create: (_) => FindPasswordProvider()),
-        ChangeNotifierProvider<ProfileProvider>(
-            create: (_) => ProfileProvider()),
         ChangeNotifierProvider<ProfileViewModel>(
           create: (context) => ProfileViewModel(
             CommonNavigator(navigatorKey),
