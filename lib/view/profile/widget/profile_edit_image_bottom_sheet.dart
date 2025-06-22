@@ -4,6 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../../../common/theme.dart';
+import '../../../common/widget/toast_message.dart';
 import '../../../provider/profile/profile_provider.dart';
 
 class ProfileImageBottomSheet extends StatelessWidget {
@@ -88,6 +89,12 @@ class ProfileImageBottomSheet extends StatelessWidget {
                 onTap: () {
                   context.pop();
                   profileProvider.resetImage();
+                  ToastMessage.show(
+                    context: context,
+                    message: "기본 프로필 이미지로 변경되었습니다.",
+                    type: 1,
+                    bottom: 50,
+                  );
                 },
                 child: Center(
                   child: Text(

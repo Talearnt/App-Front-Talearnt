@@ -18,19 +18,21 @@ class ProfileUserInfo extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          CircleAvatar(
-            radius: 52,
-            backgroundImage: profileProvider.userProfile.profileImg == ""
-                ? null
-                : NetworkImage(profileProvider.userProfile.profileImg)
-                    as ImageProvider,
-            child: profileProvider.userProfile.profileImg == ""
-                ? SvgPicture.asset(
-                    'assets/img/default_user_image.svg',
-                    width: 104,
-                    height: 104,
-                  )
-                : null,
+          Center(
+            child: CircleAvatar(
+              radius: 52,
+              backgroundImage: profileProvider.userProfile.profileImg == null
+                  ? null
+                  : NetworkImage(
+                      profileProvider.userProfile.profileImg!),
+              child: profileProvider.userProfile.profileImg == null
+                  ? SvgPicture.asset(
+                      'assets/img/default_user_image.svg',
+                      width: 104,
+                      height: 104,
+                    )
+                  : null,
+            ),
           ),
           const SizedBox(height: 10),
           Center(

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:app_front_talearnt/provider/common/common_provider.dart';
 import 'package:app_front_talearnt/view/profile/widget/profile_edit_image_bottom_sheet.dart';
 import 'package:app_front_talearnt/view/profile/widget/profile_edit_talent_bottom_sheet.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ import 'package:provider/provider.dart';
 import '../../common/theme.dart';
 import '../../common/widget/button.dart';
 import '../../common/widget/default_text_field.dart';
+import '../../common/widget/toast_message.dart';
 import '../../common/widget/top_app_bar.dart';
 import '../../constants/global_value_constants.dart';
 import '../../provider/profile/profile_provider.dart';
@@ -22,6 +24,7 @@ class ModifyUserInfoPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final profileProvider = Provider.of<ProfileProvider>(context);
     final profileViewModel = Provider.of<ProfileViewModel>(context);
+    final commonProvider = Provider.of<CommonProvider>(context);
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (bool didPop, Object? result) async {
@@ -38,7 +41,48 @@ class ModifyUserInfoPage extends StatelessWidget {
           first: TextBtnM(
               content: '저장',
               btnStyle: TextTypes.body02(color: Palette.primary01),
-              onPressed: () {}),
+              onPressed: () async {
+                final bool isSuccess;
+                commonProvider.changeIsLoading(true);
+                await profileProvider.getUploadImagesInfo();
+
+                if (profileProvider.changeImage) {
+                  await profileViewModel.getUserImageUploadUrl(
+                      profileProvider.uploadUserImageInfo);
+
+                  await profileViewModel.uploadImage(
+                    profileProvider.imageUploadS3Url,
+                    profileProvider.uploadUserImageInfo["file"],
+                    profileProvider.uploadUserImageInfo["fileSize"],
+                    profileProvider.uploadUserImageInfo["fileType"],
+                  );
+
+                  isSuccess = await profileViewModel.editUserInfo(
+                      profileProvider.editImageUploadUrl,
+                      profileProvider.editNickNameController.text,
+                      profileProvider.giveTalents,
+                      profileProvider.receiveTalents);
+                } else {
+                  isSuccess = await profileViewModel.editUserInfo(
+                      profileProvider.imageFile == null
+                          ? null
+                          : profileProvider.imageFile as String,
+                      profileProvider.editNickNameController.text,
+                      profileProvider.giveTalents,
+                      profileProvider.receiveTalents);
+                }
+                commonProvider.changeIsLoading(false);
+
+                if (isSuccess) {
+                  ToastMessage.show(
+                    context: context,
+                    message: "프로필이 수정되었습니다.",
+                    type: 1,
+                    bottom: 50,
+                  );
+                  context.go('/profile');
+                }
+              }),
           onPressed: () {
             profileProvider.resetModifyProfile();
             context.pop();
@@ -55,14 +99,16 @@ class ModifyUserInfoPage extends StatelessWidget {
                     children: [
                       CircleAvatar(
                         radius: 52,
-                        backgroundImage: profileProvider.imageFile == null
+                        backgroundImage: profileProvider.imageFile == null ||
+                                profileProvider.imageFile == ""
                             ? null
                             : profileProvider.imageFile is String
                                 ? NetworkImage(
                                     profileProvider.imageFile as String)
                                 : FileImage(profileProvider.imageFile as File)
                                     as ImageProvider,
-                        child: profileProvider.imageFile == null
+                        child: profileProvider.imageFile == null ||
+                                profileProvider.imageFile == ""
                             ? SvgPicture.asset(
                                 'assets/img/default_user_image.svg',
                                 width: 104,

@@ -1,6 +1,6 @@
 class UserProfile {
   final int userNo;
-  final String profileImg;
+  final String? profileImg;
   final String nickname;
   final List<int> giveTalents;
   final List<int> receiveTalents;
@@ -15,7 +15,7 @@ class UserProfile {
 
   UserProfile.empty()
       : userNo = 0,
-        profileImg = '',
+        profileImg = null,
         nickname = '',
         giveTalents = [],
         receiveTalents = [];
@@ -23,7 +23,7 @@ class UserProfile {
   factory UserProfile.fromJson(Map<String, dynamic> json) {
     return UserProfile(
       userNo: json['userNo'] ?? 0,
-      profileImg: json['profileImg'] ?? '',
+      profileImg: json['profileImg'],
       nickname: json['nickname'] ?? '',
       giveTalents: List<int>.from(json['giveTalents'] ?? []),
       receiveTalents: List<int>.from(json['receiveTalents'] ?? []),
