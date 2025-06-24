@@ -41,17 +41,21 @@ class UserImagePreviewPage extends StatelessWidget {
       ),
       body: LayoutBuilder(
         builder: (context, constraints) {
-          final containerWidth = MediaQuery.of(context).size.width;
-          final containerHeight = MediaQuery.of(context).size.height;
+          final cw = constraints.maxWidth;
+          final ch = constraints.maxHeight;
 
           final imageWidth = profileProvider.tempImageSize!.width;
           final imageHeight = profileProvider.tempImageSize!.height;
 
-          final widthScale = containerWidth / imageWidth;
-          final heightScale = containerHeight / imageHeight;
-          final scale = widthScale < heightScale ? widthScale : heightScale;
+          final widthRatio = cw / imageWidth;
+          final heightRatio = ch / imageHeight;
+          final previewScale =
+              widthRatio < heightRatio ? widthRatio : heightRatio;
 
-          final cropRadius = (104 * scale) / 2;
+          final originalRadius =
+              (imageWidth < imageHeight ? imageWidth : imageHeight) / 2;
+
+          final cropRadius = originalRadius * previewScale;
 
           return Stack(
             alignment: Alignment.center,
