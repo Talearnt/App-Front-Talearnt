@@ -1,0 +1,2 @@
+C:/Users/jinjin/Desktop/dev/talearnt/App-Front-Talearnt/android/app/.cxx/Debug/72y4k16e/x86_64/CMakeFiles/edit_cache.dir
+C:/Users/jinjin/Desktop/dev/talearnt/App-Front-Talearnt/android/app/.cxx/Debug/72y4k16e/x86_64/CMakeFiles/rebuild_cache.dir
