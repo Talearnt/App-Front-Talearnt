@@ -1,9 +1,7 @@
 import 'package:app_front_talearnt/common/theme.dart';
-import 'package:app_front_talearnt/common/widget/button.dart';
 import 'package:app_front_talearnt/common/widget/loading.dart';
 import 'package:app_front_talearnt/provider/auth/login_provider.dart';
 import 'package:app_front_talearnt/provider/board/match_board_provider.dart';
-import 'package:app_front_talearnt/provider/board/match_write_provider.dart';
 import 'package:app_front_talearnt/provider/common/common_provider.dart';
 import 'package:app_front_talearnt/provider/home/home_provider.dart';
 import 'package:app_front_talearnt/provider/profile/profile_provider.dart';
@@ -13,6 +11,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import '../common/widget/button.dart';
+import '../common/widget/common_bottom_navigation_bar.dart';
 import '../provider/board/common_board_provider.dart';
 import '../view_model/board_view_model.dart';
 
@@ -26,7 +26,6 @@ class HomePage extends StatelessWidget {
     final profileProvider = Provider.of<ProfileProvider>(context);
     final viewModel = Provider.of<BoardViewModel>(context);
     final commonProvider = Provider.of<CommonProvider>(context);
-    final matchWriteProvider = Provider.of<MatchWriteProvider>(context);
     final CommonBoardProvider commonBoardProvider =
         Provider.of<CommonBoardProvider>(context);
     final MatchBoardProvider matchBoardProvider =
@@ -265,43 +264,45 @@ class HomePage extends StatelessWidget {
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
-                                    horizontal: 24,
-                                  ),
-                                  child: Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Text(
-                                      "단 3초! 로그인하고 확인해보세요",
-                                      style: TextTypes.captionMedium02(
-                                        color: Palette.text02,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 24,
-                                  ),
+                                      horizontal: 24),
                                   child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.end,
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text.rich(
-                                        TextSpan(
-                                          text: '회원',
-                                          style: TextTypes.bodySemi01(
-                                            color: Palette.primary01,
-                                          ),
-                                          children: <TextSpan>[
-                                            TextSpan(
-                                              text: '님을 위한 맞춤 매칭',
-                                              style: TextTypes.bodySemi01(
-                                                color: Palette.text01,
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Align(
+                                            alignment: Alignment.centerLeft,
+                                            child: Text(
+                                              "단 3초! 로그인하고 확인해보세요",
+                                              style: TextTypes.captionMedium02(
+                                                color: Palette.text02,
                                               ),
                                             ),
-                                          ],
-                                        ),
+                                          ),
+                                          const SizedBox(
+                                            height: 2,
+                                          ),
+                                          Text.rich(
+                                            TextSpan(
+                                              text: '회원',
+                                              style: TextTypes.bodySemi01(
+                                                color: Palette.primary01,
+                                              ),
+                                              children: <TextSpan>[
+                                                TextSpan(
+                                                  text: '님을 위한 맞춤 매칭',
+                                                  style: TextTypes.bodySemi01(
+                                                    color: Palette.text01,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                       PrimaryS(
                                         content: "로그인",
@@ -330,8 +331,8 @@ class HomePage extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 24),
+                                  padding: const EdgeInsets.only(
+                                      left: 24, right: 16),
                                   child: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
@@ -522,114 +523,7 @@ class HomePage extends StatelessWidget {
                 );
               },
             ),
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: Container(
-                decoration: const BoxDecoration(
-                  border: Border(
-                    top: BorderSide(
-                      color: Palette.line01,
-                      width: 1.0,
-                    ),
-                  ),
-                ),
-                child: BottomAppBar(
-                  color: Palette.bgBackGround,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 24,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        GestureDetector(
-                          child: Column(
-                            children: [
-                              SvgPicture.asset('assets/icons/home_on.svg'),
-                              const Text('홈'),
-                            ],
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () async {
-                            commonProvider.changeIsLoading(true);
-                            await viewModel.getInitMatchBoardList();
-                            commonProvider.changeIsLoading(false);
-                          },
-                          child: Column(
-                            children: [
-                              SvgPicture.asset('assets/icons/post_off.svg'),
-                              const Text(
-                                '게시글',
-                                style: TextStyle(
-                                  color: Color(0xFFA6B0B5),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () async {
-                            if (loginProvider.isLoggedIn) {
-                              matchWriteProvider.setGiveTalentKeyword(
-                                  profileProvider.userProfile.giveTalents);
-                              context.push('/match-write1');
-                            } else {
-                              context.go("/login");
-                            }
-                          },
-                          child: Column(
-                            children: [
-                              SvgPicture.asset('assets/icons/write_off.svg'),
-                              const Text(
-                                '글쓰기',
-                                style: TextStyle(
-                                  color: Color(0xFFA6B0B5),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            context.push('/community-write1');
-                          },
-                          child: Column(
-                            children: [
-                              SvgPicture.asset('assets/icons/chat_off.svg'),
-                              const Text(
-                                '채팅',
-                                style: TextStyle(
-                                  color: Color(0xFFA6B0B5),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            context.push('/profile');
-                          },
-                          child: Column(
-                            children: [
-                              SvgPicture.asset('assets/icons/my_off.svg'),
-                              const Text(
-                                '마이',
-                                style: TextStyle(
-                                  color: Color(0xFFA6B0B5),
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
+            const CommonBottomNavigationBar(),
             if (commonProvider.isLoadingPage) const LoadingWithCharacter()
           ],
         ),

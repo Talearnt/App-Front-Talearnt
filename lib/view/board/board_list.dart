@@ -13,6 +13,7 @@ import 'package:provider/provider.dart';
 import '../../../common/theme.dart';
 import '../../../provider/board/match_board_provider.dart';
 import '../../../view_model/board_view_model.dart';
+import '../../common/widget/common_bottom_navigation_bar.dart';
 import '../../provider/board/community_board_provider.dart';
 import 'no_board_list_page.dart';
 
@@ -117,6 +118,7 @@ class BoardList extends StatelessWidget {
                   ),
                 ],
               ),
+              const CommonBottomNavigationBar(),
               if (commonProvider.isLoadingPage) const LoadingWithCharacter()
             ],
           );

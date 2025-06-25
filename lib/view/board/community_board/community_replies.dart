@@ -111,8 +111,8 @@ class CommunityReplies extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(r.nickname,
-                                    style: TextTypes.body02(
-                                        color: Palette.text01)),
+                                    style: TextTypes.captionMedium02(
+                                        color: Palette.text02)),
                                 Text(formatted,
                                     style: TextTypes.captionMedium02(
                                         color: Palette.text04)),
