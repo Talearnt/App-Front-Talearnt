@@ -214,6 +214,82 @@ class SignUpProvider extends ChangeNotifier with ClearText {
 
   bool get termsOfUseCheck => _termsOfUseCheck;
 
+  void clearProvider() {
+    _signUpPage = 0;
+    _pageController.initialPage;
+    _isFirstVisit = true;
+
+    _nickNameController.clear();
+    _nameController.clear();
+    _emailController.clear();
+    _passwordController.clear();
+    _passwordCheckController.clear();
+    _phoneNumController.clear();
+    _certNumController.clear();
+
+    _nameFocusNode.unfocus();
+    _nickNameFocusNode.unfocus();
+    _emailFocusNode.unfocus();
+    _passwordFocusNode.unfocus();
+    _phoneNumFocusNode.unfocus();
+    _certNumFocusNode.unfocus();
+    _passwordCheckFocusNode.unfocus();
+
+    _nickNameValid = true;
+    _nickNameValidMessage = '';
+    _nickNameInfoMessage = '랜덤으로 지정된 닉네임입니다. 자유롭게 수정 가능해요';
+    _nickNameInfoType = 'checkInfo';
+    _isNickNameInfo = true;
+
+    _nameValid = true;
+    _nameValidMessage = '';
+    _emailValid = true;
+    _emailValidMessage = '';
+    _passwordObscure = true;
+    _passwordValid = true;
+    _passwordValidMessage = '';
+    _isNickNameInfoValid = false;
+    _nickNameInfoValidMessage = '';
+    _passwordCheckValid = true;
+    _passwordCheckValidMessage = '';
+    _phoneNumValid = true;
+    _phoneNumValidMessage = '';
+    _cerNumValid = true;
+    _cerNumValidMessage = '';
+    _checkSmsValidation = false;
+
+    _nickNameHelperType = '';
+    _nickNameHelper = false;
+    _emailHelperType = '';
+    _emailHelper = false;
+
+    _checkNickNameDuplication = false;
+    _checkEmailDuplication = false;
+    _changeNickName = false;
+
+    _passwordCheckObscure = false;
+    _addListenerPasswordCheck = false;
+    _isSignUpSub2NextButtonEnabled = false;
+    _sendCertNum = false;
+
+    _gender = 0;
+    _allCheck = false;
+    _requiredTermsOfUseCheck = false;
+    _personalInfoCheck = false;
+    _marketingCheck = false;
+    _termsOfUseCheck = false;
+
+    _isPhoneNumEnabled = true;
+    _isCertNumEnabled = true;
+    _certNumCount = 0;
+
+    resetTimer(180);
+    _timer?.cancel();
+    _timer = null;
+
+    notifyListeners();
+  }
+
   @override
   void clearText(TextEditingController controller) {
     controller.clear();
@@ -563,57 +639,6 @@ class SignUpProvider extends ChangeNotifier with ClearText {
   void stopTimer() {
     _timer?.cancel();
     _timer = null;
-  }
-
-  void resetSignUp() {
-    _signUpPage = 0;
-    _pageController.initialPage;
-    _certTimerSeconds.value = 180;
-    _nickNameController.clear();
-    _nickNameValid = true;
-    _nickNameValidMessage = '';
-    _nickNameInfoMessage = '랜덤으로 지정된 닉네임입니다. 자유롭게 수정 가능해요';
-    _nickNameInfoType = 'checkInfo';
-    _nameController.clear();
-    _nameValid = true;
-    _nameValidMessage = '';
-    _emailController.clear();
-    _emailValid = true;
-    _emailValidMessage = '';
-    _passwordController.clear();
-    _passwordObscure = true;
-    _passwordValid = true;
-    _passwordValidMessage = '';
-    _passwordCheckController.clear();
-    _passwordCheckObscure = false;
-    _phoneNumController.clear();
-    _sendCertNum = false;
-    _certNumController.clear();
-    _gender = 0;
-    _allCheck = false;
-    _requiredTermsOfUseCheck = false;
-    _personalInfoCheck = false;
-    _marketingCheck = false;
-    _termsOfUseCheck = false;
-    _nameFocusNode.unfocus();
-    _nickNameFocusNode.unfocus();
-    _emailFocusNode.unfocus();
-    _passwordFocusNode.unfocus();
-    _phoneNumFocusNode.unfocus();
-    _isPhoneNumEnabled = true;
-    _isFirstVisit = true;
-    _certNumFocusNode.unfocus();
-    _isCertNumEnabled = true;
-    _certNumCount = 0;
-    _cerNumValid = true;
-    _cerNumValidMessage = '';
-    _checkSmsValidation = false;
-    _nickNameHelperType = '';
-    _emailHelperType = '';
-    _nickNameHelper = false;
-    _emailHelper = false;
-    resetTimer(180);
-    notifyListeners();
   }
 
   void authFailed() {

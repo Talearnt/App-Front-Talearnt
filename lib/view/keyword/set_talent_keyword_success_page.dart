@@ -21,7 +21,7 @@ class SetTalentKeywordSuccessPage extends StatelessWidget {
         leftIcon: false,
         first: GestureDetector(
             onTap: () {
-              signUpProvider.resetSignUp();
+              signUpProvider.clearProvider();
               context.go('/');
             },
             child: SvgPicture.asset("assets/icons/close.svg")),

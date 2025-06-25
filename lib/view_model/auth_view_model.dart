@@ -1,5 +1,4 @@
 import 'package:app_front_talearnt/common/widget/dialog.dart';
-import 'package:app_front_talearnt/common/widget/toast_message.dart';
 import 'package:app_front_talearnt/data/model/param/agree_req_dto.dart';
 import 'package:app_front_talearnt/data/model/param/login_param.dart';
 import 'package:app_front_talearnt/data/model/param/send_cert_number_param.dart';
@@ -124,13 +123,13 @@ class AuthViewModel extends ChangeNotifier {
     result.fold(
       (failure) {
         if (failure.errorCode == "429-AUTH-12") {
-          storageProvider.startCooldown();
+          storageProvider.startCoolDown();
           SingleBtnDialog.show(
             context,
             content: ErrorMessages.getMessage(failure.errorCode,
                 unknown: "알 수 없는 이유로\n인증번호 재발송에 실패하였습니다.\n다시 시도해 주세요."),
             timer: true,
-            timeSeconds: storageProvider.certNumResendCooldown,
+            timeSeconds: storageProvider.certNumResendCoolDown,
           );
 
           return;

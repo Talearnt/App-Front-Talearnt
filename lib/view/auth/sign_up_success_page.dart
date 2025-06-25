@@ -21,7 +21,7 @@ class SignUpSuccessPage extends StatelessWidget {
         leftIcon: false,
         first: GestureDetector(
             onTap: () {
-              signUpProvider.resetSignUp();
+              signUpProvider.clearProvider();
               context.go('/');
             },
             child: SvgPicture.asset("assets/icons/close.svg")),
@@ -64,7 +64,7 @@ class SignUpSuccessPage extends StatelessWidget {
               child: PrimaryM(
                 content: '로그인 하기',
                 onPressed: () {
-                  signUpProvider.resetSignUp();
+                  signUpProvider.clearProvider();
                   context.pop();
                 },
               ),
