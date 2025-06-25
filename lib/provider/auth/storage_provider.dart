@@ -11,11 +11,11 @@ class StorageProvider extends ChangeNotifier {
   String? getValue(String key) => _cachedValues[key];
 
   Timer? _timer;
-  ValueNotifier<int> _certNumResendCooldown = ValueNotifier<int>(600);
-  bool _isCooldown = false;
+  ValueNotifier<int> _certNumResendCoolDown = ValueNotifier<int>(600);
+  bool _isCoolDown = false;
 
-  ValueNotifier<int> get certNumResendCooldown => _certNumResendCooldown;
-  bool get isCooldown => _isCooldown;
+  ValueNotifier<int> get certNumResendCoolDown => _certNumResendCoolDown;
+  bool get isCoolDown => _isCoolDown;
 
   StorageProvider() {
     _initializeStorage();
@@ -49,22 +49,22 @@ class StorageProvider extends ChangeNotifier {
     return _prefs?.getString(key);
   }
 
-  void startCooldown() {
-    if (!_isCooldown) {
+  void startCoolDown() {
+    if (!_isCoolDown) {
       startTimer();
-      _isCooldown = true;
-      DateTime cooldownEndTime =
+      _isCoolDown = true;
+      DateTime coolDownEndTime =
           DateTime.now().add(const Duration(minutes: 10));
 
-      saveData("cooldownEndTime", cooldownEndTime);
+      saveData("coolDownEndTime", coolDownEndTime);
     }
     notifyListeners();
   }
 
-  void reStartCooldown() {
-    if (!_isCooldown) {
+  void reStartCoolDown() {
+    if (!_isCoolDown) {
       startTimer();
-      _isCooldown = true;
+      _isCoolDown = true;
     }
     notifyListeners();
   }
@@ -73,13 +73,13 @@ class StorageProvider extends ChangeNotifier {
     _timer = Timer.periodic(
       const Duration(seconds: 1),
       (timer) {
-        if (_certNumResendCooldown.value > 0) {
-          _certNumResendCooldown.value -= 1;
+        if (_certNumResendCoolDown.value > 0) {
+          _certNumResendCoolDown.value -= 1;
           notifyListeners();
         } else {
-          _isCooldown = false;
+          _isCoolDown = false;
           timer.cancel();
-          deleteData("cooldownEndTime");
+          deleteData("coolDownEndTime");
         }
       },
     );
@@ -87,7 +87,7 @@ class StorageProvider extends ChangeNotifier {
 
   void resetTimer() {
     stopTimer();
-    _certNumResendCooldown = ValueNotifier<int>(600);
+    _certNumResendCoolDown = ValueNotifier<int>(600);
   }
 
   void stopTimer() {
@@ -95,20 +95,20 @@ class StorageProvider extends ChangeNotifier {
     _timer = null;
   }
 
-  void setCooldownTime() async {
-    final String? cooldownEndTimeString = await getData("cooldownEndTime");
+  void setCoolDownTime() async {
+    final String? coolDownEndTimeString = await getData("CoolDownEndTime");
 
-    if (cooldownEndTimeString != null) {
-      final DateTime cooldownEndTime = DateTime.parse(cooldownEndTimeString);
+    if (coolDownEndTimeString != null) {
+      final DateTime coolDownEndTime = DateTime.parse(coolDownEndTimeString);
       final DateTime now = DateTime.now();
 
-      if (cooldownEndTime.isAfter(now)) {
-        final int remainingSeconds = cooldownEndTime.difference(now).inSeconds;
-        _certNumResendCooldown.value = remainingSeconds;
+      if (coolDownEndTime.isAfter(now)) {
+        final int remainingSeconds = coolDownEndTime.difference(now).inSeconds;
+        _certNumResendCoolDown.value = remainingSeconds;
 
-        reStartCooldown();
+        reStartCoolDown();
       } else {
-        deleteData("cooldownEndTime");
+        deleteData("coolDownEndTime");
       }
     }
   }

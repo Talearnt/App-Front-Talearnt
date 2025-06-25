@@ -23,7 +23,7 @@ class KakaoSignUpPage extends StatelessWidget {
       onPopInvokedWithResult: (bool didPop, Object? result) async {
         if (!didPop) {
           if (context.mounted) {
-            kakaoProvider.resetKakao();
+            kakaoProvider.clearProvider();
             context.pop();
           }
         }
@@ -112,8 +112,8 @@ class KakaoSignUpPage extends StatelessWidget {
                                 padding: const EdgeInsets.all(11.5),
                                 child: Text(
                                   '여자',
-                                  style: TextTypes.body02(
-                                      color: Palette.text04),
+                                  style:
+                                      TextTypes.body02(color: Palette.text04),
                                 ),
                               ),
                             ),
