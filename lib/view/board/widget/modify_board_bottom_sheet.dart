@@ -54,7 +54,7 @@ class ModifyBoardBottomSheet extends StatelessWidget {
                     commonProvider.changeIsLoading(true);
                     await keywordViewModel.getOfferedKeywords();
                     await matchEditProvider.setPostInfo(
-                        matchBoardDetailProvider.matchingDetailPost);
+                        matchBoardDetailProvider.matchingDetailPost!);
                     context.go('/match-edit1');
                     commonProvider.changeIsLoading(false);
                   },
