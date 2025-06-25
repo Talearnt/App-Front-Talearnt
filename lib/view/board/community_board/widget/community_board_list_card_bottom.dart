@@ -48,7 +48,7 @@ class CommunityBoardListCardBottom extends StatelessWidget {
                 SvgPicture.asset('assets/icons/comment.svg'),
                 const SizedBox(width: 4),
                 Text(
-                  "댓글수",
+                  "${post.commentCount}",
                   style: TextTypes.captionMedium02(color: Palette.text03),
                 ),
               ],

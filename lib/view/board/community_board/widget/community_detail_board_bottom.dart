@@ -3,8 +3,6 @@ import 'package:app_front_talearnt/provider/board/community_board_detail_provide
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../../../data/model/respone/community_detail_board.dart';
-
 class CommunityDetailBoardBottom extends StatelessWidget {
   final CommunityBoardDetailProvider communityBoardDetailProvider;
 
@@ -54,7 +52,7 @@ class CommunityDetailBoardBottom extends StatelessWidget {
                 SvgPicture.asset('assets/icons/comment.svg'),
                 const SizedBox(width: 4),
                 Text(
-                  "댓글수 ${communityBoardDetailProvider.communityDetailBoard.commentCount}",
+                  "댓글 ${communityBoardDetailProvider.communityDetailBoard.commentCount}",
                   style: TextTypes.captionMedium02(color: Palette.text03),
                 ),
               ],
