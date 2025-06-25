@@ -34,6 +34,25 @@ class CommonProvider with ChangeNotifier {
 
   Timer? _timer;
 
+  void clearProvider() {
+    _isLoadingPage = false;
+
+    _animationController.reset();
+
+    _currentEntry?.remove();
+    _currentEntry = null;
+
+    _isEntryUpdate = false;
+    _isBackGesture = false;
+
+    onImageType.value = 1;
+
+    _timer?.cancel();
+    _timer = null;
+
+    notifyListeners();
+  }
+
   void _startImageToggle() {
     _timer = Timer.periodic(const Duration(milliseconds: 1000), (timer) {
       if (onImageType.value < 3) {

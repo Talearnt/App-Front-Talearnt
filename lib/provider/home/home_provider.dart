@@ -16,6 +16,12 @@ class HomeProvider extends ChangeNotifier {
   List<MatchBoard> get userMatchingTalentExchangePosts =>
       _userMatchingTalentExchangePosts;
 
+  void clearProvider() {
+    _newTalentExchangePosts.clear();
+    _bestCommunityPosts.clear();
+    _userMatchingTalentExchangePosts.clear();
+  }
+
   void setNewTalentExchangePosts(List<MatchBoard> addTalentExchangePosts) {
     _newTalentExchangePosts.clear();
     _newTalentExchangePosts.addAll(addTalentExchangePosts);

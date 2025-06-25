@@ -131,6 +131,47 @@ class ProfileProvider extends ChangeNotifier with ClearText {
 
   bool get changeImage => _changeImage;
 
+  void clearProvider() {
+    _editNickNameController.clear();
+    _editNickNameFocusNode.unfocus();
+
+    _giveTalents.clear();
+    _editGiveTalents.clear();
+    _receiveTalents.clear();
+    _editReceiveTalents.clear();
+
+    _giveTalentTabController.index = 0;
+    _receiveTalentTabController.index = 0;
+    _eventNoticeTabController.index = 0;
+
+    _imageFile = null;
+    _tempImageFile = null;
+    _tempImageSize = null;
+
+    _editNickNameValid = true;
+    _checkEditNickNameDuplication = false;
+    _editNickNameValidMessage = '';
+    _isEditNickNameInfoValid = false;
+    _editNickNameInfoValidMessage = '';
+    _isEditNickNameInfo = true;
+    _editNickNameInfoMessage = '';
+    _editNickNameInfoType = 'checkInfo';
+    _editNickNameHelperType = '';
+    _editNickNameHelper = false;
+    _changeEditNickName = false;
+    _errorMessage = '';
+
+    _imageUploadS3Url = '';
+    _isS3Upload = false;
+    _uploadUserImageInfo.clear();
+    _editImageUploadUrl = '';
+    _changeImage = false;
+
+    _allAlarm = false;
+    _commentAlarm = false;
+    _keywordAlarm = false;
+  }
+
   Future<void> setUserProfile(UserProfile userProfile) async {
     _userProfile = userProfile;
     notifyListeners();

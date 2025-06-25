@@ -310,52 +310,73 @@ class MatchEditProvider extends ChangeNotifier with ClearText {
   String get errorMessage => _errorMessage;
 
   void clearProvider() {
+    _subscription?.cancel();
+
     _titleController.clear();
     _contentController.clear();
 
     _titleFocusNode.unfocus();
     _contentFocusNode.unfocus();
+    _giveTalentFocusNode.unfocus();
+    _interestTalentFocusNode.unfocus();
 
-    _searchedGiveTalentKeywordCodes.clear();
-    _searchedInterestTalentKeywordCodes.clear();
+    _giveTalentTabController.index = 0;
+    _interestTalentTabController.index = 0;
 
     _giveTalentKeywordCodes.clear();
+    _selectedGiveTalentKeywordCodes.clear();
+    _searchedGiveTalentKeywordCodes.clear();
+    _interestTalentKeywordCodes.clear();
+    _selectedInterestTalentKeywordCodes.clear();
+    _searchedInterestTalentKeywordCodes.clear();
 
-    _giveTalentRequiredMessage = "";
-    _interestTalentRequiredMessage = "";
-    _durationRequiredMessage = "";
-    _exchangeTypeRequiredMesage = "";
+    _selectedDuration = '';
+    _selectedExchangeType = '';
 
-    _onToolBar = "default";
+    _giveTalentRequiredMessage = '';
+    _interestTalentRequiredMessage = '';
+    _durationRequiredMessage = '';
+    _exchangeTypeRequiredMesage = '';
+
+    _htmlContent = '';
+    _onToolBar = 'default';
 
     _isBold = false;
     _isItalic = false;
     _isUnderline = false;
     _isUl = false;
     _isOl = false;
+
     _fontSize = 16;
     _fontColor = gray_100;
     _backGroundColor = white;
-    _alignType = "left";
+    _alignType = 'left';
+
     _isChipsSelected = true;
     _isTitleAndBoardEmpty = false;
-    _boardToastMessage = "";
 
-    _htmlContent = "";
+    _boardToastMessage = '';
+
     _totalImageSize = 0;
     _totalImageCount = 0;
 
+    _imageUploadUrls.clear();
+    _imageUploadedUrls.clear();
+    _uploadImageInfos.clear();
     _previewImageList.clear();
-    _isS3Upload = false;
+
+    _previeImageIndex = 0;
+    _isAppBarVisible = true;
 
     _linkTextController.clear();
     _urlController.clear();
 
+    _isLinkTextNotEmpty = false;
+    _isS3Upload = false;
+
     _postNo = 0;
+    _errorMessage = '';
 
-    _errorMessage = "";
-
-    reset();
     notifyListeners();
   }
 

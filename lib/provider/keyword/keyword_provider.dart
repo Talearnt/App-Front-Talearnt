@@ -85,6 +85,27 @@ class KeywordProvider extends ChangeNotifier {
       _selectedGiveTalentKeywordCodes.isNotEmpty &&
       _selectedInterestTalentKeywordCodes.isNotEmpty;
 
+  void clearProvider() {
+    _setTalentPage = 0;
+    _pageController.jumpToPage(0);
+
+    _giveTalentTabController.index = 0;
+    _interestTalentTabController.index = 0;
+
+    _giveTalentKeywordCodes.clear();
+    _selectedGiveTalentKeywordCodes.clear();
+    _searchedGiveTalentKeywordCodes.clear();
+    _interestTalentKeywordCodes.clear();
+    _selectedInterestTalentKeywordCodes.clear();
+    _searchedInterestTalentKeywordCodes.clear();
+
+    _giveTalentFocusNode.unfocus();
+    _interestTalentFocusNode.unfocus();
+
+    _giveTalentSearchController.clear();
+    _interestTalentSearchController.clear();
+  }
+
   void _onChanged() {
     notifyListeners(); // Focus 상태 변경 시 UI 갱신
   }
