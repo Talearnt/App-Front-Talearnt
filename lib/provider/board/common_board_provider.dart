@@ -8,6 +8,12 @@ class CommonBoardProvider extends ChangeNotifier {
 
   bool get initState => _initState;
 
+  void clearProvider() {
+    _boardType = 'match';
+    _initState = true;
+    notifyListeners();
+  }
+
   void setBoardType(String type) {
     _boardType = type;
     notifyListeners();
