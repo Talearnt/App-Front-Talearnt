@@ -41,6 +41,7 @@ class AuthorizationInterceptor extends InterceptorsWrapper {
       }
 
       options.headers['content-type'] = 'application/json';
+      options.headers['X-Client-Path'] = 'mobile';
     }
 
     handler.next(options);
