@@ -65,6 +65,7 @@ class BoardCustomAppBar extends StatelessWidget {
                   commonBoardProvider.updateInitState(true);
                 },
                 style: ButtonStyle(
+                  minimumSize: WidgetStateProperty.all(Size.zero),
                   padding: WidgetStateProperty.all(EdgeInsets.zero),
                   overlayColor: WidgetStateProperty.all(Colors.transparent),
                 ),
@@ -87,6 +88,7 @@ class BoardCustomAppBar extends StatelessWidget {
                   commonBoardProvider.updateInitState(true);
                 },
                 style: ButtonStyle(
+                  minimumSize: WidgetStateProperty.all(Size.zero),
                   padding: WidgetStateProperty.all(EdgeInsets.zero),
                   overlayColor: WidgetStateProperty.all(Colors.transparent),
                 ),

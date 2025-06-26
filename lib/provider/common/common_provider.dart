@@ -19,6 +19,7 @@ class CommonProvider with ChangeNotifier {
   OverlayEntry? _currentEntry;
   bool _isEntryUpdate = false;
   bool _isBackGesture = false;
+  String _selectedPage = 'home'; //home, board_list, write_board, profile
 
   bool get isLoadingPage => _isLoadingPage;
 
@@ -29,6 +30,8 @@ class CommonProvider with ChangeNotifier {
   bool get isEntryUpdate => _isEntryUpdate;
 
   bool get isBackGesture => _isBackGesture;
+
+  String get selectedPage => _selectedPage;
 
   final ValueNotifier<int> onImageType = ValueNotifier<int>(1);
 
@@ -42,6 +45,11 @@ class CommonProvider with ChangeNotifier {
         onImageType.value = 1;
       }
     });
+  }
+
+  void changeSelectedPage(String newPage) {
+    _selectedPage = newPage;
+    notifyListeners();
   }
 
   void changeIsLoading(bool loadingType) {

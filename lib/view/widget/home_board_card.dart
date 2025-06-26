@@ -25,10 +25,10 @@ class HomeMatchBoardCard extends StatelessWidget {
           width: 1,
         ),
         borderRadius: BorderRadius.circular(20),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
-            color: const Color.fromARGB(255, 0, 0, 0).withOpacity(0.1),
-            offset: const Offset(0, 1),
+            color: Color.fromRGBO(0, 0, 0, 0.1),
+            offset: Offset(0, 1),
             blurRadius: 10,
             spreadRadius: 3,
           ),
@@ -228,57 +228,71 @@ class HomeCommunityCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        Container(
-          width: 308,
-          height: 280,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.1),
-                offset: const Offset(0, 2),
-                blurRadius: 8,
-                spreadRadius: 2,
-              ),
-            ],
+    return Container(
+      width: 308,
+      height: 280,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: const [
+          BoxShadow(
+            color:  Color.fromRGBO(0, 0, 0, 0.1),
+            offset: Offset(0, 2),
+            blurRadius: 8,
+            spreadRadius: 2,
           ),
-          child: Padding(
-            padding: const EdgeInsets.all(24),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
               children: [
-                Row(
+                SizedBox(
+                  width: 40,
+                  height: 40,
+                  child: SvgPicture.asset('assets/img/profile.svg'),
+                ),
+                const SizedBox(width: 8),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
-                      width: 40,
-                      height: 40,
-                      child: SvgPicture.asset('assets/img/profile.svg'),
+                    Text(
+                      post.nickname,
+                      style: TextTypes.body02(
+                        color: Palette.text01,
+                      ),
                     ),
-                    const SizedBox(width: 8),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          post.nickname,
-                          style: TextTypes.body02(
-                            color: Palette.text01,
-                          ),
-                        ),
-                        Text(
-                          post.createdAt,
-                          style: TextTypes.captionSemi02(
-                            color: Palette.text04,
-                          ),
-                        )
-                      ],
-                    ),
+                    Text(
+                      post.createdAt,
+                      style: TextTypes.captionSemi02(
+                        color: Palette.text04,
+                      ),
+                    )
                   ],
                 ),
-                const SizedBox(height: 16),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(999),
+                    color: Palette.errorBG01,
+                  ),
+                  child: Text(
+                    'Best ${ranking.toString()}',
+                    style: TextTypes.captionMedium02(color: Palette.error01),
+                  ),
+                ),
+                const SizedBox(
+                  width: 4,
+                ),
                 Container(
                   padding:
                       const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
@@ -288,98 +302,82 @@ class HomeCommunityCard extends StatelessWidget {
                   ),
                   child: Text(
                     post.postType,
-                    style: TextTypes.captionSemi02(color: Palette.primary01),
+                    style: TextTypes.captionMedium02(color: Palette.primary01),
                   ),
                 ),
-                const SizedBox(height: 12),
-                SizedBox(
-                  height: 46,
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      post.title,
-                      style: TextTypes.bodySemi01(
-                        color: Palette.text01,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 6),
-                SizedBox(
-                  height: 36,
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      post.content,
-                      style: TextTypes.bodyMedium03(
-                        color: Palette.text03,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 28),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        SvgPicture.asset('assets/icons/thumb_up_off.svg'),
-                        const SizedBox(width: 4),
-                        Text(
-                          post.likeCount.toString(),
-                          style: TextTypes.bodySemi03(
-                            color: Palette.text03,
-                          ),
-                        ),
-                        const SizedBox(width: 6),
-                        SvgPicture.asset('assets/icons/comment.svg'),
-                        const SizedBox(width: 4),
-                        Text(
-                          post.commentCount.toString(),
-                          style: TextTypes.bodySemi03(
-                            color: Palette.text03,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SvgPicture.asset('assets/icons/eye_open_grey.svg'),
-                        const SizedBox(width: 4),
-                        Text(
-                          post.count.toString(),
-                          style: TextTypes.bodySemi03(
-                            color: Palette.text03,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                )
               ],
             ),
-          ),
-        ),
-        Positioned(
-          top: -14,
-          right: 12,
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              SvgPicture.asset('assets/icons/ranking_badge.svg'),
-              Text(
-                ranking.toString(),
-                style: TextTypes.body02(
-                  color: Palette.bgBackGround,
+            const SizedBox(height: 12),
+            SizedBox(
+              height: 46,
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: Text(
+                  post.title,
+                  style: TextTypes.bodySemi01(
+                    color: Palette.text01,
+                  ),
                 ),
               ),
-            ],
-          ),
+            ),
+            const SizedBox(height: 6),
+            SizedBox(
+              height: 36,
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: Text(
+                  post.content,
+                  style: TextTypes.bodyMedium03(
+                    color: Palette.text03,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ),
+            const SizedBox(height: 28),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    SvgPicture.asset('assets/icons/thumb_up_off.svg'),
+                    const SizedBox(width: 4),
+                    Text(
+                      post.likeCount.toString(),
+                      style: TextTypes.bodySemi03(
+                        color: Palette.text03,
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    SvgPicture.asset('assets/icons/comment.svg'),
+                    const SizedBox(width: 4),
+                    Text(
+                      post.commentCount.toString(),
+                      style: TextTypes.bodySemi03(
+                        color: Palette.text03,
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset('assets/icons/eye_open_grey.svg'),
+                    const SizedBox(width: 4),
+                    Text(
+                      post.count.toString(),
+                      style: TextTypes.bodySemi03(
+                        color: Palette.text03,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            )
+          ],
         ),
-      ],
+      ),
     );
   }
 }
@@ -395,10 +393,10 @@ class HomeNullCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            offset: const Offset(0, 2),
+            color: Color.fromRGBO(0, 0, 0, 0.1),
+            offset: Offset(0, 2),
             blurRadius: 8,
             spreadRadius: 2,
           ),
