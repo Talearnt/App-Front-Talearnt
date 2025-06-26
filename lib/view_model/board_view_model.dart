@@ -127,6 +127,7 @@ class BoardViewModel extends ChangeNotifier {
     result.fold(
         (failure) => commonNavigator.showSingleDialog(
             content: ErrorMessages.getMessage(failure.errorCode)), (result) {
+      matchWriteProvider.clearProvider();
       commonNavigator.goRoute('/write-success');
     });
   }
@@ -241,6 +242,7 @@ class BoardViewModel extends ChangeNotifier {
         (failure) => commonNavigator.showSingleDialog(
             content: ErrorMessages.getMessage(failure.errorCode)), (post) {
       talentBoardDetailProvider.updateTalentDetailPost(post);
+      matchEditProvider.clearProvider();
       commonNavigator.goRoute('/match-board-detail-page');
     });
   }

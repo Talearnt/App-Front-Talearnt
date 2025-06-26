@@ -75,6 +75,7 @@ class SignUpSuccessPage extends StatelessWidget {
               child: SecondaryMGray(
                 content: '홈으로 돌아가기',
                 onPressed: () {
+                  signUpProvider.clearProvider();
                   context.go("/");
                 },
               ),
