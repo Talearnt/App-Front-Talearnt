@@ -38,7 +38,7 @@ class CommunityBoardProvider extends ChangeNotifier {
 
   TabController get communityTabController => _communityTabController;
 
-  void clear() {
+  void clearProvider() {
     _isFetching = false;
     _selectedPostType = '';
     _selectedOrderType = 'recent';

@@ -29,7 +29,7 @@ class SetTalentKeywordMainPage extends StatelessWidget {
         if (!didPop) {
           // 뒤로가기가 처리되지 않았을 때
           if (context.mounted) {
-            keywordProvider.reset(); // 초기화 작업 수행
+            keywordProvider.clearProvider(); // 초기화 작업 수행
             context.pop(); // 화면 종료
           }
         }

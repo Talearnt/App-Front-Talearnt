@@ -30,7 +30,7 @@ class ModifyUserInfoPage extends StatelessWidget {
       onPopInvokedWithResult: (bool didPop, Object? result) async {
         if (!didPop) {
           if (context.mounted) {
-            profileProvider.resetModifyProfile();
+            profileProvider.clearProvider();
             context.pop();
           }
         }
@@ -84,7 +84,7 @@ class ModifyUserInfoPage extends StatelessWidget {
                 }
               }),
           onPressed: () {
-            profileProvider.resetModifyProfile();
+            profileProvider.clearProvider();
             context.pop();
           },
         ),

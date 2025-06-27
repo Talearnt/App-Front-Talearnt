@@ -403,33 +403,6 @@ class ProfileProvider extends ChangeNotifier with ClearText {
     notifyListeners();
   }
 
-  void resetModifyProfile() {
-    _editNickNameController.clear();
-    _editNickNameFocusNode.unfocus();
-    _editGiveTalents.clear();
-    _editReceiveTalents.clear();
-    _imageFile = null;
-    _tempImageFile = null;
-    _tempImageSize = null;
-    _editNickNameValid = true;
-    _checkEditNickNameDuplication = false;
-    _editNickNameValidMessage = '';
-    _isEditNickNameInfoValid = false;
-    _editNickNameInfoValidMessage = '';
-    _isEditNickNameInfo = true;
-    _editNickNameInfoMessage = '';
-    _editNickNameInfoType = 'checkInfo';
-    _editNickNameHelperType = '';
-    _editNickNameHelper = false;
-    _changeEditNickName = false;
-    _errorMessage = "";
-    _editImageUploadUrl = "";
-    _imageUploadS3Url = "";
-    _isS3Upload = false;
-    _uploadUserImageInfo.clear();
-    notifyListeners();
-  }
-
   @override
   void clearText(TextEditingController controller) {
     controller.clear();

@@ -29,6 +29,7 @@ class MatchBoardDetailPage extends StatelessWidget {
     return Scaffold(
       appBar: TopAppBar(
         onPressed: () {
+          matchBoardDetailProvider.clearProvider();
           context.pop();
         },
         first: InkWell(
@@ -362,8 +363,7 @@ class MatchBoardDetailPage extends StatelessWidget {
                                                   height: imageSize,
                                                   fit: BoxFit.cover,
                                                   color: index == 3
-                                                      ? Colors.black
-                                                          .withOpacity(0.6)
+                                                      ? Colors.black.withValues(alpha: 153) // 0.6 * 255 = 153
                                                       : null,
                                                   colorBlendMode: index == 3
                                                       ? BlendMode.darken
