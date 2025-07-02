@@ -19,7 +19,6 @@ import '../clear_text.dart';
 class CommunityWriteProvider extends ChangeNotifier with ClearText {
   CommunityWriteProvider() {
     _contentController.addListener(_onChanged);
-
     _subscription =
         _contentController.document.changes.listen(_onDocumentChange);
   }
@@ -224,6 +223,9 @@ class CommunityWriteProvider extends ChangeNotifier with ClearText {
   int get totalImageCount => _totalImageCount;
 
   void clearProvider() {
+    _subscription?.cancel();
+    _subscription = null;
+
     _titleController.clear();
     _contentController.clear();
 
@@ -244,17 +246,24 @@ class CommunityWriteProvider extends ChangeNotifier with ClearText {
     _isTitleAndBoardEmpty = false;
     _boardToastMessage = "";
 
+    _selectedCategory = "";
+    _categoryRequiredMessage = "";
     _htmlContent = "";
     _totalImageSize = 0;
     _totalImageCount = 0;
 
     _isS3Upload = false;
+
+    _uploadImageInfo.clear();
+    _imageUploadUrls.clear();
+    _imageUploadedUrls.clear();
     _previewImageList.clear();
 
     _linkTextController.clear();
     _urlController.clear();
 
     reset();
+
     notifyListeners();
   }
 

@@ -29,6 +29,7 @@ class MatchBoardDetailPage extends StatelessWidget {
     return Scaffold(
       appBar: TopAppBar(
         onPressed: () {
+          matchBoardDetailProvider.clearProvider();
           context.pop();
         },
         first: InkWell(
@@ -44,11 +45,11 @@ class MatchBoardDetailPage extends StatelessWidget {
               builder: (BuildContext context) {
                 return ModifyBoardBottomSheet(
                     isMine:
-                        matchBoardDetailProvider.matchingDetailPost.userNo ==
+                        matchBoardDetailProvider.matchingDetailPost!.userNo ==
                             profileProvider.userProfile.userNo,
                     boardType: 'match',
                     postNo: matchBoardDetailProvider
-                        .matchingDetailPost.exchangePostNo);
+                        .matchingDetailPost!.exchangePostNo);
               },
             );
           },
@@ -92,7 +93,7 @@ class MatchBoardDetailPage extends StatelessWidget {
                               children: [
                                 Text(
                                   matchBoardDetailProvider
-                                      .matchingDetailPost.title,
+                                      .matchingDetailPost!.title,
                                   style: TextTypes.heading2(
                                     color: Palette.text01,
                                   ),
@@ -107,12 +108,12 @@ class MatchBoardDetailPage extends StatelessWidget {
                               children: [
                                 Profile(
                                     nickName: matchBoardDetailProvider
-                                        .matchingDetailPost.nickname),
+                                        .matchingDetailPost!.nickname),
                                 Row(
                                   children: [
                                     Text(
                                       matchBoardDetailProvider
-                                          .matchingDetailPost.createdAt,
+                                          .matchingDetailPost!.createdAt,
                                       style: TextTypes.caption01(
                                         color: Palette.text04,
                                       ),
@@ -162,7 +163,7 @@ class MatchBoardDetailPage extends StatelessWidget {
                             Wrap(
                               children: [
                                 ...matchBoardDetailProvider
-                                    .matchingDetailPost.giveTalents
+                                    .matchingDetailPost!.giveTalents
                                     .map(
                                   (item) {
                                     return Padding(
@@ -210,7 +211,7 @@ class MatchBoardDetailPage extends StatelessWidget {
                             Wrap(
                               children: [
                                 ...matchBoardDetailProvider
-                                    .matchingDetailPost.receiveTalents
+                                    .matchingDetailPost!.receiveTalents
                                     .map(
                                   (item) {
                                     return Padding(
@@ -266,7 +267,7 @@ class MatchBoardDetailPage extends StatelessWidget {
                                 ),
                                 Text(
                                   matchBoardDetailProvider
-                                      .matchingDetailPost.exchangeType,
+                                      .matchingDetailPost!.exchangeType,
                                   style: TextTypes.body02(
                                     color: Palette.text02,
                                   ),
@@ -289,7 +290,7 @@ class MatchBoardDetailPage extends StatelessWidget {
                                 ),
                                 Text(
                                   matchBoardDetailProvider
-                                      .matchingDetailPost.duration,
+                                      .matchingDetailPost!.duration,
                                   style: TextTypes.body02(
                                     color: Palette.text02,
                                   ),
@@ -362,8 +363,7 @@ class MatchBoardDetailPage extends StatelessWidget {
                                                   height: imageSize,
                                                   fit: BoxFit.cover,
                                                   color: index == 3
-                                                      ? Colors.black
-                                                          .withOpacity(0.6)
+                                                      ? Colors.black.withValues(alpha: 153) // 0.6 * 255 = 153
                                                       : null,
                                                   colorBlendMode: index == 3
                                                       ? BlendMode.darken

@@ -29,7 +29,6 @@ class CommunityBoardDetailProvider extends ChangeNotifier with ClearText {
   int _targetReply = 0;
 
   bool _hasNext = false;
-
   bool _isCommentInputActive = false;
 
   final TextEditingController _commentController = TextEditingController();
@@ -65,8 +64,18 @@ class CommunityBoardDetailProvider extends ChangeNotifier with ClearText {
   int get targetReply => _targetReply;
 
   void clearProvider() {
+    _contentController.clear(); // Quill 문서 초기화
+    _communityDetailBoard = CommunityDetailBoard.empty();
+
+    _previewImageList.clear();
+    _previewImageIndex = 0;
+
+    _isAppBarVisible = true;
+
     _commentList = [];
     _replyOpenMap = {};
+    _replyMap.clear();
+    _replyHasNext.clear();
     _isCommentInputActive = false;
     _hasNext = false;
 

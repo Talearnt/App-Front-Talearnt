@@ -38,6 +38,20 @@ class CommunityBoardProvider extends ChangeNotifier {
 
   TabController get communityTabController => _communityTabController;
 
+  void clearProvider() {
+    _isFetching = false;
+    _selectedPostType = '';
+    _selectedOrderType = 'recent';
+    _lastNo = '-1';
+    _communityPage = Pagination.empty();
+    _communityBoardList.clear();
+
+    _scrollController.jumpTo(0);
+    _communityTabController.dispose();
+
+    notifyListeners();
+  }
+
   void setViewModel(BoardViewModel viewModel) {
     _viewModel = viewModel;
   }

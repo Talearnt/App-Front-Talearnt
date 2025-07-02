@@ -100,20 +100,12 @@ class FindIdProvider extends ChangeNotifier with ClearText {
     _isCertSend = false;
 
     _certNumberCount = 0;
-    _certNumSecond = ValueNotifier<int>(180);
+    _certNumSecond.value = 180;
 
     _userId = '';
     _createdAt = '';
-
-    _certNumberCount = 0;
-
-    _userId = '';
-    _createdAt = '';
-
     _loadFindIdSuccessPage = false;
-
     _textInputEnabled = true;
-
     stopTimer();
 
     notifyListeners();

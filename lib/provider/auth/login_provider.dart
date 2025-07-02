@@ -44,6 +44,28 @@ class LoginProvider extends ChangeNotifier with ClearText {
 
   bool get passwordObscure => _passwordObscure;
 
+  void clearProvider(){
+    _initLoggedIn = true;
+    _autoLoggedIn = false;
+    _isLoggedIn = false;
+    _loginRoot = 'login';
+
+    _emailController.clear();
+    _passwordController.clear();
+
+    _emailFocusNode.unfocus();
+    _passwordFocusNode.unfocus();
+
+    _emailValid = true;
+    _emailValidMessage = '';
+
+    _passwordValid = true;
+    _passwordValidMessage = '';
+    _passwordObscure = true;
+
+    notifyListeners();
+  }
+
   @override
   void clearText(TextEditingController controller) {
     controller.clear();

@@ -30,7 +30,7 @@ class SignUpMainPage extends StatelessWidget {
         if (!didPop) {
           // 뒤로가기가 처리되지 않았을 때
           if (context.mounted) {
-            signUpProvider.resetSignUp(); // 초기화 작업 수행
+            signUpProvider.clearProvider(); // 초기화 작업 수행
             context.pop();
           }
         }
@@ -41,7 +41,7 @@ class SignUpMainPage extends StatelessWidget {
             content: '회원가입',
             onPressed: () {
               if (signUpProvider.signUpPage == 0) {
-                signUpProvider.resetSignUp(); // 초기화 작업 수행
+                signUpProvider.clearProvider(); // 초기화 작업 수행
                 Navigator.of(context).pop();
               } else {
                 signUpProvider.pageController.previousPage(
@@ -121,12 +121,12 @@ class SignUpMainPage extends StatelessWidget {
                             });
                           },
                         )
-                      : storageProvider.isCooldown
+                      : storageProvider.isCoolDown
                           ? BottomBtn(
                               mediaBottom:
                                   MediaQuery.of(context).viewInsets.bottom,
                               content:
-                                  '인증번호 요청 ${commonProvider.getFormattedTime(storageProvider.certNumResendCooldown)}',
+                                  '인증번호 요청 ${commonProvider.getFormattedTime(storageProvider.certNumResendCoolDown)}',
                               isEnabled: false,
                               onPressed: () {
                                 storageProvider.startTimer();

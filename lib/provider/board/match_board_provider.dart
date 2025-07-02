@@ -59,6 +59,27 @@ class MatchBoardProvider extends ChangeNotifier {
 
   ScrollController get scrollController => _scrollController;
 
+  void clearProvider() {
+    _isFetching = false;
+
+    _giveTalentTabController.index = 0;
+    _interestTalentTabController.index = 0;
+
+    _selectedOrderType = 'recent';
+    _selectedDurationType = '';
+    _selectedOperationType = '';
+
+    _giveTalentKeywordCodes.clear();
+    _selectedGiveTalentKeywordCodes.clear();
+    _interestTalentKeywordCodes.clear();
+    _selectedInterestTalentKeywordCodes.clear();
+
+    _matchBoardList.clear();
+    _talentPage = Pagination.empty();
+
+    notifyListeners();
+  }
+
   void setViewModel(BoardViewModel viewModel) {
     _viewModel = viewModel;
   }

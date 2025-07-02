@@ -50,6 +50,28 @@ class KakaoProvider extends ChangeNotifier with ClearText {
   bool get isEnabledKakaoSignup =>
       requiredTermsOfUseCheck && personalInfoCheck && checkNickNameDupli;
 
+  void clearProvider() {
+    _gender = 0;
+
+    _nameController.clear();
+    _emailController.clear();
+    _phoneNumController.clear();
+    _nickNameController.clear();
+    _nickNameFocusNode.unfocus();
+
+    _nickNameValid = true;
+    _nickNameValidMessage = '';
+    _checkNickNameDupli = false;
+
+    _allCheck = false;
+    _requiredTermsOfUseCheck = false;
+    _personalInfoCheck = false;
+    _marketingCheck = false;
+    _termsOfUseCheck = false;
+
+    notifyListeners();
+  }
+
   @override
   void clearText(TextEditingController controller) {
     controller.clear();
@@ -134,22 +156,5 @@ class KakaoProvider extends ChangeNotifier with ClearText {
         !_termsOfUseCheck) {
       _allCheck = false;
     }
-  }
-
-  void resetKakao() {
-    _gender = 0;
-    _nameController.clear();
-    _emailController.clear();
-    _phoneNumController.clear();
-    _nickNameController.clear();
-    _nickNameFocusNode.unfocus();
-    _nickNameValid = true;
-    _nickNameValidMessage = '';
-
-    _allCheck = false;
-    _requiredTermsOfUseCheck = false;
-    _personalInfoCheck = false;
-    _marketingCheck = false;
-    _termsOfUseCheck = false;
   }
 }

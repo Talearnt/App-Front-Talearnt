@@ -85,6 +85,27 @@ class KeywordProvider extends ChangeNotifier {
       _selectedGiveTalentKeywordCodes.isNotEmpty &&
       _selectedInterestTalentKeywordCodes.isNotEmpty;
 
+  void clearProvider() {
+    _setTalentPage = 0;
+    _pageController.jumpToPage(0);
+
+    _giveTalentTabController.index = 0;
+    _interestTalentTabController.index = 0;
+
+    _giveTalentKeywordCodes.clear();
+    _selectedGiveTalentKeywordCodes.clear();
+    _searchedGiveTalentKeywordCodes.clear();
+    _interestTalentKeywordCodes.clear();
+    _selectedInterestTalentKeywordCodes.clear();
+    _searchedInterestTalentKeywordCodes.clear();
+
+    _giveTalentFocusNode.unfocus();
+    _interestTalentFocusNode.unfocus();
+
+    _giveTalentSearchController.clear();
+    _interestTalentSearchController.clear();
+  }
+
   void _onChanged() {
     notifyListeners(); // Focus 상태 변경 시 UI 갱신
   }
@@ -112,15 +133,6 @@ class KeywordProvider extends ChangeNotifier {
     return (_setTalentPage + 1) / 3;
   }
 
-  // void initTabController(List<KeywordCategory> keywordCategories) {
-  //   _giveTalentTabController.dispose();
-  //   _interestTalentTabController.dispose();
-  //   _giveTalentTabController =
-  //       TabController(length: keywordCategories.length, vsync: _tickerProvider);
-  //   _interestTalentTabController =
-  //       TabController(length: keywordCategories.length, vsync: _tickerProvider);
-  //   notifyListeners();
-  // }
 
   void resetGiveTabIndex() {
     _giveTalentTabController.index = 0;
@@ -196,24 +208,6 @@ class KeywordProvider extends ChangeNotifier {
     _interestTalentSearchController.clear();
     _interestTalentTabController.index = index;
     notifyListeners();
-  }
-
-  void reset() {
-    _setTalentPage = 0;
-    _pageController.initialPage;
-    _tickerProvider.dispose();
-    _giveTalentTabController.index = 0;
-    _interestTalentTabController.index = 0;
-    _giveTalentKeywordCodes = [];
-    _interestTalentKeywordCodes = [];
-    _selectedGiveTalentKeywordCodes = [];
-    _searchedGiveTalentKeywordCodes = [];
-    _selectedInterestTalentKeywordCodes = [];
-    _searchedInterestTalentKeywordCodes = [];
-    _giveTalentFocusNode.unfocus();
-    _interestTalentFocusNode.unfocus();
-    _giveTalentSearchController.clear();
-    _interestTalentSearchController.clear();
   }
 
   @override

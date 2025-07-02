@@ -104,6 +104,7 @@ class FindPasswordSuccessPage extends StatelessWidget {
                   child: PrimaryM(
                     content: "로그인",
                     onPressed: () {
+                      findPasswordProvider.clearProvider();
                       context.pop();
                     },
                   ),

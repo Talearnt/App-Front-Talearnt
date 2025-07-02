@@ -306,27 +306,29 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
   int get totalImageCount => _totalImageCount;
 
   void clearProvider() {
+    _subscription?.cancel();
     _titleController.clear();
     _contentController.clear();
-
-    _titleController.dispose();
-    _contentController.dispose();
-
     _titleFocusNode.unfocus();
     _contentFocusNode.unfocus();
-
-    _searchedGiveTalentKeywordCodes.clear();
-    _searchedInterestTalentKeywordCodes.clear();
-
+    _giveTalentFocusNode.unfocus();
+    _interestTalentFocusNode.unfocus();
+    _giveTalentTabController.index = 0;
+    _interestTalentTabController.index = 0;
     _giveTalentKeywordCodes.clear();
-
-    _giveTalentRequiredMessage = "";
-    _interestTalentRequiredMessage = "";
-    _durationRequiredMessage = "";
-    _exchangeTypeRequiredMesage = "";
-
-    _onToolBar = "default";
-
+    _selectedGiveTalentKeywordCodes.clear();
+    _searchedGiveTalentKeywordCodes.clear();
+    _interestTalentKeywordCodes.clear();
+    _selectedInterestTalentKeywordCodes.clear();
+    _searchedInterestTalentKeywordCodes.clear();
+    _selectedDuration = '';
+    _selectedExchangeType = '';
+    _giveTalentRequiredMessage = '';
+    _interestTalentRequiredMessage = '';
+    _durationRequiredMessage = '';
+    _exchangeTypeRequiredMesage = '';
+    _htmlContent = '';
+    _onToolBar = 'default';
     _isBold = false;
     _isItalic = false;
     _isUnderline = false;
@@ -335,24 +337,23 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
     _fontSize = 16;
     _fontColor = gray_100;
     _backGroundColor = white;
-    _alignType = "left";
+    _alignType = 'left';
     _isChipsSelected = true;
     _isTitleAndBoardEmpty = false;
-    _boardToastMessage = "";
-
-    _htmlContent = "";
+    _boardToastMessage = '';
     _totalImageSize = 0;
     _totalImageCount = 0;
-
+    _imageUploadUrls.clear();
+    _imageUploadedUrls.clear();
+    _uploadImageInfos.clear();
     _previewImageList.clear();
-    _isS3Upload = false;
-
+    _previeImageIndex = 0;
+    _isAppBarVisible = true;
     _linkTextController.clear();
     _urlController.clear();
-
-    _errorMessage = "";
-
-    reset();
+    _isLinkTextNotEmpty = false;
+    _isS3Upload = false;
+    _errorMessage = '';
     notifyListeners();
   }
 

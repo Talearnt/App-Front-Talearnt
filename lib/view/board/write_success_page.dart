@@ -24,6 +24,7 @@ class WriteSuccessPage extends StatelessWidget {
         first: GestureDetector(
             onTap: () {
               matchWriteProvider.clearProvider();
+              communityWriteProvider.clearProvider();
               context.pop();
             },
             child: SvgPicture.asset("assets/icons/close.svg")),
