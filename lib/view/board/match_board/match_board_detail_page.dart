@@ -363,7 +363,9 @@ class MatchBoardDetailPage extends StatelessWidget {
                                                   height: imageSize,
                                                   fit: BoxFit.cover,
                                                   color: index == 3
-                                                      ? Colors.black.withValues(alpha: 153) // 0.6 * 255 = 153
+                                                      ? Colors.black.withValues(
+                                                          alpha:
+                                                              153) // 0.6 * 255 = 153
                                                       : null,
                                                   colorBlendMode: index == 3
                                                       ? BlendMode.darken
@@ -409,7 +411,11 @@ class MatchBoardDetailPage extends StatelessWidget {
                                 enableInteractiveSelection: false,
                                 enableScribble: false,
                                 embedBuilders:
-                                    FlutterQuillEmbeds.editorBuilders(),
+                                    FlutterQuillEmbeds.editorBuilders(
+                                        imageEmbedConfigurations:
+                                            QuillEditorImageEmbedConfigurations(
+                                                onImageClicked:
+                                                    (String image) {})),
                               ),
                             ),
                           ],
