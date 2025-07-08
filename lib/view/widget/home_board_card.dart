@@ -4,17 +4,26 @@ import 'package:app_front_talearnt/data/model/respone/match_board.dart';
 import 'package:app_front_talearnt/view/board/match_board/widget/match_board_selected_chip_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
+
+import '../../common/widget/toast_message.dart';
+import '../../provider/auth/login_provider.dart';
+import '../../provider/home/home_provider.dart';
+import '../../view_model/board_view_model.dart';
 
 class HomeMatchBoardCard extends StatelessWidget {
   final MatchBoard post;
 
   const HomeMatchBoardCard({
     super.key,
-    required this.post,
+    required this.post
   });
 
   @override
   Widget build(BuildContext context) {
+    final homeProvider = Provider.of<HomeProvider>(context);
+    final boardViewModel = Provider.of<BoardViewModel>(context);
+    final loginProvider = Provider.of<LoginProvider>(context);
     return Container(
       width: 308,
       height: 342,
@@ -73,7 +82,27 @@ class HomeMatchBoardCard extends StatelessWidget {
                     const SizedBox(
                       width: 6,
                     ),
-                    SvgPicture.asset('assets/icons/bookmark_off.svg'),
+                    InkWell(
+                      overlayColor: WidgetStateProperty.all(Colors.transparent),
+                      onTap: () async {
+                        if (loginProvider.isLoggedIn) {
+                          await homeProvider
+                              .changeBothTalentBoardLike(post.exchangePostNo);
+                          await boardViewModel
+                              .handleMatchBoardLike(post.exchangePostNo);
+                        } else {
+                          ToastMessage.show(
+                            context: context,
+                            message: "로그인이 필요합니다.",
+                            type: 1,
+                            bottom: 50,
+                          );
+                        }
+                      },
+                      child: post.isFavorite
+                          ? SvgPicture.asset('assets/icons/bookmark_on.svg')
+                          : SvgPicture.asset('assets/icons/bookmark_off.svg'),
+                    ),
                     const SizedBox(
                       width: 4,
                     ),
@@ -228,156 +257,188 @@ class HomeCommunityCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 308,
-      height: 280,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: const [
-          BoxShadow(
-            color:  Color.fromRGBO(0, 0, 0, 0.1),
-            offset: Offset(0, 2),
-            blurRadius: 8,
-            spreadRadius: 2,
+    final homeProvider = Provider.of<HomeProvider>(context);
+    final boardViewModel = Provider.of<BoardViewModel>(context);
+    final loginProvider = Provider.of<LoginProvider>(context);
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Container(
+          width: 308,
+          height: 280,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: const [
+              BoxShadow(
+                color: Color.fromRGBO(0, 0, 0, 0.1),
+                offset: Offset(0, 2),
+                blurRadius: 8,
+                spreadRadius: 2,
+              ),
+            ],
           ),
-        ],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
-                  width: 40,
-                  height: 40,
-                  child: SvgPicture.asset('assets/img/profile.svg'),
-                ),
-                const SizedBox(width: 8),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                Row(
                   children: [
-                    Text(
-                      post.nickname,
-                      style: TextTypes.body02(
+                    SizedBox(
+                      width: 40,
+                      height: 40,
+                      child: SvgPicture.asset('assets/img/profile.svg'),
+                    ),
+                    const SizedBox(width: 8),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          post.nickname,
+                          style: TextTypes.body02(
+                            color: Palette.text01,
+                          ),
+                        ),
+                        Text(
+                          post.createdAt,
+                          style: TextTypes.captionSemi02(
+                            color: Palette.text04,
+                          ),
+                        )
+                      ],
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 4, horizontal: 8),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(999),
+                        color: Palette.errorBG01,
+                      ),
+                      child: Text(
+                        'Best ${ranking.toString()}',
+                        style:
+                            TextTypes.captionMedium02(color: Palette.error01),
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 4,
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 4, horizontal: 8),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(999),
+                        color: Palette.primaryBG04,
+                      ),
+                      child: Text(
+                        post.postType,
+                        style:
+                            TextTypes.captionMedium02(color: Palette.primary01),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                SizedBox(
+                  height: 46,
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      post.title,
+                      style: TextTypes.bodySemi01(
                         color: Palette.text01,
                       ),
                     ),
-                    Text(
-                      post.createdAt,
-                      style: TextTypes.captionSemi02(
-                        color: Palette.text04,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                SizedBox(
+                  height: 36,
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      post.content,
+                      style: TextTypes.bodyMedium03(
+                        color: Palette.text03,
                       ),
-                    )
-                  ],
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(999),
-                    color: Palette.errorBG01,
-                  ),
-                  child: Text(
-                    'Best ${ranking.toString()}',
-                    style: TextTypes.captionMedium02(color: Palette.error01),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                 ),
-                const SizedBox(
-                  width: 4,
-                ),
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(999),
-                    color: Palette.primaryBG04,
-                  ),
-                  child: Text(
-                    post.postType,
-                    style: TextTypes.captionMedium02(color: Palette.primary01),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            SizedBox(
-              height: 46,
-              child: Align(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  post.title,
-                  style: TextTypes.bodySemi01(
-                    color: Palette.text01,
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 6),
-            SizedBox(
-              height: 36,
-              child: Align(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  post.content,
-                  style: TextTypes.bodyMedium03(
-                    color: Palette.text03,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ),
-            const SizedBox(height: 28),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
+                const SizedBox(height: 28),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    SvgPicture.asset('assets/icons/thumb_up_off.svg'),
-                    const SizedBox(width: 4),
-                    Text(
-                      post.likeCount.toString(),
-                      style: TextTypes.bodySemi03(
-                        color: Palette.text03,
-                      ),
+                    Row(
+                      children: [
+                        InkWell(
+                          overlayColor:
+                              WidgetStateProperty.all(Colors.transparent),
+                          onTap: () async {
+                            if (loginProvider.isLoggedIn) {
+                              await homeProvider.changeBestCommunityBoardLike(
+                                  post.communityPostNo);
+                              await boardViewModel.handleCommunityBoardLike(
+                                  post.communityPostNo);
+                            } else {
+                              ToastMessage.show(
+                                context: context,
+                                message: "로그인이 필요합니다.",
+                                type: 1,
+                                bottom: 50,
+                              );
+                            }
+                          },
+                          child: post.isLike
+                              ? SvgPicture.asset('assets/icons/thumb_up_on.svg')
+                              : SvgPicture.asset(
+                                  'assets/icons/thumb_up_off.svg'),
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          post.likeCount.toString(),
+                          style: TextTypes.bodySemi03(
+                            color: Palette.text03,
+                          ),
+                        ),
+                        const SizedBox(width: 6),
+                        SvgPicture.asset('assets/icons/comment.svg'),
+                        const SizedBox(width: 4),
+                        Text(
+                          post.commentCount.toString(),
+                          style: TextTypes.bodySemi03(
+                            color: Palette.text03,
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(width: 6),
-                    SvgPicture.asset('assets/icons/comment.svg'),
-                    const SizedBox(width: 4),
-                    Text(
-                      post.commentCount.toString(),
-                      style: TextTypes.bodySemi03(
-                        color: Palette.text03,
-                      ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset('assets/icons/eye_open_grey.svg'),
+                        const SizedBox(width: 4),
+                        Text(
+                          post.count.toString(),
+                          style: TextTypes.bodySemi03(
+                            color: Palette.text03,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
-                ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SvgPicture.asset('assets/icons/eye_open_grey.svg'),
-                    const SizedBox(width: 4),
-                    Text(
-                      post.count.toString(),
-                      style: TextTypes.bodySemi03(
-                        color: Palette.text03,
-                      ),
-                    ),
-                  ],
-                ),
+                )
               ],
-            )
-          ],
+            ),
+          ),
         ),
-      ),
+      ],
     );
   }
 }

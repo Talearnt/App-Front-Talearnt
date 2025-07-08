@@ -61,6 +61,11 @@ class HomePage extends StatelessWidget {
               '10',
               '',
               "userMatch");
+          await context.read<BoardViewModel>().getMatchBoardList(
+              [], [], '', '', '', '', '', '', '10', '', "new");
+          await context
+              .read<BoardViewModel>()
+              .getBestCommunityBoardList("", "hot", "", "", "10", "");
         }
         commonProvider.changeIsLoading(false);
       },
@@ -403,8 +408,8 @@ class HomePage extends StatelessWidget {
                                                 },
                                               );
                                             },
-                                            child:
-                                                HomeMatchBoardCard(post: post),
+                                            child: HomeMatchBoardCard(
+                                                post: post),
                                           ),
                                         );
                                       }).toList(),
