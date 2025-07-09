@@ -15,8 +15,8 @@ class MatchBoard {
   final List<String> receiveTalents;
   final String createdAt;
   final int openedChatRoomCount;
-  final int favoriteCount;
-  final bool isFavorite;
+  int favoriteCount;
+  bool isFavorite;
 
   MatchBoard({
     required this.profileImg,

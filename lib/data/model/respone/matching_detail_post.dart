@@ -13,12 +13,12 @@ class MatchingDetailPost {
   final String createdAt;
   final String duration;
   final bool requiredBadge;
-  final bool isFavorite;
+  bool isFavorite;
   final String title;
   final String content;
   final List<String> imageUrls;
   final int count;
-  final int favoriteCount;
+  int favoriteCount;
   final int openedChatRoomCount;
   final int chatRoomNo;
 
@@ -44,6 +44,28 @@ class MatchingDetailPost {
     required this.openedChatRoomCount,
     required this.chatRoomNo,
   });
+
+  MatchingDetailPost.empty()
+      : userNo = 0,
+        nickname = '',
+        profileImg = null,
+        authority = null,
+        exchangePostNo = 0,
+        giveTalents = [],
+        receiveTalents = [],
+        exchangeType = '',
+        status = '',
+        createdAt = '',
+        duration = '',
+        requiredBadge = false,
+        isFavorite = false,
+        title = '',
+        content = '',
+        imageUrls = [],
+        count = 0,
+        favoriteCount = 0,
+        openedChatRoomCount = 0,
+        chatRoomNo = 0;
 
   factory MatchingDetailPost.fromJson(Map<String, dynamic> json) {
     DateTime dateTime = DateTime.parse(json['createdAt']);

@@ -10,8 +10,8 @@ class CommunityBoard {
   final String content;
   final int count;
   final int commentCount;
-  final int likeCount;
-  final bool isLike;
+  int likeCount;
+  bool isLike;
   final String createdAt;
 
   CommunityBoard({

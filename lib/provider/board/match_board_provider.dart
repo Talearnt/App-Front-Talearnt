@@ -217,4 +217,33 @@ class MatchBoardProvider extends ChangeNotifier {
 
     notifyListeners();
   }
+
+  Future<void> changeMatchBoardLike(int postNo) async {
+    final index =
+        _matchBoardList.indexWhere((post) => post.exchangePostNo == postNo);
+    if (index != -1) {
+      _matchBoardList[index].isFavorite = !_matchBoardList[index].isFavorite;
+      _matchBoardList[index].isFavorite
+          ? _matchBoardList[index].favoriteCount =
+              _matchBoardList[index].favoriteCount + 1
+          : _matchBoardList[index].favoriteCount =
+              _matchBoardList[index].favoriteCount - 1;
+    }
+    notifyListeners();
+  }
+
+  Future<void> changeMatchBoardLikeFromDetail(
+      int postNo, bool isFavorite) async {
+    final index =
+        _matchBoardList.indexWhere((post) => post.exchangePostNo == postNo);
+    if (index != -1) {
+      _matchBoardList[index].isFavorite = isFavorite;
+      _matchBoardList[index].isFavorite
+          ? _matchBoardList[index].favoriteCount =
+              _matchBoardList[index].favoriteCount + 1
+          : _matchBoardList[index].favoriteCount =
+              _matchBoardList[index].favoriteCount - 1;
+    }
+    notifyListeners();
+  }
 }

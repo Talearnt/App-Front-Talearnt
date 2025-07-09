@@ -29,7 +29,7 @@ class BottomBtn extends StatelessWidget {
       child: Row(
         children: [
           if (otherSetting != null) ...[
-            InkWell(child: otherSetting!),
+            otherSetting!,
             const SizedBox(width: 12), // 간격 추가
           ],
           Expanded(

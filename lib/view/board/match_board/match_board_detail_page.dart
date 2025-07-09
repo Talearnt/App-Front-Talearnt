@@ -12,8 +12,13 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../../common/widget/bottom_btn.dart';
+import '../../../common/widget/toast_message.dart';
+import '../../../provider/auth/login_provider.dart';
 import '../../../provider/board/match_board_detail_provider.dart';
+import '../../../provider/board/match_board_provider.dart';
+import '../../../provider/home/home_provider.dart';
 import '../../../provider/profile/profile_provider.dart';
+import '../../../view_model/board_view_model.dart';
 import '../widget/modify_board_bottom_sheet.dart';
 
 class MatchBoardDetailPage extends StatelessWidget {
@@ -23,8 +28,13 @@ class MatchBoardDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final matchBoardDetailProvider =
         Provider.of<MatchBoardDetailProvider>(context);
+    final MatchBoardProvider matchBoardProvider =
+        Provider.of<MatchBoardProvider>(context);
     final profileProvider = Provider.of<ProfileProvider>(context);
     final commonProvider = Provider.of<CommonProvider>(context);
+    final boardViewModel = Provider.of<BoardViewModel>(context);
+    final loginProvider = Provider.of<LoginProvider>(context);
+    final HomeProvider homeProvider = Provider.of<HomeProvider>(context);
 
     return Scaffold(
       appBar: TopAppBar(
@@ -45,11 +55,11 @@ class MatchBoardDetailPage extends StatelessWidget {
               builder: (BuildContext context) {
                 return ModifyBoardBottomSheet(
                     isMine:
-                        matchBoardDetailProvider.matchingDetailPost!.userNo ==
+                        matchBoardDetailProvider.matchingDetailPost.userNo ==
                             profileProvider.userProfile.userNo,
                     boardType: 'match',
                     postNo: matchBoardDetailProvider
-                        .matchingDetailPost!.exchangePostNo);
+                        .matchingDetailPost.exchangePostNo);
               },
             );
           },
@@ -93,7 +103,7 @@ class MatchBoardDetailPage extends StatelessWidget {
                               children: [
                                 Text(
                                   matchBoardDetailProvider
-                                      .matchingDetailPost!.title,
+                                      .matchingDetailPost.title,
                                   style: TextTypes.heading2(
                                     color: Palette.text01,
                                   ),
@@ -108,12 +118,12 @@ class MatchBoardDetailPage extends StatelessWidget {
                               children: [
                                 Profile(
                                     nickName: matchBoardDetailProvider
-                                        .matchingDetailPost!.nickname),
+                                        .matchingDetailPost.nickname),
                                 Row(
                                   children: [
                                     Text(
                                       matchBoardDetailProvider
-                                          .matchingDetailPost!.createdAt,
+                                          .matchingDetailPost.createdAt,
                                       style: TextTypes.caption01(
                                         color: Palette.text04,
                                       ),
@@ -163,7 +173,7 @@ class MatchBoardDetailPage extends StatelessWidget {
                             Wrap(
                               children: [
                                 ...matchBoardDetailProvider
-                                    .matchingDetailPost!.giveTalents
+                                    .matchingDetailPost.giveTalents
                                     .map(
                                   (item) {
                                     return Padding(
@@ -211,7 +221,7 @@ class MatchBoardDetailPage extends StatelessWidget {
                             Wrap(
                               children: [
                                 ...matchBoardDetailProvider
-                                    .matchingDetailPost!.receiveTalents
+                                    .matchingDetailPost.receiveTalents
                                     .map(
                                   (item) {
                                     return Padding(
@@ -267,7 +277,7 @@ class MatchBoardDetailPage extends StatelessWidget {
                                 ),
                                 Text(
                                   matchBoardDetailProvider
-                                      .matchingDetailPost!.exchangeType,
+                                      .matchingDetailPost.exchangeType,
                                   style: TextTypes.body02(
                                     color: Palette.text02,
                                   ),
@@ -290,7 +300,7 @@ class MatchBoardDetailPage extends StatelessWidget {
                                 ),
                                 Text(
                                   matchBoardDetailProvider
-                                      .matchingDetailPost!.duration,
+                                      .matchingDetailPost.duration,
                                   style: TextTypes.body02(
                                     color: Palette.text02,
                                   ),
@@ -363,7 +373,9 @@ class MatchBoardDetailPage extends StatelessWidget {
                                                   height: imageSize,
                                                   fit: BoxFit.cover,
                                                   color: index == 3
-                                                      ? Colors.black.withValues(alpha: 153) // 0.6 * 255 = 153
+                                                      ? Colors.black.withValues(
+                                                          alpha:
+                                                              153) // 0.6 * 255 = 153
                                                       : null,
                                                   colorBlendMode: index == 3
                                                       ? BlendMode.darken
@@ -420,8 +432,37 @@ class MatchBoardDetailPage extends StatelessWidget {
                 ),
               ),
               BottomBtn(
-                otherSetting:
-                    SvgPicture.asset('assets/icons/bookmark_default.svg'),
+                otherSetting: InkWell(
+                  overlayColor: WidgetStateProperty.all(Colors.transparent),
+                  onTap: () async {
+                    if (loginProvider.isLoggedIn) {
+                      await matchBoardDetailProvider.changeMatchBoardLike();
+                      await matchBoardProvider.changeMatchBoardLikeFromDetail(
+                          matchBoardDetailProvider
+                              .matchingDetailPost.exchangePostNo,
+                          matchBoardDetailProvider
+                              .matchingDetailPost.isFavorite);
+                      await homeProvider.changeCommunityBoardLikeFromDetail(
+                          matchBoardDetailProvider
+                              .matchingDetailPost.exchangePostNo,
+                          matchBoardDetailProvider
+                              .matchingDetailPost.isFavorite);
+                      await boardViewModel.handleMatchBoardLike(
+                          matchBoardDetailProvider
+                              .matchingDetailPost.exchangePostNo);
+                    } else {
+                      ToastMessage.show(
+                        context: context,
+                        message: "로그인이 필요합니다.",
+                        type: 1,
+                        bottom: 50,
+                      );
+                    }
+                  },
+                  child: matchBoardDetailProvider.matchingDetailPost.isFavorite
+                      ? SvgPicture.asset('assets/icons/bookmark_pressed.svg')
+                      : SvgPicture.asset('assets/icons/bookmark_default.svg'),
+                ),
                 mediaBottom: MediaQuery.of(context).viewInsets.bottom,
                 content: '채팅하기',
                 isEnabled: true,

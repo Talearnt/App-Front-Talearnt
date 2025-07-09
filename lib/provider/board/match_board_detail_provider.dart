@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_quill_delta_from_html/parser/html_to_delta.dart';
@@ -8,7 +6,7 @@ import '../../data/model/respone/matching_detail_post.dart';
 
 class MatchBoardDetailProvider extends ChangeNotifier {
   final QuillController _contentController = QuillController.basic();
-  MatchingDetailPost? _matchingDetailPost;
+  MatchingDetailPost _matchingDetailPost = MatchingDetailPost.empty();
 
   final List<String> _previewImageList = [];
 
@@ -16,7 +14,7 @@ class MatchBoardDetailProvider extends ChangeNotifier {
 
   bool _isAppBarVisible = true;
 
-  MatchingDetailPost? get matchingDetailPost => _matchingDetailPost;
+  MatchingDetailPost get matchingDetailPost => _matchingDetailPost;
 
   QuillController get contentController => _contentController;
 
@@ -28,7 +26,7 @@ class MatchBoardDetailProvider extends ChangeNotifier {
 
   void clearProvider() {
     _contentController.clear();
-    _matchingDetailPost = null;
+    _matchingDetailPost = MatchingDetailPost.empty();
 
     _previewImageList.clear();
     _previewImageIndex = 0;
@@ -67,13 +65,23 @@ class MatchBoardDetailProvider extends ChangeNotifier {
 
   void updateTalentDetailPost(MatchingDetailPost detailPost) {
     _matchingDetailPost = detailPost;
-    String content = _matchingDetailPost!.content;
+    String content = _matchingDetailPost.content;
 
     var htmlToDelta = HtmlToDelta().convert(content);
 
     contentController.document = Document.fromDelta(htmlToDelta);
     contentController.readOnly = true;
     makePreviewImageList();
+    notifyListeners();
+  }
+
+  Future<void> changeMatchBoardLike() async {
+    _matchingDetailPost.isFavorite = !_matchingDetailPost.isFavorite;
+    _matchingDetailPost.isFavorite
+        ? _matchingDetailPost.favoriteCount =
+            _matchingDetailPost.favoriteCount + 1
+        : _matchingDetailPost.favoriteCount =
+            _matchingDetailPost.favoriteCount - 1;
     notifyListeners();
   }
 }
