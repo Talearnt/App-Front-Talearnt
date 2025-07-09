@@ -35,7 +35,7 @@ class ProfileSettingSection extends StatelessWidget {
           iconPath: 'assets/icons/license.svg',
           title: '라이센스',
           onTap: () {
-            // 라이센스 정보 이동
+            context.push('/licenses');
           },
         ),
         CreateSettingMenu(

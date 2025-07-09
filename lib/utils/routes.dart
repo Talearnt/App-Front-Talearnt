@@ -37,6 +37,7 @@ import '../view/keyword/set_talent_keyword_success_page.dart';
 import '../view/profile/account_manage_page.dart';
 import '../view/profile/alarm_setting_page.dart';
 import '../view/profile/event_notice_page.dart';
+import '../view/profile/licenses_page.dart';
 import '../view/profile/modify_user_info_page.dart';
 import '../view/profile/profile_page.dart';
 import '../view/profile/user_image_preview_page.dart';
@@ -261,22 +262,32 @@ class Routes {
             builder: (BuildContext context, GoRouterState state) {
               return const ModifyUserInfoPage();
             },
-          ),GoRoute(
+          ),
+          GoRoute(
             path: '/account-manage',
             builder: (BuildContext context, GoRouterState state) {
               return const AccountManagePage();
             },
-          ),GoRoute(
+          ),
+          GoRoute(
             path: '/alarm-setting',
             builder: (BuildContext context, GoRouterState state) {
               return const AlarmSettingPage();
             },
-          ),GoRoute(
+          ),
+          GoRoute(
+            path: '/licenses',
+            builder: (BuildContext context, GoRouterState state) {
+              return const LicensesPage();
+            },
+          ),
+          GoRoute(
             path: '/event-notice',
             builder: (BuildContext context, GoRouterState state) {
               return const EventNoticePage();
             },
-          ),GoRoute(
+          ),
+          GoRoute(
             path: '/user-image-preview',
             builder: (BuildContext context, GoRouterState state) {
               return const UserImagePreviewPage();

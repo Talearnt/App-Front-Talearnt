@@ -57,6 +57,7 @@ flutter_native_splash:
   image: "assets/img/splash_logo.png"
 
 dev_dependencies:
+  flutter_oss_licenses: ^3.0.4
   flutter_test:
     sdk: flutter
 
