@@ -93,7 +93,10 @@ class MatchBoardDetailPage extends StatelessWidget {
                               children: [
                                 Text(
                                   matchBoardDetailProvider
-                                      .matchingDetailPost!.title,
+                                          .matchingDetailPost.title.isEmpty
+                                      ? ""
+                                      : matchBoardDetailProvider
+                                          .matchingDetailPost!.title,
                                   style: TextTypes.heading2(
                                     color: Palette.text01,
                                   ),

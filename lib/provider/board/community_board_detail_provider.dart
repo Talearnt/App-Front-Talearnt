@@ -298,6 +298,19 @@ class CommunityBoardDetailProvider extends ChangeNotifier with ClearText {
     }
   }
 
+  void addReply(int commentNo, CommunityReplyResponse newReply) {
+    final existing = _replyMap[commentNo] ?? [];
+
+    _replyMap[commentNo] = [
+      ...existing,
+      newReply,
+    ];
+
+    setReplyCount(commentNo, 1);
+
+    notifyListeners();
+  }
+
   void setReplyCount(int commentNo, int num) {
     final idx = _commentList.indexWhere((c) => c.commentNo == commentNo);
     if (idx == -1) return;

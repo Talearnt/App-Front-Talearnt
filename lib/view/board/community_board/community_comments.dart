@@ -98,7 +98,6 @@ class CommunityComments extends StatelessWidget {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const SizedBox(width: 12),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -244,7 +243,8 @@ class CommunityComments extends StatelessWidget {
                                 ),
                               if (c.replyCount > 0)
                                 Padding(
-                                  padding: const EdgeInsets.only(top: 16),
+                                  padding:
+                                      const EdgeInsets.only(top: 16, left: 40),
                                   child: GestureDetector(
                                     onTap: () {
                                       final isOpen =
