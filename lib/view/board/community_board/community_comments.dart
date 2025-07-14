@@ -74,15 +74,12 @@ class CommunityComments extends StatelessWidget {
           itemBuilder: (context, index) {
             final c = comments[index];
 
-            // 1) isDeleted == true && replyCount == 0 이면 렌더링하지 않음
             if (c.isDeleted && c.replyCount == 0) {
               return const SizedBox.shrink();
             }
 
-            // 2) isDeleted == true && replyCount > 0 일 때
             final isDeletedOnly = c.isDeleted && c.replyCount > 0;
 
-            // 댓글 작성 시간 포맷
             final createdAt =
                 DateFormat('yyyy.MM.dd HH:mm').format(c.createdAt);
             final hasImage = (c.profileImg?.isNotEmpty ?? false);
@@ -101,45 +98,44 @@ class CommunityComments extends StatelessWidget {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const SizedBox(width: 12),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              // ── 댓글 헤더 (작성자, 시간, 메뉴) ──────────────────────
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Row(
                                     children: [
-                                      hasImage
-                                          ? Image.network(
-                                              c.profileImg!,
-                                              width: 32,
-                                              height: 32,
-                                              fit: BoxFit.cover,
-                                              errorBuilder: (_, __, ___) {
-                                                return SvgPicture.asset(
-                                                  'assets/img/profile.svg',
-                                                  width: 32,
-                                                  height: 32,
-                                                );
-                                              },
-                                            )
-                                          : SizedBox(
-                                              width: 32,
-                                              height: 32,
-                                              child: SvgPicture.asset(
-                                                  'assets/img/profile.svg'),
-                                            ),
+                                      ClipOval(
+                                        child: hasImage
+                                            ? Image.network(
+                                                c.profileImg!,
+                                                width: 32,
+                                                height: 32,
+                                                fit: BoxFit.cover,
+                                                errorBuilder: (_, __, ___) {
+                                                  return SvgPicture.asset(
+                                                    'assets/img/profile.svg',
+                                                    width: 32,
+                                                    height: 32,
+                                                    fit: BoxFit.cover,
+                                                  );
+                                                },
+                                              )
+                                            : SvgPicture.asset(
+                                                'assets/img/profile.svg',
+                                                width: 32,
+                                                height: 32,
+                                                fit: BoxFit.cover,
+                                              ),
+                                      ),
                                       const SizedBox(width: 10),
                                       Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          // 작성자가 삭제한 댓글일 때는 닉네임과 시간이 필요 없을 수도 있지만,
-                                          // 디자인에 따라 그대로 둡니다.
                                           Text(
                                             isDeletedOnly
                                                 ? '삭제된 댓글'
@@ -198,8 +194,6 @@ class CommunityComments extends StatelessWidget {
                                 ],
                               ),
                               const SizedBox(height: 8),
-
-                              // ── 댓글 본문 ──────────────────────
                               if (!isDeletedOnly)
                                 Padding(
                                   padding:
@@ -210,8 +204,6 @@ class CommunityComments extends StatelessWidget {
                                         color: Palette.text02),
                                   ),
                                 ),
-
-                              // ── 삭제된 댓글이지만 답글이 있는 경우 메시지 표시 ──────────────────────
                               if (isDeletedOnly)
                                 Padding(
                                   padding:
@@ -222,8 +214,6 @@ class CommunityComments extends StatelessWidget {
                                         color: Palette.text04),
                                   ),
                                 ),
-
-                              // ── 답글 달기 버튼 (삭제된 댓글에서는 보이지 않아도 됩니다) ──────────────────────
                               if (!c.isDeleted)
                                 Padding(
                                   padding:
@@ -251,11 +241,10 @@ class CommunityComments extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-
-                              // ── 답글 토글 버튼 ──────────────────────
                               if (c.replyCount > 0)
                                 Padding(
-                                  padding: const EdgeInsets.only(top: 16),
+                                  padding:
+                                      const EdgeInsets.only(top: 16, left: 40),
                                   child: GestureDetector(
                                     onTap: () {
                                       final isOpen =
@@ -339,8 +328,6 @@ class CommunityComments extends StatelessWidget {
                     ),
                   ),
                 ),
-
-                // ── Nested Replies ──────────────────────
                 if (c.replyCount > 0 &&
                     communityBoardDetailProvider.isRepliesOpen(c.commentNo))
                   CommunityReplies(
@@ -350,7 +337,6 @@ class CommunityComments extends StatelessWidget {
                     loadReplies: loadReplies,
                     detailPageContext: detailPageContext,
                   ),
-
                 const Divider(color: Palette.bgUp02, height: 1, thickness: 1),
               ],
             );

@@ -421,7 +421,11 @@ class MatchBoardDetailPage extends StatelessWidget {
                                 enableInteractiveSelection: false,
                                 enableScribble: false,
                                 embedBuilders:
-                                    FlutterQuillEmbeds.editorBuilders(),
+                                    FlutterQuillEmbeds.editorBuilders(
+                                        imageEmbedConfigurations:
+                                            QuillEditorImageEmbedConfigurations(
+                                                onImageClicked:
+                                                    (String image) {})),
                               ),
                             ),
                           ],

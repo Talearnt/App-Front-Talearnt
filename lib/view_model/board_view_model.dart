@@ -6,6 +6,7 @@ import 'package:app_front_talearnt/data/model/param/match_board_param.dart';
 import 'package:app_front_talearnt/data/model/param/post_comment.dart';
 import 'package:app_front_talearnt/data/model/param/post_reply.dart';
 import 'package:app_front_talearnt/data/model/param/put_comment.dart';
+import 'package:app_front_talearnt/data/model/respone/community_reply.dart';
 import 'package:app_front_talearnt/provider/board/community_write_provider.dart';
 import 'package:app_front_talearnt/provider/board/match_edit_provider.dart';
 import 'package:app_front_talearnt/provider/home/home_provider.dart';
@@ -458,15 +459,20 @@ class BoardViewModel extends ChangeNotifier {
   }
 
   Future<void> insertReply(int commentNo, String content) async {
-    PostReply param = PostReply(commentNo: commentNo, content: content);
+    final param = PostReply(commentNo: commentNo, content: content);
 
-    final result = await boardRepository.insertCommunityReply(param);
+    final resultEither = await boardRepository.insertCommunityReply(param);
 
-    result.fold(
-        (failure) => commonNavigator.showSingleDialog(
-            content: ErrorMessages.getMessage(failure.errorCode)), (result) {
-      communityBoardDetailProvider.mergeReplies(commentNo, result['comments']);
-    });
+    resultEither.fold(
+      (failure) => commonNavigator.showSingleDialog(
+        content: ErrorMessages.getMessage(failure.errorCode),
+      ),
+      (map) {
+        final newReply = map['reply'] as CommunityReplyResponse;
+
+        communityBoardDetailProvider.addReply(commentNo, newReply);
+      },
+    );
   }
 
   Future<void> deleteReply(int commentNo, int replyNo) async {

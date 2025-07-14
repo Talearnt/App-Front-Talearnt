@@ -170,7 +170,10 @@ class MatchEdit2Page extends StatelessWidget {
                     focusNode: matchEditProvider.contentFocusNode,
                     scrollController: scrollController,
                     configurations: QuillEditorConfigurations(
-                      embedBuilders: FlutterQuillEmbeds.editorBuilders(),
+                      embedBuilders: FlutterQuillEmbeds.editorBuilders(
+                          imageEmbedConfigurations:
+                              QuillEditorImageEmbedConfigurations(
+                                  onImageClicked: (String image) {})),
                       placeholder: "내용을 입력해주세요",
                       expands: true,
                       customStyles: DefaultStyles(

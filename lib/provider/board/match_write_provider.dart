@@ -557,45 +557,60 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
 
       for (final pickedFile in pickedFiles) {
         final File image = File(pickedFile.path);
-
         final processedImage = await _processImage(image);
 
-        // 압축 후 파일 크기 계산
         final int finalSizeInBytes = await processedImage.length();
         final double finalSizeInMB = finalSizeInBytes / (1024 * 1024);
 
         if (finalSizeInMB > 3.0) {
-          SingleBtnDialog.show(context,
-              content: '각 이미지 용량은 3MB 이하만 업로드 가능합니다.',
-              button: PrimaryM(
-                content: '확인',
-                onPressed: () {
-                  context.pop();
-                },
-              ));
+          SingleBtnDialog.show(
+            context,
+            content: '각 이미지 용량은 3MB 이하만 업로드 가능합니다.',
+            button: PrimaryM(
+              content: '확인',
+              onPressed: () => context.pop(),
+            ),
+          );
           break;
         }
 
         if (_totalImageCount == 5) {
-          SingleBtnDialog.show(context,
-              content: '이미지는 최대 5장까지 업로드 가능합니다.',
-              button: PrimaryM(
-                content: '확인',
-                onPressed: () {
-                  context.pop();
-                },
-              ));
+          SingleBtnDialog.show(
+            context,
+            content: '이미지는 최대 5장까지 업로드 가능합니다.',
+            button: PrimaryM(
+              content: '확인',
+              onPressed: () => context.pop(),
+            ),
+          );
           break;
         }
 
         _totalImageCount++;
 
-        contentController.insertImageBlock(imageSource: processedImage.path);
+        final int idx = contentController.selection.baseOffset;
+        contentController.replaceText(
+          idx,
+          0,
+          '\n',
+          contentController.selection,
+        );
+        contentController.replaceText(
+          idx + 1,
+          0,
+          BlockEmbed.image(processedImage.path),
+          TextSelection.collapsed(offset: idx + 2),
+        );
+        contentController.replaceText(
+          idx + 2,
+          0,
+          '\n',
+          TextSelection.collapsed(offset: idx + 3),
+        );
       }
     }
 
     notifyListeners();
-
     commonProvider.changeIsLoading(false);
   }
 

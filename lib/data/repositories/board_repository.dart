@@ -233,28 +233,22 @@ class BoardRepository {
   }
 
   Future<Either<Failure, Map<String, dynamic>>> insertCommunityReply(
-      PostReply body) async {
-    final response =
-        await dio.post(ApiConstants.insertCommunityReply, body.toJson(), null);
+    PostReply body,
+  ) async {
+    final response = await dio.post(
+      ApiConstants.insertCommunityReply,
+      body.toJson(),
+      null,
+    );
 
     return response.fold(
       left,
       (result) {
         final data = result['data'] as Map<String, dynamic>;
-        final rawList = data['results'] as List<dynamic>;
-
-        final comments = rawList
-            .map((e) =>
-                CommunityReplyResponse.fromJson(e as Map<String, dynamic>))
-            .toList();
-
-        final hasNext = (data['pagination']
-                as Map<String, dynamic>?)?['hasNext'] as bool? ??
-            false;
+        final newReply = CommunityReplyResponse.fromJson(data);
 
         return right(<String, dynamic>{
-          'comments': comments,
-          'hasNext': hasNext,
+          'reply': newReply,
         });
       },
     );

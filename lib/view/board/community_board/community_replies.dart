@@ -82,9 +82,7 @@ class CommunityReplies extends StatelessWidget {
                       children: [
                         Row(
                           children: [
-                            SizedBox(
-                              width: 32,
-                              height: 32,
+                            ClipOval(
                               child: hasImage
                                   ? Image.network(
                                       r.profileImg!,
