@@ -267,4 +267,16 @@ class BoardRepository {
 
     return response.fold(left, (result) => right(Success.fromJson(result)));
   }
+
+  Future<Either<Failure, Success>> handleMatchBoardLike(int postNo) async {
+    final response =
+        await dio.post(ApiConstants.handleMatchBoardLike(postNo), null, null);
+    return response.fold(left, (result) => right(Success.fromJson(result)));
+  }
+
+  Future<Either<Failure, Success>> handleCommunityBoardLike(int postNo) async {
+    final response = await dio.post(
+        ApiConstants.handleCommunityBoardLike(postNo), null, null);
+    return response.fold(left, (result) => right(Success.fromJson(result)));
+  }
 }

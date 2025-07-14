@@ -31,8 +31,8 @@ class BoardViewModel extends ChangeNotifier {
   final BoardRepository boardRepository;
   final KeywordProvider keywordProvider;
   final MatchWriteProvider matchWriteProvider;
-  final MatchBoardProvider talentBoardProvider;
-  final MatchBoardDetailProvider talentBoardDetailProvider;
+  final MatchBoardProvider matchBoardProvider;
+  final MatchBoardDetailProvider matchBoardDetailProvider;
   final MatchEditProvider matchEditProvider;
   final CommunityBoardProvider communityBoardProvider;
   final CommunityWriteProvider communityWriteProvider;
@@ -44,8 +44,8 @@ class BoardViewModel extends ChangeNotifier {
       this.boardRepository,
       this.keywordProvider,
       this.matchWriteProvider,
-      this.talentBoardProvider,
-      this.talentBoardDetailProvider,
+      this.matchBoardProvider,
+      this.matchBoardDetailProvider,
       this.matchEditProvider,
       this.communityBoardProvider,
       this.communityWriteProvider,
@@ -175,8 +175,8 @@ class BoardViewModel extends ChangeNotifier {
             content: ErrorMessages.getMessage(failure.errorCode)), (result) {
       final posts = result['posts'];
       final pagination = result['pagination'];
-      talentBoardProvider.updateTalentExchangePosts(posts);
-      talentBoardProvider.updateTalentExchangePostsPage(pagination);
+      matchBoardProvider.updateTalentExchangePosts(posts);
+      matchBoardProvider.updateTalentExchangePostsPage(pagination);
       commonNavigator.goRoute('/board-list');
     });
   }
@@ -214,11 +214,11 @@ class BoardViewModel extends ChangeNotifier {
       final posts = result['posts'];
       final pagination = result['pagination'];
       if (searchType == "reset") {
-        talentBoardProvider.updateTalentExchangePosts(posts);
-        talentBoardProvider.updateTalentExchangePostsPage(pagination);
+        matchBoardProvider.updateTalentExchangePosts(posts);
+        matchBoardProvider.updateTalentExchangePostsPage(pagination);
       } else if (searchType == "add") {
-        talentBoardProvider.addTalentExchangePosts(posts);
-        talentBoardProvider.updateTalentExchangePostsPage(pagination);
+        matchBoardProvider.addTalentExchangePosts(posts);
+        matchBoardProvider.updateTalentExchangePostsPage(pagination);
       } else if (searchType == "new") {
         homeProvider.setNewTalentExchangePosts(posts);
       } else {
@@ -232,7 +232,7 @@ class BoardViewModel extends ChangeNotifier {
     result.fold(
         (failure) => commonNavigator.showSingleDialog(
             content: ErrorMessages.getMessage(failure.errorCode)), (post) {
-      talentBoardDetailProvider.updateTalentDetailPost(post);
+      matchBoardDetailProvider.updateTalentDetailPost(post);
       commonNavigator.pushRoute('/match-board-detail-page');
     });
   }
@@ -242,7 +242,7 @@ class BoardViewModel extends ChangeNotifier {
     result.fold(
         (failure) => commonNavigator.showSingleDialog(
             content: ErrorMessages.getMessage(failure.errorCode)), (post) {
-      talentBoardDetailProvider.updateTalentDetailPost(post);
+      matchBoardDetailProvider.updateTalentDetailPost(post);
       matchEditProvider.clearProvider();
       commonNavigator.goRoute('/match-board-detail-page');
     });
@@ -354,15 +354,15 @@ class BoardViewModel extends ChangeNotifier {
             content: ErrorMessages.getMessage(failure.errorCode)),
         (success) async {
       await getMatchBoardList(
-          talentBoardProvider.selectedGiveTalentKeywordCodes
+          matchBoardProvider.selectedGiveTalentKeywordCodes
               .map((e) => e.toString())
               .toList(),
-          talentBoardProvider.selectedInterestTalentKeywordCodes
+          matchBoardProvider.selectedInterestTalentKeywordCodes
               .map((e) => e.toString())
               .toList(),
-          talentBoardProvider.selectedOrderType,
-          talentBoardProvider.selectedDurationType,
-          talentBoardProvider.selectedOperationType,
+          matchBoardProvider.selectedOrderType,
+          matchBoardProvider.selectedDurationType,
+          matchBoardProvider.selectedOperationType,
           null,
           null,
           null,
@@ -499,5 +499,31 @@ class BoardViewModel extends ChangeNotifier {
           communityBoardDetailProvider.targetReply,
           content);
     });
+  }
+
+  Future<void> handleMatchBoardLike(int postNo) async {
+    final result = await boardRepository.handleMatchBoardLike(postNo);
+    result.fold((failure) {
+      matchBoardDetailProvider.changeMatchBoardLike();
+      matchBoardProvider.changeMatchBoardLikeFromDetail(
+          postNo, matchBoardDetailProvider.matchingDetailPost.isFavorite);
+      homeProvider.changeCommunityBoardLikeFromDetail(
+          postNo, matchBoardDetailProvider.matchingDetailPost.isFavorite);
+      commonNavigator.showSingleDialog(
+          content: ErrorMessages.getMessage(failure.errorCode));
+    }, (post) {});
+  }
+
+  Future<void> handleCommunityBoardLike(int postNo) async {
+    final result = await boardRepository.handleCommunityBoardLike(postNo);
+    result.fold((failure) {
+      communityBoardDetailProvider.changeCommunityBoardLike();
+      communityBoardProvider.changeCommunityBoardLikeFromDetail(
+          postNo, communityBoardDetailProvider.communityDetailBoard.isLike);
+      homeProvider.changeCommunityBoardLikeFromDetail(
+          postNo, communityBoardDetailProvider.communityDetailBoard.isLike);
+      commonNavigator.showSingleDialog(
+          content: ErrorMessages.getMessage(failure.errorCode));
+    }, (post) {});
   }
 }

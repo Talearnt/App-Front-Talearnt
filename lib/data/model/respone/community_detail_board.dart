@@ -11,8 +11,8 @@ class CommunityDetailBoard {
   final List<String> imageUrls;
   final String postType;
   final int count;
-  final bool isLike;
-  final int likeCount;
+  bool isLike;
+  int likeCount;
   final int commentCount;
   final String createdAt;
 

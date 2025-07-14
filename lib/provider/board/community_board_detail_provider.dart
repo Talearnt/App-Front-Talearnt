@@ -61,6 +61,7 @@ class CommunityBoardDetailProvider extends ChangeNotifier with ClearText {
   String get commentType => _commentType;
 
   int get targetComment => _targetComment;
+
   int get targetReply => _targetReply;
 
   void clearProvider() {
@@ -174,6 +175,7 @@ class CommunityBoardDetailProvider extends ChangeNotifier with ClearText {
 
   List<CommunityReplyResponse> getReplies(int commentNo) =>
       _replyMap[commentNo] ?? [];
+
   bool hasNextReplies(int commentNo) => _replyHasNext[commentNo] ?? false;
 
   void toggleCommentInputActive(bool state) {
@@ -378,7 +380,7 @@ class CommunityBoardDetailProvider extends ChangeNotifier with ClearText {
       userNo: replies[idx].userNo,
       nickname: replies[idx].nickname,
       profileImg: replies[idx].profileImg,
-      content: newContent, // 여기만 새 내용
+      content: newContent,
       createdAt: replies[idx].createdAt,
     );
 
@@ -392,6 +394,14 @@ class CommunityBoardDetailProvider extends ChangeNotifier with ClearText {
     _targetComment = 0;
     _targetReply = 0;
 
+    notifyListeners();
+  }
+
+  Future<void> changeCommunityBoardLike() async {
+    _communityDetailBoard.isLike = !_communityDetailBoard.isLike;
+    _communityDetailBoard.isLike
+        ? _communityDetailBoard.likeCount = _communityDetailBoard.likeCount + 1
+        : _communityDetailBoard.likeCount = _communityDetailBoard.likeCount - 1;
     notifyListeners();
   }
 }
