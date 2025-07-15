@@ -1,3 +1,4 @@
+import 'package:app_front_talearnt/view/home_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
@@ -17,8 +18,7 @@ class CommonBottomNavigationBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final commonProvider = context.read<CommonProvider>();
     final loginProvider = context.read<LoginProvider>();
-    final matchWriteProvider = context.read<MatchWriteProvider>();
-    final profileProvider = context.read<ProfileProvider>();
+
     final boardViewModel = Provider.of<BoardViewModel>(context);
     return Positioned(
       bottom: 0,
@@ -93,10 +93,18 @@ class CommonBottomNavigationBar extends StatelessWidget {
                 child: GestureDetector(
                   onTap: () async {
                     if (loginProvider.isLoggedIn) {
-                      matchWriteProvider.setGiveTalentKeyword(
-                        profileProvider.userProfile.giveTalents,
+                      showModalBottomSheet(
+                        context: context,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(
+                            top: Radius.circular(24),
+                          ),
+                        ),
+                        clipBehavior: Clip.antiAlias,
+                        builder: (BuildContext context) {
+                          return const HomeBottomSheet();
+                        },
                       );
-                      context.push('/match-write1');
                     } else {
                       context.go('/login');
                     }
