@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import '../../common/common_navigator.dart';
 import '../../common/widget/button.dart';
 import '../../common/widget/top_app_bar.dart';
 import '../../provider/profile/profile_provider.dart';
@@ -14,6 +15,8 @@ class AccountManagePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final profileProvider = Provider.of<ProfileProvider>(context);
+    final commonNavigator = Provider.of<CommonNavigator>(context);
+
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (bool didPop, Object? result) async {
@@ -49,8 +52,21 @@ class AccountManagePage extends StatelessWidget {
                               style: TextTypes.bodyMedium03(
                                   color: Palette.text03)),
                         ]),
-                    const TextBtnXs(
+                    TextBtnXs(
                       content: '로그아웃',
+                      onPressed: () {
+                        commonNavigator.showDoubleDialog(
+                            content: "정말 로그아웃 하시겠어요?",
+                            leftText: '취소',
+                            rightText: '로그아웃',
+                            leftFun: () {
+                              commonNavigator.goBack();
+                            },
+                            rightFun: () async {
+                              profileProvider.clearAllProviders(context);
+                              commonNavigator.goRoute('/login');
+                            });
+                      },
                     ),
                   ],
                 ),

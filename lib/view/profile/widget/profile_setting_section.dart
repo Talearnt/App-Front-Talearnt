@@ -5,7 +5,9 @@ import '../../../common/theme.dart';
 import 'create_setting_menu.dart';
 
 class ProfileSettingSection extends StatelessWidget {
-  const ProfileSettingSection({super.key});
+  final bool isLoggedIn;
+
+  const ProfileSettingSection({super.key, required this.isLoggedIn});
 
   @override
   Widget build(BuildContext context) {
@@ -17,20 +19,22 @@ class ProfileSettingSection extends StatelessWidget {
           child:
               Text('설정', style: TextTypes.bodyMedium03(color: Palette.text03)),
         ),
-        CreateSettingMenu(
-          iconPath: 'assets/icons/setting.svg',
-          title: '계정 관리',
-          onTap: () {
-            context.push('/account-manage');
-          },
-        ),
-        CreateSettingMenu(
-          iconPath: 'assets/icons/bell.svg',
-          title: '알림 설정',
-          onTap: () {
-            context.push('/alarm-setting');
-          },
-        ),
+        if (isLoggedIn) ...[
+          CreateSettingMenu(
+            iconPath: 'assets/icons/setting.svg',
+            title: '계정 관리',
+            onTap: () {
+              context.push('/account-manage');
+            },
+          ),
+          CreateSettingMenu(
+            iconPath: 'assets/icons/bell.svg',
+            title: '알림 설정',
+            onTap: () {
+              context.push('/alarm-setting');
+            },
+          )
+        ],
         CreateSettingMenu(
           iconPath: 'assets/icons/license.svg',
           title: '라이센스',

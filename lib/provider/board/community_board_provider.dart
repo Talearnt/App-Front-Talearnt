@@ -46,8 +46,10 @@ class CommunityBoardProvider extends ChangeNotifier {
     _communityPage = Pagination.empty();
     _communityBoardList.clear();
 
-    _scrollController.jumpTo(0);
-    _communityTabController.dispose();
+    if (_scrollController.hasClients) {
+      _scrollController.jumpTo(0);
+    }
+    _communityTabController.index = 0;
 
     notifyListeners();
   }
@@ -126,7 +128,8 @@ class CommunityBoardProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> changeCommunityBoardLikeFromDetail(int postNo, bool isLike) async {
+  Future<void> changeCommunityBoardLikeFromDetail(
+      int postNo, bool isLike) async {
     final index = _communityBoardList
         .indexWhere((post) => post.communityPostNo == postNo);
     if (index != -1) {

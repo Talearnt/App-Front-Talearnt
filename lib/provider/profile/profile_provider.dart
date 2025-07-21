@@ -8,11 +8,27 @@ import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mime/mime.dart';
 import 'package:path/path.dart' as path;
+import 'package:provider/provider.dart';
 
 import '../../constants/global_value_constants.dart';
 import '../../data/model/respone/user_profile.dart';
+import '../auth/find_id_provider.dart';
+import '../auth/find_password_provider.dart';
+import '../auth/kakao_provider.dart';
+import '../auth/login_provider.dart';
+import '../auth/sign_up_provider.dart';
+import '../board/common_board_provider.dart';
+import '../board/community_board_detail_provider.dart';
+import '../board/community_board_provider.dart';
+import '../board/community_write_provider.dart';
+import '../board/match_board_detail_provider.dart';
+import '../board/match_board_provider.dart';
+import '../board/match_edit_provider.dart';
 import '../clear_text.dart';
+import '../common/common_provider.dart';
 import '../common/custom_ticker_provider.dart';
+import '../home/home_provider.dart';
+import '../keyword/keyword_provider.dart';
 
 class ProfileProvider extends ChangeNotifier with ClearText {
   ProfileProvider() : _tickerProvider = CustomTickerProvider() {
@@ -407,5 +423,26 @@ class ProfileProvider extends ChangeNotifier with ClearText {
   void clearText(TextEditingController controller) {
     controller.clear();
     notifyListeners();
+  }
+
+  void clearAllProviders(BuildContext context) {
+    clearProvider();
+    Provider.of<FindIdProvider>(context, listen: false).clearProvider();
+    Provider.of<FindPasswordProvider>(context, listen: false).clearProvider();
+    Provider.of<KakaoProvider>(context, listen: false).clearProvider();
+    Provider.of<LoginProvider>(context, listen: false).clearProvider();
+    Provider.of<SignUpProvider>(context, listen: false).clearProvider();
+    Provider.of<CommonBoardProvider>(context, listen: false).clearProvider();
+    Provider.of<CommunityBoardDetailProvider>(context, listen: false)
+        .clearProvider();
+    Provider.of<CommunityBoardProvider>(context, listen: false).clearProvider();
+    Provider.of<CommunityWriteProvider>(context, listen: false).clearProvider();
+    Provider.of<MatchBoardProvider>(context, listen: false).clearProvider();
+    Provider.of<MatchBoardDetailProvider>(context, listen: false)
+        .clearProvider();
+    Provider.of<MatchEditProvider>(context, listen: false).clearProvider();
+    Provider.of<CommonProvider>(context, listen: false).clearProvider();
+    Provider.of<HomeProvider>(context, listen: false).clearProvider();
+    Provider.of<KeywordProvider>(context, listen: false).clearProvider();
   }
 }

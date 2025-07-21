@@ -87,7 +87,9 @@ class KeywordProvider extends ChangeNotifier {
 
   void clearProvider() {
     _setTalentPage = 0;
-    _pageController.jumpToPage(0);
+    if (_pageController.hasClients) {
+      _pageController.jumpTo(0);
+    }
 
     _giveTalentTabController.index = 0;
     _interestTalentTabController.index = 0;
