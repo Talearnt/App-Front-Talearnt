@@ -1,5 +1,7 @@
+import 'package:app_front_talearnt/view_model/board_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import '../../../common/theme.dart';
 import 'create_setting_menu.dart';
 
@@ -8,6 +10,8 @@ class ProfileMeSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final boardViewModel = Provider.of<BoardViewModel>(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -19,7 +23,8 @@ class ProfileMeSection extends StatelessWidget {
         CreateSettingMenu(
           iconPath: 'assets/icons/bookmark_off.svg',
           title: '찜 목록',
-          onTap: () {
+          onTap: () async {
+            await boardViewModel.getInitMatchBoardLikeList();
             context.go('/match_board_like');
           },
         ),

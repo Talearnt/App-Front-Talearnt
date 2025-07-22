@@ -24,12 +24,9 @@ class MatchBoardLikePage extends StatelessWidget {
     final viewModel = Provider.of<BoardViewModel>(context);
     final MatchBoardProvider matchBoardProvider =
         Provider.of<MatchBoardProvider>(context);
-    final CommunityBoardProvider communityBoardProvider =
-        Provider.of<CommunityBoardProvider>(context);
     final commonProvider = Provider.of<CommonProvider>(context);
 
     matchBoardProvider.setViewModel(viewModel);
-    communityBoardProvider.setViewModel(viewModel);
     return Scaffold(
         appBar: TopAppBar(
           content: "찜 게시물",
@@ -43,42 +40,45 @@ class MatchBoardLikePage extends StatelessWidget {
               final int childCount = (matchBoardProvider.matchBoardList.length);
               return Stack(
                 children: [
-                  CustomScrollView(
-                    controller: matchBoardProvider.scrollController,
-                    slivers: [
-                      SliverList(
-                        delegate: SliverChildBuilderDelegate(
-                          (context, index) {
-                            List<dynamic> posts =
-                                matchBoardProvider.matchBoardList;
-                            if (posts.isEmpty) {
-                              if (commonBoardProvider.initState) {
-                                return NoBoardListPage(
-                                  boardType: commonBoardProvider.boardType,
-                                );
-                              } else {
-                                return AfterFilterNoBoardListPage(
-                                  boardType: commonBoardProvider.boardType,
-                                );
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 40.0),
+                    child: CustomScrollView(
+                      controller: matchBoardProvider.scrollController,
+                      slivers: [
+                        SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                            (context, index) {
+                              List<dynamic> posts =
+                                  matchBoardProvider.matchBoardList;
+                              if (posts.isEmpty) {
+                                if (commonBoardProvider.initState) {
+                                  return NoBoardListPage(
+                                    boardType: commonBoardProvider.boardType,
+                                  );
+                                } else {
+                                  return AfterFilterNoBoardListPage(
+                                    boardType: commonBoardProvider.boardType,
+                                  );
+                                }
                               }
-                            }
-                            return InkWell(
-                                overlayColor:
-                                    WidgetStateProperty.all(Colors.transparent),
-                                onTap: () async {
-                                  commonProvider.changeIsLoading(true);
-                                  await viewModel.getMatchDetailBoard(
-                                      matchBoardProvider.matchBoardList[index]
-                                          .exchangePostNo);
-                                  commonProvider.changeIsLoading(false);
-                                },
-                                child: MatchBoardListCard(
-                                    post: posts[index], index: index));
-                          },
-                          childCount: childCount == 0 ? 1 : childCount,
+                              return InkWell(
+                                  overlayColor: WidgetStateProperty.all(
+                                      Colors.transparent),
+                                  onTap: () async {
+                                    commonProvider.changeIsLoading(true);
+                                    await viewModel.getMatchDetailBoard(
+                                        matchBoardProvider.matchBoardList[index]
+                                            .exchangePostNo);
+                                    commonProvider.changeIsLoading(false);
+                                  },
+                                  child: MatchBoardListCard(
+                                      post: posts[index], index: index));
+                            },
+                            childCount: childCount == 0 ? 1 : childCount,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                   const CommonBottomNavigationBar(),
                   if (commonProvider.isLoadingPage) const LoadingWithCharacter()

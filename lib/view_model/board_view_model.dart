@@ -526,4 +526,18 @@ class BoardViewModel extends ChangeNotifier {
           content: ErrorMessages.getMessage(failure.errorCode));
     }, (post) {});
   }
+
+  Future<void> getInitMatchBoardLikeList() async {
+    MatchBoardListSearchParam param = MatchBoardListSearchParam();
+    final result = await boardRepository.getMatchBoardLikeList(param);
+    result.fold(
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)), (result) {
+      final posts = result['posts'];
+      final pagination = result['pagination'];
+      matchBoardProvider.updateTalentExchangePosts(posts);
+      matchBoardProvider.updateTalentExchangePostsPage(pagination);
+      commonNavigator.goRoute('/board-list');
+    });
+  }
 }

@@ -279,4 +279,16 @@ class BoardRepository {
         ApiConstants.handleCommunityBoardLike(postNo), null, null);
     return response.fold(left, (result) => right(Success.fromJson(result)));
   }
+
+  Future<Either<Failure, Map<String, dynamic>>> getMatchBoardLikeList(
+      MatchBoardListSearchParam body) async {
+    final response = await dio.get(
+        ApiConstants.getMatchBoardLikeListUrl, null, body.toJson());
+    return response.fold(left, (response) {
+      final posts = List<MatchBoard>.from(
+          response['data']['results'].map((data) => MatchBoard.fromJson(data)));
+      final pagination = Pagination.fromJson(response['data']['pagination']);
+      return right({'posts': posts, 'pagination': pagination});
+    });
+  }
 }
