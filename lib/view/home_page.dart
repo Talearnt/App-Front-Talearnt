@@ -19,6 +19,8 @@ import '../view_model/board_view_model.dart';
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
+  static bool _hasLoaded = false;
+
   @override
   Widget build(BuildContext context) {
     final homeProvider = Provider.of<HomeProvider>(context);
@@ -31,45 +33,41 @@ class HomePage extends StatelessWidget {
     final MatchBoardProvider matchBoardProvider =
         Provider.of<MatchBoardProvider>(context);
 
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) async {
+    if (!_hasLoaded) {
+      _hasLoaded = true;
+
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
         commonProvider.changeIsLoading(true);
+
+        final List<Future> futures = [];
+
+        // 신규 매칭 게시물
         if (homeProvider.newTalentExchangePosts.isEmpty) {
-          await context.read<BoardViewModel>().getMatchBoardList(
-              [], [], '', '', '', '', '', '', '10', '', "new");
+          futures.add(viewModel.getMatchBoardList(
+              [], [], '', '', '', '', '', '', '10', '', 'new'));
         }
 
+        // BEST 커뮤니티 글
         if (homeProvider.bestCommunityPosts.isEmpty) {
-          await context
-              .read<BoardViewModel>()
-              .getBestCommunityBoardList("", "hot", "", "", "10", "");
+          futures.add(
+              viewModel.getBestCommunityBoardList("", "hot", "", "", "10", ""));
         }
 
-        if (homeProvider.userMatchingTalentExchangePosts.isEmpty &&
-            loginProvider.isLoggedIn) {
-          await context.read<BoardViewModel>().getMatchBoardList(
-              profileProvider.userProfile.giveTalents
-                  .map((e) => e.toString())
-                  .toList(),
-              [],
-              '',
-              '',
-              '',
-              '',
-              '',
-              '',
-              '10',
-              '',
-              "userMatch");
-          await context.read<BoardViewModel>().getMatchBoardList(
-              [], [], '', '', '', '', '', '', '10', '', "new");
-          await context
-              .read<BoardViewModel>()
-              .getBestCommunityBoardList("", "hot", "", "", "10", "");
+        // 유저 맞춤 매칭 (로그인 시)
+        if (loginProvider.isLoggedIn &&
+            homeProvider.userMatchingTalentExchangePosts.isEmpty) {
+          final giveTalents = profileProvider.userProfile.giveTalents
+              .map((e) => e.toString())
+              .toList();
+
+          futures.add(viewModel.getMatchBoardList(
+              giveTalents, [], '', '', '', '', '', '', '10', '', 'userMatch'));
         }
+
+        await Future.wait(futures);
         commonProvider.changeIsLoading(false);
-      },
-    );
+      });
+    }
 
     Future<void> getList(
         CommonProvider commonProvider,
@@ -408,8 +406,8 @@ class HomePage extends StatelessWidget {
                                                 },
                                               );
                                             },
-                                            child: HomeMatchBoardCard(
-                                                post: post),
+                                            child:
+                                                HomeMatchBoardCard(post: post),
                                           ),
                                         );
                                       }).toList(),
