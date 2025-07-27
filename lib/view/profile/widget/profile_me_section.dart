@@ -25,7 +25,7 @@ class ProfileMeSection extends StatelessWidget {
           title: '찜 목록',
           onTap: () async {
             await boardViewModel.getInitMatchBoardLikeList();
-            context.go('/match_board_like');
+            context.push('/match_board_like');
           },
         ),
         CreateSettingMenu(

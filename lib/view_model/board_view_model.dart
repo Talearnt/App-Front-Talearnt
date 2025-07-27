@@ -537,7 +537,6 @@ class BoardViewModel extends ChangeNotifier {
       final pagination = result['pagination'];
       matchBoardProvider.updateTalentExchangePosts(posts);
       matchBoardProvider.updateTalentExchangePostsPage(pagination);
-      commonNavigator.goRoute('/board-list');
     });
   }
 }
