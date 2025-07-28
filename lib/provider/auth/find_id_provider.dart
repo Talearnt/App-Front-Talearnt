@@ -189,23 +189,26 @@ class FindIdProvider extends ChangeNotifier with ClearText {
   }
 
   void startCountdown(BuildContext context) {
-    Timer.periodic(
+    _timer = Timer.periodic(
       const Duration(seconds: 1),
       (timer) {
         if (_certNumSecond.value > 0) {
           _certNumSecond.value -= 1;
         } else {
-          SingleBtnDialog.show(context,
-              content: '인증번호 시간 초과\n다시 시도해 주세요.',
-              timer: false,
-              button: PrimaryM(
-                content: '확인',
-                onPressed: () {
-                  overValidTime();
-                  context.pop();
-                },
-              ));
+          SingleBtnDialog.show(
+            context,
+            content: '인증번호 시간 초과\n다시 시도해 주세요.',
+            timer: false,
+            button: PrimaryM(
+              content: '확인',
+              onPressed: () {
+                overValidTime();
+                context.pop();
+              },
+            ),
+          );
           timer.cancel();
+          _timer = null;
         }
       },
     );
