@@ -7,6 +7,8 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../../common/common_navigator.dart';
+import '../../../provider/board/community_board_detail_provider.dart';
+import '../../../provider/board/community_edit_provider.dart';
 import '../../../provider/board/match_board_detail_provider.dart';
 import '../../../view_model/board_view_model.dart';
 
@@ -54,7 +56,7 @@ class ModifyBoardBottomSheet extends StatelessWidget {
                     if (boardType == "match") {
                       await keywordViewModel.getOfferedKeywords();
                       await matchEditProvider.setPostInfo(
-                          matchBoardDetailProvider.matchingDetailPost!);
+                          matchBoardDetailProvider.matchingDetailPost);
                       context.go('/match-edit1');
                     } else {
                       await communityEditProvider.setPostInfo(
