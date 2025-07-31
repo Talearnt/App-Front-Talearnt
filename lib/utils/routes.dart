@@ -6,6 +6,7 @@ import 'package:app_front_talearnt/view/auth/find_password_success_page.dart';
 import 'package:app_front_talearnt/view/auth/reset_password_page.dart';
 import 'package:app_front_talearnt/view/auth/sign_up_success_page.dart';
 import 'package:app_front_talearnt/view/board/community_board/community_edit1_page.dart';
+import 'package:app_front_talearnt/view/board/match_board/match_board_like_page.dart';
 import 'package:app_front_talearnt/view/board/match_board/match_edit1_page.dart';
 import 'package:app_front_talearnt/view/board/match_board/match_edit2_page.dart';
 import 'package:app_front_talearnt/view/board/match_board/match_edit_preview_page.dart';
