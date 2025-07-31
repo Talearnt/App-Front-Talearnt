@@ -13,7 +13,6 @@ import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../provider/board/community_board_detail_provider.dart';
@@ -208,8 +207,8 @@ class CommunityBoardDetailPage extends StatelessWidget {
                                                   height: imageSize,
                                                   fit: BoxFit.cover,
                                                   color: index == 3
-                                                      ? Colors.black
-                                                          .withOpacity(0.6)
+                                                      ? Colors.black.withValues(
+                                                          alpha: 153)
                                                       : null,
                                                   colorBlendMode: index == 3
                                                       ? BlendMode.darken
@@ -245,7 +244,7 @@ class CommunityBoardDetailPage extends StatelessWidget {
                             QuillEditor.basic(
                               controller: communityBoardDetailProvider
                                   .contentController,
-                              configurations: QuillEditorConfigurations(
+                              config: QuillEditorConfig(
                                 showCursor: false,
                                 readOnlyMouseCursor: MouseCursor.uncontrolled,
                                 enableAlwaysIndentOnTab: false,
@@ -253,8 +252,8 @@ class CommunityBoardDetailPage extends StatelessWidget {
                                 enableScribble: false,
                                 embedBuilders:
                                     FlutterQuillEmbeds.editorBuilders(
-                                        imageEmbedConfigurations:
-                                            QuillEditorImageEmbedConfigurations(
+                                        imageEmbedConfig:
+                                            QuillEditorImageEmbedConfig(
                                                 onImageClicked:
                                                     (String image) {})),
                               ),

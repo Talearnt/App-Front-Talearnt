@@ -8,14 +8,12 @@ import 'package:app_front_talearnt/provider/common/custom_ticker_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_quill/quill_delta.dart';
-import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart' as path;
-import 'package:provider/provider.dart';
-import 'package:vsc_quill_delta_to_html/vsc_quill_delta_to_html.dart';
 import 'package:mime/mime.dart';
-import 'package:go_router/go_router.dart';
+import 'package:path/path.dart' as path;
+import 'package:vsc_quill_delta_to_html/vsc_quill_delta_to_html.dart';
 
 import '../../constants/global_value_constants.dart';
 import '../clear_text.dart';
