@@ -414,7 +414,7 @@ class MatchBoardDetailPage extends StatelessWidget {
                             QuillEditor.basic(
                               controller:
                                   matchBoardDetailProvider.contentController,
-                              configurations: QuillEditorConfigurations(
+                              config: QuillEditorConfig(
                                 showCursor: false,
                                 readOnlyMouseCursor: MouseCursor.uncontrolled,
                                 enableAlwaysIndentOnTab: false,
@@ -422,8 +422,8 @@ class MatchBoardDetailPage extends StatelessWidget {
                                 enableScribble: false,
                                 embedBuilders:
                                     FlutterQuillEmbeds.editorBuilders(
-                                        imageEmbedConfigurations:
-                                            QuillEditorImageEmbedConfigurations(
+                                        imageEmbedConfig:
+                                            QuillEditorImageEmbedConfig(
                                                 onImageClicked:
                                                     (String image) {})),
                               ),

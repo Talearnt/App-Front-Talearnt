@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 import '../../../provider/board/community_write_provider.dart';
+import '../../../provider/common/common_provider.dart';
 
 class CommunityWriteEditorToolbar extends StatelessWidget {
   const CommunityWriteEditorToolbar({super.key});
@@ -13,16 +14,19 @@ class CommunityWriteEditorToolbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final communityWriteProvider = Provider.of<CommunityWriteProvider>(context);
+    final commonProvider = Provider.of<CommonProvider>(context);
 
     return BottomAppBar(
       color: Palette.bgBackGround,
-      child: getToolbar(context, communityWriteProvider),
+      child: getToolbar(context, communityWriteProvider, commonProvider),
     );
   }
 }
 
 Widget getToolbar(
-    BuildContext context, CommunityWriteProvider communityWriteProvider) {
+    BuildContext context,
+    CommunityWriteProvider communityWriteProvider,
+    CommonProvider commonProvider) {
   if (communityWriteProvider.onToolBar == "default") {
     return Row(
       children: [
@@ -47,7 +51,8 @@ Widget getToolbar(
         ),
         IconButton(
           onPressed: () async {
-            await communityWriteProvider.pickImagesAndInsert(context);
+            await communityWriteProvider.pickImagesAndInsert(
+                context, commonProvider);
           },
           icon: SvgPicture.asset('assets/icons/image_before.svg'),
         ),
@@ -371,7 +376,7 @@ Widget getToolbar(
                         communityWriteProvider.contentController
                             .formatSelection(
                           Attribute.fromKeyValue('color',
-                              '#${item.value.toRadixString(16).padLeft(8, '0')}'),
+                              '#${item.toARGB32().toRadixString(16).padLeft(8, '0')}'),
                         );
                       },
                       icon: communityWriteProvider.fontColor == item
@@ -411,7 +416,7 @@ Widget getToolbar(
                         communityWriteProvider.contentController
                             .formatSelection(
                           Attribute.fromKeyValue('background',
-                              '#${item.value.toRadixString(16).padLeft(8, '0')}'),
+                              '#${item.toARGB32().toRadixString(16).padLeft(8, '0')}'),
                         );
                       },
                       icon: communityWriteProvider.backGroundColor == item

@@ -11,9 +11,9 @@ import 'package:app_front_talearnt/constants/global_value_constants.dart';
 import 'package:app_front_talearnt/provider/board/match_edit_provider.dart';
 import 'package:app_front_talearnt/provider/common/common_provider.dart';
 import 'package:app_front_talearnt/view_model/board_view_model.dart';
-import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
+import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -455,13 +455,15 @@ class MatchEditPreviewPage extends StatelessWidget {
                         ),
                         QuillEditor.basic(
                           controller: matchEditProvider.contentController,
-                          configurations: QuillEditorConfigurations(
+                          config: QuillEditorConfig(
                             showCursor: false,
                             readOnlyMouseCursor: MouseCursor.uncontrolled,
                             enableAlwaysIndentOnTab: false,
                             enableInteractiveSelection: false,
                             enableScribble: false,
-                            embedBuilders: FlutterQuillEmbeds.editorBuilders(),
+                            embedBuilders: FlutterQuillEmbeds.editorBuilders(
+                                imageEmbedConfig: QuillEditorImageEmbedConfig(
+                                    onImageClicked: (String image) {})),
                           ),
                         ),
                       ],

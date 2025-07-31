@@ -1,10 +1,11 @@
 import 'package:app_front_talearnt/common/theme.dart';
 import 'package:app_front_talearnt/provider/board/match_edit_provider.dart';
+import 'package:app_front_talearnt/provider/common/common_provider.dart';
 import 'package:app_front_talearnt/view/board/match_board/match_write_link_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
 class MatchEditEditorToolbar extends StatelessWidget {
   const MatchEditEditorToolbar({super.key});
@@ -12,15 +13,17 @@ class MatchEditEditorToolbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final matchEditProvider = Provider.of<MatchEditProvider>(context);
+    final commonProvider = Provider.of<CommonProvider>(context);
 
     return BottomAppBar(
       color: Palette.bgBackGround,
-      child: getToolbar(context, matchEditProvider),
+      child: getToolbar(context, matchEditProvider, commonProvider),
     );
   }
 }
 
-Widget getToolbar(BuildContext context, MatchEditProvider matchEditProvider) {
+Widget getToolbar(BuildContext context, MatchEditProvider matchEditProvider,
+    CommonProvider commonProvider) {
   if (matchEditProvider.onToolBar == "default") {
     return Row(
       children: [
@@ -45,7 +48,8 @@ Widget getToolbar(BuildContext context, MatchEditProvider matchEditProvider) {
         ),
         IconButton(
           onPressed: () async {
-            await matchEditProvider.pickImagesAndInsert(context);
+            await matchEditProvider.pickImagesAndInsert(
+                context, commonProvider);
           },
           icon: SvgPicture.asset('assets/icons/image_before.svg'),
         ),
@@ -358,7 +362,7 @@ Widget getToolbar(BuildContext context, MatchEditProvider matchEditProvider) {
                         matchEditProvider.setToolbar('style');
                         matchEditProvider.contentController.formatSelection(
                           Attribute.fromKeyValue('color',
-                              '#${item.value.toRadixString(16).padLeft(8, '0')}'),
+                              '#${item.toARGB32().toRadixString(16).padLeft(8, '0')}'),
                         );
                       },
                       icon: matchEditProvider.fontColor == item
@@ -397,7 +401,7 @@ Widget getToolbar(BuildContext context, MatchEditProvider matchEditProvider) {
                         matchEditProvider.setToolbar('style');
                         matchEditProvider.contentController.formatSelection(
                           Attribute.fromKeyValue('background',
-                              '#${item.value.toRadixString(16).padLeft(8, '0')}'),
+                              '#${item.toARGB32().toRadixString(16).padLeft(8, '0')}'),
                         );
                       },
                       icon: matchEditProvider.backGroundColor == item
