@@ -1,4 +1,7 @@
+import 'package:app_front_talearnt/view_model/board_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import '../../../common/theme.dart';
 import 'create_setting_menu.dart';
 
@@ -7,18 +10,22 @@ class ProfileMeSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final boardViewModel = Provider.of<BoardViewModel>(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12),
-          child: Text('설정', style: TextTypes.bodyMedium03(color: Palette.text03)),
+          child:
+              Text('설정', style: TextTypes.bodyMedium03(color: Palette.text03)),
         ),
         CreateSettingMenu(
           iconPath: 'assets/icons/bookmark_off.svg',
           title: '찜 목록',
-          onTap: () {
-            // 책 목록 이동
+          onTap: () async {
+            await boardViewModel.getInitMatchBoardLikeList();
+            context.push('/match_board_like');
           },
         ),
         CreateSettingMenu(
