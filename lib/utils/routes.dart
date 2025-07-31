@@ -38,13 +38,6 @@ import '../view/board/write_success_page.dart';
 import '../view/home_page.dart';
 import '../view/keyword/set_talent_keyword_main_page.dart';
 import '../view/keyword/set_talent_keyword_success_page.dart';
-import '../view/profile/account_manage_page.dart';
-import '../view/profile/alarm_setting_page.dart';
-import '../view/profile/event_notice_page.dart';
-import '../view/profile/licenses_page.dart';
-import '../view/profile/modify_user_info_page.dart';
-import '../view/profile/profile_page.dart';
-import '../view/profile/user_image_preview_page.dart';
 
 class Routes {
   static final GoRouter router = GoRouter(
