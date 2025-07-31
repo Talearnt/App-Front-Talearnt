@@ -6,6 +6,8 @@ import 'package:app_front_talearnt/view/auth/find_password_success_page.dart';
 import 'package:app_front_talearnt/view/auth/reset_password_page.dart';
 import 'package:app_front_talearnt/view/auth/sign_up_success_page.dart';
 import 'package:app_front_talearnt/view/board/community_board/community_edit1_page.dart';
+import 'package:app_front_talearnt/view/board/community_board/community_edit2_page.dart';
+import 'package:app_front_talearnt/view/board/community_board/community_edit_preview_page.dart';
 import 'package:app_front_talearnt/view/board/match_board/match_board_like_page.dart';
 import 'package:app_front_talearnt/view/board/match_board/match_edit1_page.dart';
 import 'package:app_front_talearnt/view/board/match_board/match_edit2_page.dart';
@@ -23,8 +25,6 @@ import '../view/board/board_list.dart';
 import '../view/board/community_board/community_board_detail_page.dart';
 import '../view/board/community_board/community_board_image_view_detail_page.dart';
 import '../view/board/community_board/community_board_image_view_page.dart';
-import '../view/board/community_board/community_edit2_page.dart';
-import '../view/board/community_board/community_edit_preview_page.dart';
 import '../view/board/community_board/community_write1_page.dart';
 import '../view/board/community_board/community_write2_page.dart';
 import '../view/board/community_board/community_write_preview_page.dart';
@@ -38,6 +38,13 @@ import '../view/board/write_success_page.dart';
 import '../view/home_page.dart';
 import '../view/keyword/set_talent_keyword_main_page.dart';
 import '../view/keyword/set_talent_keyword_success_page.dart';
+import '../view/profile/account_manage_page.dart';
+import '../view/profile/alarm_setting_page.dart';
+import '../view/profile/event_notice_page.dart';
+import '../view/profile/licenses_page.dart';
+import '../view/profile/modify_user_info_page.dart';
+import '../view/profile/profile_page.dart';
+import '../view/profile/user_image_preview_page.dart';
 
 class Routes {
   static final GoRouter router = GoRouter(
@@ -249,42 +256,6 @@ class Routes {
             ],
           ),
           GoRoute(
-            path: '/community-edit1',
-            builder: (BuildContext context, GoRouterState state) {
-              return const CommunityEdit1Page();
-            },
-          ),
-          GoRoute(
-            path: '/community-edit2',
-            builder: (BuildContext context, GoRouterState state) {
-              return const CommunityEdit2Page();
-            },
-          ),
-          GoRoute(
-            path: '/community-edit-preview',
-            builder: (BuildContext context, GoRouterState state) {
-              return const CommunityEditPreviewPage();
-            },
-          ),
-          GoRoute(
-            path: '/community-edit1',
-            builder: (BuildContext context, GoRouterState state) {
-              return const CommunityEdit1Page();
-            },
-          ),
-          GoRoute(
-            path: '/community-edit2',
-            builder: (BuildContext context, GoRouterState state) {
-              return const CommunityEdit2Page();
-            },
-          ),
-          GoRoute(
-            path: '/community-edit-preview',
-            builder: (BuildContext context, GoRouterState state) {
-              return const CommunityEditPreviewPage();
-            },
-          ),
-          GoRoute(
             path: '/profile',
             builder: (BuildContext context, GoRouterState state) {
               return const ProfilePage();
@@ -330,6 +301,24 @@ class Routes {
             path: '/match_board_like',
             builder: (BuildContext context, GoRouterState state) {
               return const MatchBoardLikePage();
+            },
+          ),
+          GoRoute(
+            path: '/community-edit1',
+            builder: (BuildContext context, GoRouterState state) {
+              return const CommunityEdit1Page();
+            },
+          ),
+          GoRoute(
+            path: '/community-edit2',
+            builder: (BuildContext context, GoRouterState state) {
+              return const CommunityEdit2Page();
+            },
+          ),
+          GoRoute(
+            path: '/community-edit-preview',
+            builder: (BuildContext context, GoRouterState state) {
+              return const CommunityEditPreviewPage();
             },
           ),
         ],

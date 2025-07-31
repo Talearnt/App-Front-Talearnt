@@ -351,7 +351,7 @@ class BoardViewModel extends ChangeNotifier {
         (failure) => commonNavigator.showSingleDialog(
             content: ErrorMessages.getMessage(failure.errorCode)), (post) {
       communityBoardDetailProvider.updateCommunityDetailBoard(post);
-      commonNavigator.pushRoute('/community-board-detail');
+      commonNavigator.goRoute('/community-board-detail');
     });
   }
 

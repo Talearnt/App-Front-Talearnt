@@ -51,6 +51,7 @@ class CommunityEdit2Page extends StatelessWidget {
         first: PrimaryS(
           content: '완료',
           onPressed: () async {
+            commonProvider.changeIsLoading(true);
             await communityEditProvider.getUploadImagesInfo();
 
             if (communityEditProvider.uploadImageInfos.isNotEmpty) {
@@ -76,12 +77,23 @@ class CommunityEdit2Page extends StatelessWidget {
             if (communityEditProvider.isTitleAndBoardEmpty) {
               communityEditProvider.setCommunityBoard();
 
-              await boardViewModel.editCommunityBoard(
+              await boardViewModel
+                  .editCommunityBoard(
                 communityEditProvider.titleController.text,
                 communityEditProvider.htmlContent,
                 communityEditProvider.selectedCategory,
                 communityEditProvider.imageUploadedUrls,
                 communityEditProvider.postNo,
+              )
+                  .then(
+                (value) {
+                  ToastMessage.show(
+                    context: context,
+                    message: '수정이 완료되었습니다.',
+                    type: 1,
+                    bottom: 42,
+                  );
+                },
               );
             } else {
               ToastMessage.show(
@@ -91,6 +103,7 @@ class CommunityEdit2Page extends StatelessWidget {
                 bottom: 50,
               );
             }
+            commonProvider.changeIsLoading(false);
           },
         ),
       ),
@@ -151,7 +164,10 @@ class CommunityEdit2Page extends StatelessWidget {
                 focusNode: communityEditProvider.contentFocusNode,
                 scrollController: scrollController,
                 configurations: QuillEditorConfigurations(
-                  embedBuilders: FlutterQuillEmbeds.editorBuilders(),
+                  embedBuilders: FlutterQuillEmbeds.editorBuilders(
+                      imageEmbedConfigurations:
+                          QuillEditorImageEmbedConfigurations(
+                              onImageClicked: (String image) {})),
                   placeholder: "내용을 입력해주세요",
                   expands: true,
                   customStyles: DefaultStyles(

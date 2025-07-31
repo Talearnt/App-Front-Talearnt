@@ -1,4 +1,5 @@
 import 'package:app_front_talearnt/common/theme.dart';
+import 'package:app_front_talearnt/provider/common/common_provider.dart';
 import 'package:app_front_talearnt/view/board/match_board/match_write_link_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
@@ -13,16 +14,19 @@ class CommunityEditEditorToolbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final communityEditProvider = Provider.of<CommunityEditProvider>(context);
+    final commonProvider = Provider.of<CommonProvider>(context);
 
     return BottomAppBar(
       color: Palette.bgBackGround,
-      child: getToolbar(context, communityEditProvider),
+      child: getToolbar(context, communityEditProvider, commonProvider),
     );
   }
 }
 
 Widget getToolbar(
-    BuildContext context, CommunityEditProvider communityEditProvider) {
+    BuildContext context,
+    CommunityEditProvider communityEditProvider,
+    CommonProvider commonProvider) {
   if (communityEditProvider.onToolBar == "default") {
     return Row(
       children: [
@@ -47,7 +51,8 @@ Widget getToolbar(
         ),
         IconButton(
           onPressed: () async {
-            await communityEditProvider.pickImagesAndInsert(context);
+            await communityEditProvider.pickImagesAndInsert(
+                context, commonProvider);
           },
           icon: SvgPicture.asset('assets/icons/image_before.svg'),
         ),
