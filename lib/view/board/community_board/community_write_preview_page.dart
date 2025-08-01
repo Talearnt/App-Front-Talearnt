@@ -60,6 +60,7 @@ class CommunityWritePreviewPage extends StatelessWidget {
             content: '등록',
             onPressed: () async {
               commonProvider.changeIsLoading(true);
+              commonProvider.updateBackGesture(true);
               commonProvider.removeToast();
               await communityWriteProvider.getUploadImagesInfo();
 

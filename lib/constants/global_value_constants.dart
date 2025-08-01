@@ -253,7 +253,7 @@ class GlobalValueConstants {
   static List<Map<String, String>> communityCategoryTypes = [
     {'code': '', 'value': '전체'},
     {'code': 'FREE', 'value': '자유 게시판'},
-    {'code': 'STUDY', 'value': '스터디 모임 게시판'},
+    {'code': 'STUDY', 'value': '스터디 모집 게시판'},
     {'code': 'QUESTION', 'value': '질문 게시판'},
   ];
 }

@@ -5,6 +5,9 @@ import 'package:app_front_talearnt/view/auth/find_password_page.dart';
 import 'package:app_front_talearnt/view/auth/find_password_success_page.dart';
 import 'package:app_front_talearnt/view/auth/reset_password_page.dart';
 import 'package:app_front_talearnt/view/auth/sign_up_success_page.dart';
+import 'package:app_front_talearnt/view/board/community_board/community_edit1_page.dart';
+import 'package:app_front_talearnt/view/board/community_board/community_edit2_page.dart';
+import 'package:app_front_talearnt/view/board/community_board/community_edit_preview_page.dart';
 import 'package:app_front_talearnt/view/board/match_board/match_board_like_page.dart';
 import 'package:app_front_talearnt/view/board/match_board/match_edit1_page.dart';
 import 'package:app_front_talearnt/view/board/match_board/match_edit2_page.dart';
@@ -298,6 +301,24 @@ class Routes {
             path: '/match_board_like',
             builder: (BuildContext context, GoRouterState state) {
               return const MatchBoardLikePage();
+            },
+          ),
+          GoRoute(
+            path: '/community-edit1',
+            builder: (BuildContext context, GoRouterState state) {
+              return const CommunityEdit1Page();
+            },
+          ),
+          GoRoute(
+            path: '/community-edit2',
+            builder: (BuildContext context, GoRouterState state) {
+              return const CommunityEdit2Page();
+            },
+          ),
+          GoRoute(
+            path: '/community-edit-preview',
+            builder: (BuildContext context, GoRouterState state) {
+              return const CommunityEditPreviewPage();
             },
           ),
         ],
