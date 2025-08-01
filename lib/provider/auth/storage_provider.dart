@@ -2,13 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class StorageProvider extends ChangeNotifier {
+  final _storage = const FlutterSecureStorage();
   SharedPreferences? _prefs;
-
-  final Map<String, String?> _cachedValues = {};
-
-  String? getValue(String key) => _cachedValues[key];
 
   Timer? _timer;
   ValueNotifier<int> _certNumResendCoolDown = ValueNotifier<int>(600);
@@ -17,36 +15,24 @@ class StorageProvider extends ChangeNotifier {
   ValueNotifier<int> get certNumResendCoolDown => _certNumResendCoolDown;
   bool get isCoolDown => _isCoolDown;
 
-  StorageProvider() {
-    _initializeStorage();
-  }
+  Future<void> saveData(String key, String value) async {
+    await _storage.write(key: key, value: value);
 
-  Future<void> _initializeStorage() async {
-    _prefs = await SharedPreferences.getInstance();
-
-    for (String key in _prefs!.getKeys()) {
-      _cachedValues[key] = _prefs?.getString(key);
-    }
-    notifyListeners();
-  }
-
-  Future<void> saveData(String key, dynamic value) async {
-    if (_prefs == null) return;
-    await _prefs!.setString(key, value);
-    _cachedValues[key] = value;
-    notifyListeners();
-  }
-
-  Future<void> deleteData(String key) async {
-    if (_prefs == null) return;
-    await _prefs!.remove(key);
-    _cachedValues.remove(key);
     notifyListeners();
   }
 
   Future<String?> getData(String key) async {
-    _prefs ??= await SharedPreferences.getInstance();
-    return _prefs?.getString(key);
+    final String? value = await _storage.read(key: key);
+
+    notifyListeners();
+
+    return value;
+  }
+
+  Future<void> deleteData(String key) async {
+    await _storage.delete(key: key);
+
+    notifyListeners();
   }
 
   void startCoolDown() {
@@ -56,7 +42,7 @@ class StorageProvider extends ChangeNotifier {
       DateTime coolDownEndTime =
           DateTime.now().add(const Duration(minutes: 10));
 
-      saveData("coolDownEndTime", coolDownEndTime);
+      saveData("coolDownEndTime", coolDownEndTime.toString());
     }
     notifyListeners();
   }
