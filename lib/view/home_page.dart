@@ -201,6 +201,8 @@ class HomePage extends StatelessWidget {
                                               .updateInitState(false);
                                           getList(commonProvider, viewModel,
                                               matchBoardProvider);
+                                          commonProvider
+                                              .changeSelectedPage('board_list');
                                           context.push('/board-list');
                                         },
                                         child: Row(
@@ -352,6 +354,8 @@ class HomePage extends StatelessWidget {
                                               .getInitMatchBoardList()
                                               .then(
                                             (value) {
+                                              commonProvider.changeSelectedPage(
+                                                  'board_list');
                                               commonProvider
                                                   .changeIsLoading(false);
                                             },
@@ -442,6 +446,8 @@ class HomePage extends StatelessWidget {
                                     commonBoardProvider
                                         .setBoardType("community");
                                     commonBoardProvider.updateInitState(true);
+                                    commonProvider
+                                        .changeSelectedPage('board_list');
                                     commonProvider.changeIsLoading(false);
                                   },
                                   child: Row(
