@@ -261,13 +261,15 @@ class CommunityEditPreviewPage extends StatelessWidget {
                     ),
                     QuillEditor.basic(
                       controller: communityEditProvider.contentController,
-                      configurations: QuillEditorConfigurations(
+                      config: QuillEditorConfig(
                         showCursor: false,
                         readOnlyMouseCursor: MouseCursor.uncontrolled,
                         enableAlwaysIndentOnTab: false,
                         enableInteractiveSelection: false,
                         enableScribble: false,
-                        embedBuilders: FlutterQuillEmbeds.editorBuilders(),
+                        embedBuilders: FlutterQuillEmbeds.editorBuilders(
+                            imageEmbedConfig: QuillEditorImageEmbedConfig(
+                                onImageClicked: (String image) {})),
                       ),
                     ),
                   ],
