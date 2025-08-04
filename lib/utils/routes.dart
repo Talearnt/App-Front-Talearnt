@@ -43,6 +43,7 @@ import '../view/profile/alarm_setting_page.dart';
 import '../view/profile/event_notice_page.dart';
 import '../view/profile/licenses_page.dart';
 import '../view/profile/modify_user_info_page.dart';
+import '../view/profile/my_write_page.dart';
 import '../view/profile/profile_page.dart';
 import '../view/profile/user_image_preview_page.dart';
 
@@ -319,6 +320,11 @@ class Routes {
             path: '/community-edit-preview',
             builder: (BuildContext context, GoRouterState state) {
               return const CommunityEditPreviewPage();
+            },
+          ),GoRoute(
+            path: '/my-write',
+            builder: (BuildContext context, GoRouterState state) {
+              return const MyWritePage();
             },
           ),
         ],

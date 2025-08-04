@@ -213,8 +213,7 @@ class BoardViewModel extends ChangeNotifier {
         status: status,
         page: page,
         size: size,
-        lastNo: lastNo,
-        path: "mobile");
+        lastNo: lastNo);
     final result = await boardRepository.getMatchBoardList(param);
     result.fold(
         (failure) => commonNavigator.showSingleDialog(
@@ -292,7 +291,6 @@ class BoardViewModel extends ChangeNotifier {
     CommunityBoardListSearchParam param = CommunityBoardListSearchParam(
         postType: postType,
         order: order,
-        path: path,
         page: page,
         size: size,
         lastNo: lastNo);
@@ -312,7 +310,6 @@ class BoardViewModel extends ChangeNotifier {
     CommunityBoardListSearchParam param = CommunityBoardListSearchParam(
         postType: postType,
         order: order,
-        path: path,
         page: page,
         size: size,
         lastNo: lastNo);
@@ -332,7 +329,6 @@ class BoardViewModel extends ChangeNotifier {
     CommunityBoardListSearchParam param = CommunityBoardListSearchParam(
         postType: postType,
         order: order,
-        path: path,
         page: page,
         size: size,
         lastNo: lastNo);
