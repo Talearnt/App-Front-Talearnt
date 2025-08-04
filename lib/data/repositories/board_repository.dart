@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:app_front_talearnt/data/model/param/community_board_commnet.dart';
 import 'package:app_front_talearnt/data/model/param/community_board_reply.dart';
+import 'package:app_front_talearnt/data/model/param/event_param.dart';
 import 'package:app_front_talearnt/data/model/param/match_board_param.dart';
 import 'package:app_front_talearnt/data/model/param/post_comment.dart';
 import 'package:app_front_talearnt/data/model/param/post_reply.dart';
@@ -9,6 +10,7 @@ import 'package:app_front_talearnt/data/model/param/put_comment.dart';
 import 'package:app_front_talearnt/data/model/param/s3_controller_param.dart';
 import 'package:app_front_talearnt/data/model/respone/community_comment.dart';
 import 'package:app_front_talearnt/data/model/respone/community_reply.dart';
+import 'package:app_front_talearnt/data/model/respone/event.dart';
 import 'package:app_front_talearnt/data/model/respone/failure.dart';
 import 'package:app_front_talearnt/data/model/respone/pagination.dart';
 import 'package:app_front_talearnt/data/model/respone/s3_upload_url.dart';
@@ -298,5 +300,19 @@ class BoardRepository {
       final pagination = Pagination.fromJson(response['data']['pagination']);
       return right({'posts': posts, 'pagination': pagination});
     });
+  }
+
+  Future<Either<Failure, List<Event>>> getEvent(EventParam body) async {
+    final response =
+        await dio.get(ApiConstants.getEventUrl, null, body.toJson());
+    return response.fold(
+      left,
+      (response) {
+        final events = (response['data']['results'] as List<dynamic>)
+            .map((data) => Event.fromJson(data as Map<String, dynamic>))
+            .toList();
+        return right(events);
+      },
+    );
   }
 }

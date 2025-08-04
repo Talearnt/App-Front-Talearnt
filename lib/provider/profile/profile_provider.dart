@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:typed_data' as typed_data;
 import 'dart:ui' as ui;
 
+import 'package:app_front_talearnt/data/model/respone/event.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
@@ -49,6 +50,8 @@ class ProfileProvider extends ChangeNotifier with ClearText {
   final List<int> _editGiveTalents = [];
   final List<int> _receiveTalents = [];
   final List<int> _editReceiveTalents = [];
+
+  List<Event> _eventList = [];
 
   late TabController _giveTalentTabController;
   late TabController _receiveTalentTabController;
@@ -147,6 +150,8 @@ class ProfileProvider extends ChangeNotifier with ClearText {
 
   bool get changeImage => _changeImage;
 
+  List<Event> get eventList => _eventList;
+
   void clearProvider() {
     _editNickNameController.clear();
     _editNickNameFocusNode.unfocus();
@@ -155,6 +160,8 @@ class ProfileProvider extends ChangeNotifier with ClearText {
     _editGiveTalents.clear();
     _receiveTalents.clear();
     _editReceiveTalents.clear();
+
+    _eventList.clear();
 
     _giveTalentTabController.index = 0;
     _receiveTalentTabController.index = 0;
@@ -416,6 +423,11 @@ class ProfileProvider extends ChangeNotifier with ClearText {
     _imageUploadS3Url = "";
     _changeImage = false;
     _uploadUserImageInfo.clear();
+    notifyListeners();
+  }
+
+  Future<void> setEventList(List<Event> events) async {
+    _eventList = events;
     notifyListeners();
   }
 

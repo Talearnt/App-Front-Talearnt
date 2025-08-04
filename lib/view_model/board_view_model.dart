@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:app_front_talearnt/data/model/param/community_board_commnet.dart';
 import 'package:app_front_talearnt/data/model/param/community_board_reply.dart';
+import 'package:app_front_talearnt/data/model/param/event_param.dart';
 import 'package:app_front_talearnt/data/model/param/match_board_param.dart';
 import 'package:app_front_talearnt/data/model/param/post_comment.dart';
 import 'package:app_front_talearnt/data/model/param/post_reply.dart';
@@ -10,6 +11,7 @@ import 'package:app_front_talearnt/data/model/respone/community_reply.dart';
 import 'package:app_front_talearnt/provider/board/community_write_provider.dart';
 import 'package:app_front_talearnt/provider/board/match_edit_provider.dart';
 import 'package:app_front_talearnt/provider/home/home_provider.dart';
+import 'package:app_front_talearnt/provider/profile/profile_provider.dart';
 import 'package:flutter/material.dart';
 
 import '../common/common_navigator.dart';
@@ -40,6 +42,7 @@ class BoardViewModel extends ChangeNotifier {
   final CommunityBoardDetailProvider communityBoardDetailProvider;
   final CommunityEditProvider communityEditProvider;
   final HomeProvider homeProvider;
+  final ProfileProvider profileProvider;
 
   BoardViewModel(
       this.commonNavigator,
@@ -53,7 +56,8 @@ class BoardViewModel extends ChangeNotifier {
       this.communityWriteProvider,
       this.communityBoardDetailProvider,
       this.communityEditProvider,
-      this.homeProvider);
+      this.homeProvider,
+      this.profileProvider);
 
   Future<void> getImageUploadUrl(
       List<Map<String, dynamic>> uploadImageInfos, String type) async {
@@ -570,6 +574,16 @@ class BoardViewModel extends ChangeNotifier {
       final pagination = result['pagination'];
       matchBoardProvider.updateTalentExchangePosts(posts);
       matchBoardProvider.updateTalentExchangePostsPage(pagination);
+    });
+  }
+
+  Future<void> getEvent() async {
+    EventParam param = EventParam();
+    final result = await boardRepository.getEvent(param);
+    result.fold(
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)), (result) {
+      profileProvider.setEventList(result);
     });
   }
 }
