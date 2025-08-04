@@ -227,7 +227,7 @@ class CommunityWritePreviewPage extends StatelessWidget {
                                               fit: BoxFit.cover,
                                               color: index == 3
                                                   ? Colors.black
-                                                      .withOpacity(0.6)
+                                                      .withValues(alpha: 153)
                                                   : null,
                                               colorBlendMode: index == 3
                                                   ? BlendMode.darken
@@ -264,13 +264,15 @@ class CommunityWritePreviewPage extends StatelessWidget {
                         ),
                         QuillEditor.basic(
                           controller: communityWriteProvider.contentController,
-                          configurations: QuillEditorConfigurations(
+                          config: QuillEditorConfig(
                             showCursor: false,
                             readOnlyMouseCursor: MouseCursor.uncontrolled,
                             enableAlwaysIndentOnTab: false,
                             enableInteractiveSelection: false,
                             enableScribble: false,
-                            embedBuilders: FlutterQuillEmbeds.editorBuilders(),
+                            embedBuilders: FlutterQuillEmbeds.editorBuilders(
+                                imageEmbedConfig: QuillEditorImageEmbedConfig(
+                                    onImageClicked: (String image) {})),
                           ),
                         ),
                       ],

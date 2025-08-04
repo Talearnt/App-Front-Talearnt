@@ -6,15 +6,15 @@ import 'package:app_front_talearnt/common/widget/dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_quill/quill_delta.dart';
-import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
 import 'package:mime/mime.dart';
 import 'package:path/path.dart' as path;
 import 'package:vsc_quill_delta_to_html/vsc_quill_delta_to_html.dart';
-import 'package:go_router/go_router.dart';
 
 import '../clear_text.dart';
+import '../common/common_provider.dart';
 
 class CommunityWriteProvider extends ChangeNotifier with ClearText {
   CommunityWriteProvider() {
@@ -374,10 +374,13 @@ class CommunityWriteProvider extends ChangeNotifier with ClearText {
     _isTitleAndBoardEmpty = true;
   }
 
-  Future<void> pickImagesAndInsert(BuildContext context) async {
+  Future<void> pickImagesAndInsert(
+      BuildContext context, CommonProvider commonProvider) async {
     final List<XFile> pickedFiles = await _picker.pickMultiImage();
 
     if (pickedFiles.isNotEmpty) {
+      commonProvider.changeIsLoading(true);
+
       for (final pickedFile in pickedFiles) {
         final File image = File(pickedFile.path);
 
@@ -413,11 +416,30 @@ class CommunityWriteProvider extends ChangeNotifier with ClearText {
 
         _totalImageCount++;
 
-        contentController.insertImageBlock(imageSource: processedImage.path);
+        final int idx = contentController.selection.baseOffset;
+        contentController.replaceText(
+          idx,
+          0,
+          '\n',
+          contentController.selection,
+        );
+        contentController.replaceText(
+          idx + 1,
+          0,
+          BlockEmbed.image(processedImage.path),
+          TextSelection.collapsed(offset: idx + 2),
+        );
+        contentController.replaceText(
+          idx + 2,
+          0,
+          '\n',
+          TextSelection.collapsed(offset: idx + 3),
+        );
       }
     }
 
     notifyListeners();
+    commonProvider.changeIsLoading(false);
   }
 
   Future<File> _processImage(File imageFile) async {

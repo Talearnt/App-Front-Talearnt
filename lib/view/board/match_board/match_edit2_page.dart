@@ -6,7 +6,6 @@ import 'package:app_front_talearnt/common/widget/top_app_bar.dart';
 import 'package:app_front_talearnt/provider/board/match_edit_provider.dart';
 import 'package:app_front_talearnt/provider/common/common_provider.dart';
 import 'package:app_front_talearnt/view/board/match_board/match_edit_editor_toolbar.dart';
-import 'package:app_front_talearnt/view/board/match_board/match_write_editor_toolbar.dart';
 import 'package:app_front_talearnt/view_model/board_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
@@ -169,11 +168,10 @@ class MatchEdit2Page extends StatelessWidget {
                     controller: matchEditProvider.contentController,
                     focusNode: matchEditProvider.contentFocusNode,
                     scrollController: scrollController,
-                    configurations: QuillEditorConfigurations(
+                    config: QuillEditorConfig(
                       embedBuilders: FlutterQuillEmbeds.editorBuilders(
-                          imageEmbedConfigurations:
-                              QuillEditorImageEmbedConfigurations(
-                                  onImageClicked: (String image) {})),
+                          imageEmbedConfig: QuillEditorImageEmbedConfig(
+                              onImageClicked: (String image) {})),
                       placeholder: "내용을 입력해주세요",
                       expands: true,
                       customStyles: DefaultStyles(
