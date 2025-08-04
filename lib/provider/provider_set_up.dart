@@ -30,6 +30,7 @@ import '../view_model/profile_view_model.dart';
 import 'auth/kakao_provider.dart';
 import 'board/community_board_detail_provider.dart';
 import 'board/community_board_provider.dart';
+import 'board/community_edit_provider.dart';
 import 'board/community_write_provider.dart';
 import 'board/match_board_detail_provider.dart';
 import 'board/match_write_provider.dart';
@@ -121,6 +122,8 @@ class ProviderSetup extends StatelessWidget {
             create: (_) => MatchBoardDetailProvider()),
         ChangeNotifierProvider<CommunityBoardDetailProvider>(
             create: (_) => CommunityBoardDetailProvider()),
+        ChangeNotifierProvider<CommunityEditProvider>(
+            create: (_) => CommunityEditProvider()),
         ChangeNotifierProvider<BoardViewModel>(
           create: (context) => BoardViewModel(
             CommonNavigator(navigatorKey),
@@ -133,6 +136,7 @@ class ProviderSetup extends StatelessWidget {
             context.read<CommunityBoardProvider>(),
             context.read<CommunityWriteProvider>(),
             context.read<CommunityBoardDetailProvider>(),
+            context.read<CommunityEditProvider>(),
             context.read<HomeProvider>(),
           ),
         ),
