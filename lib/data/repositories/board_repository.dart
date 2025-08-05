@@ -301,18 +301,4 @@ class BoardRepository {
       return right({'posts': posts, 'pagination': pagination});
     });
   }
-
-  Future<Either<Failure, List<Event>>> getEvent(EventParam body) async {
-    final response =
-        await dio.get(ApiConstants.getEventUrl, null, body.toJson());
-    return response.fold(
-      left,
-      (response) {
-        final events = (response['data']['results'] as List<dynamic>)
-            .map((data) => Event.fromJson(data as Map<String, dynamic>))
-            .toList();
-        return right(events);
-      },
-    );
-  }
 }

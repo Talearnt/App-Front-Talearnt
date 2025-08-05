@@ -1,5 +1,6 @@
 import 'package:app_front_talearnt/provider/common/common_provider.dart';
 import 'package:app_front_talearnt/view_model/board_view_model.dart';
+import 'package:app_front_talearnt/view_model/profile_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -13,7 +14,7 @@ class ProfileOtherSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final commonProvider = context.read<CommonProvider>();
-    final boardViewModel = Provider.of<BoardViewModel>(context);
+    final profileViewModel = Provider.of<ProfileViewModel>(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -28,7 +29,7 @@ class ProfileOtherSection extends StatelessWidget {
           title: '이벤트/공지사항',
           onTap: () async {
             commonProvider.changeIsLoading(true);
-            await boardViewModel.getEvent();
+            await profileViewModel.getEvent();
             commonProvider.changeIsLoading(false);
             context.push('/event-notice');
           },

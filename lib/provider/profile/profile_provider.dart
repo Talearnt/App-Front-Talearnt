@@ -4,6 +4,8 @@ import 'dart:typed_data' as typed_data;
 import 'dart:ui' as ui;
 
 import 'package:app_front_talearnt/data/model/respone/event.dart';
+import 'package:app_front_talearnt/view_model/board_view_model.dart';
+import 'package:app_front_talearnt/view_model/profile_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
@@ -41,6 +43,17 @@ class ProfileProvider extends ChangeNotifier with ClearText {
         vsync: _tickerProvider);
     _eventNoticeTabController =
         TabController(length: 2, vsync: _tickerProvider);
+    _scrollController.addListener(_onScroll);
+  }
+
+  bool _isFetching = false;
+
+  void _onScroll() {
+    if (!_isFetching &&
+        _scrollController.position.pixels >=
+            _scrollController.position.maxScrollExtent - 200) {
+      _fetchMoreData();
+    }
   }
 
   UserProfile _userProfile = UserProfile.empty();
@@ -51,12 +64,16 @@ class ProfileProvider extends ChangeNotifier with ClearText {
   final List<int> _receiveTalents = [];
   final List<int> _editReceiveTalents = [];
 
-  List<Event> _eventList = [];
+  final List<Event> _eventList = [];
+  bool _eventHasNext = true;
+  int _eventPage = 1;
+  late ProfileViewModel _profileViewModel;
 
   late TabController _giveTalentTabController;
   late TabController _receiveTalentTabController;
   late TabController _eventNoticeTabController;
   final CustomTickerProvider _tickerProvider;
+  final ScrollController _scrollController = ScrollController();
 
   Object? _imageFile;
   File? _tempImageFile;
@@ -151,6 +168,10 @@ class ProfileProvider extends ChangeNotifier with ClearText {
   bool get changeImage => _changeImage;
 
   List<Event> get eventList => _eventList;
+  bool get eventHasNext => _eventHasNext;
+  int get eventPage => _eventPage;
+
+  ScrollController get scrollController => _scrollController;
 
   void clearProvider() {
     _editNickNameController.clear();
@@ -162,6 +183,8 @@ class ProfileProvider extends ChangeNotifier with ClearText {
     _editReceiveTalents.clear();
 
     _eventList.clear();
+    _eventHasNext = true;
+    _eventPage = 1;
 
     _giveTalentTabController.index = 0;
     _receiveTalentTabController.index = 0;
@@ -426,8 +449,21 @@ class ProfileProvider extends ChangeNotifier with ClearText {
     notifyListeners();
   }
 
-  Future<void> setEventList(List<Event> events) async {
-    _eventList = events;
+  Future<void> setEventList(Map<String, dynamic> result) async {
+    final events = (result['events'] as List).map((e) => e as Event).toList();
+
+    _eventList.addAll(events);
+    _eventHasNext = result['hasNext'] as bool;
+
+    _eventPage++;
+
+    notifyListeners();
+  }
+
+  Future<void> _fetchMoreData() async {
+    _isFetching = true;
+    await _profileViewModel.getEvent();
+    _isFetching = false;
     notifyListeners();
   }
 

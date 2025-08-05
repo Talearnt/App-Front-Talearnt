@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:app_front_talearnt/data/model/param/event_param.dart';
 import 'package:flutter/material.dart';
 
 import '../common/common_navigator.dart';
@@ -117,5 +118,15 @@ class ProfileViewModel extends ChangeNotifier {
     });
 
     return success;
+  }
+
+  Future<void> getEvent() async {
+    EventParam param = EventParam(page: profileProvider.eventPage.toString());
+    final result = await profileRepository.getEvent(param);
+    result.fold(
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)), (result) {
+      profileProvider.setEventList(result);
+    });
   }
 }

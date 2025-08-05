@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:app_front_talearnt/data/model/param/event_param.dart';
 import 'package:app_front_talearnt/data/model/param/user_profile_param.dart';
+import 'package:app_front_talearnt/data/model/respone/event.dart';
 import 'package:app_front_talearnt/data/model/respone/failure.dart';
 import 'package:app_front_talearnt/data/services/dio_service.dart';
 import 'package:dartz/dartz.dart';
@@ -38,7 +40,7 @@ class ProfileRepository {
 
   Future<Either<Failure, dynamic>> uploadImage(String imageUploadUrl,
       File image, int fileSize, String contentType) async {
-   final result = await dio.put(
+    final result = await dio.put(
       imageUploadUrl,
       image.openRead(),
       size: fileSize,
@@ -53,5 +55,33 @@ class ProfileRepository {
     final result = await dio.put(ApiConstants.editUserProfile, body.toJson());
     return result.fold(
         left, (response) => right(UserProfile.fromJson(response["data"])));
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> getEvent(
+      EventParam body) async {
+    final response =
+        await dio.get(ApiConstants.getEventUrl, null, body.toJson());
+
+    return response.fold(
+      // 에러인 경우 그대로 전달
+      left,
+      (resp) {
+        final data = resp['data'] as Map<String, dynamic>;
+
+        // 이벤트 리스트 파싱
+        final events = (data['results'] as List<dynamic>)
+            .map((e) => Event.fromJson(e as Map<String, dynamic>))
+            .toList();
+
+        // hasNext 플래그 추출
+        final hasNext = data['pagination']['hasNext'] as bool;
+
+        // Map에 담아서 반환
+        return right({
+          'events': events,
+          'hasNext': hasNext,
+        });
+      },
+    );
   }
 }

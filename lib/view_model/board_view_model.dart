@@ -576,14 +576,4 @@ class BoardViewModel extends ChangeNotifier {
       matchBoardProvider.updateTalentExchangePostsPage(pagination);
     });
   }
-
-  Future<void> getEvent() async {
-    EventParam param = EventParam();
-    final result = await boardRepository.getEvent(param);
-    result.fold(
-        (failure) => commonNavigator.showSingleDialog(
-            content: ErrorMessages.getMessage(failure.errorCode)), (result) {
-      profileProvider.setEventList(result);
-    });
-  }
 }
