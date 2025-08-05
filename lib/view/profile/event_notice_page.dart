@@ -1,4 +1,5 @@
 import 'package:app_front_talearnt/common/theme.dart';
+import 'package:app_front_talearnt/provider/common/common_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
@@ -12,7 +13,8 @@ class EventNoticePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final provider = context.watch<ProfileProvider>();
+    final commonProvider = context.read<CommonProvider>();
+    final profileProvider = context.watch<ProfileProvider>();
 
     return Scaffold(
       backgroundColor: Palette.bgBackGround,
@@ -26,7 +28,7 @@ class EventNoticePage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: TabBar(
-              controller: provider.eventNoticeTabController,
+              controller: profileProvider.eventNoticeTabController,
               indicator: const UnderlineTabIndicator(
                 borderSide: BorderSide(width: 2),
               ),
@@ -45,9 +47,9 @@ class EventNoticePage extends StatelessWidget {
           // TabBarView
           Expanded(
             child: TabBarView(
-              controller: provider.eventNoticeTabController,
+              controller: profileProvider.eventNoticeTabController,
               children: [
-                _buildEventTab(provider),
+                _buildEventTab(profileProvider),
                 const NoEventNoticePage(type: 'notice'),
               ],
             ),
@@ -57,29 +59,27 @@ class EventNoticePage extends StatelessWidget {
     );
   }
 
-  Widget _buildEventTab(ProfileProvider provider) {
-    // 1) 초기 로딩 상태 (아직 한 번도 데이터가 안 들어왔을 때)
-    if (provider.eventList.isEmpty && provider.eventHasNext) {
-      return const Center(child: CircularProgressIndicator());
-    }
-    // 2) 데이터가 없고 더 가져올 페이지도 없을 때
-    if (provider.eventList.isEmpty && !provider.eventHasNext) {
+  Widget _buildEventTab(ProfileProvider profileProvider) {
+    // if (profileProvider.eventList.isEmpty && profileProvider.eventHasNext) {
+    //   return const Center(child: CircularProgressIndicator());
+    // }
+    if (profileProvider.eventList.isEmpty && !profileProvider.eventHasNext) {
       return const NoEventNoticePage(type: 'event');
     }
-    // 3) 리스트 + 무한 스크롤
+
     return ListView.builder(
-      controller: provider.scrollController,
-      itemCount: provider.eventList.length + (provider.eventHasNext ? 1 : 0),
+      controller: profileProvider.eventScrollController,
+      itemCount: profileProvider.eventList.length +
+          (profileProvider.eventHasNext ? 1 : 0),
       itemBuilder: (context, index) {
-        // 맨 끝 로딩 인디케이터
-        if (index == provider.eventList.length) {
+        if (index == profileProvider.eventList.length) {
           return const Padding(
             padding: EdgeInsets.symmetric(vertical: 16),
             child: Center(child: CircularProgressIndicator()),
           );
         }
 
-        final event = provider.eventList[index];
+        final event = profileProvider.eventList[index];
         return Column(
           children: [
             Image.network(

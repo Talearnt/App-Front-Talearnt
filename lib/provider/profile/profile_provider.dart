@@ -43,16 +43,26 @@ class ProfileProvider extends ChangeNotifier with ClearText {
         vsync: _tickerProvider);
     _eventNoticeTabController =
         TabController(length: 2, vsync: _tickerProvider);
-    _scrollController.addListener(_onScroll);
+    _eventScrollController.addListener(() => _onScroll('event'));
+    _noticeScrollController.addListener(() => _onScroll('notice'));
   }
 
-  bool _isFetching = false;
+  bool _isEventFetching = false;
+  bool _isNoticeFetching = false;
 
-  void _onScroll() {
-    if (!_isFetching &&
-        _scrollController.position.pixels >=
-            _scrollController.position.maxScrollExtent - 200) {
-      _fetchMoreData();
+  void _onScroll(String type) {
+    final controller =
+        (type == 'event') ? _eventScrollController : _noticeScrollController;
+    final isFetching = (type == 'event') ? _isEventFetching : _isNoticeFetching;
+
+    if (!isFetching &&
+        controller.position.pixels >=
+            controller.position.maxScrollExtent - 200) {
+      if (type == 'event') {
+        _fetchMoreEvents();
+      } else {
+        _fetchMoreNotices();
+      }
     }
   }
 
@@ -67,13 +77,19 @@ class ProfileProvider extends ChangeNotifier with ClearText {
   final List<Event> _eventList = [];
   bool _eventHasNext = true;
   int _eventPage = 1;
+
+  final List<Event> _noticeList = [];
+  final bool _noticeHasNext = true;
+  final int _noticePage = 1;
+
   late ProfileViewModel _profileViewModel;
 
   late TabController _giveTalentTabController;
   late TabController _receiveTalentTabController;
   late TabController _eventNoticeTabController;
   final CustomTickerProvider _tickerProvider;
-  final ScrollController _scrollController = ScrollController();
+  final ScrollController _eventScrollController = ScrollController();
+  final ScrollController _noticeScrollController = ScrollController();
 
   Object? _imageFile;
   File? _tempImageFile;
@@ -171,7 +187,12 @@ class ProfileProvider extends ChangeNotifier with ClearText {
   bool get eventHasNext => _eventHasNext;
   int get eventPage => _eventPage;
 
-  ScrollController get scrollController => _scrollController;
+  List<Event> get noticeList => _noticeList;
+  bool get noticeHasNext => _noticeHasNext;
+  int get noticePage => _noticePage;
+
+  ScrollController get eventScrollController => _eventScrollController;
+  ScrollController get noticeScrollController => _noticeScrollController;
 
   void clearProvider() {
     _editNickNameController.clear();
@@ -460,10 +481,17 @@ class ProfileProvider extends ChangeNotifier with ClearText {
     notifyListeners();
   }
 
-  Future<void> _fetchMoreData() async {
-    _isFetching = true;
+  Future<void> _fetchMoreEvents() async {
+    _isEventFetching = true;
     await _profileViewModel.getEvent();
-    _isFetching = false;
+    _isEventFetching = false;
+    notifyListeners();
+  }
+
+  Future<void> _fetchMoreNotices() async {
+    _isNoticeFetching = true;
+    await _profileViewModel.getEvent();
+    _isNoticeFetching = false;
     notifyListeners();
   }
 
