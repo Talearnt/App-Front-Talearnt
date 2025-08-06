@@ -1,5 +1,6 @@
 import 'package:app_front_talearnt/common/theme.dart';
 import 'package:app_front_talearnt/provider/common/common_provider.dart';
+import 'package:app_front_talearnt/view_model/profile_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
@@ -13,9 +14,11 @@ class EventNoticePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final viewModel = Provider.of<ProfileViewModel>(context);
     final commonProvider = context.read<CommonProvider>();
     final profileProvider = context.watch<ProfileProvider>();
 
+    profileProvider.setViewModel(viewModel);
     return Scaffold(
       backgroundColor: Palette.bgBackGround,
       appBar: const TopAppBar(

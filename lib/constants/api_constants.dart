@@ -40,6 +40,8 @@ abstract class ApiConstants {
 
   static const String getEventUrl = "$baseUrl/v1/events";
 
+  static const String getNoticeUrl = "$baseUrl/v1/notices";
+
   static String handleCommunityBoardLike(int postNo) {
     return "$baseUrl/v1/posts/communities/$postNo/like";
   }

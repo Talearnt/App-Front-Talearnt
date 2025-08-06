@@ -30,6 +30,7 @@ class ProfileOtherSection extends StatelessWidget {
           onTap: () async {
             commonProvider.changeIsLoading(true);
             await profileViewModel.getEvent();
+            await profileViewModel.getNotice();
             commonProvider.changeIsLoading(false);
             context.push('/event-notice');
           },

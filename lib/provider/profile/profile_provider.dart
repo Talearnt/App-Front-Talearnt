@@ -79,8 +79,8 @@ class ProfileProvider extends ChangeNotifier with ClearText {
   int _eventPage = 1;
 
   final List<Event> _noticeList = [];
-  final bool _noticeHasNext = true;
-  final int _noticePage = 1;
+  bool _noticeHasNext = true;
+  int _noticePage = 1;
 
   late ProfileViewModel _profileViewModel;
 
@@ -481,18 +481,38 @@ class ProfileProvider extends ChangeNotifier with ClearText {
     notifyListeners();
   }
 
+  Future<void> setNoticeList(Map<String, dynamic> result) async {
+    final events = (result['notices'] as List).map((e) => e as Event).toList();
+
+    _noticeList.addAll(events);
+    _noticeHasNext = result['hasNext'] as bool;
+
+    _noticePage++;
+
+    notifyListeners();
+  }
+
   Future<void> _fetchMoreEvents() async {
-    _isEventFetching = true;
-    await _profileViewModel.getEvent();
-    _isEventFetching = false;
+    if (_eventHasNext) {
+      _isEventFetching = true;
+      await _profileViewModel.getEvent();
+      _isEventFetching = false;
+    }
+
     notifyListeners();
   }
 
   Future<void> _fetchMoreNotices() async {
-    _isNoticeFetching = true;
-    await _profileViewModel.getEvent();
-    _isNoticeFetching = false;
+    if (_noticeHasNext) {
+      _isNoticeFetching = true;
+      await _profileViewModel.getNotice();
+      _isNoticeFetching = false;
+    }
     notifyListeners();
+  }
+
+  void setViewModel(ProfileViewModel viewModel) {
+    _profileViewModel = viewModel;
   }
 
   @override

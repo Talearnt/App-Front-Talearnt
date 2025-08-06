@@ -1,12 +1,12 @@
-class EventParam {
+class EventNoticeParam {
   final String path;
   final String page;
   final String size;
 
-  EventParam({
+  EventNoticeParam({
     this.path = 'mobile',
     this.page = '1',
-    this.size = '15',
+    this.size = '10',
   });
 
   Map<String, String> toJson() => {
