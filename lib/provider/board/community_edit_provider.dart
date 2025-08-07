@@ -8,7 +8,6 @@ import 'package:app_front_talearnt/provider/common/custom_ticker_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_quill_delta_from_html/parser/html_to_delta.dart';
-import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';

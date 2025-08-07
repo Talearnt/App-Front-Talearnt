@@ -75,17 +75,22 @@ class AccountManagePage extends StatelessWidget {
                 color: Palette.bgUp01,
                 thickness: 12.0,
               ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text('계정 탈퇴',
-                        style:
-                            TextTypes.captionMedium02(color: Palette.text04)),
-                    SvgPicture.asset('assets/icons/chevron_right_before.svg'),
-                  ],
+              InkWell(
+                onTap: () {
+                  context.push('/account-delete');
+                },
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text('계정 탈퇴',
+                          style:
+                              TextTypes.captionMedium02(color: Palette.text04)),
+                      SvgPicture.asset('assets/icons/chevron_right_before.svg'),
+                    ],
+                  ),
                 ),
               ),
               const Divider(

@@ -103,6 +103,7 @@ flutter:
     - assets/icons/chat_off.svg
     - assets/icons/chat_on.svg
     - assets/icons/check_off_primary.svg
+    - assets/icons/check_off_line_primary.svg
     - assets/icons/check_off_second.svg
     - assets/icons/check_on_primary.svg
     - assets/icons/check_on_second.svg
