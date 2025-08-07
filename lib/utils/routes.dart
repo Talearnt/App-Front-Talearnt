@@ -38,6 +38,8 @@ import '../view/board/write_success_page.dart';
 import '../view/home_page.dart';
 import '../view/keyword/set_talent_keyword_main_page.dart';
 import '../view/keyword/set_talent_keyword_success_page.dart';
+import '../view/profile/account_delete_complete_page.dart';
+import '../view/profile/account_delete_page.dart';
 import '../view/profile/account_manage_page.dart';
 import '../view/profile/alarm_setting_page.dart';
 import '../view/profile/event_notice_page.dart';
@@ -319,6 +321,18 @@ class Routes {
             path: '/community-edit-preview',
             builder: (BuildContext context, GoRouterState state) {
               return const CommunityEditPreviewPage();
+            },
+          ),
+          GoRoute(
+            path: '/account-delete',
+            builder: (BuildContext context, GoRouterState state) {
+              return const AccountDeletePage();
+            },
+          ),
+          GoRoute(
+            path: '/account-delete-complete',
+            builder: (BuildContext context, GoRouterState state) {
+              return const AccountDeleteCompletePage();
             },
           ),
         ],
