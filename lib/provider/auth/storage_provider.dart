@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class StorageProvider extends ChangeNotifier {
   final _storage = const FlutterSecureStorage();
@@ -13,6 +13,7 @@ class StorageProvider extends ChangeNotifier {
   bool _isCoolDown = false;
 
   ValueNotifier<int> get certNumResendCoolDown => _certNumResendCoolDown;
+
   bool get isCoolDown => _isCoolDown;
 
   Future<void> saveData(String key, String value) async {

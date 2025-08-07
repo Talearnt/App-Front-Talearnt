@@ -47,6 +47,7 @@ class ProfileProvider extends ChangeNotifier with ClearText {
     _myWriteTabController = TabController(length: 2, vsync: _tickerProvider);
     _myWriteMatchScrollController.addListener(_onMatchScroll);
     _myWriteCommunityScrollController.addListener(_onCommunityScroll);
+    _etcController.addListener(_onEtcChanged);
   }
 
   UserProfile _userProfile = UserProfile.empty();
@@ -85,6 +86,19 @@ class ProfileProvider extends ChangeNotifier with ClearText {
   Map<String, dynamic> _uploadUserImageInfo = {};
   String _editImageUploadUrl = "";
   bool _changeImage = false;
+
+  //탈퇴 관련
+  bool _isServiceNotUseful = false;
+  bool _isNoMatchingFound = false;
+  bool _isNoKeywordPosts = false;
+  bool _isTemporaryWithdrawal = false;
+  bool _isFrequentErrors = false;
+  bool _isSlowSupportResponse = false;
+  bool _isInappropriateContent = false;
+  bool _isUnpleasantExperience = false;
+  bool _isAgreeToWithdraw = false;
+  final TextEditingController _etcController = TextEditingController();
+  int _etcTextLength = 0;
 
   late TabController _myWriteTabController;
   late ProfileViewModel _viewModel;
@@ -165,6 +179,28 @@ class ProfileProvider extends ChangeNotifier with ClearText {
   Map<String, dynamic> get uploadUserImageInfo => _uploadUserImageInfo;
 
   bool get changeImage => _changeImage;
+
+  bool get isServiceNotUseful => _isServiceNotUseful;
+
+  bool get isNoMatchingFound => _isNoMatchingFound;
+
+  bool get isNoKeywordPosts => _isNoKeywordPosts;
+
+  bool get isTemporaryWithdrawal => _isTemporaryWithdrawal;
+
+  bool get isFrequentErrors => _isFrequentErrors;
+
+  bool get isSlowSupportResponse => _isSlowSupportResponse;
+
+  bool get isInappropriateContent => _isInappropriateContent;
+
+  bool get isUnpleasantExperience => _isUnpleasantExperience;
+
+  bool get isAgreeToWithdraw => _isAgreeToWithdraw;
+
+  TextEditingController get etcController => _etcController;
+
+  int get etcTextLength => _etcTextLength;
 
   bool get isFirstTabChange => _isFirstTabChange;
 
@@ -460,6 +496,56 @@ class ProfileProvider extends ChangeNotifier with ClearText {
   @override
   void clearText(TextEditingController controller) {
     controller.clear();
+    notifyListeners();
+  }
+
+  void changeServiceNotUseful() {
+    _isServiceNotUseful = !_isServiceNotUseful;
+    notifyListeners();
+  }
+
+  void changeNoMatchingFound() {
+    _isNoMatchingFound = !_isNoMatchingFound;
+    notifyListeners();
+  }
+
+  void changeNoKeywordPosts() {
+    _isNoKeywordPosts = !_isNoKeywordPosts;
+    notifyListeners();
+  }
+
+  void changeTemporaryWithdrawal() {
+    _isTemporaryWithdrawal = !_isTemporaryWithdrawal;
+    notifyListeners();
+  }
+
+  void changeFrequentErrors() {
+    _isFrequentErrors = !_isFrequentErrors;
+    notifyListeners();
+  }
+
+  void changeSlowSupportResponse() {
+    _isSlowSupportResponse = !_isSlowSupportResponse;
+    notifyListeners();
+  }
+
+  void changeInappropriateContent() {
+    _isInappropriateContent = !_isInappropriateContent;
+    notifyListeners();
+  }
+
+  void changeUnpleasantExperience() {
+    _isUnpleasantExperience = !_isUnpleasantExperience;
+    notifyListeners();
+  }
+
+  void changeAgreeToWithdraw() {
+    _isAgreeToWithdraw = !_isAgreeToWithdraw;
+    notifyListeners();
+  }
+
+  void _onEtcChanged() {
+    _etcTextLength = _etcController.text.length;
     notifyListeners();
   }
 
