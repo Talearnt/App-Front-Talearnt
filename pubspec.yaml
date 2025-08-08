@@ -242,6 +242,7 @@ flutter:
     - assets/icons/notice.svg
     - assets/icons/send.svg
     - assets/icons/setting.svg
+    - assets/icons/setting_black.svg
     - assets/icons/update.svg
     - assets/icons/edit_my.svg
     - assets/icons/profile_image_edit.svg

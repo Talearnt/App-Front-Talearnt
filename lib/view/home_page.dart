@@ -124,10 +124,15 @@ class HomePage extends StatelessWidget {
                                 height: 22,
                               ),
                             ),
-                            SvgPicture.asset(
-                              'assets/icons/bell_off.svg',
-                              width: 18,
-                              height: 20,
+                            GestureDetector(
+                              onTap: () {
+                                context.push('/alarm');
+                              },
+                              child: SvgPicture.asset(
+                                'assets/icons/bell_off.svg',
+                                width: 18,
+                                height: 20,
+                              ),
                             ),
                           ],
                         ),

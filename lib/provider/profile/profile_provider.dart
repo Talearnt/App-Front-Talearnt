@@ -11,6 +11,7 @@ import 'package:path/path.dart' as path;
 import 'package:provider/provider.dart';
 
 import '../../constants/global_value_constants.dart';
+import '../../data/model/respone/alarm.dart';
 import '../../data/model/respone/user_profile.dart';
 import '../auth/find_id_provider.dart';
 import '../auth/find_password_provider.dart';
@@ -40,6 +41,7 @@ class ProfileProvider extends ChangeNotifier with ClearText {
         vsync: _tickerProvider);
     _eventNoticeTabController =
         TabController(length: 2, vsync: _tickerProvider);
+    _alarmTabController = TabController(length: 3, vsync: _tickerProvider);
   }
 
   UserProfile _userProfile = UserProfile.empty();
@@ -79,15 +81,45 @@ class ProfileProvider extends ChangeNotifier with ClearText {
   String _editImageUploadUrl = "";
   bool _changeImage = false;
 
+  bool _allAlarm = false;
+  bool _commentAlarm = false;
+  bool _keywordAlarm = false;
+  late TabController _alarmTabController;
+
+  //나중에 제거
+  final List<Alarm> alarmList = [
+    Alarm(
+      type: '댓글',
+      time: '45분 전',
+      text: '몽글이님이 내 게시글에 댓글을 달았어요! 최대 글자는 이렇게 됩니다.',
+      isRead: false,
+    ),
+    Alarm(
+      type: '댓글',
+      time: '45분 전',
+      text: '몽글이님이 내 댓글에 답글을 달았어요! 산책도 취미가 될 수 있죠!',
+      isRead: true,
+    ),
+    Alarm(
+      type: '관심 키워드',
+      time: '45분 전',
+      text: '요가 관련 매칭이 올라왔어요!',
+      isRead: false,
+    ),
+    Alarm(
+      type: '댓글',
+      time: '45분 전',
+      text: '잭재기님이 내 댓글에 답글을 달았어요! 그니까욤',
+      isRead: true,
+    ),
+  ];
+
+
   TabController get giveTalentTabController => _giveTalentTabController;
 
   TabController get receiveTalentTabController => _receiveTalentTabController;
 
   TabController get eventNoticeTabController => _eventNoticeTabController;
-
-  bool _allAlarm = false;
-  bool _commentAlarm = false;
-  bool _keywordAlarm = false;
 
   UserProfile get userProfile => _userProfile;
 
@@ -96,6 +128,8 @@ class ProfileProvider extends ChangeNotifier with ClearText {
   bool get commentAlarm => _commentAlarm;
 
   bool get keywordAlarm => _keywordAlarm;
+
+  TabController get alarmTabController => _alarmTabController;
 
   TextEditingController get editNickNameController => _editNickNameController;
 

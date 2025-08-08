@@ -15,6 +15,7 @@ import 'package:app_front_talearnt/view/board/match_board/match_edit_preview_pag
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../view/alarm/alarm_page.dart';
 import '../view/auth/agreement/privacy_agreement_optional.dart';
 import '../view/auth/agreement/privacy_agreement_required.dart';
 import '../view/auth/agreement/terms_agreement_optional.dart';
@@ -319,6 +320,12 @@ class Routes {
             path: '/community-edit-preview',
             builder: (BuildContext context, GoRouterState state) {
               return const CommunityEditPreviewPage();
+            },
+          ),
+          GoRoute(
+            path: '/alarm',
+            builder: (BuildContext context, GoRouterState state) {
+              return const AlarmPage();
             },
           ),
         ],
