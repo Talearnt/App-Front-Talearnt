@@ -3,6 +3,7 @@ import 'package:app_front_talearnt/data/model/param/agree_req_dto.dart';
 import 'package:app_front_talearnt/data/model/param/login_param.dart';
 import 'package:app_front_talearnt/data/model/param/send_cert_number_param.dart';
 import 'package:app_front_talearnt/data/model/param/send_reset_password_mail_param.dart';
+import 'package:app_front_talearnt/data/services/stomp_service.dart';
 import 'package:app_front_talearnt/provider/auth/find_id_provider.dart';
 import 'package:app_front_talearnt/provider/auth/find_password_provider.dart';
 import 'package:app_front_talearnt/provider/auth/login_provider.dart';
@@ -55,6 +56,8 @@ class AuthViewModel extends ChangeNotifier {
         tokenManager.saveToken(token);
         loginProvider.updateLoginFormSuccess();
         profileViewModel.getUserProfile(root);
+        final stompClient = createStompClient(token: token.accessToken);
+        stompClient.activate();
       },
     );
   }
