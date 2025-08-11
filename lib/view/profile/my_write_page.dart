@@ -124,9 +124,11 @@ class MyWritePageState extends State<MyWritePage> {
                                         commonProvider.changeIsLoading(false);
                                       },
                                       child: MatchBoardListCard(
-                                          post: profileProvider
-                                              .matchBoardList[index],
-                                          index: index));
+                                        post: profileProvider
+                                            .matchBoardList[index],
+                                        index: index,
+                                        pageType: 'my-write',
+                                      ));
                                 },
                                 childCount:
                                     profileProvider.matchBoardList.length,
@@ -153,9 +155,11 @@ class MyWritePageState extends State<MyWritePage> {
                                         commonProvider.changeIsLoading(false);
                                       },
                                       child: CommunityBoardListCard(
-                                          post: profileProvider
-                                              .communityBoardList[index],
-                                          index: index));
+                                        post: profileProvider
+                                            .communityBoardList[index],
+                                        index: index,
+                                        pageType: 'my-write',
+                                      ));
                                 },
                                 childCount:
                                     profileProvider.communityBoardList.length,

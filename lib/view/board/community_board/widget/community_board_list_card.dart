@@ -6,13 +6,14 @@ import '../../../../data/model/respone/community_board.dart';
 import 'community_board_list_card_bottom.dart';
 
 class CommunityBoardListCard extends StatelessWidget {
+  final String pageType; // my-write, list
   final CommunityBoard post;
   final int index;
 
   const CommunityBoardListCard({
     Key? key,
     required this.post,
-    required this.index,
+    required this.index, required this.pageType,
   }) : super(key: key);
 
   @override
@@ -76,7 +77,7 @@ class CommunityBoardListCard extends StatelessWidget {
             ],
           ),
         ),
-        CommunityBoardListCardBottom(post: post, index: index),
+        CommunityBoardListCardBottom(post: post, index: index, pageType: pageType,),
         const SizedBox(height: 16),
       ],
     );

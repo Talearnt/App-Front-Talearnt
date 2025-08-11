@@ -7,6 +7,7 @@ import 'match_board_list_card_bottom.dart';
 import 'match_board_selected_chip_list.dart';
 
 class MatchBoardListCard extends StatelessWidget {
+  final String pageType; // my-write, list
   final MatchBoard post;
   final int index;
 
@@ -14,6 +15,7 @@ class MatchBoardListCard extends StatelessWidget {
     Key? key,
     required this.post,
     required this.index,
+    required this.pageType,
   }) : super(key: key);
 
   @override
@@ -129,7 +131,11 @@ class MatchBoardListCard extends StatelessWidget {
             ],
           ),
         ),
-        MatchBoardListCardBottom(post: post, index: index),
+        MatchBoardListCardBottom(
+          post: post,
+          index: index,
+          pageType: pageType,
+        ),
         const SizedBox(height: 16),
       ],
     );

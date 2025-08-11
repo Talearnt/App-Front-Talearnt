@@ -540,6 +540,64 @@ class ProfileProvider extends ChangeNotifier with ClearText {
     notifyListeners();
   }
 
+  Future<void> changeMatchBoardLike(int postNo) async {
+    final index =
+    _matchBoardList.indexWhere((post) => post.exchangePostNo == postNo);
+    if (index != -1) {
+      _matchBoardList[index].isFavorite = !_matchBoardList[index].isFavorite;
+      _matchBoardList[index].isFavorite
+          ? _matchBoardList[index].favoriteCount =
+          _matchBoardList[index].favoriteCount + 1
+          : _matchBoardList[index].favoriteCount =
+          _matchBoardList[index].favoriteCount - 1;
+    }
+    notifyListeners();
+  }
+
+  Future<void> changeMatchBoardLikeFromDetail(
+      int postNo, bool isFavorite) async {
+    final index =
+    _matchBoardList.indexWhere((post) => post.exchangePostNo == postNo);
+    if (index != -1) {
+      _matchBoardList[index].isFavorite = isFavorite;
+      _matchBoardList[index].isFavorite
+          ? _matchBoardList[index].favoriteCount =
+          _matchBoardList[index].favoriteCount + 1
+          : _matchBoardList[index].favoriteCount =
+          _matchBoardList[index].favoriteCount - 1;
+    }
+    notifyListeners();
+  }
+
+  Future<void> changeCommunityBoardLike(int postNo) async {
+    final index = _communityBoardList
+        .indexWhere((post) => post.communityPostNo == postNo);
+    if (index != -1) {
+      _communityBoardList[index].isLike = !_communityBoardList[index].isLike;
+      _communityBoardList[index].isLike
+          ? _communityBoardList[index].likeCount =
+          _communityBoardList[index].likeCount + 1
+          : _communityBoardList[index].likeCount =
+          _communityBoardList[index].likeCount - 1;
+    }
+    notifyListeners();
+  }
+
+  Future<void> changeCommunityBoardLikeFromDetail(
+      int postNo, bool isLike) async {
+    final index = _communityBoardList
+        .indexWhere((post) => post.communityPostNo == postNo);
+    if (index != -1) {
+      _communityBoardList[index].isLike = isLike;
+      _communityBoardList[index].isLike
+          ? _communityBoardList[index].likeCount =
+          _communityBoardList[index].likeCount + 1
+          : _communityBoardList[index].likeCount =
+          _communityBoardList[index].likeCount - 1;
+    }
+    notifyListeners();
+  }
+
   void clearAllProviders(BuildContext context) {
     clearProvider();
     Provider.of<FindIdProvider>(context, listen: false).clearProvider();

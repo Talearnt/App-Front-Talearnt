@@ -446,7 +446,12 @@ class MatchBoardDetailPage extends StatelessWidget {
                               .matchingDetailPost.exchangePostNo,
                           matchBoardDetailProvider
                               .matchingDetailPost.isFavorite);
-                      await homeProvider.changeCommunityBoardLikeFromDetail(
+                      await homeProvider.changeBothTalentBoardLikeFromDetail(
+                          matchBoardDetailProvider
+                              .matchingDetailPost.exchangePostNo,
+                          matchBoardDetailProvider
+                              .matchingDetailPost.isFavorite);
+                      await profileProvider.changeMatchBoardLikeFromDetail(
                           matchBoardDetailProvider
                               .matchingDetailPost.exchangePostNo,
                           matchBoardDetailProvider
