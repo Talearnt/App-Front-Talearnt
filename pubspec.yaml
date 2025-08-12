@@ -118,6 +118,7 @@ flutter:
     - assets/icons/chevron_up_before.svg
     - assets/icons/chips_close.svg
     - assets/icons/close.svg
+    - assets/icons/devider.svg
     - assets/icons/eye_close.svg
     - assets/icons/eye_open.svg
     - assets/icons/finish.svg

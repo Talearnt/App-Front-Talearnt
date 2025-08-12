@@ -4,7 +4,7 @@ import 'package:app_front_talearnt/data/model/param/event_notice_param.dart';
 import 'package:app_front_talearnt/data/model/param/user_profile_param.dart';
 import 'package:app_front_talearnt/data/model/respone/event.dart';
 import 'package:app_front_talearnt/data/model/respone/failure.dart';
-import 'package:app_front_talearnt/data/model/respone/model.dart';
+import 'package:app_front_talearnt/data/model/respone/notice.dart';
 import 'package:app_front_talearnt/data/services/dio_service.dart';
 import 'package:dartz/dartz.dart';
 
@@ -85,7 +85,7 @@ class ProfileRepository {
   Future<Either<Failure, Map<String, dynamic>>> getNotice(
       EventNoticeParam body) async {
     final response =
-        await dio.get(ApiConstants.getEventUrl, null, body.toJson());
+        await dio.get(ApiConstants.getNoticeUrl, null, body.toJson());
 
     return response.fold(
       left,

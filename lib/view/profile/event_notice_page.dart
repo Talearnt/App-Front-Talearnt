@@ -4,6 +4,7 @@ import 'package:app_front_talearnt/view_model/profile_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../common/widget/top_app_bar.dart';
 import '../../provider/profile/profile_provider.dart';
@@ -29,7 +30,7 @@ class EventNoticePage extends StatelessWidget {
         children: [
           // TabBar
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 24),
             child: TabBar(
               controller: profileProvider.eventNoticeTabController,
               indicator: const UnderlineTabIndicator(
@@ -53,7 +54,7 @@ class EventNoticePage extends StatelessWidget {
               controller: profileProvider.eventNoticeTabController,
               children: [
                 _buildEventTab(profileProvider),
-                const NoEventNoticePage(type: 'notice'),
+                _buildNoticeTab(profileProvider),
               ],
             ),
           ),
@@ -119,6 +120,61 @@ class EventNoticePage extends StatelessWidget {
               ),
             ),
           ],
+        );
+      },
+    );
+  }
+
+  Widget _buildNoticeTab(ProfileProvider profileProvider) {
+    if (profileProvider.noticeList.isEmpty && !profileProvider.noticeHasNext) {
+      return const NoEventNoticePage(type: 'notice');
+    }
+
+    return ListView.builder(
+      controller: profileProvider.noticeScrollController,
+      itemCount: profileProvider.noticeList.length +
+          (profileProvider.noticeHasNext ? 1 : 0),
+      itemBuilder: (context, index) {
+        if (index == profileProvider.noticeList.length) {
+          return const Padding(
+            padding: EdgeInsets.symmetric(vertical: 16),
+            child: Center(child: CircularProgressIndicator()),
+          );
+        }
+
+        final notice = profileProvider.noticeList[index];
+        return Container(
+          margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+          padding: const EdgeInsets.all(16),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    notice.noticeType,
+                    style: TextTypes.captionMedium02(color: Palette.primary01),
+                  ),
+                  const SizedBox(width: 6),
+                  SvgPicture.asset('assets/icons/devider.svg'),
+                  const SizedBox(width: 6.5),
+                  Text(
+                    DateFormat('yy.MM.dd').format(notice.createdAt),
+                    style: TextTypes.captionMedium02(color: Palette.icon03),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              Text(
+                notice.title,
+                style: TextTypes.bodyMedium03(color: Palette.text01),
+              ),
+            ],
+          ),
         );
       },
     );

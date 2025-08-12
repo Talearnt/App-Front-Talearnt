@@ -4,6 +4,7 @@ import 'dart:typed_data' as typed_data;
 import 'dart:ui' as ui;
 
 import 'package:app_front_talearnt/data/model/respone/event.dart';
+import 'package:app_front_talearnt/data/model/respone/notice.dart';
 import 'package:app_front_talearnt/view_model/board_view_model.dart';
 import 'package:app_front_talearnt/view_model/profile_view_model.dart';
 import 'package:flutter/material.dart';
@@ -78,7 +79,7 @@ class ProfileProvider extends ChangeNotifier with ClearText {
   bool _eventHasNext = true;
   int _eventPage = 1;
 
-  final List<Event> _noticeList = [];
+  final List<Notice> _noticeList = [];
   bool _noticeHasNext = true;
   int _noticePage = 1;
 
@@ -187,7 +188,7 @@ class ProfileProvider extends ChangeNotifier with ClearText {
   bool get eventHasNext => _eventHasNext;
   int get eventPage => _eventPage;
 
-  List<Event> get noticeList => _noticeList;
+  List<Notice> get noticeList => _noticeList;
   bool get noticeHasNext => _noticeHasNext;
   int get noticePage => _noticePage;
 
@@ -482,9 +483,10 @@ class ProfileProvider extends ChangeNotifier with ClearText {
   }
 
   Future<void> setNoticeList(Map<String, dynamic> result) async {
-    final events = (result['notices'] as List).map((e) => e as Event).toList();
+    final notices =
+        (result['notices'] as List).map((e) => e as Notice).toList();
 
-    _noticeList.addAll(events);
+    _noticeList.addAll(notices);
     _noticeHasNext = result['hasNext'] as bool;
 
     _noticePage++;
