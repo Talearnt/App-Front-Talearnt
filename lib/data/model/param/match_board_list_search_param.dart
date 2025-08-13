@@ -9,7 +9,6 @@ class MatchBoardListSearchParam {
   final String? page; // 기본값 1
   final String? size; // 기본값 15, 최대 50
   final String? lastNo;
-  final String? path;
 
   MatchBoardListSearchParam({
     this.giveTalents,
@@ -22,9 +21,7 @@ class MatchBoardListSearchParam {
     String? page,
     String? size,
     this.lastNo,
-    String? path,
-  })  : path = path ?? 'mobile',
-        page = page ?? '1',
+  })  : page = page ?? '1',
         size = size ?? '15';
 
   MatchBoardListSearchParam.empty()
@@ -37,8 +34,7 @@ class MatchBoardListSearchParam {
         status = null,
         page = '1',
         size = '15',
-        lastNo = null,
-        path = "mobile";
+        lastNo = null;
 
   Map<String, dynamic> toJson() {
     return {
@@ -52,7 +48,6 @@ class MatchBoardListSearchParam {
       'page': page,
       'size': size,
       'lastNo': lastNo,
-      'path': path,
     };
   }
 }

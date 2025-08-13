@@ -3,6 +3,8 @@ import 'dart:io';
 import 'dart:typed_data' as typed_data;
 import 'dart:ui' as ui;
 
+import 'package:app_front_talearnt/data/model/respone/community_board.dart';
+import 'package:app_front_talearnt/view_model/profile_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
@@ -11,6 +13,8 @@ import 'package:path/path.dart' as path;
 import 'package:provider/provider.dart';
 
 import '../../constants/global_value_constants.dart';
+import '../../data/model/respone/match_board.dart';
+import '../../data/model/respone/pagination.dart';
 import '../../data/model/respone/user_profile.dart';
 import '../auth/find_id_provider.dart';
 import '../auth/find_password_provider.dart';
@@ -40,6 +44,9 @@ class ProfileProvider extends ChangeNotifier with ClearText {
         vsync: _tickerProvider);
     _eventNoticeTabController =
         TabController(length: 2, vsync: _tickerProvider);
+    _myWriteTabController = TabController(length: 2, vsync: _tickerProvider);
+    _myWriteMatchScrollController.addListener(_onMatchScroll);
+    _myWriteCommunityScrollController.addListener(_onCommunityScroll);
     _etcController.addListener(_onEtcChanged);
   }
 
@@ -92,6 +99,18 @@ class ProfileProvider extends ChangeNotifier with ClearText {
   bool _isAgreeToWithdraw = false;
   final TextEditingController _etcController = TextEditingController();
   int _etcTextLength = 0;
+
+  late TabController _myWriteTabController;
+  late ProfileViewModel _viewModel;
+  final ScrollController _myWriteMatchScrollController = ScrollController();
+  final ScrollController _myWriteCommunityScrollController = ScrollController();
+  bool _isMatchFetching = false;
+  bool _isCommunityFetching = false;
+  final List<MatchBoard> _matchBoardList = [];
+  final List<CommunityBoard> _communityBoardList = [];
+  Pagination _matchPage = Pagination.empty();
+  Pagination _communityPage = Pagination.empty();
+  bool _isFirstTabChange = true;
 
   TabController get giveTalentTabController => _giveTalentTabController;
 
@@ -182,6 +201,20 @@ class ProfileProvider extends ChangeNotifier with ClearText {
   TextEditingController get etcController => _etcController;
 
   int get etcTextLength => _etcTextLength;
+
+  bool get isFirstTabChange => _isFirstTabChange;
+
+  TabController get myWriteTabController => _myWriteTabController;
+
+  ScrollController get myWriteMatchScrollController =>
+      _myWriteMatchScrollController;
+
+  ScrollController get myWriteCommunityScrollController =>
+      _myWriteCommunityScrollController;
+
+  List<MatchBoard> get matchBoardList => _matchBoardList;
+
+  List<CommunityBoard> get communityBoardList => _communityBoardList;
 
   void clearProvider() {
     _editNickNameController.clear();
@@ -455,6 +488,11 @@ class ProfileProvider extends ChangeNotifier with ClearText {
     notifyListeners();
   }
 
+  Future<void> setTabChange() async {
+    _isFirstTabChange = false;
+    notifyListeners();
+  }
+
   @override
   void clearText(TextEditingController controller) {
     controller.clear();
@@ -508,6 +546,141 @@ class ProfileProvider extends ChangeNotifier with ClearText {
 
   void _onEtcChanged() {
     _etcTextLength = _etcController.text.length;
+    notifyListeners();
+  }
+
+  void _onMatchScroll() {
+    if (!_isMatchFetching &&
+        _myWriteMatchScrollController.position.pixels >=
+            _myWriteMatchScrollController.position.maxScrollExtent - 200) {
+      _fetchMoreMatchData();
+    }
+  }
+
+  void _onCommunityScroll() {
+    if (!_isCommunityFetching &&
+        _myWriteCommunityScrollController.position.pixels >=
+            _myWriteCommunityScrollController.position.maxScrollExtent - 200) {
+      _fetchMoreCommunityData();
+    }
+  }
+
+  void setViewModel(ProfileViewModel viewModel) {
+    _viewModel = viewModel;
+  }
+
+  Future<void> _fetchMoreMatchData() async {
+    _isMatchFetching = true;
+    await _viewModel.getMyWriteMatchBoardList(
+        null, null, _matchBoardList.last.exchangePostNo.toString(),'add');
+    _isMatchFetching = false;
+  }
+
+  Future<void> _fetchMoreCommunityData() async {
+    _isCommunityFetching = true;
+    await _viewModel.getMyWriteCommunityBoardList(
+        GlobalValueConstants.communityCategoryTypes[0]['code']!,
+        null,
+        null,
+        null,
+        _communityBoardList.last.communityPostNo.toString(),
+        'add');
+    _isCommunityFetching = false;
+  }
+
+  void addMatchBoardPosts(List<MatchBoard> addTalentExchangePosts) {
+    _matchBoardList.addAll(addTalentExchangePosts);
+    notifyListeners();
+  }
+
+  void updateMatchPosts(List<MatchBoard> matchBoardList) {
+    _matchBoardList.clear();
+    _matchBoardList.addAll(matchBoardList);
+    if (_myWriteMatchScrollController.hasClients) {
+      _myWriteMatchScrollController.jumpTo(0);
+    }
+    notifyListeners();
+  }
+
+  void updateMyWriteMatchPage(Pagination paging) {
+    _matchPage = paging;
+    notifyListeners();
+  }
+
+  void addCommunityBoardPosts(List<CommunityBoard> communityBoardList) {
+    _communityBoardList.addAll(communityBoardList);
+    notifyListeners();
+  }
+
+  void updateCommunityPosts(List<CommunityBoard> communityBoardList) {
+    _communityBoardList.clear();
+    _communityBoardList.addAll(communityBoardList);
+    if (_myWriteCommunityScrollController.hasClients) {
+      _myWriteCommunityScrollController.jumpTo(0);
+    }
+    notifyListeners();
+  }
+
+  void updateMyWriteCommunityPage(Pagination paging) {
+    _communityPage = paging;
+    notifyListeners();
+  }
+
+  Future<void> changeMatchBoardLike(int postNo) async {
+    final index =
+    _matchBoardList.indexWhere((post) => post.exchangePostNo == postNo);
+    if (index != -1) {
+      _matchBoardList[index].isFavorite = !_matchBoardList[index].isFavorite;
+      _matchBoardList[index].isFavorite
+          ? _matchBoardList[index].favoriteCount =
+          _matchBoardList[index].favoriteCount + 1
+          : _matchBoardList[index].favoriteCount =
+          _matchBoardList[index].favoriteCount - 1;
+    }
+    notifyListeners();
+  }
+
+  Future<void> changeMatchBoardLikeFromDetail(
+      int postNo, bool isFavorite) async {
+    final index =
+    _matchBoardList.indexWhere((post) => post.exchangePostNo == postNo);
+    if (index != -1) {
+      _matchBoardList[index].isFavorite = isFavorite;
+      _matchBoardList[index].isFavorite
+          ? _matchBoardList[index].favoriteCount =
+          _matchBoardList[index].favoriteCount + 1
+          : _matchBoardList[index].favoriteCount =
+          _matchBoardList[index].favoriteCount - 1;
+    }
+    notifyListeners();
+  }
+
+  Future<void> changeCommunityBoardLike(int postNo) async {
+    final index = _communityBoardList
+        .indexWhere((post) => post.communityPostNo == postNo);
+    if (index != -1) {
+      _communityBoardList[index].isLike = !_communityBoardList[index].isLike;
+      _communityBoardList[index].isLike
+          ? _communityBoardList[index].likeCount =
+          _communityBoardList[index].likeCount + 1
+          : _communityBoardList[index].likeCount =
+          _communityBoardList[index].likeCount - 1;
+    }
+    notifyListeners();
+  }
+
+  Future<void> changeCommunityBoardLikeFromDetail(
+      int postNo, bool isLike) async {
+    final index = _communityBoardList
+        .indexWhere((post) => post.communityPostNo == postNo);
+    if (index != -1) {
+      _communityBoardList[index].isLike = isLike;
+      _communityBoardList[index].isLike
+          ? _communityBoardList[index].likeCount =
+          _communityBoardList[index].likeCount + 1
+          : _communityBoardList[index].likeCount =
+          _communityBoardList[index].likeCount - 1;
+    }
     notifyListeners();
   }
 

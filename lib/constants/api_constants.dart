@@ -38,6 +38,12 @@ abstract class ApiConstants {
   static const String getMatchBoardLikeListUrl =
       "$baseUrl/v1/posts/exchanges/favorites";
 
+  static const String getMyWriteMatchBoardListUrl =
+      "$baseUrl/v1/users/exchanges";
+
+  static const String getMyWriteCommunityBoardListUrl =
+      "$baseUrl/v1/users/communities";
+
   static String handleCommunityBoardLike(int postNo) {
     return "$baseUrl/v1/posts/communities/$postNo/like";
   }

@@ -138,6 +138,7 @@ class ProviderSetup extends StatelessWidget {
             context.read<CommunityBoardDetailProvider>(),
             context.read<CommunityEditProvider>(),
             context.read<HomeProvider>(),
+            context.read<ProfileProvider>(),
           ),
         ),
         ChangeNotifierProvider<KeywordViewModel>(
