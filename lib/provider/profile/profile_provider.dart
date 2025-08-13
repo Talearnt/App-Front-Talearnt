@@ -11,7 +11,7 @@ import 'package:path/path.dart' as path;
 import 'package:provider/provider.dart';
 
 import '../../constants/global_value_constants.dart';
-import '../../data/model/respone/alarm.dart';
+import '../../data/model/respone/notification.dart';
 import '../../data/model/respone/user_profile.dart';
 import '../auth/find_id_provider.dart';
 import '../auth/find_password_provider.dart';
@@ -87,33 +87,52 @@ class ProfileProvider extends ChangeNotifier with ClearText {
   late TabController _alarmTabController;
 
   //나중에 제거
-  final List<Alarm> alarmList = [
-    Alarm(
-      type: '댓글',
-      time: '45분 전',
-      text: '몽글이님이 내 게시글에 댓글을 달았어요! 최대 글자는 이렇게 됩니다.',
+  final List<NotificationData> alarmList = [
+    NotificationData(
+      notificationNo: 1,
+      senderNickname: '몽글이',
+      targetNo: 101,
+      content: '최대 글자는 이렇게 됩니다.',
+      notificationType: '댓글',
+      talentCodes: [1, 2],
       isRead: false,
+      unreadCount: 3,
+      createdAt: DateTime.now().subtract(const Duration(minutes: 45)),
     ),
-    Alarm(
-      type: '댓글',
-      time: '45분 전',
-      text: '몽글이님이 내 댓글에 답글을 달았어요! 산책도 취미가 될 수 있죠!',
+    NotificationData(
+      notificationNo: 2,
+      senderNickname: '몽글이',
+      targetNo: 102,
+      content: '어쩌고 저쩍옹오오옹 산책도 취미가 될 수 있죠!',
+      notificationType: '댓글',
+      talentCodes: [3],
       isRead: true,
+      unreadCount: 0,
+      createdAt: DateTime.now().subtract(const Duration(hours: 2)),
     ),
-    Alarm(
-      type: '관심 키워드',
-      time: '45분 전',
-      text: '요가 관련 매칭이 올라왔어요!',
+    NotificationData(
+      notificationNo: 3,
+      senderNickname: '몽글이',
+      targetNo: 103,
+      content: ' 구경해보세요.',
+      notificationType: '새글',
+      talentCodes: [4, 5],
       isRead: false,
+      unreadCount: 5,
+      createdAt: DateTime.now().subtract(const Duration(days: 1, hours: 3)),
     ),
-    Alarm(
-      type: '댓글',
-      time: '45분 전',
-      text: '잭재기님이 내 댓글에 답글을 달았어요! 그니까욤',
+    NotificationData(
+      notificationNo: 4,
+      senderNickname: '몽글이',
+      targetNo: 104,
+      content: '`요가’ 관련 매칭이 올라왔어요!!',
+      notificationType: '관심키워드',
+      talentCodes: [],
       isRead: true,
+      unreadCount: 0,
+      createdAt: DateTime.now().subtract(const Duration(days: 3)),
     ),
   ];
-
 
   TabController get giveTalentTabController => _giveTalentTabController;
 

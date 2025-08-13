@@ -118,8 +118,8 @@ class TextTypes {
 
 class Palette {
   static const Color bgBackGround = Color(0xFFFFFFFF);
-  static Color bgToast01 = const Color(0xFF000000).withOpacity(0.7);
-  static Color bgToast02 = const Color(0xFF000000).withOpacity(0.8);
+  static Color bgToast01 = const Color(0xFF000000).withValues(alpha: 0.7);
+  static Color bgToast02 = const Color(0xFF000000).withValues(alpha: 0.8);
   static const Color onToast = Color(0xFFFFFFFF);
   static const Color primary01 = Color(0xFF1B76FF);
   static const Color primaryBG01 = Color(0xFFE5F0FF);
@@ -144,4 +144,5 @@ class Palette {
   static const Color bgUp01 = Color(0xFFF7F8F8);
   static const Color bgUp02 = Color(0xFFECEEEF);
   static const Color bgUp03 = Color(0xFFDEE1E3);
+  static const Color bgUp04 = Color(0xFFF0F6FF);
 }
