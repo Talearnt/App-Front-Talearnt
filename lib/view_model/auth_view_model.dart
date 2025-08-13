@@ -11,6 +11,7 @@ import 'package:app_front_talearnt/provider/auth/sign_up_provider.dart';
 import 'package:app_front_talearnt/provider/auth/storage_provider.dart';
 import 'package:app_front_talearnt/provider/common/common_provider.dart';
 import 'package:app_front_talearnt/utils/token_manager.dart';
+import 'package:app_front_talearnt/view_model/notification_view_model.dart';
 import 'package:app_front_talearnt/view_model/profile_view_model.dart';
 import 'package:flutter/material.dart';
 
@@ -31,6 +32,7 @@ class AuthViewModel extends ChangeNotifier {
   final StorageProvider storageProvider;
   final CommonProvider commonProvider;
   final ProfileViewModel profileViewModel;
+  final NotificationViewModel notificationViewModel;
 
   AuthViewModel(
     this.loginProvider,
@@ -43,6 +45,7 @@ class AuthViewModel extends ChangeNotifier {
     this.storageProvider,
     this.commonProvider,
     this.profileViewModel,
+    this.notificationViewModel,
   );
 
   Future<void> login(String email, String pw, String root) async {
@@ -56,6 +59,7 @@ class AuthViewModel extends ChangeNotifier {
         tokenManager.saveToken(token);
         loginProvider.updateLoginFormSuccess();
         profileViewModel.getUserProfile(root);
+        notificationViewModel.getNotification();
         final stompClient = createStompClient(token: token.accessToken);
         stompClient.activate();
       },

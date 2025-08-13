@@ -1,5 +1,6 @@
 import 'package:app_front_talearnt/common/common_navigator.dart';
 import 'package:app_front_talearnt/data/repositories/keyword_repository.dart';
+import 'package:app_front_talearnt/data/repositories/notification_repository.dart';
 import 'package:app_front_talearnt/data/repositories/profile_repository.dart';
 import 'package:app_front_talearnt/provider/auth/find_id_provider.dart';
 import 'package:app_front_talearnt/provider/auth/find_password_provider.dart';
@@ -11,8 +12,10 @@ import 'package:app_front_talearnt/provider/board/match_board_provider.dart';
 import 'package:app_front_talearnt/provider/board/match_edit_provider.dart';
 import 'package:app_front_talearnt/provider/home/home_provider.dart';
 import 'package:app_front_talearnt/provider/keyword/keyword_provider.dart';
+import 'package:app_front_talearnt/provider/notification/notification_provider.dart';
 import 'package:app_front_talearnt/provider/profile/profile_provider.dart';
 import 'package:app_front_talearnt/view_model/keyword_view_model.dart';
+import 'package:app_front_talearnt/view_model/notification_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -59,6 +62,8 @@ class ProviderSetup extends StatelessWidget {
             create: (_) => CommunityWriteProvider()),
         ChangeNotifierProvider<ProfileProvider>(
             create: (_) => ProfileProvider()),
+        ChangeNotifierProvider<NotificationProvider>(
+            create: (_) => NotificationProvider()),
         Provider<AuthorizationInterceptor>(
           create: (context) => AuthorizationInterceptor(
             tokenManager: context.read<TokenManager>(),
@@ -96,6 +101,13 @@ class ProviderSetup extends StatelessWidget {
             context.read<ProfileProvider>(),
           ),
         ),
+        ChangeNotifierProvider<NotificationViewModel>(
+          create: (context) => NotificationViewModel(
+            CommonNavigator(navigatorKey),
+            NotificationRepository(context.read<DioService>()),
+            context.read<NotificationProvider>(),
+          ),
+        ),
         ChangeNotifierProvider<AuthViewModel>(
           create: (context) => AuthViewModel(
             context.read<LoginProvider>(),
@@ -108,6 +120,7 @@ class ProviderSetup extends StatelessWidget {
             context.read<StorageProvider>(),
             context.read<CommonProvider>(),
             context.read<ProfileViewModel>(),
+            context.read<NotificationViewModel>(),
           ),
         ),
         ChangeNotifierProvider<KeywordProvider>(
