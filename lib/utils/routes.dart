@@ -341,6 +341,18 @@ class Routes {
               return const AccountDeleteCompletePage();
             },
           ),
+          GoRoute(
+            path: '/account-delete',
+            builder: (BuildContext context, GoRouterState state) {
+              return const AccountDeletePage();
+            },
+          ),
+          GoRoute(
+            path: '/account-delete-complete',
+            builder: (BuildContext context, GoRouterState state) {
+              return const AccountDeleteCompletePage();
+            },
+          ),
         ],
       ),
     ],
