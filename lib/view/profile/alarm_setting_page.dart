@@ -1,4 +1,5 @@
 import 'package:app_front_talearnt/common/theme.dart';
+import 'package:app_front_talearnt/provider/notification/notification_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -14,6 +15,7 @@ class AlarmSettingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final profileProvider = Provider.of<ProfileProvider>(context);
+    final notificationProvider = Provider.of<NotificationProvider>(context);
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (bool didPop, Object? result) async {
@@ -50,9 +52,9 @@ class AlarmSettingPage extends StatelessWidget {
                                   color: Palette.text03)),
                         ]),
                     CustomToggle(
-                      value: profileProvider.allAlarm,
+                      value: notificationProvider.allNotification,
                       onChanged: (alarm) {
-                        profileProvider.changeAllAlarm(alarm);
+                        notificationProvider.changeAllNotification(alarm);
                         ToastMessage.show(
                           context: context,
                           message: "알림 설정이 변경되었습니다.",
@@ -77,9 +79,9 @@ class AlarmSettingPage extends StatelessWidget {
                     Text('댓글 알림 허용',
                         style: TextTypes.bodyMedium01(color: Palette.text01)),
                     CustomToggle(
-                      value: profileProvider.commentAlarm,
+                      value: notificationProvider.commentNotification,
                       onChanged: (alarm) {
-                        profileProvider.changeCommentAlarm(alarm);
+                        notificationProvider.changeCommentNotification(alarm);
                         ToastMessage.show(
                           context: context,
                           message: "알림 설정이 변경되었습니다.",
@@ -100,9 +102,9 @@ class AlarmSettingPage extends StatelessWidget {
                     Text('관심 키워드 알림 허용',
                         style: TextTypes.bodyMedium01(color: Palette.text01)),
                     CustomToggle(
-                      value: profileProvider.keywordAlarm,
+                      value: notificationProvider.keywordNotification,
                       onChanged: (alarm) {
-                        profileProvider.changeKeywordAlarm(alarm);
+                        notificationProvider.changeKeywordNotification(alarm);
                         ToastMessage.show(
                           context: context,
                           message: "알림 설정이 변경되었습니다.",

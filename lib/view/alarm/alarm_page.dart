@@ -1,4 +1,5 @@
 import 'package:app_front_talearnt/common/theme.dart';
+import 'package:app_front_talearnt/provider/notification/notification_provider.dart';
 import 'package:app_front_talearnt/view/alarm/widget/alarm_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -7,14 +8,14 @@ import 'package:provider/provider.dart';
 
 import '../../common/widget/button.dart';
 import '../../common/widget/top_app_bar.dart';
-import '../../provider/profile/profile_provider.dart';
 
 class AlarmPage extends StatelessWidget {
   const AlarmPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final profileProvider = Provider.of<ProfileProvider>(context);
+    final notificationProvider = Provider.of<NotificationProvider>(context);
+
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (bool didPop, Object? result) async {
@@ -44,7 +45,7 @@ class AlarmPage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: TabBar(
-                controller: profileProvider.alarmTabController,
+                controller: notificationProvider.notificationTabController,
                 indicator: const UnderlineTabIndicator(
                   borderSide: BorderSide(
                     width: 2.0,
@@ -75,7 +76,8 @@ class AlarmPage extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 24, vertical: 11),
                   child: TextBtnS(
-                    content: '모두읽기 ', // + 안읽은 애들 개수
+                    content:
+                        '모두읽기 ${notificationProvider.notifications.where((notification) => !notification.isRead).length}',
                     onPressed: () {},
                     btnStyle: TextTypes.caption01(color: Palette.primary01),
                   ),
@@ -84,26 +86,46 @@ class AlarmPage extends StatelessWidget {
             ),
             Expanded(
               child: TabBarView(
-                controller: profileProvider.alarmTabController,
+                controller: notificationProvider.notificationTabController,
                 children: [
+                  // 전체
                   ListView.builder(
-                    itemCount: profileProvider.alarmList.length,
+                    itemCount: notificationProvider.notifications.length,
                     itemBuilder: (context, index) {
-                      return AlarmTile(alarm: profileProvider.alarmList[index]);
+                      return AlarmTile(
+                          alarm: notificationProvider.notifications[index]);
                     },
                   ),
                   // 댓글
                   ListView.builder(
-                    itemCount: profileProvider.alarmList.length,
+                    itemCount: notificationProvider.notifications
+                        .where((notification) =>
+                            notification.notificationType == '댓글' ||
+                            notification.notificationType == '답글')
+                        .length,
                     itemBuilder: (context, index) {
-                      return AlarmTile(alarm: profileProvider.alarmList[index]);
+                      final commentNotifications = notificationProvider
+                          .notifications
+                          .where((notification) =>
+                              notification.notificationType == '댓글' ||
+                              notification.notificationType == '답글')
+                          .toList();
+                      return AlarmTile(alarm: commentNotifications[index]);
                     },
                   ),
                   // 관심 키워드
                   ListView.builder(
-                    itemCount: profileProvider.alarmList.length,
+                    itemCount: notificationProvider.notifications
+                        .where((notification) =>
+                            notification.notificationType == '관심 키워드')
+                        .length,
                     itemBuilder: (context, index) {
-                      return AlarmTile(alarm: profileProvider.alarmList[index]);
+                      final keywordNotifications = notificationProvider
+                          .notifications
+                          .where((notification) =>
+                              notification.notificationType == '관심 키워드')
+                          .toList();
+                      return AlarmTile(alarm: keywordNotifications[index]);
                     },
                   ),
                 ],
