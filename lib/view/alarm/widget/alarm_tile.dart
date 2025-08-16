@@ -63,7 +63,21 @@ class AlarmTile extends StatelessWidget {
                     ),
                   ],
                 )
-              : Container(), // 확인 필요
+              : alarm.notificationType == '답글'
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('${alarm.senderNickname}님이 내 댓글에 답글을 달았어요!',
+                            style:
+                                TextTypes.bodyMedium03(color: Palette.text01)),
+                        Text(
+                          alarm.content,
+                          style: TextTypes.bodyMedium03(color: Palette.text01),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    )
+                  : Container(), // 확인 필요
         ],
       ),
     );
