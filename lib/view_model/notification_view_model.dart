@@ -1,4 +1,6 @@
+import 'package:app_front_talearnt/data/model/param/readNotification_param.dart';
 import 'package:app_front_talearnt/data/repositories/notification_repository.dart';
+// removed: int_array_param import
 import 'package:flutter/material.dart';
 
 import '../common/common_navigator.dart';
@@ -25,6 +27,17 @@ class NotificationViewModel extends ChangeNotifier {
       List<NotificationData> notifications = List<NotificationData>.from(
           data.map((item) => NotificationData.fromJson(item)));
       notificationProvider.setNotifications(notifications);
+    });
+  }
+
+  Future<void> readNotification(List<int> notificationNos) async {
+    ReadnotificationParam param =
+        ReadnotificationParam(notificationNos: notificationNos);
+    final result = await notificationRepository.readNotification(param);
+    result.fold(
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)), (data) {
+      notificationProvider.markAsRead(notificationNos);
     });
   }
 }

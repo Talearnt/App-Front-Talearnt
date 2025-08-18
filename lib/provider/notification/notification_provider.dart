@@ -60,4 +60,23 @@ class NotificationProvider extends ChangeNotifier {
     _notifications = notifications;
     notifyListeners();
   }
+
+  void markAsRead(List<int> notificationNos) {
+    for (int i = 0; i < _notifications.length; i++) {
+      if (notificationNos.contains(_notifications[i].notificationNo)) {
+        _notifications[i] = NotificationData(
+          notificationNo: _notifications[i].notificationNo,
+          senderNickname: _notifications[i].senderNickname,
+          targetNo: _notifications[i].targetNo,
+          content: _notifications[i].content,
+          notificationType: _notifications[i].notificationType,
+          talentCodes: _notifications[i].talentCodes,
+          isRead: true, // 읽음 처리
+          unreadCount: _notifications[i].unreadCount,
+          createdAt: _notifications[i].createdAt,
+        );
+      }
+    }
+    notifyListeners();
+  }
 }

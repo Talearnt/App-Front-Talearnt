@@ -1,5 +1,6 @@
+import 'package:app_front_talearnt/data/model/param/readNotification_param.dart';
 import 'package:app_front_talearnt/data/model/respone/failure.dart';
-import 'package:app_front_talearnt/data/model/respone/keyword_talent.dart';
+import 'package:app_front_talearnt/data/model/respone/success.dart';
 import 'package:app_front_talearnt/data/services/dio_service.dart';
 import 'package:dartz/dartz.dart';
 
@@ -15,5 +16,14 @@ class NotificationRepository {
     return result.fold((failure) => left(failure), (response) {
       return right(response['data']);
     });
+  }
+
+  Future<Either<Failure, Success>> readNotification(
+      ReadnotificationParam body) async {
+    final result = await dio.put(
+      ApiConstants.readNotification,
+      body.toJson(),
+    );
+    return result.fold(left, (response) => right(Success.fromJson(response)));
   }
 }

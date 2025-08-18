@@ -40,6 +40,8 @@ abstract class ApiConstants {
 
   static const String getNotification = "$baseUrl/notifications";
 
+  static const String readNotification = "$baseUrl/notifications/read";
+
   static String handleCommunityBoardLike(int postNo) {
     return "$baseUrl/v1/posts/communities/$postNo/like";
   }
