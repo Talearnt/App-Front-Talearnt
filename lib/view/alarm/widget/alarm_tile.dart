@@ -109,10 +109,36 @@ class AlarmTile extends StatelessWidget {
                     children: [
                       Text('${alarm.senderNickname}님이 내 게시글에 댓글을 달았어요!',
                           style: TextTypes.bodyMedium03(color: Palette.text01)),
-                      Text(
-                        alarm.content,
-                        style: TextTypes.bodyMedium03(color: Palette.text01),
-                        overflow: TextOverflow.ellipsis,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            alarm.content,
+                            style:
+                                TextTypes.bodyMedium03(color: Palette.text01),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          !alarm.isRead
+                              ? Container(
+                                  constraints: const BoxConstraints(
+                                    minWidth: 23,
+                                    minHeight: 24,
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 3),
+                                  decoration: BoxDecoration(
+                                    color: Palette.primary01,
+                                    borderRadius: BorderRadius.circular(99),
+                                  ),
+                                  child: Text(
+                                    '${alarm.unreadCount + 1}',
+                                    style: TextTypes.captionMedium02(
+                                        color: Colors.white),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                )
+                              : Container()
+                        ],
                       ),
                     ],
                   )
@@ -123,11 +149,36 @@ class AlarmTile extends StatelessWidget {
                           Text('${alarm.senderNickname}님이 내 댓글에 답글을 달았어요!',
                               style: TextTypes.bodyMedium03(
                                   color: Palette.text01)),
-                          Text(
-                            alarm.content,
-                            style:
-                                TextTypes.bodyMedium03(color: Palette.text01),
-                            overflow: TextOverflow.ellipsis,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                alarm.content,
+                                style: TextTypes.bodyMedium03(
+                                    color: Palette.text01),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              !alarm.isRead
+                                  ? Container(
+                                      constraints: const BoxConstraints(
+                                        minWidth: 23,
+                                        minHeight: 24,
+                                      ),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8, vertical: 3),
+                                      decoration: BoxDecoration(
+                                        color: Palette.primary01,
+                                        borderRadius: BorderRadius.circular(99),
+                                      ),
+                                      child: Text(
+                                        '${alarm.unreadCount + 1}',
+                                        style: TextTypes.captionMedium02(
+                                            color: Colors.white),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    )
+                                  : Container()
+                            ],
                           ),
                         ],
                       )
