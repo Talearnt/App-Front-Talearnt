@@ -1,7 +1,12 @@
 import 'package:app_front_talearnt/common/theme.dart';
+import 'package:app_front_talearnt/data/services/notification_permission_service.dart';
+import 'package:app_front_talearnt/firebase_options.dart';
+import 'package:app_front_talearnt/provider/notification/notification_provider.dart';
 import 'package:app_front_talearnt/provider/provider_set_up.dart';
 import 'package:app_front_talearnt/utils/routes.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'common/theme.dart';
 import 'provider/provider_set_up.dart';
@@ -9,7 +14,14 @@ import 'utils/routes.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  await NotificationPermissionService.ensurePermission();
+
   runApp(const ProviderSetup(
     child: MyApp(),
   ));

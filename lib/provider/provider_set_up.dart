@@ -120,6 +120,7 @@ class ProviderSetup extends StatelessWidget {
             context.read<StorageProvider>(),
             context.read<CommonProvider>(),
             context.read<ProfileViewModel>(),
+            context.read<NotificationProvider>(),
             context.read<NotificationViewModel>(),
           ),
         ),

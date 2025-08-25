@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1018896965719",
+    "project_id": "talearnt-app",
+    "storage_bucket": "talearnt-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1018896965719:android:b7441785902756ed86c312",
+        "android_client_info": {
+          "package_name": "com.example.app_front_talearnt"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCLntE59PfhaPW8eHqsTHR5FB0nJz106Ek"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

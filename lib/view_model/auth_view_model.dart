@@ -10,6 +10,7 @@ import 'package:app_front_talearnt/provider/auth/login_provider.dart';
 import 'package:app_front_talearnt/provider/auth/sign_up_provider.dart';
 import 'package:app_front_talearnt/provider/auth/storage_provider.dart';
 import 'package:app_front_talearnt/provider/common/common_provider.dart';
+import 'package:app_front_talearnt/provider/notification/notification_provider.dart';
 import 'package:app_front_talearnt/utils/token_manager.dart';
 import 'package:app_front_talearnt/view_model/notification_view_model.dart';
 import 'package:app_front_talearnt/view_model/profile_view_model.dart';
@@ -32,6 +33,7 @@ class AuthViewModel extends ChangeNotifier {
   final StorageProvider storageProvider;
   final CommonProvider commonProvider;
   final ProfileViewModel profileViewModel;
+  final NotificationProvider notificationProvider;
   final NotificationViewModel notificationViewModel;
 
   AuthViewModel(
@@ -45,6 +47,7 @@ class AuthViewModel extends ChangeNotifier {
     this.storageProvider,
     this.commonProvider,
     this.profileViewModel,
+    this.notificationProvider,
     this.notificationViewModel,
   );
 
@@ -55,11 +58,14 @@ class AuthViewModel extends ChangeNotifier {
     result.fold(
       (failure) => loginProvider.updateLoginFormFail(failure.errorMessage),
       // 이후 수정 들어갈 수 도 있다.
-      (token) {
+      (token) async {
         tokenManager.saveToken(token);
         loginProvider.updateLoginFormSuccess();
         profileViewModel.getUserProfile(root);
         notificationViewModel.getNotification();
+        await notificationProvider.startFCM();
+        notificationViewModel
+            .sendFcmToken(notificationProvider.fcmToken.toString());
         final stompClient = createStompClient(token: token.accessToken);
         stompClient.activate();
       },

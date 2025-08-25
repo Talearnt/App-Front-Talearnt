@@ -1,3 +1,4 @@
+import 'package:app_front_talearnt/data/model/param/fcm_token_parm.dart';
 import 'package:app_front_talearnt/data/model/param/readNotification_param.dart';
 import 'package:app_front_talearnt/data/model/respone/failure.dart';
 import 'package:app_front_talearnt/data/model/respone/success.dart';
@@ -24,6 +25,12 @@ class NotificationRepository {
       ApiConstants.readNotification,
       body.toJson(),
     );
+    return result.fold(left, (response) => right(Success.fromJson(response)));
+  }
+
+  Future<Either<Failure, Success>> sendFcmToken(FcmTokenParm body) async {
+    final result =
+        await dio.post(ApiConstants.sendFcmToken, body.toJson(), null);
     return result.fold(left, (response) => right(Success.fromJson(response)));
   }
 }

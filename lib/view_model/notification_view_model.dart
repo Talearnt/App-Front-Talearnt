@@ -1,3 +1,4 @@
+import 'package:app_front_talearnt/data/model/param/fcm_token_parm.dart';
 import 'package:app_front_talearnt/data/model/param/readNotification_param.dart';
 import 'package:app_front_talearnt/data/repositories/notification_repository.dart';
 // removed: int_array_param import
@@ -39,5 +40,14 @@ class NotificationViewModel extends ChangeNotifier {
             content: ErrorMessages.getMessage(failure.errorCode)), (data) {
       notificationProvider.markAsRead(notificationNos);
     });
+  }
+
+  Future<void> sendFcmToken(String token) async {
+    FcmTokenParm param = FcmTokenParm(fcmToken: token);
+    final result = await notificationRepository.sendFcmToken(param);
+    result.fold(
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)),
+        (data) {});
   }
 }
