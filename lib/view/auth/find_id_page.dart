@@ -224,18 +224,19 @@ class FindIdPage extends StatelessWidget {
                             onPressed: findIdProvider.isValidNameAndPhoneNumber
                                 ? () async {
                                     commonProvider.changeIsLoading(true);
-                                    await authViewModel
+                                    final result = await authViewModel
                                         .sendCertNum(
-                                      context,
-                                      'findId',
-                                      findIdProvider.userNameController.text,
-                                      findIdProvider.phoneNumberController.text,
-                                    )
-                                        .whenComplete(
-                                      () {
-                                        commonProvider.changeIsLoading(false);
-                                      },
-                                    ).then(
+                                          context,
+                                          'findId',
+                                          findIdProvider
+                                              .userNameController.text,
+                                          findIdProvider
+                                              .phoneNumberController.text,
+                                        )
+                                        .whenComplete(() => commonProvider
+                                            .changeIsLoading(false));
+                                    result.fold(
+                                      (failure) {},
                                       (value) {
                                         ToastMessage.show(
                                           context: context,

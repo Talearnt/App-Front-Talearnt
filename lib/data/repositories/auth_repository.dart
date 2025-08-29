@@ -83,9 +83,9 @@ class AuthRepository {
   }
 
   Future<Either<Failure, SendMailInfo>> sendResetPasswordMail(
-      SendResetPasswordMailParam body, String email) async {
-    final result = await dio.post(
-        ApiConstants.getFineUserPwUrl(email), body.toJson(), null);
+      SendResetPasswordMailParam body) async {
+    final result =
+        await dio.post(ApiConstants.getFineUserPwUrl, body.toJson(), null);
     return result.fold(
         left, (response) => right(SendMailInfo.fromJson(response)));
   }
