@@ -125,7 +125,6 @@ class FindPasswordPage extends StatelessWidget {
                 commonProvider.changeIsLoading(true);
                 await authViewModel
                     .sendResetPasswordEmail(
-                        context,
                         findPasswordProvider.emailController.text,
                         findPasswordProvider.phoneNumberController.text)
                     .whenComplete(() => commonProvider.changeIsLoading(false));
