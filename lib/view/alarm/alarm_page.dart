@@ -1,6 +1,10 @@
 import 'package:app_front_talearnt/common/theme.dart';
+import 'package:app_front_talearnt/provider/common/common_provider.dart';
 import 'package:app_front_talearnt/provider/notification/notification_provider.dart';
 import 'package:app_front_talearnt/view/alarm/widget/alarm_tile.dart';
+import 'package:app_front_talearnt/view/alarm/widget/no_alarm_title.dart';
+import 'package:app_front_talearnt/view_model/notification_view_model.dart';
+import 'package:app_front_talearnt/data/model/respone/notification.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
@@ -15,6 +19,23 @@ class AlarmPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final notificationProvider = Provider.of<NotificationProvider>(context);
+    final notificationViewModel = Provider.of<NotificationViewModel>(context);
+    final commonProvider = Provider.of<CommonProvider>(context);
+
+    List<NotificationData> _getNotificationsForCurrentTab(
+        NotificationProvider p) {
+      final idx = p.notificationTabController.index;
+      final all = p.notifications;
+      if (idx == 1) {
+        return all
+            .where(
+                (n) => n.notificationType == '댓글' || n.notificationType == '답글')
+            .toList();
+      } else if (idx == 2) {
+        return all.where((n) => n.notificationType == '관심 키워드').toList();
+      }
+      return all;
+    }
 
     return PopScope(
       canPop: false,
@@ -31,12 +52,8 @@ class AlarmPage extends StatelessWidget {
           content: '알림',
           leftIcon: true,
           first: IconButton(
-            icon: SvgPicture.asset(
-              'assets/icons/setting_black.svg',
-            ),
-            onPressed: () {
-              //세팅 관련 함수 아직 나온거 없음
-            },
+            icon: SvgPicture.asset('assets/icons/setting_black.svg'),
+            onPressed: () {},
           ),
         ),
         body: Column(
@@ -47,16 +64,12 @@ class AlarmPage extends StatelessWidget {
               child: TabBar(
                 controller: notificationProvider.notificationTabController,
                 indicator: const UnderlineTabIndicator(
-                  borderSide: BorderSide(
-                    width: 2.0,
-                  ),
+                  borderSide: BorderSide(width: 2.0),
                 ),
                 indicatorSize: TabBarIndicatorSize.tab,
                 indicatorColor: Palette.text01,
                 indicatorWeight: 1.0,
-                indicatorPadding: const EdgeInsets.symmetric(
-                  horizontal: 4,
-                ),
+                indicatorPadding: const EdgeInsets.symmetric(horizontal: 4),
                 dividerColor: Colors.transparent,
                 labelColor: Palette.text01,
                 labelStyle: TextTypes.body02(color: Palette.text01),
@@ -69,65 +82,78 @@ class AlarmPage extends StatelessWidget {
                 ],
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 24, vertical: 11),
-                  child: TextBtnS(
-                    content:
-                        '모두읽기 ${notificationProvider.notifications.where((notification) => !notification.isRead).length}',
-                    onPressed: () {},
-                    btnStyle: TextTypes.caption01(color: Palette.primary01),
-                  ),
-                ),
-              ],
+            AnimatedBuilder(
+              animation: notificationProvider.notificationTabController,
+              builder: (context, _) {
+                final currentList =
+                    _getNotificationsForCurrentTab(notificationProvider);
+                final unreadNos = currentList
+                    .where((n) => !n.isRead)
+                    .map((n) => n.notificationNo)
+                    .toList();
+
+                if (currentList.isEmpty) {
+                  return const SizedBox.shrink();
+                }
+
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 24, vertical: 11),
+                      child: TextBtnS(
+                        content: '모두읽기 ${unreadNos.length}',
+                        onPressed: () async {
+                          if (unreadNos.isNotEmpty) {
+                            await notificationViewModel
+                                .readNotification(unreadNos);
+                          }
+                        },
+                        btnStyle: TextTypes.caption01(color: Palette.primary01),
+                      ),
+                    ),
+                  ],
+                );
+              },
             ),
             Expanded(
               child: TabBarView(
                 controller: notificationProvider.notificationTabController,
                 children: [
-                  // 전체
-                  ListView.builder(
-                    itemCount: notificationProvider.notifications.length,
-                    itemBuilder: (context, index) {
-                      return AlarmTile(
-                          alarm: notificationProvider.notifications[index]);
-                    },
-                  ),
-                  // 댓글
-                  ListView.builder(
-                    itemCount: notificationProvider.notifications
-                        .where((notification) =>
-                            notification.notificationType == '댓글' ||
-                            notification.notificationType == '답글')
-                        .length,
-                    itemBuilder: (context, index) {
-                      final commentNotifications = notificationProvider
-                          .notifications
-                          .where((notification) =>
-                              notification.notificationType == '댓글' ||
-                              notification.notificationType == '답글')
-                          .toList();
-                      return AlarmTile(alarm: commentNotifications[index]);
-                    },
-                  ),
-                  // 관심 키워드
-                  ListView.builder(
-                    itemCount: notificationProvider.notifications
-                        .where((notification) =>
-                            notification.notificationType == '관심 키워드')
-                        .length,
-                    itemBuilder: (context, index) {
-                      final keywordNotifications = notificationProvider
-                          .notifications
-                          .where((notification) =>
-                              notification.notificationType == '관심 키워드')
-                          .toList();
-                      return AlarmTile(alarm: keywordNotifications[index]);
-                    },
-                  ),
+                  Builder(builder: (context) {
+                    final list = notificationProvider.notifications;
+                    if (list.isEmpty) return const NoAlarmTitle();
+                    return ListView.builder(
+                      itemCount: list.length,
+                      itemBuilder: (context, index) =>
+                          AlarmTile(alarm: list[index]),
+                    );
+                  }),
+                  Builder(builder: (context) {
+                    final list = notificationProvider.notifications
+                        .where((n) =>
+                            n.notificationType == '댓글' ||
+                            n.notificationType == '답글')
+                        .toList();
+                    if (list.isEmpty) return const NoAlarmTitle();
+                    return ListView.builder(
+                      itemCount: list.length,
+                      itemBuilder: (context, index) =>
+                          AlarmTile(alarm: list[index]),
+                    );
+                  }),
+                  Builder(builder: (context) {
+                    final list = notificationProvider.notifications
+                        .where((n) => n.notificationType == '관심 키워드')
+                        .toList();
+                    if (list.isEmpty) return const NoAlarmTitle();
+                    return ListView.builder(
+                      itemCount: list.length,
+                      itemBuilder: (context, index) =>
+                          AlarmTile(alarm: list[index]),
+                    );
+                  }),
                 ],
               ),
             ),

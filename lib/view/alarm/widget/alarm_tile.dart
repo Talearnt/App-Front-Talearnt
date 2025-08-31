@@ -38,11 +38,13 @@ class AlarmTile extends StatelessWidget {
 
     for (final code in codes) {
       for (final category in GlobalValueConstants.keywordCategoris) {
-        final match = category.talentKeywords.firstWhere((k) => k.code == code,
-            orElse: () => KeywordTalent(code: -1, name: ''));
+        final match = category.talentKeywords.firstWhere(
+          (k) => k.code == code,
+          orElse: () => KeywordTalent(code: -1, name: ''),
+        );
         if (match.code != -1) {
-          names.add(match.name);
-          break; // 찾으면 다음 코드로 넘어가기
+          names.add("'${match.name}'"); // 🔑 name에 작은따옴표 추가
+          break;
         }
       }
     }
@@ -187,7 +189,7 @@ class AlarmTile extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                  '\'${_getTalentNames(alarm.talentCodes)}\' 관련 매칭이 올라왔어요!',
+                                  '${_getTalentNames(alarm.talentCodes)} 관련 매칭이 올라왔어요!',
                                   style: TextTypes.bodyMedium03(
                                       color: Palette.text01)),
                             ],

@@ -173,6 +173,7 @@ flutter:
     - assets/icons/listnumber_before.svg
     - assets/img/main_banner1.svg
     - assets/img/mako_like.svg
+    - assets/img/mako_normal.svg
     - assets/icons/my_off.svg
     - assets/icons/my_on.svg
     - assets/icons/next_arrow.svg
