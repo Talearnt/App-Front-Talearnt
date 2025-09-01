@@ -433,10 +433,13 @@ class HomePage extends StatelessWidget {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
-                                  'BEST 커뮤니티 글만 모아봤어요!',
-                                  style: TextTypes.bodySemi01(
-                                    color: Palette.text01,
+                                Expanded(
+                                  child: Text(
+                                    'BEST 커뮤니티 글만 모아봤어요!',
+                                    style: TextTypes.bodySemi01(
+                                      color: Palette.text01,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
                                 GestureDetector(

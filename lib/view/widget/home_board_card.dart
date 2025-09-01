@@ -14,10 +14,7 @@ import '../../view_model/board_view_model.dart';
 class HomeMatchBoardCard extends StatelessWidget {
   final MatchBoard post;
 
-  const HomeMatchBoardCard({
-    super.key,
-    required this.post
-  });
+  const HomeMatchBoardCard({super.key, required this.post});
 
   @override
   Widget build(BuildContext context) {
@@ -50,21 +47,26 @@ class HomeMatchBoardCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  children: [
-                    SizedBox(
-                      width: 40,
-                      height: 40,
-                      child: SvgPicture.asset('assets/img/profile.svg'),
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      post.nickname,
-                      style: TextTypes.body02(
-                        color: Palette.text01,
+                Expanded(
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 40,
+                        height: 40,
+                        child: SvgPicture.asset('assets/img/profile.svg'),
                       ),
-                    ),
-                  ],
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          post.nickname,
+                          style: TextTypes.body02(
+                            color: Palette.text01,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
