@@ -36,9 +36,11 @@ class ProfileViewModel extends ChangeNotifier {
             userProfile.giveTalents.isEmpty) {
           commonNavigator.goRoute('/set-keyword');
         } else {
-          root == "profile"
-              ? commonNavigator.goRoute('/profile')
-              : commonNavigator.goRoute('/');
+          if (root == "profile") {
+            commonNavigator.goRoute('/profile');
+          } else if (root == "login") {
+            commonNavigator.goRoute('/');
+          }
         }
       },
     );

@@ -108,6 +108,7 @@ class ProviderSetup extends StatelessWidget {
             context.read<StorageProvider>(),
             context.read<CommonProvider>(),
             context.read<ProfileViewModel>(),
+            context.read<KakaoProvider>(),
           ),
         ),
         ChangeNotifierProvider<KeywordProvider>(
@@ -149,6 +150,7 @@ class ProviderSetup extends StatelessWidget {
             context.read<MatchWriteProvider>(),
             context.read<MatchBoardProvider>(),
             context.read<MatchEditProvider>(),
+            context.read<ProfileViewModel>(),
           ),
         ),
       ],

@@ -72,7 +72,9 @@ class LoginPage extends StatelessWidget {
                     const SizedBox(height: 40.0),
                     Container(
                         margin: const EdgeInsets.symmetric(horizontal: 24),
-                        child: const SimpleLoginForm())
+                        child: SimpleLoginForm(
+                          loginRoot: loginProvider.loginRoot,
+                        ))
                   ],
                 ))
               ],
