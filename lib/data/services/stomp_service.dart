@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:app_front_talearnt/data/services/local_notification_service.dart';
 import 'package:stomp_dart_client/stomp_dart_client.dart';
 
 /// SockJS 프로토콜로 연결하는 StompClient 팩토리 함수
@@ -23,9 +24,34 @@ StompClient createStompClient({
         print('✅ STOMP 연결 성공! frame.headers: ${frame.headers}');
         client.subscribe(
           destination: '/user/queue/notifications',
-          callback: (frame) {
+          callback: (frame) async {
             final result = json.decode(frame.body!);
-            print("result:  $result");
+            print("result: $result");
+
+            final type = result['notificationType']?.toString();
+            final sender = result['senderNickname']?.toString() ?? '';
+            String title;
+
+            switch (type) {
+              case '관심 키워드':
+                title = '회원님이 원하는 매칭 게시글이 나타났어요!';
+                break;
+              case '댓글':
+                title = '$sender님이 내 게시물에 댓글을 달았어요!';
+                break;
+              case '답글':
+                title = '$sender님이 내 댓글에 답글을 달았어요!';
+                break;
+              default:
+                title = type ?? '알림';
+            }
+
+            final body = (result['content'] ?? '').toString();
+
+            await LocalNotificationService.I.show(
+              title: title,
+              body: body,
+            );
           },
         );
       },
