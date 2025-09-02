@@ -7,6 +7,10 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter/material.dart';
 import '../../firebase_options.dart';
 
+import 'package:provider/provider.dart';
+import 'package:app_front_talearnt/main.dart'; // navigatorKey
+import 'package:app_front_talearnt/view_model/board_view_model.dart';
+
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   if (Firebase.apps.isEmpty) {
@@ -34,6 +38,8 @@ class NotificationProvider extends ChangeNotifier {
   StreamSubscription<RemoteMessage>? _onMessageSub;
   StreamSubscription<RemoteMessage>? _onOpenedSub;
   bool _initialized = false;
+
+  final _fln = FlutterLocalNotificationsPlugin();
 
   List<NotificationData> get notifications => _notifications;
   bool get allNotification => _allNotification;
@@ -92,31 +98,47 @@ class NotificationProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void myCustomMethod(dynamic data) async {
+    final String? targetNoStr =
+        (data['targetNo'] ?? data['postNo'] ?? data['communityPostNo'])
+            ?.toString();
+    final int? targetNo =
+        targetNoStr == null ? null : int.tryParse(targetNoStr);
+
+    final context = navigatorKey.currentContext;
+    if (context == null) {
+      debugPrint('myCustomMethod: context 미준비로 스킵');
+      return;
+    }
+
+    final boardVM = Provider.of<BoardViewModel>(context, listen: false);
+    await boardVM.getCommunityDetailBoard(targetNo!);
+    await boardVM.getComments(targetNo!, 0);
+  }
+
   Future<void> startFCM() async {
     if (Firebase.apps.isEmpty) {
       await Firebase.initializeApp(
-        options: DefaultFirebaseOptions.currentPlatform,
-      );
+          options: DefaultFirebaseOptions.currentPlatform);
     }
     if (_initialized) return;
 
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
     _fcmToken = await _messaging.getToken();
-    debugPrint("FCM Token: $_fcmToken"); // 👉 콘솔에서 토큰 확인
 
     _onMessageSub = FirebaseMessaging.onMessage.listen((m) {
       notifyListeners();
     });
 
     _onOpenedSub = FirebaseMessaging.onMessageOpenedApp.listen((m) {
-      debugPrint("알림 클릭: ${m.data}");
+      myCustomMethod(m.data);
       notifyListeners();
     });
 
     final initial = await _messaging.getInitialMessage();
     if (initial != null) {
-      debugPrint("종료상태 알림 데이터: ${initial.data}");
+      myCustomMethod(initial.data);
     }
 
     _initialized = true;
@@ -133,10 +155,6 @@ class NotificationProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // 필드
-  final _fln = FlutterLocalNotificationsPlugin();
-
-// 메서드
   Future<void> _initLocalNotifications() async {
     const android = AndroidInitializationSettings('@mipmap/ic_launcher');
     const init = InitializationSettings(android: android);

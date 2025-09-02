@@ -1,4 +1,7 @@
+import 'package:app_front_talearnt/main.dart';
+import 'package:app_front_talearnt/view_model/board_view_model.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:provider/provider.dart';
 
 class LocalNotificationService {
   LocalNotificationService._();
@@ -10,13 +13,37 @@ class LocalNotificationService {
 
   Future<void> init() async {
     if (_inited) return;
+
     const android = AndroidInitializationSettings('@mipmap/ic_launcher');
     const settings = InitializationSettings(android: android);
-    await _plugin.initialize(settings);
+
+    await _plugin.initialize(
+      settings,
+      onDidReceiveNotificationResponse: (NotificationResponse response) async {
+        final context = navigatorKey.currentContext;
+        if (context == null) return;
+
+        final payload = response.payload;
+        if (payload == null) return;
+
+        final targetNo = int.tryParse(payload);
+        if (targetNo == null) return;
+
+        final boardViewModel =
+            Provider.of<BoardViewModel>(context, listen: false);
+
+        await boardViewModel.getCommunityDetailBoard(targetNo);
+        await boardViewModel.getComments(targetNo, 0);
+      },
+    );
+
     _inited = true;
   }
 
-  Future<void> show({required String title, required String body}) async {
+  Future<void> show(
+      {required String title,
+      required String body,
+      required String payload}) async {
     const android = AndroidNotificationDetails(
       'default_channel',
       '일반 알림',
@@ -31,6 +58,7 @@ class LocalNotificationService {
       title,
       body,
       details,
+      payload: payload,
     );
   }
 }
