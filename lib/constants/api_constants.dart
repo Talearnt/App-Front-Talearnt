@@ -42,6 +42,10 @@ abstract class ApiConstants {
 
   static const String getNoticeUrl = "$baseUrl/v1/notices";
 
+  static String getNoticeDetailUrl(int noticeNo) {
+    return "$baseUrl/v1/notices/$noticeNo";
+  }
+
   static const String getMyWriteMatchBoardListUrl =
       "$baseUrl/v1/users/exchanges";
 

@@ -46,6 +46,7 @@ import '../view/profile/event_notice_page.dart';
 import '../view/profile/licenses_page.dart';
 import '../view/profile/modify_user_info_page.dart';
 import '../view/profile/my_write_page.dart';
+import '../view/profile/notice_detail_page.dart';
 import '../view/profile/profile_page.dart';
 import '../view/profile/user_image_preview_page.dart';
 
@@ -323,7 +324,8 @@ class Routes {
             builder: (BuildContext context, GoRouterState state) {
               return const CommunityEditPreviewPage();
             },
-          ),GoRoute(
+          ),
+          GoRoute(
             path: '/my-write',
             builder: (BuildContext context, GoRouterState state) {
               return const MyWritePage();
@@ -351,6 +353,12 @@ class Routes {
             path: '/account-delete-complete',
             builder: (BuildContext context, GoRouterState state) {
               return const AccountDeleteCompletePage();
+            },
+          ),
+          GoRoute(
+            path: '/notice-detail',
+            builder: (BuildContext context, GoRouterState state) {
+              return const NoticeDetailPage();
             },
           ),
         ],
