@@ -5,7 +5,6 @@ import 'dart:ui' as ui;
 
 import 'package:app_front_talearnt/data/model/respone/event.dart';
 import 'package:app_front_talearnt/data/model/respone/notice.dart';
-import 'package:app_front_talearnt/view_model/board_view_model.dart';
 import 'package:app_front_talearnt/data/model/respone/community_board.dart';
 import 'package:app_front_talearnt/view_model/profile_view_model.dart';
 import 'package:flutter/material.dart';
@@ -137,7 +136,6 @@ class ProfileProvider extends ChangeNotifier with ClearText {
   int _etcTextLength = 0;
 
   late TabController _myWriteTabController;
-  late ProfileViewModel _viewModel;
   final ScrollController _myWriteMatchScrollController = ScrollController();
   final ScrollController _myWriteCommunityScrollController = ScrollController();
   bool _isMatchFetching = false;
@@ -663,20 +661,16 @@ class ProfileProvider extends ChangeNotifier with ClearText {
     }
   }
 
-  void setViewModel(ProfileViewModel viewModel) {
-    _viewModel = viewModel;
-  }
-
   Future<void> _fetchMoreMatchData() async {
     _isMatchFetching = true;
-    await _viewModel.getMyWriteMatchBoardList(
+    await _profileViewModel.getMyWriteMatchBoardList(
         null, null, _matchBoardList.last.exchangePostNo.toString(),'add');
     _isMatchFetching = false;
   }
 
   Future<void> _fetchMoreCommunityData() async {
     _isCommunityFetching = true;
-    await _viewModel.getMyWriteCommunityBoardList(
+    await _profileViewModel.getMyWriteCommunityBoardList(
         GlobalValueConstants.communityCategoryTypes[0]['code']!,
         null,
         null,
