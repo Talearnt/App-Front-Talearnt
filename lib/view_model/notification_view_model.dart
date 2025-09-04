@@ -1,4 +1,6 @@
 import 'package:app_front_talearnt/data/model/param/fcm_token_parm.dart';
+import 'package:app_front_talearnt/data/model/param/my_talent_keywords_param.dart';
+import 'package:app_front_talearnt/data/model/param/notification_settng_param.dart';
 import 'package:app_front_talearnt/data/model/param/readNotification_param.dart';
 import 'package:app_front_talearnt/data/repositories/notification_repository.dart';
 // removed: int_array_param import
@@ -49,5 +51,19 @@ class NotificationViewModel extends ChangeNotifier {
         (failure) => commonNavigator.showSingleDialog(
             content: ErrorMessages.getMessage(failure.errorCode)),
         (data) {});
+  }
+
+  Future<void> changeAllowNotification(
+      bool keywordNotification, bool commentNotification) async {
+    NotificationSettngParam param = NotificationSettngParam(
+        allowKeywordNotifications: keywordNotification,
+        allowCommentNotifications: commentNotification);
+    final result = await notificationRepository.changeAllowNotification(param);
+    result.fold(
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)), (data) {
+      notificationProvider.changeKeywordNotification(keywordNotification);
+      notificationProvider.changeCommentNotification(commentNotification);
+    });
   }
 }

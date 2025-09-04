@@ -44,6 +44,9 @@ abstract class ApiConstants {
 
   static const String sendFcmToken = "$baseUrl/v1/fcm/token";
 
+  static const String changeAllowNotification =
+      "$baseUrl/notifications/settings";
+
   static String handleCommunityBoardLike(int postNo) {
     return "$baseUrl/v1/posts/communities/$postNo/like";
   }

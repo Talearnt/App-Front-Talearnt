@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:app_front_talearnt/main.dart';
 import 'package:app_front_talearnt/view_model/board_view_model.dart';
+import 'package:app_front_talearnt/view_model/notification_view_model.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 
@@ -26,14 +29,46 @@ class LocalNotificationService {
         final payload = response.payload;
         if (payload == null) return;
 
-        final targetNo = int.tryParse(payload);
+        Map<String, dynamic> payloadMap;
+        try {
+          payloadMap = json.decode(payload) as Map<String, dynamic>;
+        } catch (_) {
+          final legacyTargetNo = int.tryParse(payload);
+          if (legacyTargetNo == null) return;
+          payloadMap = {
+            'targetNo': legacyTargetNo,
+            'notificationType': null,
+            'notificationNo': null,
+          };
+        }
+
+        final int? targetNo = payloadMap['targetNo'] is int
+            ? payloadMap['targetNo'] as int
+            : int.tryParse('${payloadMap['targetNo']}');
+        final String? notificationType =
+            payloadMap['notificationType']?.toString();
+        final int? notificationNo = payloadMap['notificationNo'] is int
+            ? payloadMap['notificationNo'] as int
+            : int.tryParse('${payloadMap['notificationNo']}');
         if (targetNo == null) return;
 
         final boardViewModel =
             Provider.of<BoardViewModel>(context, listen: false);
+        final notificationViewModel =
+            Provider.of<NotificationViewModel>(context, listen: false);
 
-        await boardViewModel.getCommunityDetailBoard(targetNo);
-        await boardViewModel.getComments(targetNo, 0);
+        if (notificationType == '댓글' || notificationType == '답글') {
+          if (notificationNo != null) {
+            await notificationViewModel.readNotification([notificationNo]);
+          }
+          await boardViewModel.getCommunityDetailBoard(targetNo);
+          await boardViewModel.getComments(targetNo, 0);
+        } else if (notificationType == '관심 키워드') {
+          if (notificationNo != null) {
+            await notificationViewModel.readNotification([notificationNo]);
+          }
+          await boardViewModel.getMatchDetailBoard(targetNo);
+        }
       },
     );
 

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:app_front_talearnt/view_model/notification_view_model.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:app_front_talearnt/data/model/respone/notification.dart';
@@ -29,9 +30,9 @@ class NotificationProvider extends ChangeNotifier {
   final FirebaseMessaging _messaging = FirebaseMessaging.instance;
 
   List<NotificationData> _notifications = [];
-  bool _allNotification = false;
-  bool _commentNotification = false;
-  bool _keywordNotification = false;
+  bool _allNotification = true;
+  bool _commentNotification = true;
+  bool _keywordNotification = true;
   late TabController _notificationTabController;
 
   String? _fcmToken;
@@ -105,15 +106,33 @@ class NotificationProvider extends ChangeNotifier {
     final int? targetNo =
         targetNoStr == null ? null : int.tryParse(targetNoStr);
 
+    final String? notificationType =
+        (data['notificationType'] ?? data['type'] ?? data['notification_type'])
+            ?.toString();
+
+    final String? notificationNoStr = data['notificationNo']?.toString();
+    final int? notificationNo =
+        notificationNoStr == null ? null : int.tryParse(notificationNoStr);
+
     final context = navigatorKey.currentContext;
     if (context == null) {
       debugPrint('myCustomMethod: context 미준비로 스킵');
       return;
     }
 
-    final boardVM = Provider.of<BoardViewModel>(context, listen: false);
-    await boardVM.getCommunityDetailBoard(targetNo!);
-    await boardVM.getComments(targetNo!, 0);
+    final boardViewModel = Provider.of<BoardViewModel>(context, listen: false);
+    final notificationViewModel =
+        Provider.of<NotificationViewModel>(context, listen: false);
+    if (notificationType == '댓글' || notificationType == '답글') {
+      await notificationViewModel.readNotification([notificationNo!]);
+
+      await boardViewModel.getCommunityDetailBoard(targetNo!);
+      await boardViewModel.getComments(targetNo!, 0);
+    } else if (notificationType == '관심 키워드') {
+      await notificationViewModel.readNotification([notificationNo!]);
+
+      await boardViewModel.getMatchDetailBoard(targetNo!);
+    }
   }
 
   Future<void> startFCM() async {

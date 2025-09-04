@@ -1,5 +1,6 @@
 import 'package:app_front_talearnt/common/theme.dart';
 import 'package:app_front_talearnt/provider/notification/notification_provider.dart';
+import 'package:app_front_talearnt/view_model/notification_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -7,15 +8,15 @@ import 'package:provider/provider.dart';
 import '../../common/widget/custom_toggle.dart';
 import '../../common/widget/toast_message.dart';
 import '../../common/widget/top_app_bar.dart';
-import '../../provider/profile/profile_provider.dart';
 
 class AlarmSettingPage extends StatelessWidget {
   const AlarmSettingPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final profileProvider = Provider.of<ProfileProvider>(context);
     final notificationProvider = Provider.of<NotificationProvider>(context);
+    final notificationViewModel = Provider.of<NotificationViewModel>(context);
+
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (bool didPop, Object? result) async {
@@ -54,12 +55,17 @@ class AlarmSettingPage extends StatelessWidget {
                     CustomToggle(
                       value: notificationProvider.allNotification,
                       onChanged: (alarm) {
-                        notificationProvider.changeAllNotification(alarm);
-                        ToastMessage.show(
-                          context: context,
-                          message: "알림 설정이 변경되었습니다.",
-                          type: 1,
-                          bottom: 50,
+                        notificationViewModel
+                            .changeAllowNotification(alarm, alarm)
+                            .then(
+                          (value) {
+                            ToastMessage.show(
+                              context: context,
+                              message: "알림 설정이 변경되었습니다.",
+                              type: 1,
+                              bottom: 50,
+                            );
+                          },
                         );
                       },
                     ),
@@ -81,12 +87,18 @@ class AlarmSettingPage extends StatelessWidget {
                     CustomToggle(
                       value: notificationProvider.commentNotification,
                       onChanged: (alarm) {
-                        notificationProvider.changeCommentNotification(alarm);
-                        ToastMessage.show(
-                          context: context,
-                          message: "알림 설정이 변경되었습니다.",
-                          type: 1,
-                          bottom: 50,
+                        notificationViewModel
+                            .changeAllowNotification(
+                                notificationProvider.keywordNotification, alarm)
+                            .then(
+                          (value) {
+                            ToastMessage.show(
+                              context: context,
+                              message: "알림 설정이 변경되었습니다.",
+                              type: 1,
+                              bottom: 50,
+                            );
+                          },
                         );
                       },
                     ),
@@ -104,12 +116,18 @@ class AlarmSettingPage extends StatelessWidget {
                     CustomToggle(
                       value: notificationProvider.keywordNotification,
                       onChanged: (alarm) {
-                        notificationProvider.changeKeywordNotification(alarm);
-                        ToastMessage.show(
-                          context: context,
-                          message: "알림 설정이 변경되었습니다.",
-                          type: 1,
-                          bottom: 50,
+                        notificationViewModel
+                            .changeAllowNotification(
+                                alarm, notificationProvider.commentNotification)
+                            .then(
+                          (value) {
+                            ToastMessage.show(
+                              context: context,
+                              message: "알림 설정이 변경되었습니다.",
+                              type: 1,
+                              bottom: 50,
+                            );
+                          },
                         );
                       },
                     ),

@@ -51,7 +51,11 @@ StompClient createStompClient({
             await LocalNotificationService.I.show(
               title: title,
               body: body,
-              payload: result['targetNo']?.toString() ?? '',
+              payload: json.encode({
+                'targetNo': result['targetNo'],
+                'notificationType': result['notificationType'],
+                'notificationNo': result['notificationNo'],
+              }),
             );
           },
         );
