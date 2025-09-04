@@ -42,6 +42,12 @@ abstract class ApiConstants {
 
   static const String getNoticeUrl = "$baseUrl/v1/notices";
 
+  static const String getMyWriteMatchBoardListUrl =
+      "$baseUrl/v1/users/exchanges";
+
+  static const String getMyWriteCommunityBoardListUrl =
+      "$baseUrl/v1/users/communities";
+
   static String handleCommunityBoardLike(int postNo) {
     return "$baseUrl/v1/posts/communities/$postNo/like";
   }
@@ -58,9 +64,7 @@ abstract class ApiConstants {
     return "$baseUrl/v1/posts/communities/$postNo";
   }
 
-  static String getFineUserPwUrl(String userId) {
-    return "$baseUrl/v1/auth/password/$userId/email";
-  }
+  static String getFineUserPwUrl = "$baseUrl/v1/auth/password/email";
 
   static String getChangeUserPwUrl(String no, String uuid) {
     return "$baseUrl/v1/auth/$no/password/$uuid";

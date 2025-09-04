@@ -7,19 +7,26 @@ import '../../../../common/widget/toast_message.dart';
 import '../../../../data/model/respone/community_board.dart';
 import '../../../../provider/auth/login_provider.dart';
 import '../../../../provider/board/community_board_provider.dart';
+import '../../../../provider/profile/profile_provider.dart';
 import '../../../../view_model/board_view_model.dart';
 
 class CommunityBoardListCardBottom extends StatelessWidget {
+  final String pageType; // my-write, list
   final CommunityBoard post;
   final int index;
 
   const CommunityBoardListCardBottom(
-      {super.key, required this.post, required this.index});
+      {super.key,
+      required this.post,
+      required this.index,
+      required this.pageType});
 
   @override
   Widget build(BuildContext context) {
     final CommunityBoardProvider communityBoardProvider =
         Provider.of<CommunityBoardProvider>(context);
+    final ProfileProvider profileProvider =
+        Provider.of<ProfileProvider>(context);
     final boardViewModel = Provider.of<BoardViewModel>(context);
     final loginProvider = Provider.of<LoginProvider>(context);
     return Container(
@@ -71,11 +78,18 @@ class CommunityBoardListCardBottom extends StatelessWidget {
               overlayColor: WidgetStateProperty.all(Colors.transparent),
               onTap: () async {
                 if (loginProvider.isLoggedIn) {
-                  await communityBoardProvider
-                      .changeCommunityBoardLike(post.communityPostNo);
-                  await boardViewModel.handleCommunityBoardLike(
-                      communityBoardProvider
-                          .communityBoardList[index].communityPostNo);
+                  if (pageType == 'list') {
+                    await communityBoardProvider
+                        .changeCommunityBoardLike(post.communityPostNo);
+                    await boardViewModel.handleCommunityBoardLike(
+                        communityBoardProvider
+                            .communityBoardList[index].communityPostNo);
+                  } else {
+                    await profileProvider
+                        .changeCommunityBoardLike(post.communityPostNo);
+                    await boardViewModel.handleCommunityBoardLike(profileProvider
+                        .communityBoardList[index].communityPostNo);
+                  }
                 } else {
                   ToastMessage.show(
                     context: context,

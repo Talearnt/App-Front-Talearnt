@@ -8,6 +8,7 @@ import '../../../../common/widget/toast_message.dart';
 import '../../../../provider/auth/login_provider.dart';
 import '../../../../provider/board/community_board_provider.dart';
 import '../../../../provider/home/home_provider.dart';
+import '../../../../provider/profile/profile_provider.dart';
 import '../../../../view_model/board_view_model.dart';
 
 class CommunityDetailBoardBottom extends StatelessWidget {
@@ -25,6 +26,7 @@ class CommunityDetailBoardBottom extends StatelessWidget {
         Provider.of<CommunityBoardProvider>(context);
     final HomeProvider homeProvider = Provider.of<HomeProvider>(context);
     final loginProvider = Provider.of<LoginProvider>(context);
+    final profileProvider = Provider.of<ProfileProvider>(context);
     return Container(
       height: 56,
       decoration: const BoxDecoration(
@@ -87,6 +89,10 @@ class CommunityDetailBoardBottom extends StatelessWidget {
                           communityBoardDetailProvider
                               .communityDetailBoard.isLike);
                   await homeProvider.changeCommunityBoardLikeFromDetail(
+                      communityBoardDetailProvider
+                          .communityDetailBoard.communityPostNo,
+                      communityBoardDetailProvider.communityDetailBoard.isLike);
+                  await profileProvider.changeCommunityBoardLikeFromDetail(
                       communityBoardDetailProvider
                           .communityDetailBoard.communityPostNo,
                       communityBoardDetailProvider.communityDetailBoard.isLike);

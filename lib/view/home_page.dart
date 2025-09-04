@@ -201,6 +201,8 @@ class HomePage extends StatelessWidget {
                                               .updateInitState(false);
                                           getList(commonProvider, viewModel,
                                               matchBoardProvider);
+                                          commonProvider
+                                              .changeSelectedPage('board_list');
                                           context.push('/board-list');
                                         },
                                         child: Row(
@@ -352,6 +354,8 @@ class HomePage extends StatelessWidget {
                                               .getInitMatchBoardList()
                                               .then(
                                             (value) {
+                                              commonProvider.changeSelectedPage(
+                                                  'board_list');
                                               commonProvider
                                                   .changeIsLoading(false);
                                             },
@@ -429,10 +433,13 @@ class HomePage extends StatelessWidget {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
-                                  'BEST 커뮤니티 글만 모아봤어요!',
-                                  style: TextTypes.bodySemi01(
-                                    color: Palette.text01,
+                                Expanded(
+                                  child: Text(
+                                    'BEST 커뮤니티 글만 모아봤어요!',
+                                    style: TextTypes.bodySemi01(
+                                      color: Palette.text01,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
                                 GestureDetector(
@@ -442,6 +449,8 @@ class HomePage extends StatelessWidget {
                                     commonBoardProvider
                                         .setBoardType("community");
                                     commonBoardProvider.updateInitState(true);
+                                    commonProvider
+                                        .changeSelectedPage('board_list');
                                     commonProvider.changeIsLoading(false);
                                   },
                                   child: Row(

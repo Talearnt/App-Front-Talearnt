@@ -1,5 +1,6 @@
 import 'package:app_front_talearnt/common/theme.dart';
 import 'package:app_front_talearnt/provider/board/match_board_provider.dart';
+import 'package:app_front_talearnt/provider/profile/profile_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -10,16 +11,22 @@ import '../../../../provider/auth/login_provider.dart';
 import '../../../../view_model/board_view_model.dart';
 
 class MatchBoardListCardBottom extends StatelessWidget {
+  final String pageType; // my-write, list
   final MatchBoard post;
   final int index;
 
   const MatchBoardListCardBottom(
-      {super.key, required this.post, required this.index});
+      {super.key,
+      required this.post,
+      required this.index,
+      required this.pageType});
 
   @override
   Widget build(BuildContext context) {
     final MatchBoardProvider matchBoardProvider =
         Provider.of<MatchBoardProvider>(context);
+    final ProfileProvider profileProvider =
+        Provider.of<ProfileProvider>(context);
     final boardViewModel = Provider.of<BoardViewModel>(context);
     final loginProvider = Provider.of<LoginProvider>(context);
     return Container(
@@ -71,10 +78,17 @@ class MatchBoardListCardBottom extends StatelessWidget {
               overlayColor: WidgetStateProperty.all(Colors.transparent),
               onTap: () async {
                 if (loginProvider.isLoggedIn) {
-                  await matchBoardProvider
-                      .changeMatchBoardLike(post.exchangePostNo);
-                  await boardViewModel.handleMatchBoardLike(
-                      matchBoardProvider.matchBoardList[index].exchangePostNo);
+                  if (pageType == 'list') {
+                    await matchBoardProvider
+                        .changeMatchBoardLike(post.exchangePostNo);
+                    await boardViewModel.handleMatchBoardLike(matchBoardProvider
+                        .matchBoardList[index].exchangePostNo);
+                  } else {
+                    await profileProvider
+                        .changeMatchBoardLike(post.exchangePostNo);
+                    await boardViewModel.handleMatchBoardLike(
+                        profileProvider.matchBoardList[index].exchangePostNo);
+                  }
                 } else {
                   ToastMessage.show(
                     context: context,

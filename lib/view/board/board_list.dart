@@ -93,7 +93,10 @@ class BoardList extends StatelessWidget {
                                   commonProvider.changeIsLoading(false);
                                 },
                                 child: MatchBoardListCard(
-                                    post: posts[index], index: index))
+                                  post: posts[index],
+                                  index: index,
+                                  pageType: 'list',
+                                ))
                             : InkWell(
                                 overlayColor:
                                     WidgetStateProperty.all(Colors.transparent),
@@ -111,7 +114,10 @@ class BoardList extends StatelessWidget {
                                   commonProvider.changeIsLoading(false);
                                 },
                                 child: CommunityBoardListCard(
-                                    post: posts[index], index: index));
+                                  post: posts[index],
+                                  index: index,
+                                  pageType: 'list',
+                                ));
                       },
                       childCount: childCount == 0 ? 1 : childCount,
                     ),

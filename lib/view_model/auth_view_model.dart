@@ -11,11 +11,14 @@ import 'package:app_front_talearnt/provider/auth/storage_provider.dart';
 import 'package:app_front_talearnt/provider/common/common_provider.dart';
 import 'package:app_front_talearnt/utils/token_manager.dart';
 import 'package:app_front_talearnt/view_model/profile_view_model.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 
 import '../common/common_navigator.dart';
 import '../data/model/param/sign_up_param.dart';
 import '../data/model/param/sms_validation_param.dart';
+import '../data/model/respone/failure.dart';
+import '../data/model/respone/success.dart';
 import '../data/repositories/auth_repository.dart';
 import '../utils/error_message.dart';
 
@@ -96,11 +99,10 @@ class AuthViewModel extends ChangeNotifier {
     });
   }
 
-  Future<void> sendResetPasswordEmail(
-      BuildContext context, String email, String phoneNumber) async {
+  Future<void> sendResetPasswordEmail(String email, String phoneNumber) async {
     SendResetPasswordMailParam body =
-        SendResetPasswordMailParam(phoneNumber: phoneNumber);
-    final result = await authRepository.sendResetPasswordMail(body, email);
+        SendResetPasswordMailParam(phoneNumber: phoneNumber, userId: email);
+    final result = await authRepository.sendResetPasswordMail(body);
 
     result.fold(
       (failure) => commonNavigator.showSingleDialog(
@@ -114,13 +116,13 @@ class AuthViewModel extends ChangeNotifier {
     );
   }
 
-  Future<void> sendCertNum(BuildContext context, String type, String? userName,
-      String phoneNumber) async {
+  Future<Either<Failure, Success>> sendCertNum(BuildContext context,
+      String type, String? userName, String phoneNumber) async {
     SendCertNumberParam body = SendCertNumberParam(
         type: type, phoneNumber: phoneNumber, name: userName);
     final result = await authRepository.sendCertNumber(body);
 
-    result.fold(
+    return result.fold(
       (failure) {
         if (failure.errorCode == "429-AUTH-12") {
           storageProvider.startCoolDown();
@@ -132,14 +134,14 @@ class AuthViewModel extends ChangeNotifier {
             timeSeconds: storageProvider.certNumResendCoolDown,
           );
 
-          return;
+          return left(failure);
         }
 
         commonNavigator.showSingleDialog(
           content: ErrorMessages.getMessage(failure.errorCode,
               unknown: "알 수 없는 이유로\n인증번호 재발송에 실패하였습니다.\n다시 시도해 주세요."),
         );
-        return;
+        return left(failure);
       },
       (res) {
         if (type == 'findId') {
@@ -150,6 +152,7 @@ class AuthViewModel extends ChangeNotifier {
           signUpProvider.startTimer(commonNavigator.context);
           signUpProvider.updateSendCertNum();
         }
+        return right(res);
       },
     );
   }

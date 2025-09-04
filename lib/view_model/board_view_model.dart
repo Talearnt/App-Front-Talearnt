@@ -217,8 +217,7 @@ class BoardViewModel extends ChangeNotifier {
         status: status,
         page: page,
         size: size,
-        lastNo: lastNo,
-        path: "mobile");
+        lastNo: lastNo);
     final result = await boardRepository.getMatchBoardList(param);
     result.fold(
         (failure) => commonNavigator.showSingleDialog(
@@ -296,7 +295,6 @@ class BoardViewModel extends ChangeNotifier {
     CommunityBoardListSearchParam param = CommunityBoardListSearchParam(
         postType: postType,
         order: order,
-        path: path,
         page: page,
         size: size,
         lastNo: lastNo);
@@ -316,7 +314,6 @@ class BoardViewModel extends ChangeNotifier {
     CommunityBoardListSearchParam param = CommunityBoardListSearchParam(
         postType: postType,
         order: order,
-        path: path,
         page: page,
         size: size,
         lastNo: lastNo);
@@ -336,7 +333,6 @@ class BoardViewModel extends ChangeNotifier {
     CommunityBoardListSearchParam param = CommunityBoardListSearchParam(
         postType: postType,
         order: order,
-        path: path,
         page: page,
         size: size,
         lastNo: lastNo);
@@ -355,7 +351,7 @@ class BoardViewModel extends ChangeNotifier {
         (failure) => commonNavigator.showSingleDialog(
             content: ErrorMessages.getMessage(failure.errorCode)), (post) {
       communityBoardDetailProvider.updateCommunityDetailBoard(post);
-      commonNavigator.goRoute('/community-board-detail');
+      commonNavigator.pushRoute('/community-board-detail');
     });
   }
 
@@ -544,7 +540,9 @@ class BoardViewModel extends ChangeNotifier {
       matchBoardDetailProvider.changeMatchBoardLike();
       matchBoardProvider.changeMatchBoardLikeFromDetail(
           postNo, matchBoardDetailProvider.matchingDetailPost.isFavorite);
-      homeProvider.changeCommunityBoardLikeFromDetail(
+      homeProvider.changeBothTalentBoardLikeFromDetail(
+          postNo, matchBoardDetailProvider.matchingDetailPost.isFavorite);
+      profileProvider.changeMatchBoardLikeFromDetail(
           postNo, matchBoardDetailProvider.matchingDetailPost.isFavorite);
       commonNavigator.showSingleDialog(
           content: ErrorMessages.getMessage(failure.errorCode));
@@ -558,6 +556,8 @@ class BoardViewModel extends ChangeNotifier {
       communityBoardProvider.changeCommunityBoardLikeFromDetail(
           postNo, communityBoardDetailProvider.communityDetailBoard.isLike);
       homeProvider.changeCommunityBoardLikeFromDetail(
+          postNo, communityBoardDetailProvider.communityDetailBoard.isLike);
+      profileProvider.changeCommunityBoardLikeFromDetail(
           postNo, communityBoardDetailProvider.communityDetailBoard.isLike);
       commonNavigator.showSingleDialog(
           content: ErrorMessages.getMessage(failure.errorCode));
