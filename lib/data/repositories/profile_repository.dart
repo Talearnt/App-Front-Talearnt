@@ -1,7 +1,10 @@
 import 'dart:io';
 
+import 'package:app_front_talearnt/data/model/param/event_notice_param.dart';
 import 'package:app_front_talearnt/data/model/param/user_profile_param.dart';
+import 'package:app_front_talearnt/data/model/respone/event.dart';
 import 'package:app_front_talearnt/data/model/respone/failure.dart';
+import 'package:app_front_talearnt/data/model/respone/notice.dart';
 import 'package:app_front_talearnt/data/services/dio_service.dart';
 import 'package:dartz/dartz.dart';
 
@@ -82,5 +85,53 @@ class ProfileRepository {
       final pagination = Pagination.fromJson(response['data']['pagination']);
       return right({'posts': posts, 'pagination': pagination});
     });
+  }
+  
+  Future<Either<Failure, Map<String, dynamic>>> getEvent(
+      EventNoticeParam body) async {
+    final response =
+        await dio.get(ApiConstants.getEventUrl, null, body.toJson());
+
+    return response.fold(
+      left,
+      (resp) {
+        final data = resp['data'] as Map<String, dynamic>;
+
+        final events = (data['results'] as List<dynamic>)
+            .map((e) => Event.fromJson(e as Map<String, dynamic>))
+            .toList();
+
+        final hasNext = data['pagination']['hasNext'] as bool;
+
+        return right({
+          'events': events,
+          'hasNext': hasNext,
+        });
+      },
+    );
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> getNotice(
+      EventNoticeParam body) async {
+    final response =
+        await dio.get(ApiConstants.getNoticeUrl, null, body.toJson());
+
+    return response.fold(
+      left,
+      (resp) {
+        final data = resp['data'] as Map<String, dynamic>;
+
+        final notices = (data['results'] as List<dynamic>)
+            .map((e) => Notice.fromJson(e as Map<String, dynamic>))
+            .toList();
+
+        final hasNext = data['pagination']['hasNext'] as bool;
+
+        return right({
+          'notices': notices,
+          'hasNext': hasNext,
+        });
+      },
+    );
   }
 }

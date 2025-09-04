@@ -3,6 +3,9 @@ import 'dart:io';
 import 'dart:typed_data' as typed_data;
 import 'dart:ui' as ui;
 
+import 'package:app_front_talearnt/data/model/respone/event.dart';
+import 'package:app_front_talearnt/data/model/respone/notice.dart';
+import 'package:app_front_talearnt/view_model/board_view_model.dart';
 import 'package:app_front_talearnt/data/model/respone/community_board.dart';
 import 'package:app_front_talearnt/view_model/profile_view_model.dart';
 import 'package:flutter/material.dart';
@@ -44,10 +47,31 @@ class ProfileProvider extends ChangeNotifier with ClearText {
         vsync: _tickerProvider);
     _eventNoticeTabController =
         TabController(length: 2, vsync: _tickerProvider);
+    _eventScrollController.addListener(() => _onScroll('event'));
+    _noticeScrollController.addListener(() => _onScroll('notice'));
     _myWriteTabController = TabController(length: 2, vsync: _tickerProvider);
     _myWriteMatchScrollController.addListener(_onMatchScroll);
     _myWriteCommunityScrollController.addListener(_onCommunityScroll);
     _etcController.addListener(_onEtcChanged);
+  }
+
+  bool _isEventFetching = false;
+  bool _isNoticeFetching = false;
+
+  void _onScroll(String type) {
+    final controller =
+        (type == 'event') ? _eventScrollController : _noticeScrollController;
+    final isFetching = (type == 'event') ? _isEventFetching : _isNoticeFetching;
+
+    if (!isFetching &&
+        controller.position.pixels >=
+            controller.position.maxScrollExtent - 200) {
+      if (type == 'event') {
+        _fetchMoreEvents();
+      } else {
+        _fetchMoreNotices();
+      }
+    }
   }
 
   UserProfile _userProfile = UserProfile.empty();
@@ -58,10 +82,22 @@ class ProfileProvider extends ChangeNotifier with ClearText {
   final List<int> _receiveTalents = [];
   final List<int> _editReceiveTalents = [];
 
+  final List<Event> _eventList = [];
+  bool _eventHasNext = true;
+  int _eventPage = 1;
+
+  final List<Notice> _noticeList = [];
+  bool _noticeHasNext = true;
+  int _noticePage = 1;
+
+  late ProfileViewModel _profileViewModel;
+
   late TabController _giveTalentTabController;
   late TabController _receiveTalentTabController;
   late TabController _eventNoticeTabController;
   final CustomTickerProvider _tickerProvider;
+  final ScrollController _eventScrollController = ScrollController();
+  final ScrollController _noticeScrollController = ScrollController();
 
   Object? _imageFile;
   File? _tempImageFile;
@@ -180,6 +216,18 @@ class ProfileProvider extends ChangeNotifier with ClearText {
 
   bool get changeImage => _changeImage;
 
+
+  List<Event> get eventList => _eventList;
+  bool get eventHasNext => _eventHasNext;
+  int get eventPage => _eventPage;
+
+  List<Notice> get noticeList => _noticeList;
+  bool get noticeHasNext => _noticeHasNext;
+  int get noticePage => _noticePage;
+
+  ScrollController get eventScrollController => _eventScrollController;
+  ScrollController get noticeScrollController => _noticeScrollController;
+
   bool get isServiceNotUseful => _isServiceNotUseful;
 
   bool get isNoMatchingFound => _isNoMatchingFound;
@@ -224,6 +272,10 @@ class ProfileProvider extends ChangeNotifier with ClearText {
     _editGiveTalents.clear();
     _receiveTalents.clear();
     _editReceiveTalents.clear();
+
+    _eventList.clear();
+    _eventHasNext = true;
+    _eventPage = 1;
 
     _giveTalentTabController.index = 0;
     _receiveTalentTabController.index = 0;
@@ -486,6 +538,52 @@ class ProfileProvider extends ChangeNotifier with ClearText {
     _changeImage = false;
     _uploadUserImageInfo.clear();
     notifyListeners();
+  }
+
+  Future<void> setEventList(Map<String, dynamic> result) async {
+    final events = (result['events'] as List).map((e) => e as Event).toList();
+
+    _eventList.addAll(events);
+    _eventHasNext = result['hasNext'] as bool;
+
+    _eventPage++;
+
+    notifyListeners();
+  }
+
+  Future<void> setNoticeList(Map<String, dynamic> result) async {
+    final notices =
+        (result['notices'] as List).map((e) => e as Notice).toList();
+
+    _noticeList.addAll(notices);
+    _noticeHasNext = result['hasNext'] as bool;
+
+    _noticePage++;
+
+    notifyListeners();
+  }
+
+  Future<void> _fetchMoreEvents() async {
+    if (_eventHasNext) {
+      _isEventFetching = true;
+      await _profileViewModel.getEvent();
+      _isEventFetching = false;
+    }
+
+    notifyListeners();
+  }
+
+  Future<void> _fetchMoreNotices() async {
+    if (_noticeHasNext) {
+      _isNoticeFetching = true;
+      await _profileViewModel.getNotice();
+      _isNoticeFetching = false;
+    }
+    notifyListeners();
+  }
+
+  void setViewModel(ProfileViewModel viewModel) {
+    _profileViewModel = viewModel;
   }
 
   Future<void> setTabChange() async {

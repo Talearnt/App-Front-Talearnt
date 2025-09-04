@@ -38,6 +38,10 @@ abstract class ApiConstants {
   static const String getMatchBoardLikeListUrl =
       "$baseUrl/v1/posts/exchanges/favorites";
 
+  static const String getEventUrl = "$baseUrl/v1/events";
+
+  static const String getNoticeUrl = "$baseUrl/v1/notices";
+
   static const String getMyWriteMatchBoardListUrl =
       "$baseUrl/v1/users/exchanges";
 
