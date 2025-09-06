@@ -10,6 +10,7 @@ class DoubleBtnDialog extends StatelessWidget {
   final VoidCallback leftFun;
   final VoidCallback rightFun;
   final ValueNotifier<int>? timeSeconds;
+  final double vertical;
 
   const DoubleBtnDialog({
     super.key,
@@ -20,6 +21,7 @@ class DoubleBtnDialog extends StatelessWidget {
     required this.rightFun,
     this.timer = false,
     this.timeSeconds,
+    this.vertical = 13.5,
   });
 
   // showDialog를 포함하는 정적 메서드
@@ -76,14 +78,12 @@ class DoubleBtnDialog extends StatelessWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(8),
-                    child: Expanded(
-                      child: Text(
-                        content,
-                        style: TextTypes.body02(
-                          color: Palette.text01,
-                        ),
-                        textAlign: TextAlign.center,
+                    child: Text(
+                      content,
+                      style: TextTypes.body02(
+                        color: Palette.text01,
                       ),
+                      textAlign: TextAlign.center,
                     ),
                   ),
                   !timer
@@ -114,6 +114,7 @@ class DoubleBtnDialog extends StatelessWidget {
                   ),
                   Expanded(
                       child: PrimaryM(
+                    vertical: vertical,
                     content: rightText,
                     onPressed: rightFun,
                   )),

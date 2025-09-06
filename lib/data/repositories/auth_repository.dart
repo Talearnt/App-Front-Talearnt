@@ -29,6 +29,11 @@ class AuthRepository {
     return result.fold(left, (response) => right(Token.fromJson(response)));
   }
 
+  Future<Either<Failure, Success>> logout() async {
+    final result = await dio.post(ApiConstants.logoutUrl, null, null);
+    return result.fold(left, (response) => right(Success.fromJson(response)));
+  }
+
   Future<Either<Failure, String>> createRandomNickName() async {
     final result =
         await dio.get(ApiConstants.createRandomNickNameUrl, null, null);

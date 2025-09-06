@@ -8,6 +8,7 @@ import '../../common/common_navigator.dart';
 import '../../common/widget/button.dart';
 import '../../common/widget/top_app_bar.dart';
 import '../../provider/profile/profile_provider.dart';
+import '../../view_model/auth_view_model.dart';
 
 class AccountManagePage extends StatelessWidget {
   const AccountManagePage({super.key});
@@ -16,6 +17,7 @@ class AccountManagePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final profileProvider = Provider.of<ProfileProvider>(context);
     final commonNavigator = Provider.of<CommonNavigator>(context);
+    final authViewModel = Provider.of<AuthViewModel>(context);
 
     return PopScope(
       canPop: false,
@@ -63,8 +65,14 @@ class AccountManagePage extends StatelessWidget {
                               commonNavigator.goBack();
                             },
                             rightFun: () async {
-                              profileProvider.clearAllProviders(context);
-                              commonNavigator.goRoute('/login');
+                              final result = await authViewModel.logout();
+                              result.fold(
+                                (failure) {},
+                                (value) {
+                                  profileProvider.clearAllProviders(context);
+                                  commonNavigator.goRoute('/login');
+                                },
+                              );
                             });
                       },
                     ),

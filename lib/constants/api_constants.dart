@@ -5,6 +5,7 @@ abstract class ApiConstants {
   static const String refreshTokenUrl = "$baseUrl/v1/auth/login/refresh";
   static const String loginUrl = "$baseUrl/v1/auth/login";
   static const String loginKakaoUrl = "$baseUrl/v1/auth/login/kakao/mobile";
+  static const String logoutUrl = "$baseUrl/v1/auth/logout";
   static const String createRandomNickNameUrl =
       "$baseUrl/v1/auth/users/nickname/random";
   static const String checkNickNameAvailableUrl =
