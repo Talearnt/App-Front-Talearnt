@@ -10,6 +10,8 @@ import '../../common/widget/bottom_btn.dart';
 import '../../common/widget/top_app_bar.dart';
 import '../../provider/common/common_provider.dart';
 import '../../provider/keyword/keyword_provider.dart';
+import '../../provider/profile/profile_provider.dart';
+import '../../view_model/auth_view_model.dart';
 import '../../view_model/keyword_view_model.dart';
 import 'confirmation_talent_keyword_page.dart';
 
@@ -22,12 +24,13 @@ class SetTalentKeywordMainPage extends StatelessWidget {
     final commonNavigator = Provider.of<CommonNavigator>(context);
     final keywordViewModel = Provider.of<KeywordViewModel>(context);
     final commonProvider = Provider.of<CommonProvider>(context);
+    final profileProvider = Provider.of<ProfileProvider>(context);
+    final authViewModel = Provider.of<AuthViewModel>(context);
 
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (bool didPop, Object? result) async {
         if (!didPop) {
-          // 뒤로가기가 처리되지 않았을 때
           if (context.mounted) {
             keywordProvider.clearProvider(); // 초기화 작업 수행
             context.pop(); // 화면 종료
@@ -44,10 +47,16 @@ class SetTalentKeywordMainPage extends StatelessWidget {
                   content: "로그아웃 후\n다른 아이디로 로그인 하시겠어요?",
                   leftText: '로그아웃',
                   rightText: '키워드 설정',
-                  leftFun: () {
+                  leftFun: () async {
                     if (context.mounted) {
-                      context.pop();
-                      context.go('/');
+                      final result = await authViewModel.logout();
+                      result.fold(
+                        (failure) {},
+                        (value) {
+                          profileProvider.clearAllProviders(context);
+                          commonNavigator.goRoute('/login');
+                        },
+                      );
                     }
                   },
                 );
