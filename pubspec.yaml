@@ -53,7 +53,8 @@ dependencies:
   camera: ^0.11.1
   kakao_flutter_sdk_user: ^1.9.5 # 카카오 로그인 API 패키지
   flutter_dotenv: ^5.2.1
-
+  web_socket_channel: ^2.2.0
+  stomp_dart_client: ^0.4.4
 
 flutter_native_splash:
   color: "#94B79D"
@@ -120,6 +121,7 @@ flutter:
     - assets/icons/chevron_up_before.svg
     - assets/icons/chips_close.svg
     - assets/icons/close.svg
+    - assets/icons/devider.svg
     - assets/icons/eye_close.svg
     - assets/icons/eye_open.svg
     - assets/icons/finish.svg

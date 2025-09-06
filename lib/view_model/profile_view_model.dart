@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:app_front_talearnt/data/model/param/event_notice_param.dart';
 import 'package:app_front_talearnt/data/model/param/match_board_list_search_param.dart';
 import 'package:flutter/material.dart';
 
@@ -175,6 +176,38 @@ class ProfileViewModel extends ChangeNotifier {
         profileProvider.addCommunityBoardPosts(posts);
         profileProvider.updateMyWriteCommunityPage(pagination);
       }
+    });
+  }
+
+  Future<void> getEvent() async {
+    EventNoticeParam param =
+        EventNoticeParam(page: profileProvider.eventPage.toString());
+    final result = await profileRepository.getEvent(param);
+    result.fold(
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)), (result) {
+      profileProvider.setEventList(result);
+    });
+  }
+
+  Future<void> getNotice() async {
+    EventNoticeParam param =
+        EventNoticeParam(page: profileProvider.noticePage.toString());
+    final result = await profileRepository.getNotice(param);
+    result.fold(
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)), (result) {
+      profileProvider.setNoticeList(result);
+    });
+  }
+
+  Future<void> getNoticeDetail(int noticeNo) async {
+    final result = await profileRepository.getNoticeDetail(noticeNo);
+    result.fold(
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)), (result) {
+      profileProvider.setNoticeDetail(result);
+      commonNavigator.pushRoute('/notice-detail');
     });
   }
 }

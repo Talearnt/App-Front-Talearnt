@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 import '../../common/theme.dart';
 import '../../common/widget/button.dart';
+import '../../provider/common/common_provider.dart';
+import '../../view_model/board_view_model.dart';
 
 class NoEventNoticePage extends StatelessWidget {
   final String type; //event, notice
@@ -11,6 +13,9 @@ class NoEventNoticePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final commonProvider = Provider.of<CommonProvider>(context);
+    final boardViewModel = Provider.of<BoardViewModel>(context);
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Column(
@@ -39,9 +44,13 @@ class NoEventNoticePage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: PrimaryM(
-              content: '게시물 작성하기',
-              onPressed: () {
-                context.pop('/board-list');
+              content: '매칭 구경하러 가기',
+              onPressed: () async {
+                commonProvider.changeIsLoading(true);
+                await boardViewModel.getInitMatchBoardList().whenComplete(() {
+                  commonProvider.changeSelectedPage('board_list');
+                  commonProvider.changeIsLoading(false);
+                });
               },
             ),
           ),
