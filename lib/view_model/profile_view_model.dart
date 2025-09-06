@@ -210,4 +210,14 @@ class ProfileViewModel extends ChangeNotifier {
       commonNavigator.pushRoute('/notice-detail');
     });
   }
+
+  Future<void> getEventDetail(int eventNo) async {
+    final result = await profileRepository.getEventDetail(eventNo);
+    result.fold(
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)), (result) {
+      profileProvider.setEventDetail(result);
+      commonNavigator.pushRoute('/event-detail');
+    });
+  }
 }

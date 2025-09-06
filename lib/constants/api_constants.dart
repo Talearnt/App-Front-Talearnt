@@ -40,6 +40,10 @@ abstract class ApiConstants {
 
   static const String getEventUrl = "$baseUrl/v1/events";
 
+  static String getEventDetailUrl(int eventNo) {
+    return "$baseUrl/v1/events/$eventNo";
+  }
+
   static const String getNoticeUrl = "$baseUrl/v1/notices";
 
   static String getNoticeDetailUrl(int noticeNo) {
