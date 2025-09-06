@@ -43,6 +43,7 @@ import '../view/profile/account_delete_complete_page.dart';
 import '../view/profile/account_delete_page.dart';
 import '../view/profile/account_manage_page.dart';
 import '../view/profile/alarm_setting_page.dart';
+import '../view/profile/event_detail_page.dart';
 import '../view/profile/event_notice_page.dart';
 import '../view/profile/licenses_page.dart';
 import '../view/profile/modify_user_info_page.dart';
@@ -366,6 +367,12 @@ class Routes {
             path: '/notice-detail',
             builder: (BuildContext context, GoRouterState state) {
               return const NoticeDetailPage();
+            },
+          ),
+          GoRoute(
+            path: '/event-detail',
+            builder: (BuildContext context, GoRouterState state) {
+              return const EventDetailPage();
             },
           ),
         ],
