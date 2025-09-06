@@ -20,6 +20,7 @@ class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   static bool _hasLoaded = false;
+  static bool _wasLoggedIn = false;
 
   @override
   Widget build(BuildContext context) {
@@ -33,64 +34,70 @@ class HomePage extends StatelessWidget {
     final MatchBoardProvider matchBoardProvider =
         Provider.of<MatchBoardProvider>(context);
 
+    Future<void> loadHome() async {
+      commonProvider.changeIsLoading(true);
+      final futures = <Future>[];
+      if (homeProvider.newTalentExchangePosts.isEmpty) {
+        futures.add(viewModel.getMatchBoardList(
+            [], [], '', '', '', '', '', '', '10', '', 'new'));
+      }
+      if (homeProvider.bestCommunityPosts.isEmpty) {
+        futures.add(
+            viewModel.getBestCommunityBoardList("", "hot", "", "", "10", ""));
+      }
+      if (loginProvider.isLoggedIn &&
+          homeProvider.userMatchingTalentExchangePosts.isEmpty) {
+        final giveTalents = profileProvider.userProfile.giveTalents
+            .map((e) => e.toString())
+            .toList();
+        futures.add(viewModel.getMatchBoardList(
+            giveTalents, [], '', '', '', '', '', '', '10', '', 'userMatch'));
+      }
+      await Future.wait(futures);
+      commonProvider.changeIsLoading(false);
+    }
+
     if (!_hasLoaded) {
       _hasLoaded = true;
-
       WidgetsBinding.instance.addPostFrameCallback((_) async {
-        commonProvider.changeIsLoading(true);
-
-        final List<Future> futures = [];
-
-        // 신규 매칭 게시물
-        if (homeProvider.newTalentExchangePosts.isEmpty) {
-          futures.add(viewModel.getMatchBoardList(
-              [], [], '', '', '', '', '', '', '10', '', 'new'));
-        }
-
-        // BEST 커뮤니티 글
-        if (homeProvider.bestCommunityPosts.isEmpty) {
-          futures.add(
-              viewModel.getBestCommunityBoardList("", "hot", "", "", "10", ""));
-        }
-
-        // 유저 맞춤 매칭 (로그인 시)
-        if (loginProvider.isLoggedIn &&
-            homeProvider.userMatchingTalentExchangePosts.isEmpty) {
-          final giveTalents = profileProvider.userProfile.giveTalents
-              .map((e) => e.toString())
-              .toList();
-
-          futures.add(viewModel.getMatchBoardList(
-              giveTalents, [], '', '', '', '', '', '', '10', '', 'userMatch'));
-        }
-
-        await Future.wait(futures);
-        commonProvider.changeIsLoading(false);
+        _wasLoggedIn = loginProvider.isLoggedIn;
+        await loadHome();
       });
     }
 
+    if (loginProvider.isLoggedIn && !_wasLoggedIn) {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        await loadHome();
+      });
+      _wasLoggedIn = true;
+    } else if (!loginProvider.isLoggedIn && _wasLoggedIn) {
+      _wasLoggedIn = false;
+    }
+
     Future<void> getList(
-        CommonProvider commonProvider,
-        BoardViewModel boardViewModel,
-        MatchBoardProvider matchBoardProvider) async {
+      CommonProvider commonProvider,
+      BoardViewModel boardViewModel,
+      MatchBoardProvider matchBoardProvider,
+    ) async {
       commonProvider.changeIsLoading(true);
       await boardViewModel
           .getMatchBoardList(
-              matchBoardProvider.selectedGiveTalentKeywordCodes
-                  .map((e) => e.toString())
-                  .toList(),
-              matchBoardProvider.selectedInterestTalentKeywordCodes
-                  .map((e) => e.toString())
-                  .toList(),
-              matchBoardProvider.selectedOrderType,
-              matchBoardProvider.selectedDurationType,
-              matchBoardProvider.selectedOperationType,
-              null,
-              null,
-              null,
-              null,
-              null,
-              "reset")
+            matchBoardProvider.selectedGiveTalentKeywordCodes
+                .map((e) => e.toString())
+                .toList(),
+            matchBoardProvider.selectedInterestTalentKeywordCodes
+                .map((e) => e.toString())
+                .toList(),
+            matchBoardProvider.selectedOrderType,
+            matchBoardProvider.selectedDurationType,
+            matchBoardProvider.selectedOperationType,
+            null,
+            null,
+            null,
+            null,
+            null,
+            "reset",
+          )
           .whenComplete(() => commonProvider.changeIsLoading(false));
     }
 
@@ -105,30 +112,21 @@ class HomePage extends StatelessWidget {
                     children: [
                       Padding(
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 20,
-                          vertical: 16,
-                        ),
+                            horizontal: 20, vertical: 16),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Padding(
                               padding: const EdgeInsets.only(
-                                top: 1,
-                                bottom: 1,
-                                left: 8,
-                              ),
+                                  top: 1, bottom: 1, left: 8),
                               child: SvgPicture.asset(
-                                'assets/icons/default_logo.svg',
-                                width: 112,
-                                height: 22,
-                              ),
+                                  'assets/icons/default_logo.svg',
+                                  width: 112,
+                                  height: 22),
                             ),
-                            SvgPicture.asset(
-                              'assets/icons/bell_off.svg',
-                              width: 18,
-                              height: 20,
-                            ),
+                            SvgPicture.asset('assets/icons/bell_off.svg',
+                                width: 18, height: 20),
                           ],
                         ),
                       ),
@@ -145,31 +143,24 @@ class HomePage extends StatelessWidget {
                           ),
                         ),
                       ),
-                      const SizedBox(
-                        height: 36,
-                      ),
+                      const SizedBox(height: 36),
                       loginProvider.isLoggedIn
                           ? Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
-                                    horizontal: 24,
-                                  ),
+                                      horizontal: 24),
                                   child: Align(
                                     alignment: Alignment.centerLeft,
-                                    child: Text(
-                                      "관심있는 키워드를 반영했어요",
-                                      style: TextTypes.captionMedium02(
-                                        color: Palette.text02,
-                                      ),
-                                    ),
+                                    child: Text("관심있는 키워드를 반영했어요",
+                                        style: TextTypes.captionMedium02(
+                                            color: Palette.text02)),
                                   ),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
-                                    horizontal: 24,
-                                  ),
+                                      horizontal: 24),
                                   child: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
@@ -179,55 +170,46 @@ class HomePage extends StatelessWidget {
                                           text: profileProvider
                                               .userProfile.nickname,
                                           style: TextTypes.bodySemi01(
-                                            color: Palette.primary01,
-                                          ),
+                                              color: Palette.primary01),
                                           children: <TextSpan>[
                                             TextSpan(
-                                              text: '님을 위한 맞춤 매칭',
-                                              style: TextTypes.bodySemi01(
-                                                color: Palette.text01,
-                                              ),
-                                            ),
+                                                text: '님을 위한 맞춤 매칭',
+                                                style: TextTypes.bodySemi01(
+                                                    color: Palette.text01)),
                                           ],
                                         ),
                                       ),
                                       GestureDetector(
-                                        onTap: () {
+                                        onTap: () async {
                                           matchBoardProvider
                                               .setSelectedInterestTalentKeyword(
                                                   profileProvider.userProfile
                                                       .receiveTalents);
                                           commonBoardProvider
                                               .updateInitState(false);
-                                          getList(commonProvider, viewModel,
-                                              matchBoardProvider);
+                                          await getList(commonProvider,
+                                              viewModel, matchBoardProvider);
                                           commonProvider
                                               .changeSelectedPage('board_list');
-                                          context.push('/board-list');
+                                          await context.push('/board-list');
                                         },
                                         child: Row(
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
-                                            Text(
-                                              '더보기',
-                                              style: TextTypes.caption01(
-                                                color: Palette.text03,
-                                              ),
-                                            ),
+                                            Text('더보기',
+                                                style: TextTypes.caption01(
+                                                    color: Palette.text03)),
                                             SvgPicture.asset(
-                                              'assets/icons/add_more_arrow.svg',
-                                              width: 24,
-                                              height: 24,
-                                            ),
+                                                'assets/icons/add_more_arrow.svg',
+                                                width: 24,
+                                                height: 24),
                                           ],
                                         ),
                                       ),
                                     ],
                                   ),
                                 ),
-                                const SizedBox(
-                                  height: 12,
-                                ),
+                                const SizedBox(height: 12),
                                 SingleChildScrollView(
                                   scrollDirection: Axis.horizontal,
                                   padding:
@@ -242,22 +224,20 @@ class HomePage extends StatelessWidget {
                                           padding:
                                               const EdgeInsets.only(right: 14),
                                           child: GestureDetector(
-                                              onTap: () async {
+                                            onTap: () async {
+                                              commonProvider
+                                                  .changeIsLoading(true);
+                                              await viewModel
+                                                  .getMatchDetailBoard(
+                                                      post.exchangePostNo)
+                                                  .then((value) {
                                                 commonProvider
-                                                    .changeIsLoading(true);
-                                                await viewModel
-                                                    .getMatchDetailBoard(
-                                                  post.exchangePostNo,
-                                                )
-                                                    .then(
-                                                  (value) {
-                                                    commonProvider
-                                                        .changeIsLoading(false);
-                                                  },
-                                                );
-                                              },
-                                              child: HomeMatchBoardCard(
-                                                  post: post)),
+                                                    .changeIsLoading(false);
+                                              });
+                                            },
+                                            child:
+                                                HomeMatchBoardCard(post: post),
+                                          ),
                                         );
                                       }).toList(),
                                     ],
@@ -281,29 +261,22 @@ class HomePage extends StatelessWidget {
                                         children: [
                                           Align(
                                             alignment: Alignment.centerLeft,
-                                            child: Text(
-                                              "단 3초! 로그인하고 확인해보세요",
-                                              style: TextTypes.captionMedium02(
-                                                color: Palette.text02,
-                                              ),
-                                            ),
+                                            child: Text("단 3초! 로그인하고 확인해보세요",
+                                                style:
+                                                    TextTypes.captionMedium02(
+                                                        color: Palette.text02)),
                                           ),
-                                          const SizedBox(
-                                            height: 2,
-                                          ),
+                                          const SizedBox(height: 2),
                                           Text.rich(
                                             TextSpan(
                                               text: '회원',
                                               style: TextTypes.bodySemi01(
-                                                color: Palette.primary01,
-                                              ),
+                                                  color: Palette.primary01),
                                               children: <TextSpan>[
                                                 TextSpan(
-                                                  text: '님을 위한 맞춤 매칭',
-                                                  style: TextTypes.bodySemi01(
-                                                    color: Palette.text01,
-                                                  ),
-                                                ),
+                                                    text: '님을 위한 맞춤 매칭',
+                                                    style: TextTypes.bodySemi01(
+                                                        color: Palette.text01)),
                                               ],
                                             ),
                                           ),
@@ -311,25 +284,19 @@ class HomePage extends StatelessWidget {
                                       ),
                                       PrimaryS(
                                         content: "로그인",
-                                        onPressed: () {
-                                          context.push("/login");
+                                        onPressed: () async {
+                                          await context.push("/login");
                                         },
                                       ),
                                     ],
                                   ),
                                 ),
-                                const SizedBox(
-                                  height: 24,
-                                ),
+                                const SizedBox(height: 24),
                                 const Divider(
-                                  thickness: 8,
-                                  color: Palette.line02,
-                                )
+                                    thickness: 8, color: Palette.line02),
                               ],
                             ),
-                      const SizedBox(
-                        height: 44,
-                      ),
+                      const SizedBox(height: 44),
                       homeProvider.newTalentExchangePosts.isEmpty
                           ? const SizedBox.shrink()
                           : Column(
@@ -342,47 +309,38 @@ class HomePage extends StatelessWidget {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(
-                                        '신규 매칭 게시물이 올라왔어요!',
-                                        style: TextTypes.bodySemi01(
-                                            color: Palette.text01),
-                                      ),
+                                      Text('신규 매칭 게시물이 올라왔어요!',
+                                          style: TextTypes.bodySemi01(
+                                              color: Palette.text01)),
                                       GestureDetector(
                                         onTap: () async {
                                           commonProvider.changeIsLoading(true);
                                           await viewModel
                                               .getInitMatchBoardList()
-                                              .then(
-                                            (value) {
-                                              commonProvider.changeSelectedPage(
-                                                  'board_list');
-                                              commonProvider
-                                                  .changeIsLoading(false);
-                                            },
-                                          );
+                                              .then((value) {
+                                            commonProvider.changeSelectedPage(
+                                                'board_list');
+                                            commonProvider
+                                                .changeIsLoading(false);
+                                          });
                                         },
                                         child: Row(
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
-                                            Text(
-                                              '더보기',
-                                              style: TextTypes.caption01(
-                                                  color: Palette.text03),
-                                            ),
+                                            Text('더보기',
+                                                style: TextTypes.caption01(
+                                                    color: Palette.text03)),
                                             SvgPicture.asset(
-                                              'assets/icons/add_more_arrow.svg',
-                                              width: 24,
-                                              height: 24,
-                                            ),
+                                                'assets/icons/add_more_arrow.svg',
+                                                width: 24,
+                                                height: 24),
                                           ],
                                         ),
                                       ),
                                     ],
                                   ),
                                 ),
-                                const SizedBox(
-                                  height: 12,
-                                ),
+                                const SizedBox(height: 12),
                                 SingleChildScrollView(
                                   scrollDirection: Axis.horizontal,
                                   padding:
@@ -401,14 +359,11 @@ class HomePage extends StatelessWidget {
                                                   .changeIsLoading(true);
                                               await viewModel
                                                   .getMatchDetailBoard(
-                                                post.exchangePostNo,
-                                              )
-                                                  .then(
-                                                (value) {
-                                                  commonProvider
-                                                      .changeIsLoading(false);
-                                                },
-                                              );
+                                                      post.exchangePostNo)
+                                                  .then((value) {
+                                                commonProvider
+                                                    .changeIsLoading(false);
+                                              });
                                             },
                                             child:
                                                 HomeMatchBoardCard(post: post),
@@ -420,27 +375,20 @@ class HomePage extends StatelessWidget {
                                 ),
                               ],
                             ),
-                      const SizedBox(
-                        height: 44,
-                      ),
+                      const SizedBox(height: 44),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 24,
-                            ),
+                            padding: const EdgeInsets.symmetric(horizontal: 24),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Expanded(
-                                  child: Text(
-                                    'BEST 커뮤니티 글만 모아봤어요!',
-                                    style: TextTypes.bodySemi01(
-                                      color: Palette.text01,
-                                    ),
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
+                                  child: Text('BEST 커뮤니티 글만 모아봤어요!',
+                                      style: TextTypes.bodySemi01(
+                                          color: Palette.text01),
+                                      overflow: TextOverflow.ellipsis),
                                 ),
                                 GestureDetector(
                                   onTap: () async {
@@ -456,33 +404,25 @@ class HomePage extends StatelessWidget {
                                   child: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      Text(
-                                        '더보기',
-                                        style: TextTypes.caption01(
-                                          color: Palette.text03,
-                                        ),
-                                      ),
+                                      Text('더보기',
+                                          style: TextTypes.caption01(
+                                              color: Palette.text03)),
                                       SvgPicture.asset(
-                                        'assets/icons/add_more_arrow.svg',
-                                        width: 24,
-                                        height: 24,
-                                      ),
+                                          'assets/icons/add_more_arrow.svg',
+                                          width: 24,
+                                          height: 24),
                                     ],
                                   ),
                                 ),
                               ],
                             ),
                           ),
-                          const SizedBox(
-                            height: 12,
-                          ),
+                          const SizedBox(height: 12),
                           homeProvider.bestCommunityPosts.isEmpty
-                              ? const Row(
-                                  children: [
-                                    SizedBox(width: 24),
-                                    HomeNullCard(),
-                                  ],
-                                )
+                              ? const Row(children: [
+                                  SizedBox(width: 24),
+                                  HomeNullCard()
+                                ])
                               : SingleChildScrollView(
                                   scrollDirection: Axis.horizontal,
                                   padding:
@@ -496,7 +436,6 @@ class HomePage extends StatelessWidget {
                                           .map((entry) {
                                         final ranking = entry.key + 1;
                                         final post = entry.value;
-
                                         return Padding(
                                           padding:
                                               const EdgeInsets.only(right: 14),
@@ -506,19 +445,14 @@ class HomePage extends StatelessWidget {
                                                   .changeIsLoading(true);
                                               await viewModel
                                                   .getCommunityDetailBoard(
-                                                post.communityPostNo,
-                                              )
-                                                  .then(
-                                                (value) {
-                                                  commonProvider
-                                                      .changeIsLoading(false);
-                                                },
-                                              );
+                                                      post.communityPostNo)
+                                                  .then((value) {
+                                                commonProvider
+                                                    .changeIsLoading(false);
+                                              });
                                             },
                                             child: HomeCommunityCard(
-                                              post: post,
-                                              ranking: ranking,
-                                            ),
+                                                post: post, ranking: ranking),
                                           ),
                                         );
                                       }).toList(),
@@ -527,16 +461,14 @@ class HomePage extends StatelessWidget {
                                 )
                         ],
                       ),
-                      const SizedBox(
-                        height: 108,
-                      ),
+                      const SizedBox(height: 108),
                     ],
                   ),
                 );
               },
             ),
             const CommonBottomNavigationBar(),
-            if (commonProvider.isLoadingPage) const LoadingWithCharacter()
+            if (commonProvider.isLoadingPage) const LoadingWithCharacter(),
           ],
         ),
       ),
