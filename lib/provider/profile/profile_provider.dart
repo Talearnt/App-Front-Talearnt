@@ -3,9 +3,9 @@ import 'dart:io';
 import 'dart:typed_data' as typed_data;
 import 'dart:ui' as ui;
 
+import 'package:app_front_talearnt/data/model/respone/community_board.dart';
 import 'package:app_front_talearnt/data/model/respone/event.dart';
 import 'package:app_front_talearnt/data/model/respone/notice.dart';
-import 'package:app_front_talearnt/data/model/respone/community_board.dart';
 import 'package:app_front_talearnt/view_model/profile_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -16,6 +16,7 @@ import 'package:provider/provider.dart';
 
 import '../../constants/global_value_constants.dart';
 import '../../data/model/respone/match_board.dart';
+import '../../data/model/respone/notice_detail.dart';
 import '../../data/model/respone/pagination.dart';
 import '../../data/model/respone/user_profile.dart';
 import '../auth/find_id_provider.dart';
@@ -54,25 +55,6 @@ class ProfileProvider extends ChangeNotifier with ClearText {
     _etcController.addListener(_onEtcChanged);
   }
 
-  bool _isEventFetching = false;
-  bool _isNoticeFetching = false;
-
-  void _onScroll(String type) {
-    final controller =
-        (type == 'event') ? _eventScrollController : _noticeScrollController;
-    final isFetching = (type == 'event') ? _isEventFetching : _isNoticeFetching;
-
-    if (!isFetching &&
-        controller.position.pixels >=
-            controller.position.maxScrollExtent - 200) {
-      if (type == 'event') {
-        _fetchMoreEvents();
-      } else {
-        _fetchMoreNotices();
-      }
-    }
-  }
-
   UserProfile _userProfile = UserProfile.empty();
   final TextEditingController _editNickNameController = TextEditingController();
   final FocusNode _editNickNameFocusNode = FocusNode();
@@ -80,16 +62,6 @@ class ProfileProvider extends ChangeNotifier with ClearText {
   final List<int> _editGiveTalents = [];
   final List<int> _receiveTalents = [];
   final List<int> _editReceiveTalents = [];
-
-  final List<Event> _eventList = [];
-  bool _eventHasNext = true;
-  int _eventPage = 1;
-
-  final List<Notice> _noticeList = [];
-  bool _noticeHasNext = true;
-  int _noticePage = 1;
-
-  late ProfileViewModel _profileViewModel;
 
   late TabController _giveTalentTabController;
   late TabController _receiveTalentTabController;
@@ -145,6 +117,21 @@ class ProfileProvider extends ChangeNotifier with ClearText {
   Pagination _matchPage = Pagination.empty();
   Pagination _communityPage = Pagination.empty();
   bool _isFirstTabChange = true;
+
+  //이벤트/공지사항
+  final List<Event> _eventList = [];
+  bool _eventHasNext = true;
+  int _eventPage = 1;
+
+  final List<Notice> _noticeList = [];
+  bool _noticeHasNext = true;
+  int _noticePage = 1;
+  bool _isEventFetching = false;
+  bool _isNoticeFetching = false;
+
+  late NoticeDetail _noticeDetail = NoticeDetail.empty();
+
+  late ProfileViewModel _profileViewModel;
 
   TabController get giveTalentTabController => _giveTalentTabController;
 
@@ -214,17 +201,23 @@ class ProfileProvider extends ChangeNotifier with ClearText {
 
   bool get changeImage => _changeImage;
 
-
   List<Event> get eventList => _eventList;
+
   bool get eventHasNext => _eventHasNext;
+
   int get eventPage => _eventPage;
 
   List<Notice> get noticeList => _noticeList;
+
   bool get noticeHasNext => _noticeHasNext;
+
   int get noticePage => _noticePage;
 
   ScrollController get eventScrollController => _eventScrollController;
+
   ScrollController get noticeScrollController => _noticeScrollController;
+
+  NoticeDetail get noticeDetail => _noticeDetail;
 
   bool get isServiceNotUseful => _isServiceNotUseful;
 
@@ -275,6 +268,10 @@ class ProfileProvider extends ChangeNotifier with ClearText {
     _eventHasNext = true;
     _eventPage = 1;
 
+    _noticeList.clear();
+    _noticeHasNext = true;
+    _noticePage = 1;
+
     _giveTalentTabController.index = 0;
     _receiveTalentTabController.index = 0;
     _eventNoticeTabController.index = 0;
@@ -305,6 +302,23 @@ class ProfileProvider extends ChangeNotifier with ClearText {
     _allAlarm = false;
     _commentAlarm = false;
     _keywordAlarm = false;
+    _noticeDetail = NoticeDetail.empty();
+  }
+
+  void _onScroll(String type) {
+    final controller =
+        (type == 'event') ? _eventScrollController : _noticeScrollController;
+    final isFetching = (type == 'event') ? _isEventFetching : _isNoticeFetching;
+
+    if (!isFetching &&
+        controller.position.pixels >=
+            controller.position.maxScrollExtent - 200) {
+      if (type == 'event') {
+        _fetchMoreEvents();
+      } else {
+        _fetchMoreNotices();
+      }
+    }
   }
 
   Future<void> setUserProfile(UserProfile userProfile) async {
@@ -664,7 +678,7 @@ class ProfileProvider extends ChangeNotifier with ClearText {
   Future<void> _fetchMoreMatchData() async {
     _isMatchFetching = true;
     await _profileViewModel.getMyWriteMatchBoardList(
-        null, null, _matchBoardList.last.exchangePostNo.toString(),'add');
+        null, null, _matchBoardList.last.exchangePostNo.toString(), 'add');
     _isMatchFetching = false;
   }
 
@@ -720,14 +734,14 @@ class ProfileProvider extends ChangeNotifier with ClearText {
 
   Future<void> changeMatchBoardLike(int postNo) async {
     final index =
-    _matchBoardList.indexWhere((post) => post.exchangePostNo == postNo);
+        _matchBoardList.indexWhere((post) => post.exchangePostNo == postNo);
     if (index != -1) {
       _matchBoardList[index].isFavorite = !_matchBoardList[index].isFavorite;
       _matchBoardList[index].isFavorite
           ? _matchBoardList[index].favoriteCount =
-          _matchBoardList[index].favoriteCount + 1
+              _matchBoardList[index].favoriteCount + 1
           : _matchBoardList[index].favoriteCount =
-          _matchBoardList[index].favoriteCount - 1;
+              _matchBoardList[index].favoriteCount - 1;
     }
     notifyListeners();
   }
@@ -735,14 +749,14 @@ class ProfileProvider extends ChangeNotifier with ClearText {
   Future<void> changeMatchBoardLikeFromDetail(
       int postNo, bool isFavorite) async {
     final index =
-    _matchBoardList.indexWhere((post) => post.exchangePostNo == postNo);
+        _matchBoardList.indexWhere((post) => post.exchangePostNo == postNo);
     if (index != -1) {
       _matchBoardList[index].isFavorite = isFavorite;
       _matchBoardList[index].isFavorite
           ? _matchBoardList[index].favoriteCount =
-          _matchBoardList[index].favoriteCount + 1
+              _matchBoardList[index].favoriteCount + 1
           : _matchBoardList[index].favoriteCount =
-          _matchBoardList[index].favoriteCount - 1;
+              _matchBoardList[index].favoriteCount - 1;
     }
     notifyListeners();
   }
@@ -754,9 +768,9 @@ class ProfileProvider extends ChangeNotifier with ClearText {
       _communityBoardList[index].isLike = !_communityBoardList[index].isLike;
       _communityBoardList[index].isLike
           ? _communityBoardList[index].likeCount =
-          _communityBoardList[index].likeCount + 1
+              _communityBoardList[index].likeCount + 1
           : _communityBoardList[index].likeCount =
-          _communityBoardList[index].likeCount - 1;
+              _communityBoardList[index].likeCount - 1;
     }
     notifyListeners();
   }
@@ -769,11 +783,26 @@ class ProfileProvider extends ChangeNotifier with ClearText {
       _communityBoardList[index].isLike = isLike;
       _communityBoardList[index].isLike
           ? _communityBoardList[index].likeCount =
-          _communityBoardList[index].likeCount + 1
+              _communityBoardList[index].likeCount + 1
           : _communityBoardList[index].likeCount =
-          _communityBoardList[index].likeCount - 1;
+              _communityBoardList[index].likeCount - 1;
     }
     notifyListeners();
+  }
+
+  void setNoticeDetail(NoticeDetail noticeDetail) {
+    _noticeDetail = noticeDetail;
+    notifyListeners();
+  }
+
+  void resetNoticeEvent(){
+    _eventList.clear();
+    _eventHasNext = true;
+    _eventPage = 1;
+
+    _noticeList.clear();
+    _noticeHasNext = true;
+    _noticePage = 1;
   }
 
   void clearAllProviders(BuildContext context) {

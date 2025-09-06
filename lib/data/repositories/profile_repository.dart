@@ -14,6 +14,7 @@ import '../model/param/match_board_list_search_param.dart';
 import '../model/param/s3_controller_param.dart';
 import '../model/respone/community_board.dart';
 import '../model/respone/match_board.dart';
+import '../model/respone/notice_detail.dart';
 import '../model/respone/pagination.dart';
 import '../model/respone/s3_upload_url.dart';
 import '../model/respone/user_profile.dart';
@@ -86,7 +87,7 @@ class ProfileRepository {
       return right({'posts': posts, 'pagination': pagination});
     });
   }
-  
+
   Future<Either<Failure, Map<String, dynamic>>> getEvent(
       EventNoticeParam body) async {
     final response =
@@ -133,5 +134,13 @@ class ProfileRepository {
         });
       },
     );
+  }
+
+  Future<Either<Failure, NoticeDetail>> getNoticeDetail(int noticeNo) async {
+    final response =
+        await dio.get(ApiConstants.getNoticeDetailUrl(noticeNo), null, null);
+
+    return response.fold(
+        left, (response) => right(NoticeDetail.fromJson(response["data"])));
   }
 }

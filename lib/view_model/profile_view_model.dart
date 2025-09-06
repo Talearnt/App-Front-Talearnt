@@ -176,8 +176,8 @@ class ProfileViewModel extends ChangeNotifier {
       }
     });
   }
-  
-   Future<void> getEvent() async {
+
+  Future<void> getEvent() async {
     EventNoticeParam param =
         EventNoticeParam(page: profileProvider.eventPage.toString());
     final result = await profileRepository.getEvent(param);
@@ -196,6 +196,16 @@ class ProfileViewModel extends ChangeNotifier {
         (failure) => commonNavigator.showSingleDialog(
             content: ErrorMessages.getMessage(failure.errorCode)), (result) {
       profileProvider.setNoticeList(result);
-          });
-    }
+    });
+  }
+
+  Future<void> getNoticeDetail(int noticeNo) async {
+    final result = await profileRepository.getNoticeDetail(noticeNo);
+    result.fold(
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)), (result) {
+      profileProvider.setNoticeDetail(result);
+      commonNavigator.pushRoute('/notice-detail');
+    });
+  }
 }
