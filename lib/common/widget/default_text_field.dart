@@ -99,31 +99,35 @@ class DefaultTextField extends StatelessWidget {
   }
 
   Widget? _getSuffixIcon() {
-    final showDeleteIcon =
-        textEditingController.text.isNotEmpty && focusNode!.hasFocus;
-    final showTimeSet = type == "cert" && isSendAuth;
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        if (showDeleteIcon)
-          GestureDetector(
-            onTap: () {
-              provider.clearText(textEditingController);
-            },
-            child: SvgPicture.asset("assets/icons/text_delete.svg"),
-          ),
-        if (showTimeSet)
-          Row(
-            children: [
-              ValueListenableBuilder<int>(
-                  valueListenable: timeSeconds!, // ValueNotifier를 감시
-                  builder: (context, value, child) {
-                    return TimeSet(timerSeconds: timeSeconds);
-                  }),
-              const SizedBox(width: 8)
-            ],
-          ),
-      ],
-    );
+    if (isEnabled) {
+      final showDeleteIcon =
+          textEditingController.text.isNotEmpty && focusNode!.hasFocus;
+      final showTimeSet = type == "cert" && isSendAuth;
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (showDeleteIcon)
+            GestureDetector(
+              onTap: () {
+                provider.clearText(textEditingController);
+              },
+              child: SvgPicture.asset("assets/icons/text_delete.svg"),
+            ),
+          if (showTimeSet)
+            Row(
+              children: [
+                ValueListenableBuilder<int>(
+                    valueListenable: timeSeconds!, // ValueNotifier를 감시
+                    builder: (context, value, child) {
+                      return TimeSet(timerSeconds: timeSeconds);
+                    }),
+                const SizedBox(width: 8)
+              ],
+            ),
+        ],
+      );
+    }else{
+      return null;
+    }
   }
 }

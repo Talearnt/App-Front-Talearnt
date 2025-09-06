@@ -4,7 +4,7 @@ abstract class ApiConstants {
   static const String joinKakaoUrl = "$baseUrl/v1/auth/join/kakao";
   static const String refreshTokenUrl = "$baseUrl/v1/auth/login/refresh";
   static const String loginUrl = "$baseUrl/v1/auth/login";
-  static const String loginKakaoUrl = "$baseUrl/v1/api/auth/login/kakao";
+  static const String loginKakaoUrl = "$baseUrl/v1/auth/login/kakao/mobile";
   static const String createRandomNickNameUrl =
       "$baseUrl/v1/auth/users/nickname/random";
   static const String checkNickNameAvailableUrl =
