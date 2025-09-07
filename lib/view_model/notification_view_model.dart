@@ -66,4 +66,16 @@ class NotificationViewModel extends ChangeNotifier {
       notificationProvider.changeCommentNotification(commentNotification);
     });
   }
+
+  Future<void> getNotificationSetting() async {
+    final result = await notificationRepository.getNotificationSetting();
+    result.fold(
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)), (data) {
+      notificationProvider
+          .changeKeywordNotification(data.data["allowKeywordNotifications"]);
+      notificationProvider
+          .changeCommentNotification(data.data["allowCommentNotifications"]);
+    });
+  }
 }

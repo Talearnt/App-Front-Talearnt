@@ -1,5 +1,7 @@
+import 'package:app_front_talearnt/view_model/notification_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 import '../../../common/theme.dart';
 import 'create_setting_menu.dart';
@@ -11,6 +13,7 @@ class ProfileSettingSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final notificationViewModel = Provider.of<NotificationViewModel>(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -30,7 +33,8 @@ class ProfileSettingSection extends StatelessWidget {
           CreateSettingMenu(
             iconPath: 'assets/icons/bell.svg',
             title: '알림 설정',
-            onTap: () {
+            onTap: () async {
+              await notificationViewModel.getNotificationSetting();
               context.push('/alarm-setting');
             },
           )
