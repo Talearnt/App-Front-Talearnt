@@ -15,6 +15,7 @@ import 'package:app_front_talearnt/view/board/match_board/match_edit_preview_pag
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../view/alarm/alarm_page.dart';
 import '../view/auth/agreement/privacy_agreement_optional.dart';
 import '../view/auth/agreement/privacy_agreement_required.dart';
 import '../view/auth/agreement/terms_agreement_optional.dart';
@@ -43,6 +44,7 @@ import '../view/profile/account_delete_complete_page.dart';
 import '../view/profile/account_delete_page.dart';
 import '../view/profile/account_manage_page.dart';
 import '../view/profile/alarm_setting_page.dart';
+import '../view/profile/event_detail_page.dart';
 import '../view/profile/event_notice_page.dart';
 import '../view/profile/licenses_page.dart';
 import '../view/profile/modify_user_info_page.dart';
@@ -333,6 +335,12 @@ class Routes {
             },
           ),
           GoRoute(
+            path: '/alarm',
+            builder: (BuildContext context, GoRouterState state) {
+              return const AlarmPage();
+            },
+          ),
+          GoRoute(
             path: '/my-write',
             builder: (BuildContext context, GoRouterState state) {
               return const MyWritePage();
@@ -366,6 +374,12 @@ class Routes {
             path: '/notice-detail',
             builder: (BuildContext context, GoRouterState state) {
               return const NoticeDetailPage();
+            },
+          ),
+          GoRoute(
+            path: '/event-detail',
+            builder: (BuildContext context, GoRouterState state) {
+              return const EventDetailPage();
             },
           ),
         ],

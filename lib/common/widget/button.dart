@@ -100,12 +100,14 @@ class PrimaryM extends StatelessWidget {
   final String content;
   final VoidCallback? onPressed;
   final bool isEnabled;
+  final double vertical;
 
   const PrimaryM({
     super.key,
     required this.content,
     this.onPressed,
     this.isEnabled = true,
+    this.vertical = 13.5,
   });
 
   @override
@@ -125,7 +127,7 @@ class PrimaryM extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
-        padding: const EdgeInsets.symmetric(vertical: 13.5, horizontal: 16),
+        padding: EdgeInsets.symmetric(vertical: vertical, horizontal: 16),
       ).copyWith(
         overlayColor: WidgetStateProperty.resolveWith<Color?>((states) {
           if (isEnabled && states.contains(WidgetState.pressed)) {
@@ -487,12 +489,14 @@ class TextBtnXs extends StatelessWidget {
 class TextBtnS extends StatelessWidget {
   final String content;
   final VoidCallback? onPressed;
+  final TextStyle? btnStyle;
 
-  const TextBtnS({
+  TextBtnS({
     super.key,
     required this.content,
     this.onPressed,
-  });
+    TextStyle? btnStyle,
+  }) : btnStyle = btnStyle ?? TextTypes.caption01(color: Palette.text02);
 
   @override
   Widget build(BuildContext context) {
@@ -502,12 +506,7 @@ class TextBtnS extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 3),
         minimumSize: Size.zero,
       ),
-      child: Text(
-        content,
-        style: TextTypes.caption01(
-          color: Palette.text02,
-        ),
-      ),
+      child:  Text(content, style: btnStyle),
     );
   }
 }

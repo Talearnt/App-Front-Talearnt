@@ -5,6 +5,7 @@ abstract class ApiConstants {
   static const String refreshTokenUrl = "$baseUrl/v1/auth/login/refresh";
   static const String loginUrl = "$baseUrl/v1/auth/login";
   static const String loginKakaoUrl = "$baseUrl/v1/auth/login/kakao/mobile";
+  static const String logoutUrl = "$baseUrl/v1/auth/logout";
   static const String createRandomNickNameUrl =
       "$baseUrl/v1/auth/users/nickname/random";
   static const String checkNickNameAvailableUrl =
@@ -38,7 +39,20 @@ abstract class ApiConstants {
   static const String getMatchBoardLikeListUrl =
       "$baseUrl/v1/posts/exchanges/favorites";
 
+  static const String getNotification = "$baseUrl/notifications";
+
+  static const String readNotification = "$baseUrl/notifications/read";
+
+  static const String sendFcmToken = "$baseUrl/v1/fcm/token";
+
+  static const String changeAllowNotification =
+      "$baseUrl/notifications/settings";
+
   static const String getEventUrl = "$baseUrl/v1/events";
+
+  static String getEventDetailUrl(int eventNo) {
+    return "$baseUrl/v1/events/$eventNo";
+  }
 
   static const String getNoticeUrl = "$baseUrl/v1/notices";
 

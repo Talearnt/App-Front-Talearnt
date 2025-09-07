@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:app_front_talearnt/data/model/param/event_notice_param.dart';
 import 'package:app_front_talearnt/data/model/param/user_profile_param.dart';
 import 'package:app_front_talearnt/data/model/respone/event.dart';
+import 'package:app_front_talearnt/data/model/respone/event_detail.dart';
 import 'package:app_front_talearnt/data/model/respone/failure.dart';
 import 'package:app_front_talearnt/data/model/respone/notice.dart';
 import 'package:app_front_talearnt/data/services/dio_service.dart';
@@ -142,5 +143,13 @@ class ProfileRepository {
 
     return response.fold(
         left, (response) => right(NoticeDetail.fromJson(response["data"])));
+  }
+
+  Future<Either<Failure, EventDetail>> getEventDetail(int eventNo) async {
+    final response =
+        await dio.get(ApiConstants.getEventDetailUrl(eventNo), null, null);
+
+    return response.fold(
+        left, (response) => right(EventDetail.fromJson(response["data"])));
   }
 }

@@ -5,6 +5,7 @@ import 'dart:ui' as ui;
 
 import 'package:app_front_talearnt/data/model/respone/community_board.dart';
 import 'package:app_front_talearnt/data/model/respone/event.dart';
+import 'package:app_front_talearnt/data/model/respone/event_detail.dart';
 import 'package:app_front_talearnt/data/model/respone/notice.dart';
 import 'package:app_front_talearnt/view_model/profile_view_model.dart';
 import 'package:flutter/material.dart';
@@ -130,6 +131,7 @@ class ProfileProvider extends ChangeNotifier with ClearText {
   bool _isNoticeFetching = false;
 
   late NoticeDetail _noticeDetail = NoticeDetail.empty();
+  late EventDetail _eventDetail = EventDetail.empty();
 
   late ProfileViewModel _profileViewModel;
 
@@ -139,17 +141,7 @@ class ProfileProvider extends ChangeNotifier with ClearText {
 
   TabController get eventNoticeTabController => _eventNoticeTabController;
 
-  bool _allAlarm = false;
-  bool _commentAlarm = false;
-  bool _keywordAlarm = false;
-
   UserProfile get userProfile => _userProfile;
-
-  bool get allAlarm => _allAlarm;
-
-  bool get commentAlarm => _commentAlarm;
-
-  bool get keywordAlarm => _keywordAlarm;
 
   TextEditingController get editNickNameController => _editNickNameController;
 
@@ -218,6 +210,8 @@ class ProfileProvider extends ChangeNotifier with ClearText {
   ScrollController get noticeScrollController => _noticeScrollController;
 
   NoticeDetail get noticeDetail => _noticeDetail;
+
+  EventDetail get eventDetail => _eventDetail;
 
   bool get isServiceNotUseful => _isServiceNotUseful;
 
@@ -299,10 +293,8 @@ class ProfileProvider extends ChangeNotifier with ClearText {
     _editImageUploadUrl = '';
     _changeImage = false;
 
-    _allAlarm = false;
-    _commentAlarm = false;
-    _keywordAlarm = false;
     _noticeDetail = NoticeDetail.empty();
+    _eventDetail = EventDetail.empty();
   }
 
   void _onScroll(String type) {
@@ -323,33 +315,6 @@ class ProfileProvider extends ChangeNotifier with ClearText {
 
   Future<void> setUserProfile(UserProfile userProfile) async {
     _userProfile = userProfile;
-    notifyListeners();
-  }
-
-  void changeAllAlarm(bool alarm) {
-    _allAlarm = alarm;
-    _commentAlarm = alarm;
-    _keywordAlarm = alarm;
-    notifyListeners();
-  }
-
-  void changeCommentAlarm(bool alarm) {
-    _commentAlarm = alarm;
-    if (_commentAlarm && _keywordAlarm) {
-      _allAlarm = true;
-    } else {
-      _allAlarm = false;
-    }
-    notifyListeners();
-  }
-
-  void changeKeywordAlarm(bool alarm) {
-    _keywordAlarm = alarm;
-    if (_commentAlarm && _keywordAlarm) {
-      _allAlarm = true;
-    } else {
-      _allAlarm = false;
-    }
     notifyListeners();
   }
 
@@ -795,7 +760,12 @@ class ProfileProvider extends ChangeNotifier with ClearText {
     notifyListeners();
   }
 
-  void resetNoticeEvent(){
+  void setEventDetail(EventDetail eventDetail) {
+    _eventDetail = eventDetail;
+    notifyListeners();
+  }
+  
+  void resetNoticeEvent() {
     _eventList.clear();
     _eventHasNext = true;
     _eventPage = 1;
