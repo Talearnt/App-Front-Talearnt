@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 import '../../../common/theme.dart';
+import '../../../provider/common/common_provider.dart';
 import '../../../provider/profile/profile_provider.dart';
+import '../../../view_model/profile_view_model.dart';
 import '../no_event_notice_page.dart';
 
 class EventTab extends StatelessWidget {
@@ -12,6 +15,9 @@ class EventTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final commonProvider = Provider.of<CommonProvider>(context);
+    final profileViewModel = Provider.of<ProfileViewModel>(context);
+
     if (profileProvider.eventList.isEmpty && !profileProvider.eventHasNext) {
       return const NoEventNoticePage(type: 'event');
     }
@@ -29,42 +35,52 @@ class EventTab extends StatelessWidget {
         }
 
         final event = profileProvider.eventList[index];
-        return Column(
-          children: [
-            Image.network(
-              profileProvider.eventList[index].bannerUrl,
-              width: double.infinity,
-              fit: BoxFit.cover,
-              loadingBuilder: (context, child, loadingProgress) {
-                if (loadingProgress == null) return child;
-                return const Center(child: CircularProgressIndicator());
-              },
-              errorBuilder: (_, __, ___) => const SizedBox(
-                height: 200,
-                child: Center(child: Icon(Icons.broken_image)),
+        return InkWell(
+          overlayColor: WidgetStateProperty.all(Colors.transparent),
+          onTap: () async {
+            commonProvider.changeIsLoading(true);
+            await profileViewModel
+                .getEventDetail(event.eventNo)
+                .whenComplete(() => commonProvider.changeIsLoading(false));
+          },
+          child: Column(
+            children: [
+              Image.network(
+                profileProvider.eventList[index].bannerUrl,
+                width: double.infinity,
+                fit: BoxFit.cover,
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return const Center(child: CircularProgressIndicator());
+                },
+                errorBuilder: (_, __, ___) => const SizedBox(
+                  height: 200,
+                  child: Center(child: Icon(Icons.broken_image)),
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    event.isActive ? "진행 중" : "종료",
-                    style: TextTypes.caption01(
-                      color:
-                          event.isActive ? Palette.primary01 : Palette.text03,
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      event.isActive ? "진행 중" : "종료",
+                      style: TextTypes.caption01(
+                        color:
+                            event.isActive ? Palette.primary01 : Palette.text03,
+                      ),
                     ),
-                  ),
-                  Text(
-                    "${DateFormat('yy.MM.dd').format(event.startDate)}"
-                    "-${DateFormat('yy.MM.dd').format(event.endDate)}",
-                    style: TextTypes.caption01(color: Palette.text03),
-                  ),
-                ],
+                    Text(
+                      "${DateFormat('yy.MM.dd').format(event.startDate)}"
+                      "-${DateFormat('yy.MM.dd').format(event.endDate)}",
+                      style: TextTypes.caption01(color: Palette.text03),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         );
       },
     );

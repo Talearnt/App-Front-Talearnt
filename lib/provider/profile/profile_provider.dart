@@ -5,6 +5,7 @@ import 'dart:ui' as ui;
 
 import 'package:app_front_talearnt/data/model/respone/community_board.dart';
 import 'package:app_front_talearnt/data/model/respone/event.dart';
+import 'package:app_front_talearnt/data/model/respone/event_detail.dart';
 import 'package:app_front_talearnt/data/model/respone/notice.dart';
 import 'package:app_front_talearnt/view_model/profile_view_model.dart';
 import 'package:flutter/material.dart';
@@ -130,6 +131,7 @@ class ProfileProvider extends ChangeNotifier with ClearText {
   bool _isNoticeFetching = false;
 
   late NoticeDetail _noticeDetail = NoticeDetail.empty();
+  late EventDetail _eventDetail = EventDetail.empty();
 
   late ProfileViewModel _profileViewModel;
 
@@ -208,6 +210,8 @@ class ProfileProvider extends ChangeNotifier with ClearText {
   ScrollController get noticeScrollController => _noticeScrollController;
 
   NoticeDetail get noticeDetail => _noticeDetail;
+
+  EventDetail get eventDetail => _eventDetail;
 
   bool get isServiceNotUseful => _isServiceNotUseful;
 
@@ -290,6 +294,7 @@ class ProfileProvider extends ChangeNotifier with ClearText {
     _changeImage = false;
 
     _noticeDetail = NoticeDetail.empty();
+    _eventDetail = EventDetail.empty();
   }
 
   void _onScroll(String type) {
@@ -755,6 +760,11 @@ class ProfileProvider extends ChangeNotifier with ClearText {
     notifyListeners();
   }
 
+  void setEventDetail(EventDetail eventDetail) {
+    _eventDetail = eventDetail;
+    notifyListeners();
+  }
+  
   void resetNoticeEvent() {
     _eventList.clear();
     _eventHasNext = true;
