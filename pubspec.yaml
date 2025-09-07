@@ -57,7 +57,6 @@ dependencies:
   flutter_local_notifications: ^19.4.1
   kakao_flutter_sdk_user: ^1.9.5 # 카카오 로그인 API 패키지
   flutter_dotenv: ^5.2.1
-  web_socket_channel: ^2.2.0
 
 
 flutter_native_splash:

@@ -15,7 +15,6 @@ import 'package:path/path.dart' as path;
 import 'package:provider/provider.dart';
 
 import '../../constants/global_value_constants.dart';
-import '../../data/model/respone/notification.dart';
 import '../../data/model/respone/match_board.dart';
 import '../../data/model/respone/notice_detail.dart';
 import '../../data/model/respone/pagination.dart';
@@ -290,9 +289,6 @@ class ProfileProvider extends ChangeNotifier with ClearText {
     _editImageUploadUrl = '';
     _changeImage = false;
 
-    _allAlarm = false;
-    _commentAlarm = false;
-    _keywordAlarm = false;
     _noticeDetail = NoticeDetail.empty();
   }
 
@@ -759,7 +755,7 @@ class ProfileProvider extends ChangeNotifier with ClearText {
     notifyListeners();
   }
 
-  void resetNoticeEvent(){
+  void resetNoticeEvent() {
     _eventList.clear();
     _eventHasNext = true;
     _eventPage = 1;
