@@ -3,6 +3,7 @@ import 'package:app_front_talearnt/data/model/param/agree_req_dto.dart';
 import 'package:app_front_talearnt/data/model/param/login_param.dart';
 import 'package:app_front_talearnt/data/model/param/send_cert_number_param.dart';
 import 'package:app_front_talearnt/data/model/param/send_reset_password_mail_param.dart';
+import 'package:app_front_talearnt/data/services/stomp_service.dart';
 import 'package:app_front_talearnt/data/model/respone/token.dart';
 import 'package:app_front_talearnt/provider/auth/find_id_provider.dart';
 import 'package:app_front_talearnt/provider/auth/find_password_provider.dart';
@@ -11,7 +12,9 @@ import 'package:app_front_talearnt/provider/auth/login_provider.dart';
 import 'package:app_front_talearnt/provider/auth/sign_up_provider.dart';
 import 'package:app_front_talearnt/provider/auth/storage_provider.dart';
 import 'package:app_front_talearnt/provider/common/common_provider.dart';
+import 'package:app_front_talearnt/provider/notification/notification_provider.dart';
 import 'package:app_front_talearnt/utils/token_manager.dart';
+import 'package:app_front_talearnt/view_model/notification_view_model.dart';
 import 'package:app_front_talearnt/view_model/profile_view_model.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
@@ -37,19 +40,25 @@ class AuthViewModel extends ChangeNotifier {
   final StorageProvider storageProvider;
   final CommonProvider commonProvider;
   final ProfileViewModel profileViewModel;
+  final NotificationProvider notificationProvider;
+  final NotificationViewModel notificationViewModel;
   final KakaoProvider kakaoProvider;
-
-  AuthViewModel(this.loginProvider,
-      this.signUpProvider,
-      this.authRepository,
-      this.tokenManager,
-      this.findIdProvider,
-      this.findPasswordProvider,
-      this.commonNavigator,
-      this.storageProvider,
-      this.commonProvider,
-      this.profileViewModel,
-      this.kakaoProvider,);
+  
+  AuthViewModel(
+    this.loginProvider,
+    this.signUpProvider,
+    this.authRepository,
+    this.tokenManager,
+    this.findIdProvider,
+    this.findPasswordProvider,
+    this.commonNavigator,
+    this.storageProvider,
+    this.commonProvider,
+    this.profileViewModel,
+    this.notificationProvider,
+    this.notificationViewModel,
+    this.kakaoProvider,
+  );
 
   Future<void> login(String email, String pw, String root) async {
     // root - login or profile or keyword
@@ -58,10 +67,16 @@ class AuthViewModel extends ChangeNotifier {
     result.fold(
           (failure) => loginProvider.updateLoginFormFail(failure.errorMessage),
       // 이후 수정 들어갈 수 도 있다.
-          (token) {
+      (token) async {
         tokenManager.saveToken(token);
         loginProvider.updateLoginFormSuccess();
         profileViewModel.getUserProfile(root);
+        notificationViewModel.getNotification();
+        await notificationProvider.startFCM();
+        notificationViewModel
+            .sendFcmToken(notificationProvider.fcmToken.toString());
+        final stompClient = createStompClient(token: token.accessToken);
+        stompClient.activate();
       },
     );
   }

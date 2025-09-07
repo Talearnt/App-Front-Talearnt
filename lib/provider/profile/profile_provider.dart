@@ -15,6 +15,7 @@ import 'package:path/path.dart' as path;
 import 'package:provider/provider.dart';
 
 import '../../constants/global_value_constants.dart';
+import '../../data/model/respone/notification.dart';
 import '../../data/model/respone/match_board.dart';
 import '../../data/model/respone/notice_detail.dart';
 import '../../data/model/respone/pagination.dart';
@@ -139,17 +140,7 @@ class ProfileProvider extends ChangeNotifier with ClearText {
 
   TabController get eventNoticeTabController => _eventNoticeTabController;
 
-  bool _allAlarm = false;
-  bool _commentAlarm = false;
-  bool _keywordAlarm = false;
-
   UserProfile get userProfile => _userProfile;
-
-  bool get allAlarm => _allAlarm;
-
-  bool get commentAlarm => _commentAlarm;
-
-  bool get keywordAlarm => _keywordAlarm;
 
   TextEditingController get editNickNameController => _editNickNameController;
 
@@ -323,33 +314,6 @@ class ProfileProvider extends ChangeNotifier with ClearText {
 
   Future<void> setUserProfile(UserProfile userProfile) async {
     _userProfile = userProfile;
-    notifyListeners();
-  }
-
-  void changeAllAlarm(bool alarm) {
-    _allAlarm = alarm;
-    _commentAlarm = alarm;
-    _keywordAlarm = alarm;
-    notifyListeners();
-  }
-
-  void changeCommentAlarm(bool alarm) {
-    _commentAlarm = alarm;
-    if (_commentAlarm && _keywordAlarm) {
-      _allAlarm = true;
-    } else {
-      _allAlarm = false;
-    }
-    notifyListeners();
-  }
-
-  void changeKeywordAlarm(bool alarm) {
-    _keywordAlarm = alarm;
-    if (_commentAlarm && _keywordAlarm) {
-      _allAlarm = true;
-    } else {
-      _allAlarm = false;
-    }
     notifyListeners();
   }
 
