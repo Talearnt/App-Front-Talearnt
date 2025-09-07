@@ -8,10 +8,15 @@ import 'package:app_front_talearnt/data/model/respone/token.dart';
 import 'package:app_front_talearnt/data/model/respone/user_id_info.dart';
 import 'package:app_front_talearnt/data/services/dio_service.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter/services.dart';
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 
 import '../../constants/api_constants.dart';
+import '../model/param/kakao_sign_up_param.dart';
 import '../model/param/login_param.dart';
 import '../model/param/sign_up_param.dart';
+import '../model/respone/kakao_login_result.dart';
+import '../model/respone/kakao_sign_up_user_info.dart';
 import '../model/respone/user_profile.dart';
 
 class AuthRepository {
@@ -83,9 +88,9 @@ class AuthRepository {
   }
 
   Future<Either<Failure, SendMailInfo>> sendResetPasswordMail(
-      SendResetPasswordMailParam body, String email) async {
-    final result = await dio.post(
-        ApiConstants.getFineUserPwUrl(email), body.toJson(), null);
+      SendResetPasswordMailParam body) async {
+    final result =
+        await dio.post(ApiConstants.getFineUserPwUrl, body.toJson(), null);
     return result.fold(
         left, (response) => right(SendMailInfo.fromJson(response)));
   }
@@ -94,5 +99,68 @@ class AuthRepository {
     final result = await dio.get(ApiConstants.getUserProfile, null, null);
     return result.fold(
         left, (response) => right(UserProfile.fromJson(response["data"])));
+  }
+
+  Future<Either<Failure, Success>> kakaoSignUp(KakaoSignUpParam param) async {
+    final result =
+        await dio.post(ApiConstants.joinKakaoUrl, param.toJson(), null);
+
+    return result.fold(left, (response) => right(Success.fromJson(response)));
+  }
+
+  Future<Either<Failure, KakaoLoginResult>> kakaoLogin() async {
+    try {
+      // 카카오톡 설치 여부에 따라 로그인 시도
+      final OAuthToken token = await attemptKakaoLogin();
+      final loginResult = await talearntKakaoLogin(token.accessToken);
+      return loginResult.fold(left, right);
+    } catch (error) {
+      //틀리면 여기로
+      if (error is PlatformException &&
+          (error.code == 'CANCELED' || error.code == 'access_denied')) {
+        return left(Failure(
+          errorCode: '회원가입 취소',
+          errorMessage: '사용자에 의해 취소되었습니다.',
+          success: false,
+        ));
+      }
+      return left(Failure(
+        errorCode: 'error',
+        errorMessage: '알 수 없는 오류가 발생했습니다. 관리자에게 문의하세요.',
+        success: false,
+      ));
+    }
+  }
+
+// 카카오톡 설치 여부에 따라 로그인 처리 함수
+  Future<OAuthToken> attemptKakaoLogin() async {
+    if (await isKakaoTalkInstalled()) {
+      try {
+        return await UserApi.instance.loginWithKakaoTalk();
+      } catch (error) {
+        return await UserApi.instance.loginWithKakaoAccount();
+      }
+    } else {
+      return await UserApi.instance.loginWithKakaoAccount();
+    }
+  }
+
+  Future<KakaoSignUpUserInfo> getKakaoUserInfo() async {
+    User kakaoUser = await UserApi.instance.me();
+    final kakaoAccount = kakaoUser.kakaoAccount!;
+    return KakaoSignUpUserInfo(
+      userId: kakaoAccount.email ?? '', // 이메일
+      name: kakaoAccount.name ?? '', // 닉네임
+      gender: kakaoAccount.gender == Gender.female ? 1 : 0, // 성별
+      phone: kakaoAccount.phoneNumber ?? '', // 전화번호
+    );
+  }
+
+  Future<Either<Failure, KakaoLoginResult>> talearntKakaoLogin(
+      String token) async {
+    final result = await dio.post(ApiConstants.loginKakaoUrl,
+        {"kakaoAccessToken": token, "autoLogin": false}, null);
+    return result.fold(
+        left, (response) => right(KakaoLoginResult.fromJson(response["data"])));
   }
 }

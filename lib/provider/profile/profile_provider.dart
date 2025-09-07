@@ -3,6 +3,10 @@ import 'dart:io';
 import 'dart:typed_data' as typed_data;
 import 'dart:ui' as ui;
 
+import 'package:app_front_talearnt/data/model/respone/community_board.dart';
+import 'package:app_front_talearnt/data/model/respone/event.dart';
+import 'package:app_front_talearnt/data/model/respone/notice.dart';
+import 'package:app_front_talearnt/view_model/profile_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
@@ -12,6 +16,9 @@ import 'package:provider/provider.dart';
 
 import '../../constants/global_value_constants.dart';
 import '../../data/model/respone/notification.dart';
+import '../../data/model/respone/match_board.dart';
+import '../../data/model/respone/notice_detail.dart';
+import '../../data/model/respone/pagination.dart';
 import '../../data/model/respone/user_profile.dart';
 import '../auth/find_id_provider.dart';
 import '../auth/find_password_provider.dart';
@@ -41,6 +48,12 @@ class ProfileProvider extends ChangeNotifier with ClearText {
         vsync: _tickerProvider);
     _eventNoticeTabController =
         TabController(length: 2, vsync: _tickerProvider);
+    _eventScrollController.addListener(() => _onScroll('event'));
+    _noticeScrollController.addListener(() => _onScroll('notice'));
+    _myWriteTabController = TabController(length: 2, vsync: _tickerProvider);
+    _myWriteMatchScrollController.addListener(_onMatchScroll);
+    _myWriteCommunityScrollController.addListener(_onCommunityScroll);
+    _etcController.addListener(_onEtcChanged);
   }
 
   UserProfile _userProfile = UserProfile.empty();
@@ -55,6 +68,8 @@ class ProfileProvider extends ChangeNotifier with ClearText {
   late TabController _receiveTalentTabController;
   late TabController _eventNoticeTabController;
   final CustomTickerProvider _tickerProvider;
+  final ScrollController _eventScrollController = ScrollController();
+  final ScrollController _noticeScrollController = ScrollController();
 
   Object? _imageFile;
   File? _tempImageFile;
@@ -79,6 +94,45 @@ class ProfileProvider extends ChangeNotifier with ClearText {
   Map<String, dynamic> _uploadUserImageInfo = {};
   String _editImageUploadUrl = "";
   bool _changeImage = false;
+
+  //탈퇴 관련
+  bool _isServiceNotUseful = false;
+  bool _isNoMatchingFound = false;
+  bool _isNoKeywordPosts = false;
+  bool _isTemporaryWithdrawal = false;
+  bool _isFrequentErrors = false;
+  bool _isSlowSupportResponse = false;
+  bool _isInappropriateContent = false;
+  bool _isUnpleasantExperience = false;
+  bool _isAgreeToWithdraw = false;
+  final TextEditingController _etcController = TextEditingController();
+  int _etcTextLength = 0;
+
+  late TabController _myWriteTabController;
+  final ScrollController _myWriteMatchScrollController = ScrollController();
+  final ScrollController _myWriteCommunityScrollController = ScrollController();
+  bool _isMatchFetching = false;
+  bool _isCommunityFetching = false;
+  final List<MatchBoard> _matchBoardList = [];
+  final List<CommunityBoard> _communityBoardList = [];
+  Pagination _matchPage = Pagination.empty();
+  Pagination _communityPage = Pagination.empty();
+  bool _isFirstTabChange = true;
+
+  //이벤트/공지사항
+  final List<Event> _eventList = [];
+  bool _eventHasNext = true;
+  int _eventPage = 1;
+
+  final List<Notice> _noticeList = [];
+  bool _noticeHasNext = true;
+  int _noticePage = 1;
+  bool _isEventFetching = false;
+  bool _isNoticeFetching = false;
+
+  late NoticeDetail _noticeDetail = NoticeDetail.empty();
+
+  late ProfileViewModel _profileViewModel;
 
   TabController get giveTalentTabController => _giveTalentTabController;
 
@@ -138,6 +192,60 @@ class ProfileProvider extends ChangeNotifier with ClearText {
 
   bool get changeImage => _changeImage;
 
+  List<Event> get eventList => _eventList;
+
+  bool get eventHasNext => _eventHasNext;
+
+  int get eventPage => _eventPage;
+
+  List<Notice> get noticeList => _noticeList;
+
+  bool get noticeHasNext => _noticeHasNext;
+
+  int get noticePage => _noticePage;
+
+  ScrollController get eventScrollController => _eventScrollController;
+
+  ScrollController get noticeScrollController => _noticeScrollController;
+
+  NoticeDetail get noticeDetail => _noticeDetail;
+
+  bool get isServiceNotUseful => _isServiceNotUseful;
+
+  bool get isNoMatchingFound => _isNoMatchingFound;
+
+  bool get isNoKeywordPosts => _isNoKeywordPosts;
+
+  bool get isTemporaryWithdrawal => _isTemporaryWithdrawal;
+
+  bool get isFrequentErrors => _isFrequentErrors;
+
+  bool get isSlowSupportResponse => _isSlowSupportResponse;
+
+  bool get isInappropriateContent => _isInappropriateContent;
+
+  bool get isUnpleasantExperience => _isUnpleasantExperience;
+
+  bool get isAgreeToWithdraw => _isAgreeToWithdraw;
+
+  TextEditingController get etcController => _etcController;
+
+  int get etcTextLength => _etcTextLength;
+
+  bool get isFirstTabChange => _isFirstTabChange;
+
+  TabController get myWriteTabController => _myWriteTabController;
+
+  ScrollController get myWriteMatchScrollController =>
+      _myWriteMatchScrollController;
+
+  ScrollController get myWriteCommunityScrollController =>
+      _myWriteCommunityScrollController;
+
+  List<MatchBoard> get matchBoardList => _matchBoardList;
+
+  List<CommunityBoard> get communityBoardList => _communityBoardList;
+
   void clearProvider() {
     _editNickNameController.clear();
     _editNickNameFocusNode.unfocus();
@@ -146,6 +254,14 @@ class ProfileProvider extends ChangeNotifier with ClearText {
     _editGiveTalents.clear();
     _receiveTalents.clear();
     _editReceiveTalents.clear();
+
+    _eventList.clear();
+    _eventHasNext = true;
+    _eventPage = 1;
+
+    _noticeList.clear();
+    _noticeHasNext = true;
+    _noticePage = 1;
 
     _giveTalentTabController.index = 0;
     _receiveTalentTabController.index = 0;
@@ -173,6 +289,27 @@ class ProfileProvider extends ChangeNotifier with ClearText {
     _uploadUserImageInfo.clear();
     _editImageUploadUrl = '';
     _changeImage = false;
+
+    _allAlarm = false;
+    _commentAlarm = false;
+    _keywordAlarm = false;
+    _noticeDetail = NoticeDetail.empty();
+  }
+
+  void _onScroll(String type) {
+    final controller =
+        (type == 'event') ? _eventScrollController : _noticeScrollController;
+    final isFetching = (type == 'event') ? _isEventFetching : _isNoticeFetching;
+
+    if (!isFetching &&
+        controller.position.pixels >=
+            controller.position.maxScrollExtent - 200) {
+      if (type == 'event') {
+        _fetchMoreEvents();
+      } else {
+        _fetchMoreNotices();
+      }
+    }
   }
 
   Future<void> setUserProfile(UserProfile userProfile) async {
@@ -379,10 +516,257 @@ class ProfileProvider extends ChangeNotifier with ClearText {
     notifyListeners();
   }
 
+  Future<void> setEventList(Map<String, dynamic> result) async {
+    final events = (result['events'] as List).map((e) => e as Event).toList();
+
+    _eventList.addAll(events);
+    _eventHasNext = result['hasNext'] as bool;
+
+    _eventPage++;
+
+    notifyListeners();
+  }
+
+  Future<void> setNoticeList(Map<String, dynamic> result) async {
+    final notices =
+        (result['notices'] as List).map((e) => e as Notice).toList();
+
+    _noticeList.addAll(notices);
+    _noticeHasNext = result['hasNext'] as bool;
+
+    _noticePage++;
+
+    notifyListeners();
+  }
+
+  Future<void> _fetchMoreEvents() async {
+    if (_eventHasNext) {
+      _isEventFetching = true;
+      await _profileViewModel.getEvent();
+      _isEventFetching = false;
+    }
+
+    notifyListeners();
+  }
+
+  Future<void> _fetchMoreNotices() async {
+    if (_noticeHasNext) {
+      _isNoticeFetching = true;
+      await _profileViewModel.getNotice();
+      _isNoticeFetching = false;
+    }
+    notifyListeners();
+  }
+
+  void setViewModel(ProfileViewModel viewModel) {
+    _profileViewModel = viewModel;
+  }
+
+  Future<void> setTabChange() async {
+    _isFirstTabChange = false;
+    notifyListeners();
+  }
+
   @override
   void clearText(TextEditingController controller) {
     controller.clear();
     notifyListeners();
+  }
+
+  void changeServiceNotUseful() {
+    _isServiceNotUseful = !_isServiceNotUseful;
+    notifyListeners();
+  }
+
+  void changeNoMatchingFound() {
+    _isNoMatchingFound = !_isNoMatchingFound;
+    notifyListeners();
+  }
+
+  void changeNoKeywordPosts() {
+    _isNoKeywordPosts = !_isNoKeywordPosts;
+    notifyListeners();
+  }
+
+  void changeTemporaryWithdrawal() {
+    _isTemporaryWithdrawal = !_isTemporaryWithdrawal;
+    notifyListeners();
+  }
+
+  void changeFrequentErrors() {
+    _isFrequentErrors = !_isFrequentErrors;
+    notifyListeners();
+  }
+
+  void changeSlowSupportResponse() {
+    _isSlowSupportResponse = !_isSlowSupportResponse;
+    notifyListeners();
+  }
+
+  void changeInappropriateContent() {
+    _isInappropriateContent = !_isInappropriateContent;
+    notifyListeners();
+  }
+
+  void changeUnpleasantExperience() {
+    _isUnpleasantExperience = !_isUnpleasantExperience;
+    notifyListeners();
+  }
+
+  void changeAgreeToWithdraw() {
+    _isAgreeToWithdraw = !_isAgreeToWithdraw;
+    notifyListeners();
+  }
+
+  void _onEtcChanged() {
+    _etcTextLength = _etcController.text.length;
+    notifyListeners();
+  }
+
+  void _onMatchScroll() {
+    if (!_isMatchFetching &&
+        _myWriteMatchScrollController.position.pixels >=
+            _myWriteMatchScrollController.position.maxScrollExtent - 200) {
+      _fetchMoreMatchData();
+    }
+  }
+
+  void _onCommunityScroll() {
+    if (!_isCommunityFetching &&
+        _myWriteCommunityScrollController.position.pixels >=
+            _myWriteCommunityScrollController.position.maxScrollExtent - 200) {
+      _fetchMoreCommunityData();
+    }
+  }
+
+  Future<void> _fetchMoreMatchData() async {
+    _isMatchFetching = true;
+    await _profileViewModel.getMyWriteMatchBoardList(
+        null, null, _matchBoardList.last.exchangePostNo.toString(), 'add');
+    _isMatchFetching = false;
+  }
+
+  Future<void> _fetchMoreCommunityData() async {
+    _isCommunityFetching = true;
+    await _profileViewModel.getMyWriteCommunityBoardList(
+        GlobalValueConstants.communityCategoryTypes[0]['code']!,
+        null,
+        null,
+        null,
+        _communityBoardList.last.communityPostNo.toString(),
+        'add');
+    _isCommunityFetching = false;
+  }
+
+  void addMatchBoardPosts(List<MatchBoard> addTalentExchangePosts) {
+    _matchBoardList.addAll(addTalentExchangePosts);
+    notifyListeners();
+  }
+
+  void updateMatchPosts(List<MatchBoard> matchBoardList) {
+    _matchBoardList.clear();
+    _matchBoardList.addAll(matchBoardList);
+    if (_myWriteMatchScrollController.hasClients) {
+      _myWriteMatchScrollController.jumpTo(0);
+    }
+    notifyListeners();
+  }
+
+  void updateMyWriteMatchPage(Pagination paging) {
+    _matchPage = paging;
+    notifyListeners();
+  }
+
+  void addCommunityBoardPosts(List<CommunityBoard> communityBoardList) {
+    _communityBoardList.addAll(communityBoardList);
+    notifyListeners();
+  }
+
+  void updateCommunityPosts(List<CommunityBoard> communityBoardList) {
+    _communityBoardList.clear();
+    _communityBoardList.addAll(communityBoardList);
+    if (_myWriteCommunityScrollController.hasClients) {
+      _myWriteCommunityScrollController.jumpTo(0);
+    }
+    notifyListeners();
+  }
+
+  void updateMyWriteCommunityPage(Pagination paging) {
+    _communityPage = paging;
+    notifyListeners();
+  }
+
+  Future<void> changeMatchBoardLike(int postNo) async {
+    final index =
+        _matchBoardList.indexWhere((post) => post.exchangePostNo == postNo);
+    if (index != -1) {
+      _matchBoardList[index].isFavorite = !_matchBoardList[index].isFavorite;
+      _matchBoardList[index].isFavorite
+          ? _matchBoardList[index].favoriteCount =
+              _matchBoardList[index].favoriteCount + 1
+          : _matchBoardList[index].favoriteCount =
+              _matchBoardList[index].favoriteCount - 1;
+    }
+    notifyListeners();
+  }
+
+  Future<void> changeMatchBoardLikeFromDetail(
+      int postNo, bool isFavorite) async {
+    final index =
+        _matchBoardList.indexWhere((post) => post.exchangePostNo == postNo);
+    if (index != -1) {
+      _matchBoardList[index].isFavorite = isFavorite;
+      _matchBoardList[index].isFavorite
+          ? _matchBoardList[index].favoriteCount =
+              _matchBoardList[index].favoriteCount + 1
+          : _matchBoardList[index].favoriteCount =
+              _matchBoardList[index].favoriteCount - 1;
+    }
+    notifyListeners();
+  }
+
+  Future<void> changeCommunityBoardLike(int postNo) async {
+    final index = _communityBoardList
+        .indexWhere((post) => post.communityPostNo == postNo);
+    if (index != -1) {
+      _communityBoardList[index].isLike = !_communityBoardList[index].isLike;
+      _communityBoardList[index].isLike
+          ? _communityBoardList[index].likeCount =
+              _communityBoardList[index].likeCount + 1
+          : _communityBoardList[index].likeCount =
+              _communityBoardList[index].likeCount - 1;
+    }
+    notifyListeners();
+  }
+
+  Future<void> changeCommunityBoardLikeFromDetail(
+      int postNo, bool isLike) async {
+    final index = _communityBoardList
+        .indexWhere((post) => post.communityPostNo == postNo);
+    if (index != -1) {
+      _communityBoardList[index].isLike = isLike;
+      _communityBoardList[index].isLike
+          ? _communityBoardList[index].likeCount =
+              _communityBoardList[index].likeCount + 1
+          : _communityBoardList[index].likeCount =
+              _communityBoardList[index].likeCount - 1;
+    }
+    notifyListeners();
+  }
+
+  void setNoticeDetail(NoticeDetail noticeDetail) {
+    _noticeDetail = noticeDetail;
+    notifyListeners();
+  }
+
+  void resetNoticeEvent(){
+    _eventList.clear();
+    _eventHasNext = true;
+    _eventPage = 1;
+
+    _noticeList.clear();
+    _noticeHasNext = true;
+    _noticePage = 1;
   }
 
   void clearAllProviders(BuildContext context) {

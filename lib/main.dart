@@ -8,14 +8,22 @@ import 'package:app_front_talearnt/utils/routes.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 bool _fcmStarted = false;
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: "assets/.env");
+  final String nativeAppKey = dotenv.env['NATIVE_APP_KEY'] ?? '';
+  KakaoSdk.init(nativeAppKey: nativeAppKey);
+
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await NotificationPermissionService.ensurePermission();
   await LocalNotificationService.I.init();
+
   runApp(
     ProviderSetup(
       child: const MyApp(),

@@ -1,5 +1,9 @@
+import 'package:app_front_talearnt/provider/common/common_provider.dart';
+import 'package:app_front_talearnt/view_model/board_view_model.dart';
+import 'package:app_front_talearnt/view_model/profile_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 import '../../../common/theme.dart';
 import 'create_setting_menu.dart';
@@ -9,6 +13,9 @@ class ProfileOtherSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final commonProvider = context.read<CommonProvider>();
+    final profileViewModel = Provider.of<ProfileViewModel>(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -20,7 +27,11 @@ class ProfileOtherSection extends StatelessWidget {
         CreateSettingMenu(
           iconPath: 'assets/icons/notice.svg',
           title: '이벤트/공지사항',
-          onTap: () {
+          onTap: () async {
+            commonProvider.changeIsLoading(true);
+            await profileViewModel.getEvent();
+            await profileViewModel.getNotice();
+            commonProvider.changeIsLoading(false);
             context.push('/event-notice');
           },
         ),

@@ -20,6 +20,7 @@ import '../view/auth/agreement/privacy_agreement_optional.dart';
 import '../view/auth/agreement/privacy_agreement_required.dart';
 import '../view/auth/agreement/terms_agreement_optional.dart';
 import '../view/auth/agreement/terms_agreement_required.dart';
+import '../view/auth/kakao_sign_up_page.dart';
 import '../view/auth/login_page.dart';
 import '../view/auth/sign_up_main_page.dart';
 import '../view/board/board_list.dart';
@@ -39,11 +40,15 @@ import '../view/board/write_success_page.dart';
 import '../view/home_page.dart';
 import '../view/keyword/set_talent_keyword_main_page.dart';
 import '../view/keyword/set_talent_keyword_success_page.dart';
+import '../view/profile/account_delete_complete_page.dart';
+import '../view/profile/account_delete_page.dart';
 import '../view/profile/account_manage_page.dart';
 import '../view/profile/alarm_setting_page.dart';
 import '../view/profile/event_notice_page.dart';
 import '../view/profile/licenses_page.dart';
 import '../view/profile/modify_user_info_page.dart';
+import '../view/profile/my_write_page.dart';
+import '../view/profile/notice_detail_page.dart';
 import '../view/profile/profile_page.dart';
 import '../view/profile/user_image_preview_page.dart';
 
@@ -112,6 +117,12 @@ class Routes {
             path: '/sign-up-success',
             builder: (BuildContext context, GoRouterState state) {
               return const SignUpSuccessPage();
+            },
+          ),
+          GoRoute(
+            path: '/kakao-sign-up',
+            builder: (BuildContext context, GoRouterState state) {
+              return const KakaoSignUpPage();
             },
           ),
           GoRoute(
@@ -326,6 +337,42 @@ class Routes {
             path: '/alarm',
             builder: (BuildContext context, GoRouterState state) {
               return const AlarmPage();
+            },
+          ),
+          GoRoute(
+            path: '/my-write',
+            builder: (BuildContext context, GoRouterState state) {
+              return const MyWritePage();
+            },
+          ),
+          GoRoute(
+            path: '/account-delete',
+            builder: (BuildContext context, GoRouterState state) {
+              return const AccountDeletePage();
+            },
+          ),
+          GoRoute(
+            path: '/account-delete-complete',
+            builder: (BuildContext context, GoRouterState state) {
+              return const AccountDeleteCompletePage();
+            },
+          ),
+          GoRoute(
+            path: '/account-delete',
+            builder: (BuildContext context, GoRouterState state) {
+              return const AccountDeletePage();
+            },
+          ),
+          GoRoute(
+            path: '/account-delete-complete',
+            builder: (BuildContext context, GoRouterState state) {
+              return const AccountDeleteCompletePage();
+            },
+          ),
+          GoRoute(
+            path: '/notice-detail',
+            builder: (BuildContext context, GoRouterState state) {
+              return const NoticeDetailPage();
             },
           ),
         ],

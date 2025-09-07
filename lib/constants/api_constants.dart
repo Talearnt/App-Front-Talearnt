@@ -4,7 +4,7 @@ abstract class ApiConstants {
   static const String joinKakaoUrl = "$baseUrl/v1/auth/join/kakao";
   static const String refreshTokenUrl = "$baseUrl/v1/auth/login/refresh";
   static const String loginUrl = "$baseUrl/v1/auth/login";
-  static const String loginKakaoUrl = "$baseUrl/v1/api/auth/login/kakao";
+  static const String loginKakaoUrl = "$baseUrl/v1/auth/login/kakao/mobile";
   static const String createRandomNickNameUrl =
       "$baseUrl/v1/auth/users/nickname/random";
   static const String checkNickNameAvailableUrl =
@@ -47,6 +47,20 @@ abstract class ApiConstants {
   static const String changeAllowNotification =
       "$baseUrl/notifications/settings";
 
+  static const String getEventUrl = "$baseUrl/v1/events";
+
+  static const String getNoticeUrl = "$baseUrl/v1/notices";
+
+  static String getNoticeDetailUrl(int noticeNo) {
+    return "$baseUrl/v1/notices/$noticeNo";
+  }
+
+  static const String getMyWriteMatchBoardListUrl =
+      "$baseUrl/v1/users/exchanges";
+
+  static const String getMyWriteCommunityBoardListUrl =
+      "$baseUrl/v1/users/communities";
+
   static String handleCommunityBoardLike(int postNo) {
     return "$baseUrl/v1/posts/communities/$postNo/like";
   }
@@ -63,9 +77,7 @@ abstract class ApiConstants {
     return "$baseUrl/v1/posts/communities/$postNo";
   }
 
-  static String getFineUserPwUrl(String userId) {
-    return "$baseUrl/v1/auth/password/$userId/email";
-  }
+  static String getFineUserPwUrl = "$baseUrl/v1/auth/password/email";
 
   static String getChangeUserPwUrl(String no, String uuid) {
     return "$baseUrl/v1/auth/$no/password/$uuid";

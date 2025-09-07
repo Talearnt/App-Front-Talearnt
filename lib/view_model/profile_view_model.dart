@@ -1,8 +1,11 @@
 import 'dart:io';
 
+import 'package:app_front_talearnt/data/model/param/event_notice_param.dart';
+import 'package:app_front_talearnt/data/model/param/match_board_list_search_param.dart';
 import 'package:flutter/material.dart';
 
 import '../common/common_navigator.dart';
+import '../data/model/param/community_board_list_search_param.dart';
 import '../data/model/param/s3_controller_param.dart';
 import '../data/model/param/user_profile_param.dart';
 import '../data/repositories/profile_repository.dart';
@@ -34,9 +37,11 @@ class ProfileViewModel extends ChangeNotifier {
             userProfile.giveTalents.isEmpty) {
           commonNavigator.goRoute('/set-keyword');
         } else {
-          root == "profile"
-              ? commonNavigator.goRoute('/profile')
-              : commonNavigator.goRoute('/');
+          if (root == "profile") {
+            commonNavigator.goRoute('/profile');
+          } else if (root == "login") {
+            commonNavigator.goRoute('/');
+          }
         }
       },
     );
@@ -117,5 +122,92 @@ class ProfileViewModel extends ChangeNotifier {
     });
 
     return success;
+  }
+
+  Future<void> getMyWriteMatchBoardList(
+      String? page, String? size, String? lastNo, String searchType) async {
+    MatchBoardListSearchParam param = MatchBoardListSearchParam(
+        giveTalents: null,
+        receiveTalents: null,
+        order: null,
+        duration: null,
+        type: null,
+        badge: null,
+        status: null,
+        page: page,
+        size: size,
+        lastNo: lastNo);
+    final result = await profileRepository.getMyWriteMatchBoardList(param);
+    result.fold(
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)), (result) {
+      final posts = result['posts'];
+      final pagination = result['pagination'];
+
+      if (searchType == "reset") {
+        profileProvider.updateMatchPosts(posts);
+        profileProvider.updateMyWriteMatchPage(pagination);
+      } else if (searchType == "add") {
+        profileProvider.addMatchBoardPosts(posts);
+        profileProvider.updateMyWriteMatchPage(pagination);
+      }
+    });
+  }
+
+  Future<void> getMyWriteCommunityBoardList(String? postType, String? order,
+      String? page, String? size, String? lastNo, String searchType) async {
+    CommunityBoardListSearchParam param = CommunityBoardListSearchParam(
+        postType: postType,
+        order: order,
+        page: page,
+        size: size,
+        lastNo: lastNo);
+    final result = await profileRepository.getMyWriteCommunityBoardList(param);
+    result.fold(
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)), (result) {
+      final posts = result['posts'];
+      final pagination = result['pagination'];
+
+      if (searchType == "reset") {
+        profileProvider.updateCommunityPosts(posts);
+        profileProvider.updateMyWriteCommunityPage(pagination);
+      } else if (searchType == "add") {
+        profileProvider.addCommunityBoardPosts(posts);
+        profileProvider.updateMyWriteCommunityPage(pagination);
+      }
+    });
+  }
+
+  Future<void> getEvent() async {
+    EventNoticeParam param =
+        EventNoticeParam(page: profileProvider.eventPage.toString());
+    final result = await profileRepository.getEvent(param);
+    result.fold(
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)), (result) {
+      profileProvider.setEventList(result);
+    });
+  }
+
+  Future<void> getNotice() async {
+    EventNoticeParam param =
+        EventNoticeParam(page: profileProvider.noticePage.toString());
+    final result = await profileRepository.getNotice(param);
+    result.fold(
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)), (result) {
+      profileProvider.setNoticeList(result);
+    });
+  }
+
+  Future<void> getNoticeDetail(int noticeNo) async {
+    final result = await profileRepository.getNoticeDetail(noticeNo);
+    result.fold(
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)), (result) {
+      profileProvider.setNoticeDetail(result);
+      commonNavigator.pushRoute('/notice-detail');
+    });
   }
 }

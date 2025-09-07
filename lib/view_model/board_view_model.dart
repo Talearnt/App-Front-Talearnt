@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:app_front_talearnt/data/model/param/community_board_commnet.dart';
 import 'package:app_front_talearnt/data/model/param/community_board_reply.dart';
+import 'package:app_front_talearnt/data/model/param/event_notice_param.dart';
 import 'package:app_front_talearnt/data/model/param/match_board_param.dart';
 import 'package:app_front_talearnt/data/model/param/post_comment.dart';
 import 'package:app_front_talearnt/data/model/param/post_reply.dart';
@@ -10,6 +11,7 @@ import 'package:app_front_talearnt/data/model/respone/community_reply.dart';
 import 'package:app_front_talearnt/provider/board/community_write_provider.dart';
 import 'package:app_front_talearnt/provider/board/match_edit_provider.dart';
 import 'package:app_front_talearnt/provider/home/home_provider.dart';
+import 'package:app_front_talearnt/provider/profile/profile_provider.dart';
 import 'package:flutter/material.dart';
 
 import '../common/common_navigator.dart';
@@ -40,6 +42,7 @@ class BoardViewModel extends ChangeNotifier {
   final CommunityBoardDetailProvider communityBoardDetailProvider;
   final CommunityEditProvider communityEditProvider;
   final HomeProvider homeProvider;
+  final ProfileProvider profileProvider;
 
   BoardViewModel(
       this.commonNavigator,
@@ -53,7 +56,8 @@ class BoardViewModel extends ChangeNotifier {
       this.communityWriteProvider,
       this.communityBoardDetailProvider,
       this.communityEditProvider,
-      this.homeProvider);
+      this.homeProvider,
+      this.profileProvider);
 
   Future<void> getImageUploadUrl(
       List<Map<String, dynamic>> uploadImageInfos, String type) async {
@@ -213,8 +217,7 @@ class BoardViewModel extends ChangeNotifier {
         status: status,
         page: page,
         size: size,
-        lastNo: lastNo,
-        path: "mobile");
+        lastNo: lastNo);
     final result = await boardRepository.getMatchBoardList(param);
     result.fold(
         (failure) => commonNavigator.showSingleDialog(
@@ -292,7 +295,6 @@ class BoardViewModel extends ChangeNotifier {
     CommunityBoardListSearchParam param = CommunityBoardListSearchParam(
         postType: postType,
         order: order,
-        path: path,
         page: page,
         size: size,
         lastNo: lastNo);
@@ -312,7 +314,6 @@ class BoardViewModel extends ChangeNotifier {
     CommunityBoardListSearchParam param = CommunityBoardListSearchParam(
         postType: postType,
         order: order,
-        path: path,
         page: page,
         size: size,
         lastNo: lastNo);
@@ -332,7 +333,6 @@ class BoardViewModel extends ChangeNotifier {
     CommunityBoardListSearchParam param = CommunityBoardListSearchParam(
         postType: postType,
         order: order,
-        path: path,
         page: page,
         size: size,
         lastNo: lastNo);
@@ -351,7 +351,7 @@ class BoardViewModel extends ChangeNotifier {
         (failure) => commonNavigator.showSingleDialog(
             content: ErrorMessages.getMessage(failure.errorCode)), (post) {
       communityBoardDetailProvider.updateCommunityDetailBoard(post);
-      commonNavigator.goRoute('/community-board-detail');
+      commonNavigator.pushRoute('/community-board-detail');
     });
   }
 
@@ -540,7 +540,9 @@ class BoardViewModel extends ChangeNotifier {
       matchBoardDetailProvider.changeMatchBoardLike();
       matchBoardProvider.changeMatchBoardLikeFromDetail(
           postNo, matchBoardDetailProvider.matchingDetailPost.isFavorite);
-      homeProvider.changeCommunityBoardLikeFromDetail(
+      homeProvider.changeBothTalentBoardLikeFromDetail(
+          postNo, matchBoardDetailProvider.matchingDetailPost.isFavorite);
+      profileProvider.changeMatchBoardLikeFromDetail(
           postNo, matchBoardDetailProvider.matchingDetailPost.isFavorite);
       commonNavigator.showSingleDialog(
           content: ErrorMessages.getMessage(failure.errorCode));
@@ -554,6 +556,8 @@ class BoardViewModel extends ChangeNotifier {
       communityBoardProvider.changeCommunityBoardLikeFromDetail(
           postNo, communityBoardDetailProvider.communityDetailBoard.isLike);
       homeProvider.changeCommunityBoardLikeFromDetail(
+          postNo, communityBoardDetailProvider.communityDetailBoard.isLike);
+      profileProvider.changeCommunityBoardLikeFromDetail(
           postNo, communityBoardDetailProvider.communityDetailBoard.isLike);
       commonNavigator.showSingleDialog(
           content: ErrorMessages.getMessage(failure.errorCode));

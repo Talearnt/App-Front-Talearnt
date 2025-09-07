@@ -1,7 +1,9 @@
 import 'package:app_front_talearnt/view_model/board_view_model.dart';
+import 'package:app_front_talearnt/view_model/profile_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+
 import '../../../common/theme.dart';
 import 'create_setting_menu.dart';
 
@@ -11,6 +13,7 @@ class ProfileMeSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final boardViewModel = Provider.of<BoardViewModel>(context);
+    final profileViewModel = Provider.of<ProfileViewModel>(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -31,8 +34,10 @@ class ProfileMeSection extends StatelessWidget {
         CreateSettingMenu(
           iconPath: 'assets/icons/post_off.svg',
           title: '작성한 게시물',
-          onTap: () {
-            // 작성한 게시물 이동
+          onTap: () async {
+            await profileViewModel.getMyWriteMatchBoardList(
+                null, null, null, 'reset');
+            context.push('/my-write');
           },
         ),
         CreateSettingMenu(

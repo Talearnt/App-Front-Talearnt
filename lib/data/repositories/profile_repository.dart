@@ -1,12 +1,21 @@
 import 'dart:io';
 
+import 'package:app_front_talearnt/data/model/param/event_notice_param.dart';
 import 'package:app_front_talearnt/data/model/param/user_profile_param.dart';
+import 'package:app_front_talearnt/data/model/respone/event.dart';
 import 'package:app_front_talearnt/data/model/respone/failure.dart';
+import 'package:app_front_talearnt/data/model/respone/notice.dart';
 import 'package:app_front_talearnt/data/services/dio_service.dart';
 import 'package:dartz/dartz.dart';
 
 import '../../constants/api_constants.dart';
+import '../model/param/community_board_list_search_param.dart';
+import '../model/param/match_board_list_search_param.dart';
 import '../model/param/s3_controller_param.dart';
+import '../model/respone/community_board.dart';
+import '../model/respone/match_board.dart';
+import '../model/respone/notice_detail.dart';
+import '../model/respone/pagination.dart';
 import '../model/respone/s3_upload_url.dart';
 import '../model/respone/user_profile.dart';
 
@@ -38,7 +47,7 @@ class ProfileRepository {
 
   Future<Either<Failure, dynamic>> uploadImage(String imageUploadUrl,
       File image, int fileSize, String contentType) async {
-   final result = await dio.put(
+    final result = await dio.put(
       imageUploadUrl,
       image.openRead(),
       size: fileSize,
@@ -53,5 +62,85 @@ class ProfileRepository {
     final result = await dio.put(ApiConstants.editUserProfile, body.toJson());
     return result.fold(
         left, (response) => right(UserProfile.fromJson(response["data"])));
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> getMyWriteMatchBoardList(
+      MatchBoardListSearchParam body) async {
+    final result = await dio.get(
+        ApiConstants.getMyWriteMatchBoardListUrl, null, body.toJson());
+    return result.fold(left, (response) {
+      final posts = List<MatchBoard>.from(
+          response['data']['results'].map((data) => MatchBoard.fromJson(data)));
+      final pagination = Pagination.fromJson(response['data']['pagination']);
+      return right({'posts': posts, 'pagination': pagination});
+    });
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> getMyWriteCommunityBoardList(
+      CommunityBoardListSearchParam body) async {
+    final result = await dio.get(
+        ApiConstants.getMyWriteCommunityBoardListUrl, null, body.toJson());
+    return result.fold(left, (response) {
+      final posts = List<CommunityBoard>.from(response['data']['results']
+          .map((data) => CommunityBoard.fromJson(data)));
+      final pagination = Pagination.fromJson(response['data']['pagination']);
+      return right({'posts': posts, 'pagination': pagination});
+    });
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> getEvent(
+      EventNoticeParam body) async {
+    final response =
+        await dio.get(ApiConstants.getEventUrl, null, body.toJson());
+
+    return response.fold(
+      left,
+      (resp) {
+        final data = resp['data'] as Map<String, dynamic>;
+
+        final events = (data['results'] as List<dynamic>)
+            .map((e) => Event.fromJson(e as Map<String, dynamic>))
+            .toList();
+
+        final hasNext = data['pagination']['hasNext'] as bool;
+
+        return right({
+          'events': events,
+          'hasNext': hasNext,
+        });
+      },
+    );
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> getNotice(
+      EventNoticeParam body) async {
+    final response =
+        await dio.get(ApiConstants.getNoticeUrl, null, body.toJson());
+
+    return response.fold(
+      left,
+      (resp) {
+        final data = resp['data'] as Map<String, dynamic>;
+
+        final notices = (data['results'] as List<dynamic>)
+            .map((e) => Notice.fromJson(e as Map<String, dynamic>))
+            .toList();
+
+        final hasNext = data['pagination']['hasNext'] as bool;
+
+        return right({
+          'notices': notices,
+          'hasNext': hasNext,
+        });
+      },
+    );
+  }
+
+  Future<Either<Failure, NoticeDetail>> getNoticeDetail(int noticeNo) async {
+    final response =
+        await dio.get(ApiConstants.getNoticeDetailUrl(noticeNo), null, null);
+
+    return response.fold(
+        left, (response) => right(NoticeDetail.fromJson(response["data"])));
   }
 }
