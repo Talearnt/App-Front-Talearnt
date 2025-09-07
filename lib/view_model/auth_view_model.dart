@@ -3,8 +3,8 @@ import 'package:app_front_talearnt/data/model/param/agree_req_dto.dart';
 import 'package:app_front_talearnt/data/model/param/login_param.dart';
 import 'package:app_front_talearnt/data/model/param/send_cert_number_param.dart';
 import 'package:app_front_talearnt/data/model/param/send_reset_password_mail_param.dart';
-import 'package:app_front_talearnt/data/services/stomp_service.dart';
 import 'package:app_front_talearnt/data/model/respone/token.dart';
+import 'package:app_front_talearnt/data/services/stomp_service.dart';
 import 'package:app_front_talearnt/provider/auth/find_id_provider.dart';
 import 'package:app_front_talearnt/provider/auth/find_password_provider.dart';
 import 'package:app_front_talearnt/provider/auth/kakao_provider.dart';
@@ -27,6 +27,7 @@ import '../data/model/respone/failure.dart';
 import '../data/model/respone/kakao_sign_up_user_info.dart';
 import '../data/model/respone/success.dart';
 import '../data/repositories/auth_repository.dart';
+import '../data/services/secure_storage_service.dart';
 import '../provider/profile/profile_provider.dart';
 import '../utils/error_message.dart';
 
@@ -45,6 +46,7 @@ class AuthViewModel extends ChangeNotifier {
   final NotificationViewModel notificationViewModel;
   final KakaoProvider kakaoProvider;
   final ProfileProvider profileProvider;
+  final SecureStorageService secureStorageService;
 
   AuthViewModel(
     this.loginProvider,
@@ -57,19 +59,26 @@ class AuthViewModel extends ChangeNotifier {
     this.storageProvider,
     this.commonProvider,
     this.profileViewModel,
-    this.kakaoProvider,
-    this.profileProvider,
     this.notificationProvider,
     this.notificationViewModel,
+    this.kakaoProvider,
+    this.profileProvider,
+    this.secureStorageService,
   );
 
-  Future<void> login(String email, String pw, String root) async {
+  Future<void> login(
+      String email, String pw, bool autoLogin, String root) async {
     // root - login or profile or keyword
-    LoginParam param = LoginParam(userId: email, pw: pw);
+    LoginParam param = LoginParam(userId: email, pw: pw, autoLogin: autoLogin);
     final result = await authRepository.login(param);
     result.fold(
-      (failure) => loginProvider.updateLoginFormFail(failure.errorMessage),
-      // 이후 수정 들어갈 수 도 있다.
+      (failure) {
+        loginProvider.updateLoginFormFail(failure.errorMessage);
+        commonNavigator.showSingleDialog(
+          content: ErrorMessages.getMessage(failure.errorCode),
+        );
+        commonNavigator.goRoute('/login');
+      },
       (token) async {
         tokenManager.saveToken(token);
         loginProvider.updateLoginFormSuccess();
@@ -324,6 +333,8 @@ class AuthViewModel extends ChangeNotifier {
       } else {
         tokenManager.saveToken(Token(accessToken: userInfo.accessToken!));
         loginProvider.updateLoginFormSuccess();
+        secureStorageService.write(key: "kakao", value: 'kakao');
+        loginProvider.setLoginType("kakao");
         commonProvider.changeIsLoading(false);
         await profileViewModel.getUserProfile(root);
       }

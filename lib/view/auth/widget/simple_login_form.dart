@@ -30,12 +30,12 @@ class SimpleLoginForm extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CircleAvatar(
-              radius: 24.0,
-              backgroundColor: Colors.green, // 첫 번째 아이콘 색상
-              child: SvgPicture.asset('assets/icons/sns_naver.svg'),
-            ),
-            const SizedBox(width: 16.0),
+            // CircleAvatar(
+            //   radius: 24.0,
+            //   backgroundColor: Colors.green, // 첫 번째 아이콘 색상
+            //   child: SvgPicture.asset('assets/icons/sns_naver.svg'),
+            // ),
+            // const SizedBox(width: 16.0),
             InkWell(
               onTap: () {
                 authViewModel.kakaoLogin(loginRoot);

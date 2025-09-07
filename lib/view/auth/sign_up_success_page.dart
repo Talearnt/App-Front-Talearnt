@@ -22,7 +22,7 @@ class SignUpSuccessPage extends StatelessWidget {
         first: GestureDetector(
             onTap: () {
               signUpProvider.clearProvider();
-              context.go('/');
+              context.go('/home');
             },
             child: SvgPicture.asset("assets/icons/close.svg")),
       ),

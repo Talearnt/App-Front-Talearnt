@@ -40,7 +40,7 @@ class ProfileViewModel extends ChangeNotifier {
           if (root == "profile") {
             commonNavigator.goRoute('/profile');
           } else if (root == "login") {
-            commonNavigator.goRoute('/');
+            commonNavigator.goRoute('/home');
           }
         }
       },

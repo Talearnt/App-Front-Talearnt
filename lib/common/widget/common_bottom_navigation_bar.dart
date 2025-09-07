@@ -42,7 +42,7 @@ class CommonBottomNavigationBar extends StatelessWidget {
                 flex: 1,
                 child: GestureDetector(
                   onTap: () {
-                    context.go('/');
+                    context.go('/home');
                     commonProvider.changeSelectedPage('home');
                   },
                   child: Column(

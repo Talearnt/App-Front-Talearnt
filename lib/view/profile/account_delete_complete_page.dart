@@ -25,7 +25,7 @@ class AccountDeleteCompletePage extends StatelessWidget {
           ),
           onPressed: () {
             commonProvider.changeSelectedPage('home');
-            context.go('/');
+            context.go('/home');
           },
         ),
       ),
@@ -89,7 +89,7 @@ class AccountDeleteCompletePage extends StatelessWidget {
               content: '홈으로',
               onPressed: () {
                 commonProvider.changeSelectedPage('home');
-                context.go('/');
+                context.go('/home');
               },
             ),
             const SizedBox(height: 24),
