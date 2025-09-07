@@ -100,12 +100,14 @@ class PrimaryM extends StatelessWidget {
   final String content;
   final VoidCallback? onPressed;
   final bool isEnabled;
+  final double vertical;
 
   const PrimaryM({
     super.key,
     required this.content,
     this.onPressed,
     this.isEnabled = true,
+    this.vertical = 13.5,
   });
 
   @override
@@ -125,7 +127,7 @@ class PrimaryM extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
-        padding: const EdgeInsets.symmetric(vertical: 13.5, horizontal: 16),
+        padding: EdgeInsets.symmetric(vertical: vertical, horizontal: 16),
       ).copyWith(
         overlayColor: WidgetStateProperty.resolveWith<Color?>((states) {
           if (isEnabled && states.contains(WidgetState.pressed)) {
