@@ -102,6 +102,7 @@ class LoginForm extends StatelessWidget {
               await authViewModel.login(
                   loginProvider.emailController.text,
                   loginProvider.passwordController.text,
+                  loginProvider.autoLoggedIn,
                   loginProvider.loginRoot);
               commonProvider.changeIsLoading(false);
               // await talentBoardViewModel.getKeywords(); 하드코딩으로 대체
@@ -129,6 +130,7 @@ class LoginForm extends StatelessWidget {
                 .login(
                     loginProvider.emailController.text,
                     loginProvider.passwordController.text,
+                    loginProvider.autoLoggedIn,
                     loginProvider.loginRoot)
                 .whenComplete(
               () {

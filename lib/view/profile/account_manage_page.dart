@@ -1,4 +1,5 @@
 import 'package:app_front_talearnt/common/theme.dart';
+import 'package:app_front_talearnt/provider/auth/login_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
@@ -7,6 +8,7 @@ import 'package:provider/provider.dart';
 import '../../common/common_navigator.dart';
 import '../../common/widget/button.dart';
 import '../../common/widget/top_app_bar.dart';
+import '../../data/services/secure_storage_service.dart';
 import '../../provider/profile/profile_provider.dart';
 import '../../view_model/auth_view_model.dart';
 
@@ -16,8 +18,10 @@ class AccountManagePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final profileProvider = Provider.of<ProfileProvider>(context);
+    final loginProvider = Provider.of<LoginProvider>(context);
     final commonNavigator = Provider.of<CommonNavigator>(context);
     final authViewModel = Provider.of<AuthViewModel>(context);
+    final secureStorageService = Provider.of<SecureStorageService>(context);
 
     return PopScope(
       canPop: false,
@@ -58,24 +62,30 @@ class AccountManagePage extends StatelessWidget {
                       content: '로그아웃',
                       onPressed: () {
                         commonNavigator.showDoubleDialog(
-                            content: "정말 로그아웃 하시겠어요?",
-                            leftText: '취소',
-                            rightText: '로그아웃',
-                            leftFun: () {
-                              commonNavigator.goBack();
-                            },
-                            rightFun: () async {
-                              final result = await authViewModel.logout();
-                              result.fold(
-                                (failure) {},
-                                (value) {
-                                  profileProvider.clearAllProviders(context);
-                                  commonNavigator.goRoute('/login');
-                                },
-                              );
-                            });
+                          content: "정말 로그아웃 하시겠어요?",
+                          leftText: '취소',
+                          rightText: '로그아웃',
+                          leftFun: () {
+                            commonNavigator.goBack();
+                          },
+                          rightFun: () async {
+                            final result = await authViewModel.logout();
+                            result.fold(
+                              (failure) {},
+                              (value) {
+                                profileProvider.clearAllProviders(context);
+                                if (loginProvider.loginType == "kakao") {
+                                  secureStorageService.delete(key: "kakao");
+                                  secureStorageService.delete(key: "email");
+                                  secureStorageService.delete(key: "password");
+                                }
+                                commonNavigator.goRoute('/login');
+                              },
+                            );
+                          },
+                        );
                       },
-                    ),
+                    )
                   ],
                 ),
               ),

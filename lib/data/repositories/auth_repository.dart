@@ -164,7 +164,7 @@ class AuthRepository {
   Future<Either<Failure, KakaoLoginResult>> talearntKakaoLogin(
       String token) async {
     final result = await dio.post(ApiConstants.loginKakaoUrl,
-        {"kakaoAccessToken": token, "autoLogin": false}, null);
+        {"kakaoAccessToken": token, "autoLogin": true}, null);
     return result.fold(
         left, (response) => right(KakaoLoginResult.fromJson(response["data"])));
   }

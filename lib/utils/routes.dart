@@ -38,6 +38,7 @@ import '../view/board/match_board/match_write2_page.dart';
 import '../view/board/match_board/match_write_preview_page.dart';
 import '../view/board/write_success_page.dart';
 import '../view/home_page.dart';
+import '../view/init_page.dart';
 import '../view/keyword/set_talent_keyword_main_page.dart';
 import '../view/keyword/set_talent_keyword_success_page.dart';
 import '../view/profile/account_delete_complete_page.dart';
@@ -60,330 +61,325 @@ class Routes {
       GoRoute(
         path: '/',
         builder: (BuildContext context, GoRouterState state) {
+          return const InitPage();
+        },
+      ),
+      GoRoute(
+        path: '/home',
+        builder: (BuildContext context, GoRouterState state) {
           return const HomePage();
         },
-        // redirect: (context, state) async {
-        //   final secureStorageService = context.read<SecureStorageService>();
-        //   final userId = await secureStorageService.read(key: "email");
-        //   final password = await secureStorageService.read(key: "password");
-        //   if (!secureStorageService.isLoggedIn) {
-        //     getUserProfile();
-        //     return '/home';
-        //   }
-        //   return null;
-        // },
+      ),
+      GoRoute(
+        path: '/login',
+        builder: (BuildContext context, GoRouterState state) {
+          return const LoginPage();
+        },
+      ),
+      GoRoute(
+        path: '/find-id',
+        builder: (BuildContext context, GoRouterState state) {
+          return const FindIdPage();
+        },
+      ),
+      GoRoute(
+        path: '/find-id-success',
+        builder: (BuildContext context, GoRouterState state) {
+          return const FindIdSuccessPage();
+        },
+      ),
+      GoRoute(
+        path: '/find-password',
+        builder: (BuildContext context, GoRouterState state) {
+          return const FindPasswordPage();
+        },
+      ),
+      GoRoute(
+        path: '/find-password-success',
+        builder: (BuildContext context, GoRouterState state) {
+          return const FindPasswordSuccessPage();
+        },
+      ),
+      GoRoute(
+          path: '/reset-password',
+          builder: (BuildContext context, GoRouterState state) {
+            return const ResetPasswordPage();
+          }),
+      GoRoute(
+        path: '/sign-up',
+        builder: (BuildContext context, GoRouterState state) {
+          return const SignUpMainPage();
+        },
+      ),
+      GoRoute(
+        path: '/sign-up-success',
+        builder: (BuildContext context, GoRouterState state) {
+          return const SignUpSuccessPage();
+        },
+      ),
+      GoRoute(
+        path: '/kakao-sign-up',
+        builder: (BuildContext context, GoRouterState state) {
+          return const KakaoSignUpPage();
+        },
+      ),
+      GoRoute(
+        path: '/set-keyword',
+        builder: (BuildContext context, GoRouterState state) {
+          return const SetTalentKeywordMainPage();
+        },
+      ),
+      GoRoute(
+        path: '/set-keyword-success',
+        builder: (BuildContext context, GoRouterState state) {
+          return const SetTalentKeywordSuccessPage();
+        },
+      ),
+      GoRoute(
+        path: '/match-write1',
+        builder: (BuildContext context, GoRouterState state) {
+          return const MatchWrite1Page();
+        },
+      ),
+      GoRoute(
+        path: '/match-write2',
+        builder: (BuildContext context, GoRouterState state) {
+          return const MatchWrite2Page();
+        },
+      ),
+      GoRoute(
+        path: '/match-write-preview',
+        builder: (BuildContext context, GoRouterState state) {
+          return const MatchWritePreviewPage();
+        },
+      ),
+      GoRoute(
+        path: '/write-success',
+        builder: (BuildContext context, GoRouterState state) {
+          return const WriteSuccessPage();
+        },
+      ),
+      GoRoute(
+        path: '/terms-agree-required',
+        builder: (BuildContext context, GoRouterState state) {
+          return const TermsAgreementRequired();
+        },
+      ),
+      GoRoute(
+        path: '/privacy-agree-required',
+        builder: (BuildContext context, GoRouterState state) {
+          return const PrivacyAgreementRequired();
+        },
+      ),
+      GoRoute(
+        path: '/privacy-agree-optional',
+        builder: (BuildContext context, GoRouterState state) {
+          return const PrivacyAgreementOptional();
+        },
+      ),
+      GoRoute(
+        path: '/terms-agree-optional',
+        builder: (BuildContext context, GoRouterState state) {
+          return const TermsAgreementOptional();
+        },
+      ),
+      GoRoute(
+        path: '/board-list',
+        builder: (BuildContext context, GoRouterState state) {
+          return const BoardList();
+        },
+      ),
+      GoRoute(
+        path: '/match-board-detail-page',
+        builder: (BuildContext context, GoRouterState state) {
+          return const MatchBoardDetailPage();
+        },
         routes: <RouteBase>[
           GoRoute(
-            path: '/login',
+            path: 'match-image-view',
             builder: (BuildContext context, GoRouterState state) {
-              return const LoginPage();
+              return const MatchBoardImageViewPage();
             },
           ),
           GoRoute(
-            path: '/find-id',
+            path: 'match-image-view-detail',
             builder: (BuildContext context, GoRouterState state) {
-              return const FindIdPage();
-            },
-          ),
-          GoRoute(
-            path: '/find-id-success',
-            builder: (BuildContext context, GoRouterState state) {
-              return const FindIdSuccessPage();
-            },
-          ),
-          GoRoute(
-            path: '/find-password',
-            builder: (BuildContext context, GoRouterState state) {
-              return const FindPasswordPage();
-            },
-          ),
-          GoRoute(
-            path: '/find-password-success',
-            builder: (BuildContext context, GoRouterState state) {
-              return const FindPasswordSuccessPage();
-            },
-          ),
-          GoRoute(
-              path: '/reset-password',
-              builder: (BuildContext context, GoRouterState state) {
-                return const ResetPasswordPage();
-              }),
-          GoRoute(
-            path: '/sign-up',
-            builder: (BuildContext context, GoRouterState state) {
-              return const SignUpMainPage();
-            },
-          ),
-          GoRoute(
-            path: '/sign-up-success',
-            builder: (BuildContext context, GoRouterState state) {
-              return const SignUpSuccessPage();
-            },
-          ),
-          GoRoute(
-            path: '/kakao-sign-up',
-            builder: (BuildContext context, GoRouterState state) {
-              return const KakaoSignUpPage();
-            },
-          ),
-          GoRoute(
-            path: '/set-keyword',
-            builder: (BuildContext context, GoRouterState state) {
-              return const SetTalentKeywordMainPage();
-            },
-          ),
-          GoRoute(
-            path: '/set-keyword-success',
-            builder: (BuildContext context, GoRouterState state) {
-              return const SetTalentKeywordSuccessPage();
-            },
-          ),
-          GoRoute(
-            path: '/match-write1',
-            builder: (BuildContext context, GoRouterState state) {
-              return const MatchWrite1Page();
-            },
-          ),
-          GoRoute(
-            path: '/match-write2',
-            builder: (BuildContext context, GoRouterState state) {
-              return const MatchWrite2Page();
-            },
-          ),
-          GoRoute(
-            path: '/match-write-preview',
-            builder: (BuildContext context, GoRouterState state) {
-              return const MatchWritePreviewPage();
-            },
-          ),
-          GoRoute(
-            path: '/write-success',
-            builder: (BuildContext context, GoRouterState state) {
-              return const WriteSuccessPage();
-            },
-          ),
-          GoRoute(
-            path: '/terms-agree-required',
-            builder: (BuildContext context, GoRouterState state) {
-              return const TermsAgreementRequired();
-            },
-          ),
-          GoRoute(
-            path: '/privacy-agree-required',
-            builder: (BuildContext context, GoRouterState state) {
-              return const PrivacyAgreementRequired();
-            },
-          ),
-          GoRoute(
-            path: '/privacy-agree-optional',
-            builder: (BuildContext context, GoRouterState state) {
-              return const PrivacyAgreementOptional();
-            },
-          ),
-          GoRoute(
-            path: '/terms-agree-optional',
-            builder: (BuildContext context, GoRouterState state) {
-              return const TermsAgreementOptional();
-            },
-          ),
-          GoRoute(
-            path: '/board-list',
-            builder: (BuildContext context, GoRouterState state) {
-              return const BoardList();
-            },
-          ),
-          GoRoute(
-            path: '/match-board-detail-page',
-            builder: (BuildContext context, GoRouterState state) {
-              return const MatchBoardDetailPage();
-            },
-            routes: <RouteBase>[
-              GoRoute(
-                path: 'match-image-view',
-                builder: (BuildContext context, GoRouterState state) {
-                  return const MatchBoardImageViewPage();
-                },
-              ),
-              GoRoute(
-                path: 'match-image-view-detail',
-                builder: (BuildContext context, GoRouterState state) {
-                  return const MatchBoardImageViewDetailPage();
-                },
-              ),
-            ],
-          ),
-          GoRoute(
-            path: '/community-write1',
-            builder: (BuildContext context, GoRouterState state) {
-              return const CommunityWrite1Page();
-            },
-          ),
-          GoRoute(
-            path: '/community-write2',
-            builder: (BuildContext context, GoRouterState state) {
-              return const CommunityWrite2Page();
-            },
-          ),
-          GoRoute(
-            path: '/community-preview',
-            builder: (BuildContext context, GoRouterState state) {
-              return const CommunityWritePreviewPage();
-            },
-          ),
-          GoRoute(
-            path: '/match-edit1',
-            builder: (BuildContext context, GoRouterState state) {
-              return const MatchEdit1Page();
-            },
-          ),
-          GoRoute(
-            path: '/match-edit2',
-            builder: (BuildContext context, GoRouterState state) {
-              return const MatchEdit2Page();
-            },
-          ),
-          GoRoute(
-            path: '/match-edit-preview',
-            builder: (BuildContext context, GoRouterState state) {
-              return const MatchEditPreviewPage();
-            },
-          ),
-          GoRoute(
-            path: '/community-board-detail',
-            builder: (BuildContext context, GoRouterState state) {
-              return const CommunityBoardDetailPage();
-            },
-            routes: <RouteBase>[
-              GoRoute(
-                path: 'community-image-view',
-                builder: (BuildContext context, GoRouterState state) {
-                  return const CommunityBoardImageViewPage();
-                },
-              ),
-              GoRoute(
-                path: 'community-image-view-detail',
-                builder: (BuildContext context, GoRouterState state) {
-                  return const CommunityBoardImageViewDetailPage();
-                },
-              ),
-            ],
-          ),
-          GoRoute(
-            path: '/profile',
-            builder: (BuildContext context, GoRouterState state) {
-              return const ProfilePage();
-            },
-          ),
-          GoRoute(
-            path: '/modify-user-info',
-            builder: (BuildContext context, GoRouterState state) {
-              return const ModifyUserInfoPage();
-            },
-          ),
-          GoRoute(
-            path: '/account-manage',
-            builder: (BuildContext context, GoRouterState state) {
-              return const AccountManagePage();
-            },
-          ),
-          GoRoute(
-            path: '/alarm-setting',
-            builder: (BuildContext context, GoRouterState state) {
-              return const AlarmSettingPage();
-            },
-          ),
-          GoRoute(
-            path: '/licenses',
-            builder: (BuildContext context, GoRouterState state) {
-              return const LicensesPage();
-            },
-          ),
-          GoRoute(
-            path: '/event-notice',
-            builder: (BuildContext context, GoRouterState state) {
-              return const EventNoticePage();
-            },
-          ),
-          GoRoute(
-            path: '/user-image-preview',
-            builder: (BuildContext context, GoRouterState state) {
-              return const UserImagePreviewPage();
-            },
-          ),
-          GoRoute(
-            path: '/match_board_like',
-            builder: (BuildContext context, GoRouterState state) {
-              return const MatchBoardLikePage();
-            },
-          ),
-          GoRoute(
-            path: '/community-edit1',
-            builder: (BuildContext context, GoRouterState state) {
-              return const CommunityEdit1Page();
-            },
-          ),
-          GoRoute(
-            path: '/community-edit2',
-            builder: (BuildContext context, GoRouterState state) {
-              return const CommunityEdit2Page();
-            },
-          ),
-          GoRoute(
-            path: '/community-edit-preview',
-            builder: (BuildContext context, GoRouterState state) {
-              return const CommunityEditPreviewPage();
-            },
-          ),
-          GoRoute(
-            path: '/alarm',
-            builder: (BuildContext context, GoRouterState state) {
-              return const AlarmPage();
-            },
-          ),
-          GoRoute(
-            path: '/my-write',
-            builder: (BuildContext context, GoRouterState state) {
-              return const MyWritePage();
-            },
-          ),
-          GoRoute(
-            path: '/account-delete',
-            builder: (BuildContext context, GoRouterState state) {
-              return const AccountDeletePage();
-            },
-          ),
-          GoRoute(
-            path: '/account-delete-complete',
-            builder: (BuildContext context, GoRouterState state) {
-              return const AccountDeleteCompletePage();
-            },
-          ),
-          GoRoute(
-            path: '/account-delete',
-            builder: (BuildContext context, GoRouterState state) {
-              return const AccountDeletePage();
-            },
-          ),
-          GoRoute(
-            path: '/account-delete-complete',
-            builder: (BuildContext context, GoRouterState state) {
-              return const AccountDeleteCompletePage();
-            },
-          ),
-          GoRoute(
-            path: '/notice-detail',
-            builder: (BuildContext context, GoRouterState state) {
-              return const NoticeDetailPage();
-            },
-          ),
-          GoRoute(
-            path: '/event-detail',
-            builder: (BuildContext context, GoRouterState state) {
-              return const EventDetailPage();
+              return const MatchBoardImageViewDetailPage();
             },
           ),
         ],
       ),
+      GoRoute(
+        path: '/community-write1',
+        builder: (BuildContext context, GoRouterState state) {
+          return const CommunityWrite1Page();
+        },
+      ),
+      GoRoute(
+        path: '/community-write2',
+        builder: (BuildContext context, GoRouterState state) {
+          return const CommunityWrite2Page();
+        },
+      ),
+      GoRoute(
+        path: '/community-preview',
+        builder: (BuildContext context, GoRouterState state) {
+          return const CommunityWritePreviewPage();
+        },
+      ),
+      GoRoute(
+        path: '/match-edit1',
+        builder: (BuildContext context, GoRouterState state) {
+          return const MatchEdit1Page();
+        },
+      ),
+      GoRoute(
+        path: '/match-edit2',
+        builder: (BuildContext context, GoRouterState state) {
+          return const MatchEdit2Page();
+        },
+      ),
+      GoRoute(
+        path: '/match-edit-preview',
+        builder: (BuildContext context, GoRouterState state) {
+          return const MatchEditPreviewPage();
+        },
+      ),
+      GoRoute(
+        path: '/community-board-detail',
+        builder: (BuildContext context, GoRouterState state) {
+          return const CommunityBoardDetailPage();
+        },
+        routes: <RouteBase>[
+          GoRoute(
+            path: 'community-image-view',
+            builder: (BuildContext context, GoRouterState state) {
+              return const CommunityBoardImageViewPage();
+            },
+          ),
+          GoRoute(
+            path: 'community-image-view-detail',
+            builder: (BuildContext context, GoRouterState state) {
+              return const CommunityBoardImageViewDetailPage();
+            },
+          ),
+        ],
+      ),
+      GoRoute(
+        path: '/profile',
+        builder: (BuildContext context, GoRouterState state) {
+          return const ProfilePage();
+        },
+      ),
+      GoRoute(
+        path: '/modify-user-info',
+        builder: (BuildContext context, GoRouterState state) {
+          return const ModifyUserInfoPage();
+        },
+      ),
+      GoRoute(
+        path: '/account-manage',
+        builder: (BuildContext context, GoRouterState state) {
+          return const AccountManagePage();
+        },
+      ),
+      GoRoute(
+        path: '/alarm-setting',
+        builder: (BuildContext context, GoRouterState state) {
+          return const AlarmSettingPage();
+        },
+      ),
+      GoRoute(
+        path: '/licenses',
+        builder: (BuildContext context, GoRouterState state) {
+          return const LicensesPage();
+        },
+      ),
+      GoRoute(
+        path: '/event-notice',
+        builder: (BuildContext context, GoRouterState state) {
+          return const EventNoticePage();
+        },
+      ),
+      GoRoute(
+        path: '/user-image-preview',
+        builder: (BuildContext context, GoRouterState state) {
+          return const UserImagePreviewPage();
+        },
+      ),
+      GoRoute(
+        path: '/match_board_like',
+        builder: (BuildContext context, GoRouterState state) {
+          return const MatchBoardLikePage();
+        },
+      ),
+      GoRoute(
+        path: '/community-edit1',
+        builder: (BuildContext context, GoRouterState state) {
+          return const CommunityEdit1Page();
+        },
+      ),
+      GoRoute(
+        path: '/community-edit2',
+        builder: (BuildContext context, GoRouterState state) {
+          return const CommunityEdit2Page();
+        },
+      ),
+      GoRoute(
+        path: '/community-edit-preview',
+        builder: (BuildContext context, GoRouterState state) {
+          return const CommunityEditPreviewPage();
+        },
+      ),
+      GoRoute(
+        path: '/alarm',
+        builder: (BuildContext context, GoRouterState state) {
+          return const AlarmPage();
+        },
+      ),
+      GoRoute(
+        path: '/my-write',
+        builder: (BuildContext context, GoRouterState state) {
+          return const MyWritePage();
+        },
+      ),
+      GoRoute(
+        path: '/account-delete',
+        builder: (BuildContext context, GoRouterState state) {
+          return const AccountDeletePage();
+        },
+      ),
+      GoRoute(
+        path: '/account-delete-complete',
+        builder: (BuildContext context, GoRouterState state) {
+          return const AccountDeleteCompletePage();
+        },
+      ),
+      GoRoute(
+        path: '/account-delete',
+        builder: (BuildContext context, GoRouterState state) {
+          return const AccountDeletePage();
+        },
+      ),
+      GoRoute(
+        path: '/account-delete-complete',
+        builder: (BuildContext context, GoRouterState state) {
+          return const AccountDeleteCompletePage();
+        },
+      ),
+      GoRoute(
+        path: '/notice-detail',
+        builder: (BuildContext context, GoRouterState state) {
+          return const NoticeDetailPage();
+        },
+      ),
+      GoRoute(
+        path: '/event-detail',
+        builder: (BuildContext context, GoRouterState state) {
+          return const EventDetailPage();
+        },
+      ),
+
     ],
     errorPageBuilder: (BuildContext context, GoRouterState state) {
       return const MaterialPage(

@@ -22,7 +22,7 @@ class SetTalentKeywordSuccessPage extends StatelessWidget {
         first: GestureDetector(
             onTap: () {
               signUpProvider.clearProvider();
-              context.go('/');
+              context.go('/home');
             },
             child: SvgPicture.asset("assets/icons/close.svg")),
       ),
@@ -61,7 +61,7 @@ class SetTalentKeywordSuccessPage extends StatelessWidget {
               child: PrimaryM(
                 content: '매칭 게시물 보러가기',
                 onPressed: () {
-                  context.go('/');
+                  context.go('/home');
                 },
               ),
             ),

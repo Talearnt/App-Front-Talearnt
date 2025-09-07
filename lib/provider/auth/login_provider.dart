@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import '../clear_text.dart';
 
 class LoginProvider extends ChangeNotifier with ClearText {
-  bool _initLoggedIn = true;
   bool _autoLoggedIn = false;
   bool _isLoggedIn = false;
   String _loginRoot = 'login';
+  String _loginType = 'default'; // default or kakao
   final TextEditingController _emailController = TextEditingController();
   final FocusNode _emailFocusNode = FocusNode();
   bool _emailValid = true;
@@ -18,13 +18,13 @@ class LoginProvider extends ChangeNotifier with ClearText {
   bool _passwordValid = true;
   String _passwordValidMessage = '';
 
-  bool get initLoggedIn => _initLoggedIn;
-
   bool get autoLoggedIn => _autoLoggedIn;
 
   bool get isLoggedIn => _isLoggedIn;
 
   String get loginRoot => _loginRoot;
+
+  String get loginType => _loginType;
 
   TextEditingController get emailController => _emailController;
 
@@ -44,14 +44,9 @@ class LoginProvider extends ChangeNotifier with ClearText {
 
   bool get passwordObscure => _passwordObscure;
 
-  void clearProvider(){
-    _initLoggedIn = true;
-    _autoLoggedIn = false;
+  void clearProvider() {
     _isLoggedIn = false;
     _loginRoot = 'login';
-
-    _emailController.clear();
-    _passwordController.clear();
 
     _emailFocusNode.unfocus();
     _passwordFocusNode.unfocus();
@@ -146,8 +141,8 @@ class LoginProvider extends ChangeNotifier with ClearText {
     notifyListeners();
   }
 
-  void updateInitLoggedIn(bool loggedIn) {
-    _initLoggedIn = loggedIn;
+  void saveAutoLogin() {
+    _autoLoggedIn = true;
     notifyListeners();
   }
 
@@ -159,6 +154,11 @@ class LoginProvider extends ChangeNotifier with ClearText {
 
   Future<void> changeRoot(String newRoot) async {
     _loginRoot = newRoot;
+    notifyListeners();
+  }
+
+  Future<void> setLoginType(String loginType) async {
+    _loginType = loginType;
     notifyListeners();
   }
 }

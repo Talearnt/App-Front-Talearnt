@@ -8,6 +8,8 @@ import 'package:provider/provider.dart';
 import '../../common/common_navigator.dart';
 import '../../common/widget/bottom_btn.dart';
 import '../../common/widget/top_app_bar.dart';
+import '../../data/services/secure_storage_service.dart';
+import '../../provider/auth/login_provider.dart';
 import '../../provider/common/common_provider.dart';
 import '../../provider/keyword/keyword_provider.dart';
 import '../../provider/profile/profile_provider.dart';
@@ -26,6 +28,8 @@ class SetTalentKeywordMainPage extends StatelessWidget {
     final commonProvider = Provider.of<CommonProvider>(context);
     final profileProvider = Provider.of<ProfileProvider>(context);
     final authViewModel = Provider.of<AuthViewModel>(context);
+    final loginProvider = Provider.of<LoginProvider>(context);
+    final secureStorageService = Provider.of<SecureStorageService>(context);
 
     return PopScope(
       canPop: false,
@@ -54,6 +58,11 @@ class SetTalentKeywordMainPage extends StatelessWidget {
                         (failure) {},
                         (value) {
                           profileProvider.clearAllProviders(context);
+                          if (loginProvider.loginType == "kakao") {
+                            secureStorageService.delete(key: "kakao");
+                            secureStorageService.delete(key: "email");
+                            secureStorageService.delete(key: "password");
+                          }
                           commonNavigator.goRoute('/login');
                         },
                       );
