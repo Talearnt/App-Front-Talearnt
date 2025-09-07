@@ -139,17 +139,7 @@ class ProfileProvider extends ChangeNotifier with ClearText {
 
   TabController get eventNoticeTabController => _eventNoticeTabController;
 
-  bool _allAlarm = false;
-  bool _commentAlarm = false;
-  bool _keywordAlarm = false;
-
   UserProfile get userProfile => _userProfile;
-
-  bool get allAlarm => _allAlarm;
-
-  bool get commentAlarm => _commentAlarm;
-
-  bool get keywordAlarm => _keywordAlarm;
 
   TextEditingController get editNickNameController => _editNickNameController;
 
@@ -299,9 +289,6 @@ class ProfileProvider extends ChangeNotifier with ClearText {
     _editImageUploadUrl = '';
     _changeImage = false;
 
-    _allAlarm = false;
-    _commentAlarm = false;
-    _keywordAlarm = false;
     _noticeDetail = NoticeDetail.empty();
   }
 
@@ -323,33 +310,6 @@ class ProfileProvider extends ChangeNotifier with ClearText {
 
   Future<void> setUserProfile(UserProfile userProfile) async {
     _userProfile = userProfile;
-    notifyListeners();
-  }
-
-  void changeAllAlarm(bool alarm) {
-    _allAlarm = alarm;
-    _commentAlarm = alarm;
-    _keywordAlarm = alarm;
-    notifyListeners();
-  }
-
-  void changeCommentAlarm(bool alarm) {
-    _commentAlarm = alarm;
-    if (_commentAlarm && _keywordAlarm) {
-      _allAlarm = true;
-    } else {
-      _allAlarm = false;
-    }
-    notifyListeners();
-  }
-
-  void changeKeywordAlarm(bool alarm) {
-    _keywordAlarm = alarm;
-    if (_commentAlarm && _keywordAlarm) {
-      _allAlarm = true;
-    } else {
-      _allAlarm = false;
-    }
     notifyListeners();
   }
 
@@ -795,7 +755,7 @@ class ProfileProvider extends ChangeNotifier with ClearText {
     notifyListeners();
   }
 
-  void resetNoticeEvent(){
+  void resetNoticeEvent() {
     _eventList.clear();
     _eventHasNext = true;
     _eventPage = 1;

@@ -489,12 +489,14 @@ class TextBtnXs extends StatelessWidget {
 class TextBtnS extends StatelessWidget {
   final String content;
   final VoidCallback? onPressed;
+  final TextStyle? btnStyle;
 
-  const TextBtnS({
+  TextBtnS({
     super.key,
     required this.content,
     this.onPressed,
-  });
+    TextStyle? btnStyle,
+  }) : btnStyle = btnStyle ?? TextTypes.caption01(color: Palette.text02);
 
   @override
   Widget build(BuildContext context) {
@@ -504,12 +506,7 @@ class TextBtnS extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 3),
         minimumSize: Size.zero,
       ),
-      child: Text(
-        content,
-        style: TextTypes.caption01(
-          color: Palette.text02,
-        ),
-      ),
+      child:  Text(content, style: btnStyle),
     );
   }
 }

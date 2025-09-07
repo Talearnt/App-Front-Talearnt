@@ -6,6 +6,7 @@ import 'package:app_front_talearnt/provider/common/common_provider.dart';
 import 'package:app_front_talearnt/provider/home/home_provider.dart';
 import 'package:app_front_talearnt/provider/profile/profile_provider.dart';
 import 'package:app_front_talearnt/view/widget/home_board_card.dart';
+import 'package:app_front_talearnt/view_model/notification_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
@@ -32,6 +33,8 @@ class HomePage extends StatelessWidget {
         Provider.of<CommonBoardProvider>(context);
     final MatchBoardProvider matchBoardProvider =
         Provider.of<MatchBoardProvider>(context);
+    final NotificationViewModel notificationViewModel =
+        Provider.of<NotificationViewModel>(context);
 
     if (!_hasLoaded) {
       _hasLoaded = true;
@@ -124,10 +127,16 @@ class HomePage extends StatelessWidget {
                                 height: 22,
                               ),
                             ),
-                            SvgPicture.asset(
-                              'assets/icons/bell_off.svg',
-                              width: 18,
-                              height: 20,
+                            GestureDetector(
+                              onTap: () async {
+                                await notificationViewModel.getNotification();
+                                context.push('/alarm');
+                              },
+                              child: SvgPicture.asset(
+                                'assets/icons/bell_off.svg',
+                                width: 18,
+                                height: 20,
+                              ),
                             ),
                           ],
                         ),

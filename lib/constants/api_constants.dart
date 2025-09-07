@@ -39,6 +39,15 @@ abstract class ApiConstants {
   static const String getMatchBoardLikeListUrl =
       "$baseUrl/v1/posts/exchanges/favorites";
 
+  static const String getNotification = "$baseUrl/notifications";
+
+  static const String readNotification = "$baseUrl/notifications/read";
+
+  static const String sendFcmToken = "$baseUrl/v1/fcm/token";
+
+  static const String changeAllowNotification =
+      "$baseUrl/notifications/settings";
+
   static const String getEventUrl = "$baseUrl/v1/events";
 
   static const String getNoticeUrl = "$baseUrl/v1/notices";
