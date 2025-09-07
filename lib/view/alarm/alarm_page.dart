@@ -53,7 +53,8 @@ class AlarmPage extends StatelessWidget {
           leftIcon: true,
           first: IconButton(
             icon: SvgPicture.asset('assets/icons/setting_black.svg'),
-            onPressed: () {
+            onPressed: () async {
+              await notificationViewModel.getNotificationSetting();
               context.push('/alarm-setting');
             },
           ),
