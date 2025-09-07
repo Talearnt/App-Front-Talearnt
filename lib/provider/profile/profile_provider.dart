@@ -80,54 +80,6 @@ class ProfileProvider extends ChangeNotifier with ClearText {
   String _editImageUploadUrl = "";
   bool _changeImage = false;
 
-  //나중에 제거
-  final List<NotificationData> alarmList = [
-    NotificationData(
-      notificationNo: 1,
-      senderNickname: '몽글이',
-      targetNo: 101,
-      content: '최대 글자는 이렇게 됩니다.',
-      notificationType: '댓글',
-      talentCodes: [1, 2],
-      isRead: false,
-      unreadCount: 3,
-      createdAt: DateTime.now().subtract(const Duration(minutes: 45)),
-    ),
-    NotificationData(
-      notificationNo: 2,
-      senderNickname: '몽글이',
-      targetNo: 102,
-      content: '어쩌고 저쩍옹오오옹 산책도 취미가 될 수 있죠!',
-      notificationType: '댓글',
-      talentCodes: [3],
-      isRead: true,
-      unreadCount: 0,
-      createdAt: DateTime.now().subtract(const Duration(hours: 2)),
-    ),
-    NotificationData(
-      notificationNo: 3,
-      senderNickname: '몽글이',
-      targetNo: 103,
-      content: ' 구경해보세요.',
-      notificationType: '새글',
-      talentCodes: [4, 5],
-      isRead: false,
-      unreadCount: 5,
-      createdAt: DateTime.now().subtract(const Duration(days: 1, hours: 3)),
-    ),
-    NotificationData(
-      notificationNo: 4,
-      senderNickname: '몽글이',
-      targetNo: 104,
-      content: '`요가’ 관련 매칭이 올라왔어요!!',
-      notificationType: '관심키워드',
-      talentCodes: [],
-      isRead: true,
-      unreadCount: 0,
-      createdAt: DateTime.now().subtract(const Duration(days: 3)),
-    ),
-  ];
-
   TabController get giveTalentTabController => _giveTalentTabController;
 
   TabController get receiveTalentTabController => _receiveTalentTabController;
