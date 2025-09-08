@@ -84,9 +84,11 @@ class AuthViewModel extends ChangeNotifier {
         loginProvider.updateLoginFormSuccess();
         profileViewModel.getUserProfile(root);
         notificationViewModel.getNotification();
-        await notificationProvider.startFCM();
-        notificationViewModel
-            .sendFcmToken(notificationProvider.fcmToken.toString());
+        if (autoLogin) {
+          await notificationProvider.startFCM();
+          notificationViewModel
+              .sendFcmToken(notificationProvider.fcmToken.toString());
+        }
         final stompClient = createStompClient(token: token.accessToken);
         stompClient.activate();
       },
@@ -102,7 +104,9 @@ class AuthViewModel extends ChangeNotifier {
         );
         return left(failure);
       },
-      (result) {
+      (result) async {
+        await notificationViewModel
+            .deleteFcmToken(notificationProvider.fcmToken.toString());
         return right(result);
       },
     );
@@ -335,6 +339,12 @@ class AuthViewModel extends ChangeNotifier {
         loginProvider.updateLoginFormSuccess();
         secureStorageService.write(key: "kakao", value: 'kakao');
         loginProvider.setLoginType("kakao");
+        notificationViewModel.getNotification();
+        await notificationProvider.startFCM();
+        notificationViewModel
+            .sendFcmToken(notificationProvider.fcmToken.toString());
+        final stompClient = createStompClient(token: userInfo.accessToken!);
+        stompClient.activate();
         commonProvider.changeIsLoading(false);
         await profileViewModel.getUserProfile(root);
       }
