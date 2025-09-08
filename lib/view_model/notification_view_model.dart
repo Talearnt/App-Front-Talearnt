@@ -53,6 +53,15 @@ class NotificationViewModel extends ChangeNotifier {
         (data) {});
   }
 
+  Future<void> deleteFcmToken(String token) async {
+    FcmTokenParm param = FcmTokenParm(fcmToken: token);
+    final result = await notificationRepository.deleteFcmToken(param);
+    result.fold(
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)),
+        (data) {});
+  }
+
   Future<void> changeAllowNotification(
       bool keywordNotification, bool commentNotification) async {
     NotificationSettngParam param = NotificationSettngParam(

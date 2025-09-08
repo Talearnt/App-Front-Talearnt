@@ -124,13 +124,13 @@ class BoardRepository {
 
   Future<Either<Failure, Success>> deleteMatchBoard(int postNo) async {
     final response =
-        await dio.delete(ApiConstants.handleMatchDetailBoard(postNo));
+        await dio.delete(ApiConstants.handleMatchDetailBoard(postNo), null);
     return response.fold(left, (result) => right(Success.fromJson(result)));
   }
 
   Future<Either<Failure, Success>> deleteCommunityBoard(int postNo) async {
     final response =
-        await dio.delete(ApiConstants.handleCommunityDetailBoard(postNo));
+        await dio.delete(ApiConstants.handleCommunityDetailBoard(postNo), null);
     return response.fold(left, (result) => right(Success.fromJson(result)));
   }
 
@@ -238,7 +238,7 @@ class BoardRepository {
 
   Future<Either<Failure, Success>> deleteCommunityComment(int commentNo) async {
     final response =
-        await dio.delete(ApiConstants.deleteCommnunityComment(commentNo));
+        await dio.delete(ApiConstants.deleteCommnunityComment(commentNo), null);
     return response.fold(left, (result) => right(Success.fromJson(result)));
   }
 
@@ -266,7 +266,7 @@ class BoardRepository {
 
   Future<Either<Failure, Success>> deleteReply(int replyNo) async {
     final response =
-        await dio.delete(ApiConstants.deleteCommnunityReply(replyNo));
+        await dio.delete(ApiConstants.deleteCommnunityReply(replyNo), null);
     return response.fold(left, (result) => right(Success.fromJson(result)));
   }
 

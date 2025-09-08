@@ -37,6 +37,11 @@ class NotificationRepository {
     return result.fold(left, (response) => right(Success.fromJson(response)));
   }
 
+  Future<Either<Failure, Success>> deleteFcmToken(FcmTokenParm body) async {
+    final result = await dio.delete(ApiConstants.sendFcmToken, body.toJson());
+    return result.fold(left, (response) => right(Success.fromJson(response)));
+  }
+
   Future<Either<Failure, Success>> changeAllowNotification(
       NotificationSettngParam body) async {
     final result =
