@@ -2,6 +2,7 @@ import 'package:app_front_talearnt/common/theme.dart';
 import 'package:app_front_talearnt/view/widget/loading_dots.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../data/services/secure_storage_service.dart';
@@ -39,13 +40,17 @@ class _InitPageState extends State<InitPage> {
         commonProvider.changeIsLoading(false);
       });
     } else if (email != null && password != null) {
-      loginProvider.saveAutoLogin();
+      loginProvider.saveAutoLogin(true);
       commonProvider.changeIsLoading(true);
       await authViewModel
           .login(email, password, true, loginProvider.loginRoot)
           .whenComplete(() {
         commonProvider.changeIsLoading(false);
       });
+    } else {
+      if (!mounted) return;
+      loginProvider.saveAutoLogin(false);
+      context.go('/home');
     }
   }
 

@@ -45,6 +45,7 @@ class LoginProvider extends ChangeNotifier with ClearText {
   bool get passwordObscure => _passwordObscure;
 
   void clearProvider() {
+    _autoLoggedIn = false;
     _isLoggedIn = false;
     _loginRoot = 'login';
 
@@ -141,8 +142,8 @@ class LoginProvider extends ChangeNotifier with ClearText {
     notifyListeners();
   }
 
-  void saveAutoLogin() {
-    _autoLoggedIn = true;
+  void saveAutoLogin(bool autoLoggedIn) {
+    _autoLoggedIn = autoLoggedIn;
     notifyListeners();
   }
 

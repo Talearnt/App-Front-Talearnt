@@ -1,5 +1,4 @@
 import 'package:app_front_talearnt/common/theme.dart';
-import 'package:app_front_talearnt/provider/auth/login_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
@@ -18,7 +17,6 @@ class AccountManagePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final profileProvider = Provider.of<ProfileProvider>(context);
-    final loginProvider = Provider.of<LoginProvider>(context);
     final commonNavigator = Provider.of<CommonNavigator>(context);
     final authViewModel = Provider.of<AuthViewModel>(context);
     final secureStorageService = Provider.of<SecureStorageService>(context);
@@ -74,11 +72,9 @@ class AccountManagePage extends StatelessWidget {
                               (failure) {},
                               (value) {
                                 profileProvider.clearAllProviders(context);
-                                if (loginProvider.loginType == "kakao") {
-                                  secureStorageService.delete(key: "kakao");
-                                  secureStorageService.delete(key: "email");
-                                  secureStorageService.delete(key: "password");
-                                }
+                                secureStorageService.delete(key: "kakao");
+                                secureStorageService.delete(key: "email");
+                                secureStorageService.delete(key: "password");
                                 commonNavigator.goRoute('/login');
                               },
                             );
