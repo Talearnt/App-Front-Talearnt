@@ -247,8 +247,7 @@ class HomePage extends StatelessWidget {
                                                     .changeIsLoading(false);
                                               });
                                             },
-                                            child:
-                                                HomeMatchBoardCard(post: post),
+                                            child: HomeBoardCard(post: post),
                                           ),
                                         );
                                       }).toList(),
@@ -377,8 +376,7 @@ class HomePage extends StatelessWidget {
                                                     .changeIsLoading(false);
                                               });
                                             },
-                                            child:
-                                                HomeMatchBoardCard(post: post),
+                                            child: HomeBoardCard(post: post),
                                           ),
                                         );
                                       }).toList(),
