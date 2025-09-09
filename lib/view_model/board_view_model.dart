@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:app_front_talearnt/data/model/param/community_board_commnet.dart';
 import 'package:app_front_talearnt/data/model/param/community_board_reply.dart';
-import 'package:app_front_talearnt/data/model/param/event_notice_param.dart';
 import 'package:app_front_talearnt/data/model/param/match_board_param.dart';
 import 'package:app_front_talearnt/data/model/param/post_comment.dart';
 import 'package:app_front_talearnt/data/model/param/post_reply.dart';
@@ -521,7 +520,7 @@ class BoardViewModel extends ChangeNotifier {
   Future<void> updateReply(String content) async {
     PutComment param = PutComment(content: content);
 
-    final result = await boardRepository.UpdateCommunityReply(
+    final result = await boardRepository.updateCommunityReply(
         param, communityBoardDetailProvider.targetReply);
 
     result.fold(
