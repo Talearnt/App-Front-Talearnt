@@ -183,7 +183,11 @@ class HomePage extends StatelessWidget {
                                             WidgetSpan(
                                               child: ConstrainedBox(
                                                 constraints: BoxConstraints(
-                                                    maxWidth: 150), // 원하는 최대 너비
+                                                    maxWidth:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.35), // 원하는 최대 너비
                                                 child: Text(
                                                   profileProvider
                                                       .userProfile.nickname,
