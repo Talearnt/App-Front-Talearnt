@@ -179,15 +179,27 @@ class HomePage extends StatelessWidget {
                                     children: [
                                       Text.rich(
                                         TextSpan(
-                                          text: profileProvider
-                                              .userProfile.nickname,
-                                          style: TextTypes.bodySemi01(
-                                              color: Palette.primary01),
-                                          children: <TextSpan>[
+                                          children: [
+                                            WidgetSpan(
+                                              child: ConstrainedBox(
+                                                constraints: BoxConstraints(
+                                                    maxWidth: 150), // 원하는 최대 너비
+                                                child: Text(
+                                                  profileProvider
+                                                      .userProfile.nickname,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: TextTypes.bodySemi01(
+                                                      color: Palette.primary01),
+                                                  maxLines: 1,
+                                                ),
+                                              ),
+                                            ),
                                             TextSpan(
-                                                text: '님을 위한 맞춤 매칭',
-                                                style: TextTypes.bodySemi01(
-                                                    color: Palette.text01)),
+                                              text: '님을 위한 맞춤 매칭',
+                                              style: TextTypes.bodySemi01(
+                                                  color: Palette.text01),
+                                            ),
                                           ],
                                         ),
                                       ),
