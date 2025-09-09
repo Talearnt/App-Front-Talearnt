@@ -76,7 +76,7 @@ class HomeBoardCard extends StatelessWidget {
                       width: 4,
                     ),
                     Text(
-                      "20",
+                      post.count.toString(),
                       style: TextTypes.bodySemi03(
                         color: Palette.text03,
                       ),
