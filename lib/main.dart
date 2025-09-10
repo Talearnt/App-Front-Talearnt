@@ -4,6 +4,7 @@ import 'package:app_front_talearnt/data/services/notification_permission_service
 import 'package:app_front_talearnt/firebase_options.dart';
 import 'package:app_front_talearnt/provider/notification/notification_provider.dart';
 import 'package:app_front_talearnt/provider/provider_set_up.dart';
+import 'package:app_front_talearnt/provider/termination/termination_provider.dart';
 import 'package:app_front_talearnt/utils/routes.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -19,14 +20,18 @@ Future<void> main() async {
   await dotenv.load(fileName: "assets/.env");
   final String nativeAppKey = dotenv.env['NATIVE_APP_KEY'] ?? '';
   KakaoSdk.init(nativeAppKey: nativeAppKey);
-
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await NotificationPermissionService.ensurePermission();
   await LocalNotificationService.I.init();
 
   runApp(
-    ProviderSetup(
-      child: const MyApp(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => TerminationProvider()),
+      ],
+      child: ProviderSetup(
+        child: const MyApp(),
+      ),
     ),
   );
 }

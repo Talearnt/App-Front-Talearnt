@@ -105,6 +105,7 @@ class AuthViewModel extends ChangeNotifier {
         return left(failure);
       },
       (result) async {
+        await disconnectStomp();
         await notificationViewModel
             .deleteFcmToken(notificationProvider.fcmToken.toString());
         return right(result);

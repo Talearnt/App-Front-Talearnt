@@ -64,16 +64,24 @@ class HomePage extends StatelessWidget {
       _hasLoaded = true;
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         _wasLoggedIn = loginProvider.isLoggedIn;
-        await loadHome();
+        // 비로그인 상태일 때만 최초 loadHome 실행
+        if (!loginProvider.isLoggedIn) {
+          await loadHome();
+        }
       });
     }
 
     if (loginProvider.isLoggedIn && !_wasLoggedIn) {
+      // 로그인 성공 시 홈 다시 로드
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         await loadHome();
       });
       _wasLoggedIn = true;
     } else if (!loginProvider.isLoggedIn && _wasLoggedIn) {
+      // 로그아웃 시 홈 다시 로드
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        await loadHome();
+      });
       _wasLoggedIn = false;
     }
 
