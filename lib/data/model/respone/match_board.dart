@@ -15,6 +15,8 @@ class MatchBoard {
   final List<String> receiveTalents;
   final String createdAt;
   final int openedChatRoomCount;
+  int count;
+
   int favoriteCount;
   bool isFavorite;
 
@@ -33,6 +35,7 @@ class MatchBoard {
     required this.receiveTalents,
     required this.createdAt,
     required this.openedChatRoomCount,
+    required this.count,
     required this.favoriteCount,
     required this.isFavorite,
   });
@@ -55,6 +58,7 @@ class MatchBoard {
       receiveTalents: List<String>.from(json['receiveTalents']),
       createdAt: formattedDate,
       openedChatRoomCount: json['openedChatRoomCount'],
+      count: json['count'],
       favoriteCount: json['favoriteCount'],
       isFavorite: json['isFavorite'],
     );
@@ -76,6 +80,7 @@ class MatchBoard {
       'receiveTalents': receiveTalents,
       'createdAt': createdAt,
       'openedChatRoomCount': openedChatRoomCount,
+      'count': count,
       'favoriteCount': favoriteCount,
       'isFavorite': isFavorite,
     };

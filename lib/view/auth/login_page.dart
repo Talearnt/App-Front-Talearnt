@@ -25,7 +25,7 @@ class LoginPage extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {
-              context.pop();
+              context.go('/home');
             },
             icon: const Icon(Icons.close),
           ),

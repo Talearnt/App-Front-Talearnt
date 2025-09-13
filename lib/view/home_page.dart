@@ -64,16 +64,24 @@ class HomePage extends StatelessWidget {
       _hasLoaded = true;
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         _wasLoggedIn = loginProvider.isLoggedIn;
-        await loadHome();
+        // 비로그인 상태일 때만 최초 loadHome 실행
+        if (!loginProvider.isLoggedIn) {
+          await loadHome();
+        }
       });
     }
 
     if (loginProvider.isLoggedIn && !_wasLoggedIn) {
+      // 로그인 성공 시 홈 다시 로드
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         await loadHome();
       });
       _wasLoggedIn = true;
     } else if (!loginProvider.isLoggedIn && _wasLoggedIn) {
+      // 로그아웃 시 홈 다시 로드
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        await loadHome();
+      });
       _wasLoggedIn = false;
     }
 
@@ -179,15 +187,31 @@ class HomePage extends StatelessWidget {
                                     children: [
                                       Text.rich(
                                         TextSpan(
-                                          text: profileProvider
-                                              .userProfile.nickname,
-                                          style: TextTypes.bodySemi01(
-                                              color: Palette.primary01),
-                                          children: <TextSpan>[
+                                          children: [
+                                            WidgetSpan(
+                                              child: ConstrainedBox(
+                                                constraints: BoxConstraints(
+                                                    maxWidth:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.35), // 원하는 최대 너비
+                                                child: Text(
+                                                  profileProvider
+                                                      .userProfile.nickname,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: TextTypes.bodySemi01(
+                                                      color: Palette.primary01),
+                                                  maxLines: 1,
+                                                ),
+                                              ),
+                                            ),
                                             TextSpan(
-                                                text: '님을 위한 맞춤 매칭',
-                                                style: TextTypes.bodySemi01(
-                                                    color: Palette.text01)),
+                                              text: '님을 위한 맞춤 매칭',
+                                              style: TextTypes.bodySemi01(
+                                                  color: Palette.text01),
+                                            ),
                                           ],
                                         ),
                                       ),
@@ -247,8 +271,7 @@ class HomePage extends StatelessWidget {
                                                     .changeIsLoading(false);
                                               });
                                             },
-                                            child:
-                                                HomeMatchBoardCard(post: post),
+                                            child: HomeBoardCard(post: post),
                                           ),
                                         );
                                       }).toList(),
@@ -377,8 +400,7 @@ class HomePage extends StatelessWidget {
                                                     .changeIsLoading(false);
                                               });
                                             },
-                                            child:
-                                                HomeMatchBoardCard(post: post),
+                                            child: HomeBoardCard(post: post),
                                           ),
                                         );
                                       }).toList(),
