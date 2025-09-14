@@ -26,14 +26,14 @@ class DoubleBtnDialog extends StatelessWidget {
 
   // showDialog를 포함하는 정적 메서드
   static void show(
-    BuildContext context, {
-    required String content,
-    required String leftText,
-    required String rightText,
-    VoidCallback? leftFun,
-    VoidCallback? rightFun,
-    bool timer = false,
-  }) {
+      BuildContext context, {
+        required String content,
+        required String leftText,
+        required String rightText,
+        VoidCallback? leftFun,
+        VoidCallback? rightFun,
+        bool timer = false,
+      }) {
     showDialog(
       context: context,
       useRootNavigator: false,
@@ -43,11 +43,11 @@ class DoubleBtnDialog extends StatelessWidget {
           leftText: leftText,
           rightText: rightText,
           leftFun: leftFun ??
-              () {
+                  () {
                 context.pop();
               },
           rightFun: rightFun ??
-              () {
+                  () {
                 context.pop();
               },
           timer: timer,
@@ -89,9 +89,9 @@ class DoubleBtnDialog extends StatelessWidget {
                   !timer
                       ? const SizedBox()
                       : SizedBox(
-                          height: 24,
-                          child: TimeSet(timerSeconds: timeSeconds),
-                        ),
+                    height: 24,
+                    child: TimeSet(timerSeconds: timeSeconds),
+                  ),
                 ],
               ),
             ),
@@ -114,10 +114,10 @@ class DoubleBtnDialog extends StatelessWidget {
                   ),
                   Expanded(
                       child: PrimaryM(
-                    vertical: vertical,
-                    content: rightText,
-                    onPressed: rightFun,
-                  )),
+                        vertical: vertical,
+                        content: rightText,
+                        onPressed: rightFun,
+                      )),
                 ],
               ),
             ),
@@ -144,12 +144,12 @@ class SingleBtnDialog extends StatelessWidget {
 
   // showDialog를 포함하는 정적 메서드
   static void show(
-    BuildContext context, {
-    required String content,
-    Widget? button,
-    bool timer = false,
-    ValueNotifier<int>? timeSeconds,
-  }) {
+      BuildContext context, {
+        required String content,
+        Widget? button,
+        bool timer = false,
+        ValueNotifier<int>? timeSeconds,
+      }) {
     showDialog(
       context: context,
       builder: (BuildContext dialogContext) {
@@ -171,66 +171,58 @@ class SingleBtnDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 40),
-      child: Dialog(
-        backgroundColor: Palette.bgBackGround,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: SizedBox(
-          height: 195,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(
-                  top: 24,
-                  left: 16,
-                  right: 16,
-                ),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: Text(
-                        content,
-                        style: TextTypes.body02(
-                          color: Palette.text01,
-                        ),
-                        textAlign: TextAlign.center,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
-                      ),
+    return Dialog(
+      backgroundColor: Palette.bgBackGround,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(
+              top: 24,
+              left: 16,
+              right: 16,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Text(
+                    content,
+                    style: TextTypes.body02(
+                      color: Palette.text01,
                     ),
-                    SizedBox(
-                      height: 24,
-                      child: timer
-                          ? ValueListenableBuilder<int>(
-                              valueListenable:
-                                  timeSeconds!, // ValueNotifier를 감시
-                              builder: (context, value, child) {
-                                return TimeSet(timerSeconds: timeSeconds);
-                              })
-                          : null,
-                    ),
-                  ],
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 16,
-                ),
-                child: Row(
-                  children: [
-                    Expanded(child: button!),
-                  ],
-                ),
-              ),
-            ],
+                timer
+                    ? SizedBox(
+                    height: 24,
+                    child: ValueListenableBuilder<int>(
+                        valueListenable: timeSeconds!, // ValueNotifier를 감시
+                        builder: (context, value, child) {
+                          return TimeSet(timerSeconds: timeSeconds);
+                        }))
+                    : const SizedBox()
+              ],
+            ),
           ),
-        ),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 16,
+            ),
+            child: Row(
+              children: [
+                Expanded(child: button!),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
