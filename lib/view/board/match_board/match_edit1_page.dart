@@ -430,7 +430,7 @@ class MatchEdit1Page extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          matchEditProvider.exchangeTypeRequiredMesage,
+                          matchEditProvider.exchangeTypeRequiredMessage,
                           style: TextTypes.caption01(
                             color: Palette.error01,
                           ),
@@ -476,7 +476,7 @@ class MatchEdit1Page extends StatelessWidget {
                                   ? matchEditProvider
                                       .removeSelectedExchangeType()
                                   : matchEditProvider
-                                      .updateSelectedExhangeType(item);
+                                      .updateSelectedExchangeType(item);
 
                               if (!matchEditProvider.isChipsSelected) {
                                 matchEditProvider.checkChipsSelected();

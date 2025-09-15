@@ -158,7 +158,7 @@ class CommunityEditPreviewPage extends StatelessWidget {
                               width: 12,
                             ),
                             Text(
-                              "조회 2",
+                              "조회 ${communityEditProvider.count}",
                               style: TextTypes.caption01(
                                 color: Palette.text04,
                               ),

@@ -13,6 +13,7 @@ import 'package:provider/provider.dart';
 
 import '../../../common/widget/bottom_btn.dart';
 import '../../../common/widget/toast_message.dart';
+import '../../../constants/global_value_constants.dart';
 import '../../../provider/auth/login_provider.dart';
 import '../../../provider/board/match_board_detail_provider.dart';
 import '../../../provider/board/match_board_provider.dart';
@@ -92,9 +93,14 @@ class MatchBoardDetailPage extends StatelessWidget {
                             const SizedBox(
                               height: 8,
                             ),
-                            const StateBadge(
-                              state: true,
-                              content: "모집중",
+                            StateBadge(
+                              state: GlobalValueConstants.boardState.firstWhere(
+                                  (item) =>
+                                      item['type'] ==
+                                      matchBoardDetailProvider
+                                          .matchingDetailPost.status)['value'],
+                              content: matchBoardDetailProvider
+                                  .matchingDetailPost.status,
                             ),
                             const SizedBox(
                               height: 8,
@@ -132,7 +138,7 @@ class MatchBoardDetailPage extends StatelessWidget {
                                       width: 12,
                                     ),
                                     Text(
-                                      "조회 2",
+                                      "조회 ${matchBoardDetailProvider.matchingDetailPost.count}",
                                       style: TextTypes.caption01(
                                         color: Palette.text04,
                                       ),

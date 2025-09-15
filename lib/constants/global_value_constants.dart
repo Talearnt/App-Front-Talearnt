@@ -256,4 +256,8 @@ class GlobalValueConstants {
     {'code': 'STUDY', 'value': '스터디 모집 게시판'},
     {'code': 'QUESTION', 'value': '질문 게시판'},
   ];
+  static List<Map<String, dynamic>> boardState = [
+    {'type': '모집중', 'value': true},
+    {'type': '모집마감', 'value': true},
+  ];
 }
