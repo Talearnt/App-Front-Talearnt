@@ -321,7 +321,7 @@ class AccountDeletePage extends StatelessWidget {
                             style: TextTypes.bodySemi03(color: Palette.text02)),
                         Expanded(
                             child: Text(
-                                '회원님이 남긴 글과 댓글의 작성자 정보는 ‘탈퇴회원\'으로 노출되어요.',
+                                '회원님이 남긴 글과 댓글의 작성자 정보는 ‘탈퇴회원\'으로 노출돼요.',
                                 style: TextTypes.bodySemi03(
                                     color: Palette.text03)))
                       ],

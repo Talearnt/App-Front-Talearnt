@@ -48,7 +48,7 @@ class CommunityBoardListCardBottom extends StatelessWidget {
                 SvgPicture.asset('assets/icons/eye_open_grey.svg'),
                 const SizedBox(width: 4),
                 Text(
-                  "조회수",
+                  post.count.toString(),
                   style: TextTypes.captionMedium02(color: Palette.text03),
                 ),
               ],
@@ -87,8 +87,9 @@ class CommunityBoardListCardBottom extends StatelessWidget {
                   } else {
                     await profileProvider
                         .changeCommunityBoardLike(post.communityPostNo);
-                    await boardViewModel.handleCommunityBoardLike(profileProvider
-                        .communityBoardList[index].communityPostNo);
+                    await boardViewModel.handleCommunityBoardLike(
+                        profileProvider
+                            .communityBoardList[index].communityPostNo);
                   }
                 } else {
                   ToastMessage.show(

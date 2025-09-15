@@ -11,10 +11,10 @@ import '../../provider/auth/login_provider.dart';
 import '../../provider/home/home_provider.dart';
 import '../../view_model/board_view_model.dart';
 
-class HomeMatchBoardCard extends StatelessWidget {
+class HomeBoardCard extends StatelessWidget {
   final MatchBoard post;
 
-  const HomeMatchBoardCard({super.key, required this.post});
+  const HomeBoardCard({super.key, required this.post});
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +76,7 @@ class HomeMatchBoardCard extends StatelessWidget {
                       width: 4,
                     ),
                     Text(
-                      "20",
+                      post.count.toString(),
                       style: TextTypes.bodySemi03(
                         color: Palette.text03,
                       ),

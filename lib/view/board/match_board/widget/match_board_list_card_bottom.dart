@@ -48,7 +48,7 @@ class MatchBoardListCardBottom extends StatelessWidget {
                 SvgPicture.asset('assets/icons/eye_open_grey.svg'),
                 const SizedBox(width: 4),
                 Text(
-                  "조회수",
+                  post.count.toString(),
                   style: TextTypes.captionSemi02(color: Palette.text03),
                 ),
               ],
