@@ -258,6 +258,6 @@ class GlobalValueConstants {
   ];
   static List<Map<String, dynamic>> boardState = [
     {'type': '모집중', 'value': true},
-    {'type': '모집 마감', 'value': true},
+    {'type': '모집 마감', 'value': false},
   ];
 }
