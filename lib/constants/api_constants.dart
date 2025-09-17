@@ -118,4 +118,8 @@ abstract class ApiConstants {
   static String deleteCommnunityComment(int commentNo) {
     return "$baseUrl/v1/communities/comments/$commentNo";
   }
+
+  static String changeRecuruiting(int postNo) {
+    return "$baseUrl/v1/posts/exchanges/$postNo/status";
+  }
 }

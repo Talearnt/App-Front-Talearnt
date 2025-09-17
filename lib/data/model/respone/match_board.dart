@@ -5,7 +5,7 @@ class MatchBoard {
   final String nickname;
   final String authority;
   final int exchangePostNo;
-  final String status;
+  String status;
   final String exchangeType;
   final String duration;
   final bool requiredBadge;

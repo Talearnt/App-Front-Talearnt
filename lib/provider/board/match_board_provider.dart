@@ -246,4 +246,13 @@ class MatchBoardProvider extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+  void updateMatchBoardStatus(int postNo, String newStatus) {
+    final index =
+        _matchBoardList.indexWhere((post) => post.exchangePostNo == postNo);
+    if (index == -1) return;
+
+    _matchBoardList[index].status = newStatus;
+    notifyListeners();
+  }
 }

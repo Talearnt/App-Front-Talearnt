@@ -6,6 +6,7 @@ import 'package:app_front_talearnt/data/model/param/match_board_param.dart';
 import 'package:app_front_talearnt/data/model/param/post_comment.dart';
 import 'package:app_front_talearnt/data/model/param/post_reply.dart';
 import 'package:app_front_talearnt/data/model/param/put_comment.dart';
+import 'package:app_front_talearnt/data/model/param/recuruiting_param.dart';
 import 'package:app_front_talearnt/data/model/respone/community_reply.dart';
 import 'package:app_front_talearnt/provider/board/community_write_provider.dart';
 import 'package:app_front_talearnt/provider/board/match_edit_provider.dart';
@@ -243,6 +244,8 @@ class BoardViewModel extends ChangeNotifier {
         (failure) => commonNavigator.showSingleDialog(
             content: ErrorMessages.getMessage(failure.errorCode)), (post) {
       matchBoardDetailProvider.updateTalentDetailPost(post);
+      matchBoardDetailProvider
+          .setRecruiting(post.status == "모집중" ? true : false);
       commonNavigator.pushRoute('/match-board-detail-page');
     });
   }
@@ -573,6 +576,22 @@ class BoardViewModel extends ChangeNotifier {
       final pagination = result['pagination'];
       matchBoardProvider.updateTalentExchangePosts(posts);
       matchBoardProvider.updateTalentExchangePostsPage(pagination);
+    });
+  }
+
+  Future<void> changeRecuriting(String recuruiting, int postNo) async {
+    RecuruitingParam param = RecuruitingParam(status: recuruiting);
+    final result = await boardRepository.changeRecuruiting(param, postNo);
+    result.fold(
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)), (result) {
+      if (recuruiting == "NOW_RECRUITING") {
+        matchBoardDetailProvider.setRecruiting(true);
+        matchBoardProvider.updateMatchBoardStatus(postNo, "모집중");
+      } else if (recuruiting == "RECRUITMENT_CLOSED") {
+        matchBoardDetailProvider.setRecruiting(false);
+        matchBoardProvider.updateMatchBoardStatus(postNo, "모집 마감");
+      }
     });
   }
 }

@@ -14,6 +14,8 @@ class MatchBoardDetailProvider extends ChangeNotifier {
 
   bool _isAppBarVisible = true;
 
+  bool _isRecruiting = true;
+
   MatchingDetailPost get matchingDetailPost => _matchingDetailPost;
 
   QuillController get contentController => _contentController;
@@ -24,6 +26,8 @@ class MatchBoardDetailProvider extends ChangeNotifier {
 
   bool get isAppBarVisible => _isAppBarVisible;
 
+  bool get isRecruiting => _isRecruiting;
+
   void clearProvider() {
     _contentController.clear();
     _matchingDetailPost = MatchingDetailPost.empty();
@@ -31,6 +35,8 @@ class MatchBoardDetailProvider extends ChangeNotifier {
     _previewImageList.clear();
     _previewImageIndex = 0;
     _isAppBarVisible = true;
+
+    _isRecruiting = true;
 
     notifyListeners();
   }
@@ -82,6 +88,11 @@ class MatchBoardDetailProvider extends ChangeNotifier {
             _matchingDetailPost.favoriteCount + 1
         : _matchingDetailPost.favoriteCount =
             _matchingDetailPost.favoriteCount - 1;
+    notifyListeners();
+  }
+
+  void setRecruiting(bool value) {
+    _isRecruiting = value;
     notifyListeners();
   }
 }
