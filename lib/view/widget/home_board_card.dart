@@ -13,8 +13,9 @@ import '../../view_model/board_view_model.dart';
 
 class HomeBoardCard extends StatelessWidget {
   final MatchBoard post;
+  final String type;
 
-  const HomeBoardCard({super.key, required this.post});
+  const HomeBoardCard({super.key, required this.post, required this.type});
 
   @override
   Widget build(BuildContext context) {
@@ -88,10 +89,11 @@ class HomeBoardCard extends StatelessWidget {
                       overlayColor: WidgetStateProperty.all(Colors.transparent),
                       onTap: () async {
                         if (loginProvider.isLoggedIn) {
-                          await homeProvider
-                              .changeBothTalentBoardLike(post.exchangePostNo);
-                          await boardViewModel
-                              .handleMatchBoardLike(post.exchangePostNo);
+                          bool isFavorite =
+                          await homeProvider.changeBothTalentBoardLike(
+                              post.exchangePostNo, type);
+                          await boardViewModel.handleMatchBoardLike(
+                              post.exchangePostNo, isFavorite);
                         } else {
                           ToastMessage.show(
                             context: context,
@@ -126,7 +128,7 @@ class HomeBoardCard extends StatelessWidget {
               children: [
                 Container(
                   padding:
-                      const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                  const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(999),
                     color: Palette.primaryBG04,
@@ -139,7 +141,7 @@ class HomeBoardCard extends StatelessWidget {
                 const SizedBox(width: 4),
                 Container(
                   padding:
-                      const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                  const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(999),
                     color: Palette.bgUp01,
@@ -152,7 +154,7 @@ class HomeBoardCard extends StatelessWidget {
                 const SizedBox(width: 4),
                 Container(
                   padding:
-                      const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                  const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(999),
                     color: Palette.bgUp01,
@@ -325,7 +327,7 @@ class HomeCommunityCard extends StatelessWidget {
                       child: Text(
                         'Best ${ranking.toString()}',
                         style:
-                            TextTypes.captionMedium02(color: Palette.error01),
+                        TextTypes.captionMedium02(color: Palette.error01),
                       ),
                     ),
                     const SizedBox(
@@ -341,7 +343,7 @@ class HomeCommunityCard extends StatelessWidget {
                       child: Text(
                         post.postType,
                         style:
-                            TextTypes.captionMedium02(color: Palette.primary01),
+                        TextTypes.captionMedium02(color: Palette.primary01),
                       ),
                     ),
                   ],
@@ -382,13 +384,14 @@ class HomeCommunityCard extends StatelessWidget {
                       children: [
                         InkWell(
                           overlayColor:
-                              WidgetStateProperty.all(Colors.transparent),
+                          WidgetStateProperty.all(Colors.transparent),
                           onTap: () async {
                             if (loginProvider.isLoggedIn) {
-                              await homeProvider.changeBestCommunityBoardLike(
+                              bool isLike = await homeProvider
+                                  .changeBestCommunityBoardLike(
                                   post.communityPostNo);
                               await boardViewModel.handleCommunityBoardLike(
-                                  post.communityPostNo);
+                                  post.communityPostNo, isLike);
                             } else {
                               ToastMessage.show(
                                 context: context,
@@ -401,7 +404,7 @@ class HomeCommunityCard extends StatelessWidget {
                           child: post.isLike
                               ? SvgPicture.asset('assets/icons/thumb_up_on.svg')
                               : SvgPicture.asset(
-                                  'assets/icons/thumb_up_off.svg'),
+                              'assets/icons/thumb_up_off.svg'),
                         ),
                         const SizedBox(width: 4),
                         Text(

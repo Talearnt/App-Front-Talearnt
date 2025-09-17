@@ -464,7 +464,9 @@ class MatchBoardDetailPage extends StatelessWidget {
                               .matchingDetailPost.isFavorite);
                       await boardViewModel.handleMatchBoardLike(
                           matchBoardDetailProvider
-                              .matchingDetailPost.exchangePostNo);
+                              .matchingDetailPost.exchangePostNo,
+                          matchBoardDetailProvider
+                              .matchingDetailPost.isFavorite);
                     } else {
                       ToastMessage.show(
                         context: context,

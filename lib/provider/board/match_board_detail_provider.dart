@@ -84,4 +84,16 @@ class MatchBoardDetailProvider extends ChangeNotifier {
             _matchingDetailPost.favoriteCount - 1;
     notifyListeners();
   }
+
+  Future<void> setMatchBoardLike(int postNo, bool isFavorite) async {
+    if (_matchingDetailPost.exchangePostNo == postNo) {
+      _matchingDetailPost.isFavorite = isFavorite;
+      _matchingDetailPost.isFavorite
+          ? _matchingDetailPost.favoriteCount =
+              _matchingDetailPost.favoriteCount + 1
+          : _matchingDetailPost.favoriteCount =
+              _matchingDetailPost.favoriteCount - 1;
+    }
+    notifyListeners();
+  }
 }

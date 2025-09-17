@@ -13,20 +13,16 @@ import '../../../../view_model/board_view_model.dart';
 class CommunityBoardListCardBottom extends StatelessWidget {
   final String pageType; // my-write, list
   final CommunityBoard post;
-  final int index;
 
   const CommunityBoardListCardBottom(
-      {super.key,
-      required this.post,
-      required this.index,
-      required this.pageType});
+      {super.key, required this.post, required this.pageType});
 
   @override
   Widget build(BuildContext context) {
     final CommunityBoardProvider communityBoardProvider =
-        Provider.of<CommunityBoardProvider>(context);
+    Provider.of<CommunityBoardProvider>(context);
     final ProfileProvider profileProvider =
-        Provider.of<ProfileProvider>(context);
+    Provider.of<ProfileProvider>(context);
     final boardViewModel = Provider.of<BoardViewModel>(context);
     final loginProvider = Provider.of<LoginProvider>(context);
     return Container(
@@ -79,17 +75,15 @@ class CommunityBoardListCardBottom extends StatelessWidget {
               onTap: () async {
                 if (loginProvider.isLoggedIn) {
                   if (pageType == 'list') {
-                    await communityBoardProvider
+                    bool isLike = await communityBoardProvider
                         .changeCommunityBoardLike(post.communityPostNo);
                     await boardViewModel.handleCommunityBoardLike(
-                        communityBoardProvider
-                            .communityBoardList[index].communityPostNo);
+                        post.communityPostNo, isLike);
                   } else {
-                    await profileProvider
+                    bool isLike = await profileProvider
                         .changeCommunityBoardLike(post.communityPostNo);
                     await boardViewModel.handleCommunityBoardLike(
-                        profileProvider
-                            .communityBoardList[index].communityPostNo);
+                        post.communityPostNo, isLike);
                   }
                 } else {
                   ToastMessage.show(
