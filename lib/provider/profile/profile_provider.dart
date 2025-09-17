@@ -697,7 +697,7 @@ class ProfileProvider extends ChangeNotifier with ClearText {
     notifyListeners();
   }
 
-  Future<void> changeMatchBoardLike(int postNo) async {
+  Future<bool> changeMatchBoardLike(int postNo) async {
     final index =
         _matchBoardList.indexWhere((post) => post.exchangePostNo == postNo);
     if (index != -1) {
@@ -709,6 +709,7 @@ class ProfileProvider extends ChangeNotifier with ClearText {
               _matchBoardList[index].favoriteCount - 1;
     }
     notifyListeners();
+    return _matchBoardList[index].isFavorite;
   }
 
   Future<void> changeMatchBoardLikeFromDetail(
@@ -726,7 +727,7 @@ class ProfileProvider extends ChangeNotifier with ClearText {
     notifyListeners();
   }
 
-  Future<void> changeCommunityBoardLike(int postNo) async {
+  Future<bool> changeCommunityBoardLike(int postNo) async {
     final index = _communityBoardList
         .indexWhere((post) => post.communityPostNo == postNo);
     if (index != -1) {
@@ -738,6 +739,7 @@ class ProfileProvider extends ChangeNotifier with ClearText {
               _communityBoardList[index].likeCount - 1;
     }
     notifyListeners();
+    return _communityBoardList[index].isLike;
   }
 
   Future<void> changeCommunityBoardLikeFromDetail(
@@ -764,7 +766,7 @@ class ProfileProvider extends ChangeNotifier with ClearText {
     _eventDetail = eventDetail;
     notifyListeners();
   }
-  
+
   void resetNoticeEvent() {
     _eventList.clear();
     _eventHasNext = true;

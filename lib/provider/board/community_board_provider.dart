@@ -114,31 +114,32 @@ class CommunityBoardProvider extends ChangeNotifier {
     _isFetching = false;
   }
 
-  Future<void> changeCommunityBoardLike(int postNo) async {
+  Future<bool> changeCommunityBoardLike(int postNo) async {
     final index = _communityBoardList
         .indexWhere((post) => post.communityPostNo == postNo);
     if (index != -1) {
       _communityBoardList[index].isLike = !_communityBoardList[index].isLike;
       _communityBoardList[index].isLike
           ? _communityBoardList[index].likeCount =
-              _communityBoardList[index].likeCount + 1
+          _communityBoardList[index].likeCount + 1
           : _communityBoardList[index].likeCount =
-              _communityBoardList[index].likeCount - 1;
+          _communityBoardList[index].likeCount - 1;
     }
     notifyListeners();
+    return _communityBoardList[index].isLike;
   }
 
-  Future<void> changeCommunityBoardLikeFromDetail(
-      int postNo, bool isLike) async {
+  Future<void> changeCommunityBoardLikeFromDetail(int postNo,
+      bool isLike) async {
     final index = _communityBoardList
         .indexWhere((post) => post.communityPostNo == postNo);
     if (index != -1) {
       _communityBoardList[index].isLike = isLike;
       _communityBoardList[index].isLike
           ? _communityBoardList[index].likeCount =
-              _communityBoardList[index].likeCount + 1
+          _communityBoardList[index].likeCount + 1
           : _communityBoardList[index].likeCount =
-              _communityBoardList[index].likeCount - 1;
+          _communityBoardList[index].likeCount - 1;
     }
     notifyListeners();
   }

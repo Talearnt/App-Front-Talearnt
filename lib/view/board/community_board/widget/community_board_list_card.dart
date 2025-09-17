@@ -77,7 +77,7 @@ class CommunityBoardListCard extends StatelessWidget {
             ],
           ),
         ),
-        CommunityBoardListCardBottom(post: post, index: index, pageType: pageType,),
+        CommunityBoardListCardBottom(post: post, pageType: pageType,),
         const SizedBox(height: 16),
       ],
     );

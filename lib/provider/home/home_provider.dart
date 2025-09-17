@@ -44,7 +44,7 @@ class HomeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> changeBestCommunityBoardLike(int postNo) async {
+  Future<bool> changeBestCommunityBoardLike(int postNo) async {
     final index = _bestCommunityPosts
         .indexWhere((post) => post.communityPostNo == postNo);
     if (index != -1) {
@@ -56,6 +56,8 @@ class HomeProvider extends ChangeNotifier {
               _bestCommunityPosts[index].likeCount - 1;
     }
     notifyListeners();
+
+    return _bestCommunityPosts[index].isLike;
   }
 
   Future<void> changeCommunityBoardLikeFromDetail(
@@ -104,7 +106,8 @@ class HomeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> changeBothTalentBoardLike(int postNo) async {
+  Future<bool> changeBothTalentBoardLike(int postNo, String type) async {
+    //new,user
     final indexOfNew = _newTalentExchangePosts
         .indexWhere((post) => post.exchangePostNo == postNo);
     final indexOfUserMatching = _userMatchingTalentExchangePosts
@@ -134,5 +137,10 @@ class HomeProvider extends ChangeNotifier {
               _newTalentExchangePosts[indexOfNew].favoriteCount - 1;
     }
     notifyListeners();
+    if (type == 'new') {
+      return newTalentExchangePosts[indexOfNew].isFavorite;
+    } else {
+      return _userMatchingTalentExchangePosts[indexOfUserMatching].isFavorite;
+    }
   }
 }

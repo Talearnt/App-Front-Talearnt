@@ -23,7 +23,7 @@ class CommunityDetailBoardBottom extends StatelessWidget {
   Widget build(BuildContext context) {
     final boardViewModel = Provider.of<BoardViewModel>(context);
     final CommunityBoardProvider communityBoardProvider =
-        Provider.of<CommunityBoardProvider>(context);
+    Provider.of<CommunityBoardProvider>(context);
     final HomeProvider homeProvider = Provider.of<HomeProvider>(context);
     final loginProvider = Provider.of<LoginProvider>(context);
     final profileProvider = Provider.of<ProfileProvider>(context);
@@ -66,7 +66,8 @@ class CommunityDetailBoardBottom extends StatelessWidget {
                 SvgPicture.asset('assets/icons/comment.svg'),
                 const SizedBox(width: 4),
                 Text(
-                  "댓글수 ${communityBoardDetailProvider.communityDetailBoard.commentCount}",
+                  "댓글수 ${communityBoardDetailProvider.communityDetailBoard
+                      .commentCount}",
                   style: TextTypes.captionMedium02(color: Palette.text03),
                 ),
               ],
@@ -84,10 +85,10 @@ class CommunityDetailBoardBottom extends StatelessWidget {
                   await communityBoardDetailProvider.changeCommunityBoardLike();
                   await communityBoardProvider
                       .changeCommunityBoardLikeFromDetail(
-                          communityBoardDetailProvider
-                              .communityDetailBoard.communityPostNo,
-                          communityBoardDetailProvider
-                              .communityDetailBoard.isLike);
+                      communityBoardDetailProvider
+                          .communityDetailBoard.communityPostNo,
+                      communityBoardDetailProvider
+                          .communityDetailBoard.isLike);
                   await homeProvider.changeCommunityBoardLikeFromDetail(
                       communityBoardDetailProvider
                           .communityDetailBoard.communityPostNo,
@@ -98,7 +99,8 @@ class CommunityDetailBoardBottom extends StatelessWidget {
                       communityBoardDetailProvider.communityDetailBoard.isLike);
                   await boardViewModel.handleCommunityBoardLike(
                       communityBoardDetailProvider
-                          .communityDetailBoard.communityPostNo);
+                          .communityDetailBoard.communityPostNo,
+                      communityBoardDetailProvider.communityDetailBoard.isLike);
                 } else {
                   ToastMessage.show(
                     context: context,
@@ -116,7 +118,8 @@ class CommunityDetailBoardBottom extends StatelessWidget {
                       : SvgPicture.asset('assets/icons/thumb_up_off.svg'),
                   const SizedBox(width: 4),
                   Text(
-                    "추천 ${communityBoardDetailProvider.communityDetailBoard.likeCount}",
+                    "추천 ${communityBoardDetailProvider.communityDetailBoard
+                        .likeCount}",
                     style: TextTypes.captionMedium02(color: Palette.text03),
                   ),
                 ],

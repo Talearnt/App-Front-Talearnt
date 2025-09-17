@@ -271,7 +271,10 @@ class HomePage extends StatelessWidget {
                                                     .changeIsLoading(false);
                                               });
                                             },
-                                            child: HomeBoardCard(post: post),
+                                            child: HomeBoardCard(
+                                              post: post,
+                                              type: 'user',
+                                            ),
                                           ),
                                         );
                                       }).toList(),
@@ -400,7 +403,10 @@ class HomePage extends StatelessWidget {
                                                     .changeIsLoading(false);
                                               });
                                             },
-                                            child: HomeBoardCard(post: post),
+                                            child: HomeBoardCard(
+                                              post: post,
+                                              type: 'new',
+                                            ),
                                           ),
                                         );
                                       }).toList(),

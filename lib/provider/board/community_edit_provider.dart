@@ -43,6 +43,7 @@ class CommunityEditProvider extends ChangeNotifier with ClearText {
   final ImagePicker _picker = ImagePicker();
 
   String _onToolBar = "default";
+  int _count = 0;
 
   bool _isBold = false;
   bool _isItalic = false;
@@ -213,6 +214,8 @@ class CommunityEditProvider extends ChangeNotifier with ClearText {
   bool get isChipsSelected => _isChipsSelected;
 
   bool get isTitleAndBoardEmpty => _isTitleAndBoardEmpty;
+
+  int get count => _count;
 
   void clearProvider() {
     _titleController.clear();
@@ -611,6 +614,12 @@ class CommunityEditProvider extends ChangeNotifier with ClearText {
     notifyListeners();
   }
 
+  void updateCount(int count) {
+    _count = count;
+
+    notifyListeners();
+  }
+
   Future<void> countImage() async {
     final delta = contentController.document.toDelta();
 
@@ -639,6 +648,7 @@ class CommunityEditProvider extends ChangeNotifier with ClearText {
     updatePostNo(communityDetailBoard.communityPostNo);
 
     updateSelectedCategory(communityDetailBoard.postType);
+    updateCount(communityDetailBoard.count);
     updateCommunityDetailBoard(communityDetailBoard.content);
     updateTitle(communityDetailBoard.title);
 

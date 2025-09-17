@@ -218,7 +218,7 @@ class MatchBoardProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> changeMatchBoardLike(int postNo) async {
+  Future<bool> changeMatchBoardLike(int postNo) async {
     final index =
         _matchBoardList.indexWhere((post) => post.exchangePostNo == postNo);
     if (index != -1) {
@@ -230,6 +230,7 @@ class MatchBoardProvider extends ChangeNotifier {
               _matchBoardList[index].favoriteCount - 1;
     }
     notifyListeners();
+    return _matchBoardList[index].isFavorite;
   }
 
   Future<void> changeMatchBoardLikeFromDetail(
