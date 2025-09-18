@@ -13,6 +13,11 @@ abstract class ApiConstants {
   static const String checkUserIdDuplicationUrl = "$baseUrl/v1/auth/users/id";
   static const String getUserProfile = "$baseUrl/v1/users/header/profile";
   static const String editUserProfile = "$baseUrl/v1/users/profile";
+  static const String getAgreements = "$baseUrl/v1/users/agreements";
+  static const String changeMarketingAgree =
+      "$baseUrl/v1/users/agreements/marketing";
+  static const String changeAdvertisingAgree =
+      "$baseUrl/v1/users/agreements/advertising";
 
   static const String smsVerifyCodeUrl =
       "$baseUrl/v1/auth/sms/verification-codes"; //인증번호 문자 전송 통합 url (회원가입, 아이디 찾기)

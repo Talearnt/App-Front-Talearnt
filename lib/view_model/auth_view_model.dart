@@ -374,6 +374,57 @@ class AuthViewModel extends ChangeNotifier {
     );
   }
 
+  Future<void> getAgreements() async {
+    final result = await authRepository.getAgreements();
+    result.fold(
+      (failure) => commonNavigator.showSingleDialog(
+          content: ErrorMessages.getMessage(
+        failure.errorCode,
+      )), //dialog 띄워줘야됨
+      (result) async {
+        profileProvider.updateAgreements(result);
+      },
+    );
+  }
+
+  Future<bool> changeMarketingAgree(bool agree) async {
+    final result = await authRepository.changeMarketingAgree(agree);
+    bool success = false;
+    result.fold(
+      (failure) {
+        commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(
+          failure.errorCode,
+        ));
+        success = false;
+      }, //dialog 띄워줘야됨
+      (result) {
+        profileProvider.changeMarketingAgree(agree);
+        success = true;
+      },
+    );
+    return success;
+  }
+
+  Future<bool> changeAdvertisingAgree(bool agree) async {
+    final result = await authRepository.changeAdvertisingAgree(agree);
+    bool success = false;
+    result.fold(
+      (failure) {
+        commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(
+          failure.errorCode,
+        ));
+        success = false;
+      }, //dialog 띄워줘야됨
+      (result) {
+        profileProvider.changeAdvertisingAgree(agree);
+        success = true;
+      },
+    );
+    return success;
+  }
+
   String getGender(int gender) {
     if (gender == 0) {
       return '남자';

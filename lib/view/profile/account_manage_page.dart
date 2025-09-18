@@ -1,4 +1,5 @@
 import 'package:app_front_talearnt/common/theme.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
@@ -6,6 +7,8 @@ import 'package:provider/provider.dart';
 
 import '../../common/common_navigator.dart';
 import '../../common/widget/button.dart';
+import '../../common/widget/custom_toggle.dart';
+import '../../common/widget/toast_message.dart';
 import '../../common/widget/top_app_bar.dart';
 import '../../data/services/secure_storage_service.dart';
 import '../../provider/profile/profile_provider.dart';
@@ -109,7 +112,101 @@ class AccountManagePage extends StatelessWidget {
               ),
               const Divider(
                 color: Palette.bgUp01,
-                thickness: 1.0,
+                thickness: 12.0,
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Flexible(
+                      child: RichText(
+                        text: TextSpan(
+                          text: '마케팅 목적의 개인정보 수집 및 이용 동의 ',
+                          style: TextTypes.bodyMedium01(color: Palette.text01),
+                          children: [
+                            TextSpan(
+                              text: '보기',
+                              style:
+                                  TextTypes.captionSemi02(color: Palette.text03)
+                                      .copyWith(
+                                decoration: TextDecoration.underline,
+                                decorationThickness: 1,
+                              ),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () =>
+                                    context.push('/privacy-agree-optional'),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    CustomToggle(
+                      value: profileProvider.marketingAgree,
+                      onChanged: (agree) async {
+                        bool result =
+                            await authViewModel.changeMarketingAgree(agree);
+                        if (result) {
+                          ToastMessage.show(
+                            context: context,
+                            message: "마케팅 설정이 변경되었습니다.",
+                            type: 1,
+                            bottom: 50,
+                          );
+                        }
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Flexible(
+                      child: RichText(
+                        text: TextSpan(
+                          text: '광고성 정보 수신 동의 ',
+                          style: TextTypes.bodyMedium01(color: Palette.text01),
+                          children: [
+                            TextSpan(
+                              text: '보기',
+                              style:
+                                  TextTypes.captionSemi02(color: Palette.text03)
+                                      .copyWith(
+                                decoration: TextDecoration.underline,
+                                decorationThickness: 1,
+                              ),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap =
+                                    () => context.push('/terms-agree-optional'),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    CustomToggle(
+                      value: profileProvider.advertisingAgree,
+                      onChanged: (agree) async {
+                        bool result =
+                            await authViewModel.changeAdvertisingAgree(agree);
+                        if (result) {
+                          ToastMessage.show(
+                            context: context,
+                            message: "광고성 수신 설정이 변경되었습니다.",
+                            type: 1,
+                            bottom: 50,
+                          );
+                        }
+                      },
+                    ),
+                  ],
+                ),
               ),
             ],
           ),

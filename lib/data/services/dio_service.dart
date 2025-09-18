@@ -76,6 +76,30 @@ class DioService {
         ));
       }
     }
+  }Future<Either<Failure, dynamic>> patch(
+      String path, dynamic data, Map<String, dynamic>? params) async {
+    try {
+      final response =
+          await _dio.patch(path, queryParameters: params, data: data);
+      return right(response.data as dynamic);
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 401) {
+        var result = await handleAuthResponse(e.response, () {
+          return get(path, data, params);
+        });
+        return right(result.data as dynamic);
+      }
+      if (e.response?.data is Map<String, dynamic>) {
+        final failureData = e.response!.data;
+        return left(Failure.fromJson(failureData));
+      } else {
+        return left(Failure(
+          errorCode: 'DIO_ERROR',
+          errorMessage: e.message ?? 'Unknown error occurred',
+          success: false,
+        ));
+      }
+    }
   }
 
   Future<Either<Failure, dynamic>> put(String path, dynamic data,
