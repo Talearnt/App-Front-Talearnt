@@ -15,6 +15,7 @@ import '../../constants/api_constants.dart';
 import '../model/param/kakao_sign_up_param.dart';
 import '../model/param/login_param.dart';
 import '../model/param/sign_up_param.dart';
+import '../model/respone/agreements.dart';
 import '../model/respone/kakao_login_result.dart';
 import '../model/respone/kakao_sign_up_user_info.dart';
 import '../model/respone/user_profile.dart';
@@ -109,6 +110,27 @@ class AuthRepository {
   Future<Either<Failure, Success>> kakaoSignUp(KakaoSignUpParam param) async {
     final result =
         await dio.post(ApiConstants.joinKakaoUrl, param.toJson(), null);
+
+    return result.fold(left, (response) => right(Success.fromJson(response)));
+  }
+
+  Future<Either<Failure, Agreements>> getAgreements() async {
+    final result = await dio.get(ApiConstants.getAgreements, null, null);
+
+    return result.fold(
+        left, (response) => right(Agreements.fromJson(response['data'])));
+  }
+
+  Future<Either<Failure, Success>> changeMarketingAgree(bool agree) async {
+    final result = await dio.patch(
+        ApiConstants.changeMarketingAgree, {'isAgree': agree}, null);
+
+    return result.fold(left, (response) => right(Success.fromJson(response)));
+  }
+
+  Future<Either<Failure, Success>> changeAdvertisingAgree(bool agree) async {
+    final result = await dio.patch(
+        ApiConstants.changeAdvertisingAgree, {'isAgree': agree}, null);
 
     return result.fold(left, (response) => right(Success.fromJson(response)));
   }

@@ -16,6 +16,7 @@ import 'package:path/path.dart' as path;
 import 'package:provider/provider.dart';
 
 import '../../constants/global_value_constants.dart';
+import '../../data/model/respone/agreements.dart';
 import '../../data/model/respone/match_board.dart';
 import '../../data/model/respone/notice_detail.dart';
 import '../../data/model/respone/pagination.dart';
@@ -107,6 +108,10 @@ class ProfileProvider extends ChangeNotifier with ClearText {
   bool _isAgreeToWithdraw = false;
   final TextEditingController _etcController = TextEditingController();
   int _etcTextLength = 0;
+
+  //동의 설정
+  late bool _marketingAgree;
+  late bool _advertisingAgree;
 
   late TabController _myWriteTabController;
   final ScrollController _myWriteMatchScrollController = ScrollController();
@@ -234,6 +239,10 @@ class ProfileProvider extends ChangeNotifier with ClearText {
   TextEditingController get etcController => _etcController;
 
   int get etcTextLength => _etcTextLength;
+
+  bool get marketingAgree => _marketingAgree;
+
+  bool get advertisingAgree => _advertisingAgree;
 
   bool get isFirstTabChange => _isFirstTabChange;
 
@@ -775,6 +784,23 @@ class ProfileProvider extends ChangeNotifier with ClearText {
     _noticeList.clear();
     _noticeHasNext = true;
     _noticePage = 1;
+    notifyListeners();
+  }
+
+  void updateAgreements(Agreements agree) {
+    _marketingAgree = agree.marketing;
+    _advertisingAgree = agree.advertising;
+    notifyListeners();
+  }
+
+  void changeMarketingAgree(bool agree) {
+    _marketingAgree = agree;
+    notifyListeners();
+  }
+
+  void changeAdvertisingAgree(bool agree) {
+    _advertisingAgree = agree;
+    notifyListeners();
   }
 
   void clearAllProviders(BuildContext context) {
