@@ -25,15 +25,14 @@ class DoubleBtnDialog extends StatelessWidget {
   });
 
   // showDialog를 포함하는 정적 메서드
-  static void show(
-      BuildContext context, {
-        required String content,
-        required String leftText,
-        required String rightText,
-        VoidCallback? leftFun,
-        VoidCallback? rightFun,
-        bool timer = false,
-      }) {
+  static void show(BuildContext context, {
+    required String content,
+    required String leftText,
+    required String rightText,
+    VoidCallback? leftFun,
+    VoidCallback? rightFun,
+    bool timer = false,
+  }) {
     showDialog(
       context: context,
       useRootNavigator: false,
@@ -143,13 +142,12 @@ class SingleBtnDialog extends StatelessWidget {
   });
 
   // showDialog를 포함하는 정적 메서드
-  static void show(
-      BuildContext context, {
-        required String content,
-        Widget? button,
-        bool timer = false,
-        ValueNotifier<int>? timeSeconds,
-      }) {
+  static void show(BuildContext context, {
+    required String content,
+    Widget? button,
+    bool timer = false,
+    ValueNotifier<int>? timeSeconds,
+  }) {
     showDialog(
       context: context,
       builder: (BuildContext dialogContext) {
@@ -196,7 +194,6 @@ class SingleBtnDialog extends StatelessWidget {
                       color: Palette.text01,
                     ),
                     textAlign: TextAlign.center,
-                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 timer

@@ -11,7 +11,7 @@ class ErrorMessages {
     "429-AUTH-09": "5회 연속 인증에 실패하였습니다. 잠시 후 다시 시도해주세요.",
     "404-AUTH-10": "10분이 지나 회원의 비밀번호를 변경할 수 없습니다. 다시 시도해주세요.",
     "400-AUTH-11":
-        "이미 다른 SNS 혹은 TALEARNT 계정으로 가입된 아이디입니다. 다른 방법으로 로그인을 시도해주세요.",
+    "이미 다른 SNS 혹은 TALEARNT 계정으로 가입된 아이디입니다. 다른 방법으로 로그인을 시도해주세요.",
     "429-AUTH-12": "많은 요청이 왔습니다. 10분 후에 다시 시도해주세요.",
   };
 
@@ -67,7 +67,7 @@ class ErrorMessages {
   static const Map<String, String> systemErrorMessages = {
     "503-SYSTEM-01": "서비스를 사용할 수 없습니다. 잠시 후 다시 시도해주세요.",
     "500-SYSTEM-02": "서버 내부 오류가 발생했습니다.",
-    "500-UNKNOWN-01": "알 수 없는 오류가 발생했습니다. 관리자에게 문의하세요.",
+    "500-UNKNOWN-01": "알 수 없는 오류가 발생했습니다.\n관리자에게 문의하세요.",
   };
 
   static const Map<String, String> keywordErrorMessages = {
@@ -136,7 +136,7 @@ class ErrorMessages {
     } else if (commonErrorMessages.containsKey(errorCode)) {
       return commonErrorMessages[errorCode]!;
     } else {
-      return unknown ?? "알 수 없는 오류가 발생했습니다. 관리자에게 문의하세요.";
+      return unknown ?? "알 수 없는 오류가 발생했습니다.\n관리자에게 문의하세요.";
     }
   }
 }

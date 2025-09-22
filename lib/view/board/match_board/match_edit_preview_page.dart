@@ -125,9 +125,12 @@ class MatchEditPreviewPage extends StatelessWidget {
                         const SizedBox(
                           height: 8,
                         ),
-                        const StateBadge(
-                          state: true,
-                          content: "모집중",
+                        StateBadge(
+                          state: GlobalValueConstants.boardState.firstWhere(
+                              (item) =>
+                                  item['type'] ==
+                                  matchEditProvider.boardStatus)['value'],
+                          content: matchEditProvider.boardStatus,
                         ),
                         const SizedBox(
                           height: 8,
@@ -161,7 +164,7 @@ class MatchEditPreviewPage extends StatelessWidget {
                                   width: 12,
                                 ),
                                 Text(
-                                  "조회 2",
+                                  "조회 ${matchEditProvider.count}",
                                   style: TextTypes.caption01(
                                     color: Palette.text04,
                                   ),

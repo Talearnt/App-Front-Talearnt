@@ -79,15 +79,15 @@ class MatchBoardListCardBottom extends StatelessWidget {
               onTap: () async {
                 if (loginProvider.isLoggedIn) {
                   if (pageType == 'list') {
-                    await matchBoardProvider
-                        .changeMatchBoardLike(post.exchangePostNo);
-                    await boardViewModel.handleMatchBoardLike(matchBoardProvider
-                        .matchBoardList[index].exchangePostNo);
-                  } else {
-                    await profileProvider
+                    bool isFavorite = await matchBoardProvider
                         .changeMatchBoardLike(post.exchangePostNo);
                     await boardViewModel.handleMatchBoardLike(
-                        profileProvider.matchBoardList[index].exchangePostNo);
+                        post.exchangePostNo, isFavorite);
+                  } else {
+                    bool isFavorite = await profileProvider
+                        .changeMatchBoardLike(post.exchangePostNo);
+                    await boardViewModel.handleMatchBoardLike(
+                        post.exchangePostNo, isFavorite);
                   }
                 } else {
                   ToastMessage.show(

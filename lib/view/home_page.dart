@@ -4,6 +4,7 @@ import 'package:app_front_talearnt/provider/auth/login_provider.dart';
 import 'package:app_front_talearnt/provider/board/match_board_provider.dart';
 import 'package:app_front_talearnt/provider/common/common_provider.dart';
 import 'package:app_front_talearnt/provider/home/home_provider.dart';
+import 'package:app_front_talearnt/provider/notification/notification_provider.dart';
 import 'package:app_front_talearnt/provider/profile/profile_provider.dart';
 import 'package:app_front_talearnt/view/widget/home_board_card.dart';
 import 'package:app_front_talearnt/view_model/notification_view_model.dart';
@@ -36,6 +37,8 @@ class HomePage extends StatelessWidget {
         Provider.of<MatchBoardProvider>(context);
     final NotificationViewModel notificationViewModel =
         Provider.of<NotificationViewModel>(context);
+    final NotificationProvider notificationProvider =
+        Provider.of<NotificationProvider>(context);
 
     Future<void> loadHome() async {
       commonProvider.changeIsLoading(true);
@@ -142,7 +145,10 @@ class HomePage extends StatelessWidget {
                                 context.push('/alarm');
                               },
                               child: SvgPicture.asset(
-                                'assets/icons/bell_off.svg',
+                                notificationProvider.notifications
+                                        .any((n) => n.isRead == false)
+                                    ? 'assets/icons/bell_on.svg'
+                                    : 'assets/icons/bell_off.svg',
                                 width: 18,
                                 height: 20,
                               ),
@@ -271,7 +277,10 @@ class HomePage extends StatelessWidget {
                                                     .changeIsLoading(false);
                                               });
                                             },
-                                            child: HomeBoardCard(post: post),
+                                            child: HomeBoardCard(
+                                              post: post,
+                                              type: 'user',
+                                            ),
                                           ),
                                         );
                                       }).toList(),
@@ -400,7 +409,10 @@ class HomePage extends StatelessWidget {
                                                     .changeIsLoading(false);
                                               });
                                             },
-                                            child: HomeBoardCard(post: post),
+                                            child: HomeBoardCard(
+                                              post: post,
+                                              type: 'new',
+                                            ),
                                           ),
                                         );
                                       }).toList(),
