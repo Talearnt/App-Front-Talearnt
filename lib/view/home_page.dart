@@ -507,7 +507,147 @@ class HomePage extends StatelessWidget {
                                 )
                         ],
                       ),
-                      const SizedBox(height: 108),
+                      const SizedBox(height: 44),
+                      Container(
+                        width: double.infinity,
+                        height: 800,
+                        decoration: BoxDecoration(
+                          color: Palette.bgUp01,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 32,
+                            horizontal: 24,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SvgPicture.asset(
+                                'assets/icons/default_logo.svg',
+                                height: 22,
+                              ),
+                              SizedBox(
+                                height: 32,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    '회사소개',
+                                    style: TextTypes.captionMedium02(
+                                        color: Palette.text03),
+                                  ),
+                                  VerticalDivider(
+                                    color: Palette.line02,
+                                    thickness: 1,
+                                  ),
+                                  Text(
+                                    '이벤트',
+                                    style: TextTypes.captionMedium02(
+                                        color: Palette.text03),
+                                  ),
+                                  VerticalDivider(
+                                    color: Palette.line02,
+                                    thickness: 1,
+                                  ),
+                                  Text(
+                                    '공지사항',
+                                    style: TextTypes.captionMedium02(
+                                        color: Palette.text03),
+                                  ),
+                                  VerticalDivider(
+                                    color: Palette.line02,
+                                    thickness: 1,
+                                  ),
+                                  Text(
+                                    '이용약관',
+                                    style: TextTypes.captionMedium02(
+                                        color: Palette.text03),
+                                  ),
+                                  VerticalDivider(
+                                    color: Palette.line02,
+                                    thickness: 1,
+                                  ),
+                                  Text(
+                                    '개인정보처리방침',
+                                    style: TextTypes.captionMedium02(
+                                        color: Palette.text02),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 24,
+                              ),
+                              Divider(
+                                color: Palette.line02,
+                                height: 1,
+                              ),
+                              SizedBox(
+                                height: 24,
+                              ),
+                              Text(
+                                '회사명 세븐피커',
+                                style: TextTypes.caption01(
+                                  color: Palette.text03,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 8,
+                              ),
+                              Text(
+                                '사업자등록번호 418-35-01518',
+                                style: TextTypes.caption01(
+                                  color: Palette.text03,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 8,
+                              ),
+                              Text(
+                                '대표자 정운만',
+                                style: TextTypes.caption01(
+                                  color: Palette.text03,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 8,
+                              ),
+                              Text(
+                                '대표 이메일 woong9421@nate.com',
+                                style: TextTypes.caption01(
+                                  color: Palette.text03,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 24,
+                              ),
+                              Divider(
+                                color: Palette.line01,
+                                height: 1,
+                              ),
+                              SizedBox(
+                                height: 24,
+                              ),
+                              Text(
+                                'Copyright © Talearnt. All Rights Reserved.',
+                                style: TextTypes.caption01(
+                                  color: Palette.text03,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 8,
+                              ),
+                              Text(
+                                'Icons by FREE Icons for Figma (CC BY 4.0)\nhttps://www.figma.com/community/file/1177180791780461401',
+                                style: TextTypes.caption01(
+                                  color: Palette.text03,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
                     ],
                   ),
                 );
