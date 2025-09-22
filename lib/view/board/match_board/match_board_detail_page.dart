@@ -37,6 +37,12 @@ class MatchBoardDetailPage extends StatelessWidget {
     final loginProvider = Provider.of<LoginProvider>(context);
     final HomeProvider homeProvider = Provider.of<HomeProvider>(context);
 
+    final stateItem = GlobalValueConstants.boardState.firstWhere(
+      (item) =>
+          item['type'] == matchBoardDetailProvider.matchingDetailPost.status,
+      orElse: () => {'type': '모집 마감', 'value': false},
+    );
+
     return Scaffold(
       appBar: TopAppBar(
         onPressed: () {
@@ -146,15 +152,13 @@ class MatchBoardDetailPage extends StatelessWidget {
                                                       ? [
                                                           BoxShadow(
                                                             color: Colors.black
-                                                                .withOpacity(
-                                                                    0.08), // 그림자 색
-                                                            spreadRadius:
-                                                                0, // 번짐 정도
-                                                            blurRadius:
-                                                                20, // 흐림 정도
-                                                            offset: const Offset(
-                                                                0,
-                                                                0), // x, y 방향 이동 (아래쪽으로 3px)
+                                                                .withValues(
+                                                                    alpha: 20),
+                                                            spreadRadius: 0,
+                                                            blurRadius: 20,
+                                                            offset:
+                                                                const Offset(
+                                                                    0, 0),
                                                           ),
                                                         ]
                                                       : [],
@@ -207,15 +211,13 @@ class MatchBoardDetailPage extends StatelessWidget {
                                                       ? [
                                                           BoxShadow(
                                                             color: Colors.black
-                                                                .withOpacity(
-                                                                    0.08), // 그림자 색
-                                                            spreadRadius:
-                                                                0, // 번짐 정도
-                                                            blurRadius:
-                                                                20, // 흐림 정도
-                                                            offset: const Offset(
-                                                                0,
-                                                                0), // x, y 방향 이동 (아래쪽으로 3px)
+                                                              ..withValues(
+                                                                  alpha: 20),
+                                                            spreadRadius: 0,
+                                                            blurRadius: 20,
+                                                            offset:
+                                                                const Offset(
+                                                                    0, 0),
                                                           ),
                                                         ]
                                                       : [],
@@ -235,14 +237,10 @@ class MatchBoardDetailPage extends StatelessWidget {
                                     ),
                                   )
                                 : StateBadge(
-                                       state: GlobalValueConstants.boardState.firstWhere(
-                                          (item) =>
-                                              item['type'] ==
-                                              matchBoardDetailProvider
-                                                  .matchingDetailPost.status)['value'],
-                                      content: matchBoardDetailProvider
-                                          .matchingDetailPost.status,
-                                   ),
+                                    state: stateItem['value'],
+                                    content: matchBoardDetailProvider
+                                        .matchingDetailPost.status,
+                                  ),
                             const SizedBox(
                               height: 8,
                             ),
