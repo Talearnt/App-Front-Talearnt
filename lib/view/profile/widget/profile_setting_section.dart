@@ -28,7 +28,7 @@ class ProfileSettingSection extends StatelessWidget {
           CreateSettingMenu(
             iconPath: 'assets/icons/setting.svg',
             title: '계정 관리',
-            onTap: () async{
+            onTap: () async {
               await authViewModel.getAgreements();
               context.push('/account-manage');
             },

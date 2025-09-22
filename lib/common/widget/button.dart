@@ -506,7 +506,7 @@ class TextBtnS extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 3),
         minimumSize: Size.zero,
       ),
-      child:  Text(content, style: btnStyle),
+      child: Text(content, style: btnStyle),
     );
   }
 }
@@ -553,12 +553,12 @@ class TextLineXs extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       onPressed: onPressed ?? () {},
-        style: ButtonStyle(
-          padding: WidgetStateProperty.all(EdgeInsets.zero),
-          minimumSize: WidgetStateProperty.all(Size.zero),
-          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          overlayColor: WidgetStateProperty.all(Colors.transparent),
-        ),
+      style: ButtonStyle(
+        padding: WidgetStateProperty.all(EdgeInsets.zero),
+        minimumSize: WidgetStateProperty.all(Size.zero),
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        overlayColor: WidgetStateProperty.all(Colors.transparent),
+      ),
       child: Text(
         content,
         style: TextTypes.captionSemi02(

@@ -76,7 +76,9 @@ class DioService {
         ));
       }
     }
-  }Future<Either<Failure, dynamic>> patch(
+  }
+
+  Future<Either<Failure, dynamic>> patch(
       String path, dynamic data, Map<String, dynamic>? params) async {
     try {
       final response =
