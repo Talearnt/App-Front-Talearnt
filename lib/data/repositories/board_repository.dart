@@ -34,7 +34,7 @@ class BoardRepository {
   Future<Either<Failure, S3UploadUrl>> getImageUploadUrl(
       S3ControllerParam body) async {
     final result =
-    await dio.post(ApiConstants.getUploadImagesUrl, body.toJson(), null);
+        await dio.post(ApiConstants.getUploadImagesUrl, body.toJson(), null);
     return result.fold(
         left, (response) => right(S3UploadUrl.fromJson(response)));
   }
@@ -54,14 +54,14 @@ class BoardRepository {
   Future<Either<Failure, Success>> insertMatchBoard(
       MatchBoardParam body) async {
     final result =
-    await dio.post(ApiConstants.insertMatchBoard, body.toJson(), null);
+        await dio.post(ApiConstants.insertMatchBoard, body.toJson(), null);
     return result.fold(left, (response) => right(Success.fromJson(response)));
   }
 
-  Future<Either<Failure, Success>> editMatchBoard(MatchBoardParam body,
-      int postNo) async {
+  Future<Either<Failure, Success>> editMatchBoard(
+      MatchBoardParam body, int postNo) async {
     final result =
-    await dio.put(ApiConstants.editMatchBoard(postNo), body.toJson());
+        await dio.put(ApiConstants.editMatchBoard(postNo), body.toJson());
 
     return result.fold(left, (response) => right(Success.fromJson(response)));
   }
@@ -69,7 +69,7 @@ class BoardRepository {
   Future<Either<Failure, Map<String, dynamic>>> getMatchBoardList(
       MatchBoardListSearchParam body) async {
     final response =
-    await dio.get(ApiConstants.getMatchBoardListUrl, null, body.toJson());
+        await dio.get(ApiConstants.getMatchBoardListUrl, null, body.toJson());
     return response.fold(left, (response) {
       final posts = List<MatchBoard>.from(
           response['data']['results'].map((data) => MatchBoard.fromJson(data)));
@@ -81,7 +81,7 @@ class BoardRepository {
   Future<Either<Failure, MatchingDetailPost>> getMatchDetailBoard(
       int postNo) async {
     final response =
-    await dio.get(ApiConstants.handleMatchDetailBoard(postNo), null, null);
+        await dio.get(ApiConstants.handleMatchDetailBoard(postNo), null, null);
     return response.fold(
         left, (result) => right(MatchingDetailPost.fromJson(result["data"])));
   }
@@ -113,8 +113,8 @@ class BoardRepository {
         left, (result) => right(CommunityDetailBoard.fromJson(result["data"])));
   }
 
-  Future<Either<Failure, Success>> editCommunityBoard(CommunityBoardParam body,
-      int postNo) async {
+  Future<Either<Failure, Success>> editCommunityBoard(
+      CommunityBoardParam body, int postNo) async {
     final result = await dio.put(
         ApiConstants.handleCommunityDetailBoard(postNo), body.toJson());
 
@@ -123,18 +123,20 @@ class BoardRepository {
 
   Future<Either<Failure, Success>> deleteMatchBoard(int postNo) async {
     final response =
-    await dio.delete(ApiConstants.handleMatchDetailBoard(postNo), null);
+        await dio.delete(ApiConstants.handleMatchDetailBoard(postNo), null);
     return response.fold(left, (result) => right(Success.fromJson(result)));
   }
 
   Future<Either<Failure, Success>> deleteCommunityBoard(int postNo) async {
     final response =
-    await dio.delete(ApiConstants.handleCommunityDetailBoard(postNo), null);
+        await dio.delete(ApiConstants.handleCommunityDetailBoard(postNo), null);
     return response.fold(left, (result) => right(Success.fromJson(result)));
   }
 
-  Future<Either<Failure, Map<String, dynamic>>> getCommunityComments(int postNo,
-      CommunityCommentParam body,) async {
+  Future<Either<Failure, Map<String, dynamic>>> getCommunityComments(
+    int postNo,
+    CommunityCommentParam body,
+  ) async {
     final response = await dio.get(
       ApiConstants.getCommunityCommnet(postNo),
       null,
@@ -143,17 +145,17 @@ class BoardRepository {
 
     return response.fold(
       left,
-          (result) {
+      (result) {
         final data = result['data'] as Map<String, dynamic>;
         final rawList = data['results'] as List<dynamic>;
 
         final comments = rawList
             .map((e) =>
-            CommunityCommentResponse.fromJson(e as Map<String, dynamic>))
+                CommunityCommentResponse.fromJson(e as Map<String, dynamic>))
             .toList();
 
         final hasNext = (data['pagination']
-        as Map<String, dynamic>?)?['hasNext'] as bool? ??
+                as Map<String, dynamic>?)?['hasNext'] as bool? ??
             false;
 
         return right(<String, dynamic>{
@@ -165,8 +167,9 @@ class BoardRepository {
   }
 
   Future<Either<Failure, Map<String, dynamic>>> getCommunityReplies(
-      int commentNo,
-      CommunityReplyParam body,) async {
+    int commentNo,
+    CommunityReplyParam body,
+  ) async {
     final response = await dio.get(
       ApiConstants.getCommunityReply(commentNo),
       null,
@@ -175,17 +178,17 @@ class BoardRepository {
 
     return response.fold(
       left,
-          (result) {
+      (result) {
         final data = result['data'] as Map<String, dynamic>;
         final rawList = data['results'] as List<dynamic>;
 
         final comments = rawList
             .map((e) =>
-            CommunityReplyResponse.fromJson(e as Map<String, dynamic>))
+                CommunityReplyResponse.fromJson(e as Map<String, dynamic>))
             .toList();
 
         final hasNext = (data['pagination']
-        as Map<String, dynamic>?)?['hasNext'] as bool? ??
+                as Map<String, dynamic>?)?['hasNext'] as bool? ??
             false;
 
         return right(<String, dynamic>{
@@ -203,17 +206,17 @@ class BoardRepository {
 
     return response.fold(
       left,
-          (result) {
+      (result) {
         final data = result['data'] as Map<String, dynamic>;
         final rawList = data['results'] as List<dynamic>;
 
         final comments = rawList
             .map((e) =>
-            CommunityCommentResponse.fromJson(e as Map<String, dynamic>))
+                CommunityCommentResponse.fromJson(e as Map<String, dynamic>))
             .toList();
 
         final hasNext = (data['pagination']
-        as Map<String, dynamic>?)?['hasNext'] as bool? ??
+                as Map<String, dynamic>?)?['hasNext'] as bool? ??
             false;
 
         return right(<String, dynamic>{
@@ -224,8 +227,8 @@ class BoardRepository {
     );
   }
 
-  Future<Either<Failure, Success>> UpdateCommunityComment(PutComment body,
-      int commentNo) async {
+  Future<Either<Failure, Success>> UpdateCommunityComment(
+      PutComment body, int commentNo) async {
     final response = await dio.put(
         ApiConstants.updateCommunityComment(commentNo), body.toJson());
 
@@ -234,12 +237,13 @@ class BoardRepository {
 
   Future<Either<Failure, Success>> deleteCommunityComment(int commentNo) async {
     final response =
-    await dio.delete(ApiConstants.deleteCommnunityComment(commentNo), null);
+        await dio.delete(ApiConstants.deleteCommnunityComment(commentNo), null);
     return response.fold(left, (result) => right(Success.fromJson(result)));
   }
 
   Future<Either<Failure, Map<String, dynamic>>> insertCommunityReply(
-      PostReply body,) async {
+    PostReply body,
+  ) async {
     final response = await dio.post(
       ApiConstants.insertCommunityReply,
       body.toJson(),
@@ -248,7 +252,7 @@ class BoardRepository {
 
     return response.fold(
       left,
-          (result) {
+      (result) {
         final data = result['data'] as Map<String, dynamic>;
         final newReply = CommunityReplyResponse.fromJson(data);
 
@@ -261,27 +265,27 @@ class BoardRepository {
 
   Future<Either<Failure, Success>> deleteReply(int replyNo) async {
     final response =
-    await dio.delete(ApiConstants.deleteCommnunityReply(replyNo), null);
+        await dio.delete(ApiConstants.deleteCommnunityReply(replyNo), null);
     return response.fold(left, (result) => right(Success.fromJson(result)));
   }
 
-  Future<Either<Failure, Success>> updateCommunityReply(PutComment body,
-      int replyNo) async {
+  Future<Either<Failure, Success>> updateCommunityReply(
+      PutComment body, int replyNo) async {
     final response = await dio.put(
         ApiConstants.updateCommunityReply(replyNo), body.toJson());
 
     return response.fold(left, (result) => right(Success.fromJson(result)));
   }
 
-  Future<Either<Failure, Success>> handleMatchBoardLike(int postNo,
-      bool isFavorite) async {
+  Future<Either<Failure, Success>> handleMatchBoardLike(
+      int postNo, bool isFavorite) async {
     final response = await dio.post(ApiConstants.handleMatchBoardLike(postNo),
         {'isFavorite': isFavorite}, null);
     return response.fold(left, (result) => right(Success.fromJson(result)));
   }
 
-  Future<Either<Failure, Success>> handleCommunityBoardLike(int postNo,
-      bool isLike) async {
+  Future<Either<Failure, Success>> handleCommunityBoardLike(
+      int postNo, bool isLike) async {
     final response = await dio.post(
         ApiConstants.handleCommunityBoardLike(postNo),
         {'isLike': isLike},
@@ -303,8 +307,8 @@ class BoardRepository {
 
   Future<Either<Failure, Success>> changeRecuruiting(
       RecuruitingParam body, int postNo) async {
-    final result =
-        await dio.patch(ApiConstants.changeRecuruiting(postNo), body.toJson());
+    final result = await dio.patch(
+        ApiConstants.changeRecuruiting(postNo), body.toJson(), null);
     return result.fold(left, (response) => right(Success.fromJson(response)));
   }
 }
