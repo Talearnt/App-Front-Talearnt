@@ -93,15 +93,156 @@ class MatchBoardDetailPage extends StatelessWidget {
                             const SizedBox(
                               height: 8,
                             ),
-                            StateBadge(
-                              state: GlobalValueConstants.boardState.firstWhere(
-                                  (item) =>
-                                      item['type'] ==
-                                      matchBoardDetailProvider
-                                          .matchingDetailPost.status)['value'],
-                              content: matchBoardDetailProvider
-                                  .matchingDetailPost.status,
-                            ),
+                            matchBoardDetailProvider
+                                        .matchingDetailPost.userNo ==
+                                    profileProvider.userProfile.userNo
+                                ? Container(
+                                    padding: const EdgeInsets.all(4),
+                                    decoration: BoxDecoration(
+                                      color: Palette.bgUp01,
+                                      borderRadius: BorderRadius.circular(8),
+                                      border: Border.all(
+                                        color: Palette.line02, // 원하는 색상
+                                        width: 1, // 선 두께
+                                      ),
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            commonProvider
+                                                .changeIsLoading(true);
+                                            boardViewModel
+                                                .changeRecuriting(
+                                                    "NOW_RECRUITING",
+                                                    matchBoardDetailProvider
+                                                        .matchingDetailPost
+                                                        .exchangePostNo)
+                                                .then((value) {
+                                              ToastMessage.show(
+                                                context: context,
+                                                message: "모집구분이 변경되었습니다.",
+                                                type: 1,
+                                                bottom: 50,
+                                              );
+                                            });
+                                            commonProvider
+                                                .changeIsLoading(false);
+                                          },
+                                          child: Container(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 10, vertical: 4),
+                                            decoration: BoxDecoration(
+                                              color: matchBoardDetailProvider
+                                                      .isRecruiting
+                                                  ? Palette.bgBackGround
+                                                  : Colors.transparent,
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                              boxShadow:
+                                                  matchBoardDetailProvider
+                                                          .isRecruiting
+                                                      ? [
+                                                          BoxShadow(
+                                                            color: Colors.black
+                                                                .withOpacity(
+                                                                    0.08), // 그림자 색
+                                                            spreadRadius:
+                                                                0, // 번짐 정도
+                                                            blurRadius:
+                                                                20, // 흐림 정도
+                                                            offset: const Offset(
+                                                                0,
+                                                                0), // x, y 방향 이동 (아래쪽으로 3px)
+                                                          ),
+                                                        ]
+                                                      : [],
+                                            ),
+                                            child: Text(
+                                              "모집중",
+                                              style: TextTypes.body02(
+                                                color: matchBoardDetailProvider
+                                                        .isRecruiting
+                                                    ? Palette.primary01
+                                                    : Palette.text04,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            commonProvider
+                                                .changeIsLoading(true);
+                                            boardViewModel
+                                                .changeRecuriting(
+                                                    "RECRUITMENT_CLOSED",
+                                                    matchBoardDetailProvider
+                                                        .matchingDetailPost
+                                                        .exchangePostNo)
+                                                .then((value) {
+                                              ToastMessage.show(
+                                                context: context,
+                                                message: "모집구분이 변경되었습니다.",
+                                                type: 1,
+                                                bottom: 50,
+                                              );
+                                            });
+                                            commonProvider
+                                                .changeIsLoading(false);
+                                          },
+                                          child: Container(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 10, vertical: 4),
+                                            decoration: BoxDecoration(
+                                              color: !matchBoardDetailProvider
+                                                      .isRecruiting
+                                                  ? Palette.bgBackGround
+                                                  : Colors.transparent,
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                              boxShadow:
+                                                  !matchBoardDetailProvider
+                                                          .isRecruiting
+                                                      ? [
+                                                          BoxShadow(
+                                                            color: Colors.black
+                                                                .withOpacity(
+                                                                    0.08), // 그림자 색
+                                                            spreadRadius:
+                                                                0, // 번짐 정도
+                                                            blurRadius:
+                                                                20, // 흐림 정도
+                                                            offset: const Offset(
+                                                                0,
+                                                                0), // x, y 방향 이동 (아래쪽으로 3px)
+                                                          ),
+                                                        ]
+                                                      : [],
+                                            ),
+                                            child: Text(
+                                              "모집마감",
+                                              style: TextTypes.body02(
+                                                color: !matchBoardDetailProvider
+                                                        .isRecruiting
+                                                    ? Palette.primary01
+                                                    : Palette.text04,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                : StateBadge(
+                                       state: GlobalValueConstants.boardState.firstWhere(
+                                          (item) =>
+                                              item['type'] ==
+                                              matchBoardDetailProvider
+                                                  .matchingDetailPost.status)['value'],
+                                      content: matchBoardDetailProvider
+                                          .matchingDetailPost.status,
+                                   ),
                             const SizedBox(
                               height: 8,
                             ),

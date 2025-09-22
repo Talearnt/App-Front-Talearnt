@@ -6,6 +6,7 @@ import 'package:app_front_talearnt/data/model/param/match_board_param.dart';
 import 'package:app_front_talearnt/data/model/param/post_comment.dart';
 import 'package:app_front_talearnt/data/model/param/post_reply.dart';
 import 'package:app_front_talearnt/data/model/param/put_comment.dart';
+import 'package:app_front_talearnt/data/model/param/recuruiting_param.dart';
 import 'package:app_front_talearnt/data/model/param/s3_controller_param.dart';
 import 'package:app_front_talearnt/data/model/respone/community_comment.dart';
 import 'package:app_front_talearnt/data/model/respone/community_reply.dart';
@@ -298,5 +299,12 @@ class BoardRepository {
       final pagination = Pagination.fromJson(response['data']['pagination']);
       return right({'posts': posts, 'pagination': pagination});
     });
+  }
+
+  Future<Either<Failure, Success>> changeRecuruiting(
+      RecuruitingParam body, int postNo) async {
+    final result =
+        await dio.patch(ApiConstants.changeRecuruiting(postNo), body.toJson());
+    return result.fold(left, (response) => right(Success.fromJson(response)));
   }
 }
