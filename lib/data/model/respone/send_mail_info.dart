@@ -1,14 +1,14 @@
 class SendMailInfo {
-  final String userId, createdAt;
+  final String userId, sentDate;
   final bool success;
 
   SendMailInfo(
-      {required this.userId, required this.createdAt, required this.success});
+      {required this.userId, required this.sentDate, required this.success});
 
   factory SendMailInfo.fromJson(Map<String, dynamic> json) {
     return SendMailInfo(
       userId: json['data']['userId'],
-      createdAt: json['data']['createdAt'],
+      sentDate: json['data']['sentDate'],
       success: json['success'],
     );
   }
@@ -17,7 +17,7 @@ class SendMailInfo {
     return {
       'data': {
         'userId': userId,
-        'createdAt': createdAt,
+        'sentDate': sentDate,
       },
       'success': success,
     };

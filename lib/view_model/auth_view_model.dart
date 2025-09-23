@@ -166,7 +166,7 @@ class AuthViewModel extends ChangeNotifier {
       ),
       (sendMailInfo) {
         findPasswordProvider.setFindedUserIdInfo(
-            sendMailInfo.userId, sendMailInfo.createdAt);
+            sendMailInfo.userId, sendMailInfo.sentDate);
       },
     );
   }
