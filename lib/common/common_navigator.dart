@@ -20,6 +20,7 @@ class CommonNavigator {
       content: content,
       button: button,
       timer: timer,
+      timeSeconds: timeSeconds,
     );
   }
 
