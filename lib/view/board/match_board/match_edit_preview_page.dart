@@ -29,6 +29,11 @@ class MatchEditPreviewPage extends StatelessWidget {
 
     String today = DateFormat('yyyy.MM.dd').format(DateTime.now());
 
+    final stateItem = GlobalValueConstants.boardState.firstWhere(
+      (item) => item['type'] == matchEditProvider.boardStatus,
+      orElse: () => {'type': '모집 마감', 'value': false},
+    );
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (context.mounted &&
           !commonProvider.isEntryUpdate &&
@@ -126,10 +131,7 @@ class MatchEditPreviewPage extends StatelessWidget {
                           height: 8,
                         ),
                         StateBadge(
-                          state: GlobalValueConstants.boardState.firstWhere(
-                              (item) =>
-                                  item['type'] ==
-                                  matchEditProvider.boardStatus)['value'],
+                          state: stateItem['value'],
                           content: matchEditProvider.boardStatus,
                         ),
                         const SizedBox(
