@@ -551,6 +551,9 @@ class BoardViewModel extends ChangeNotifier {
               unknown: "알 수 없는 이유로\n인증번호 재발송에 실패하였습니다.\n다시 시도해 주세요."),
           timer: true,
           timeSeconds: storageProvider.favoriteCoolDown,
+          onConfirm: () {
+            storageProvider.resetFavoriteCoolDownTimer();
+          },
         );
       } else {
         commonNavigator.showSingleDialog(
@@ -574,6 +577,9 @@ class BoardViewModel extends ChangeNotifier {
               unknown: "알 수 없는 이유로\n인증번호 재발송에 실패하였습니다.\n다시 시도해 주세요."),
           timer: true,
           timeSeconds: storageProvider.likeCoolDown,
+          onConfirm: () {
+            storageProvider.resetLikeCoolDownTimer();
+          },
         );
       } else {
         commonNavigator.showSingleDialog(
@@ -605,12 +611,15 @@ class BoardViewModel extends ChangeNotifier {
     final result = await boardRepository.changeRecuruiting(param, postNo);
     result.fold((failure) {
       if (failure.errorCode == "429-REQ-09") {
-        storageProvider.startLikeCoolDown();
+        storageProvider.startBoardStatusCoolDown();
         commonNavigator.showSingleDialog(
           content: ErrorMessages.getMessage(failure.errorCode,
               unknown: "알 수 없는 이유로\n인증번호 재발송에 실패하였습니다.\n다시 시도해 주세요."),
           timer: true,
-          timeSeconds: storageProvider.likeCoolDown,
+          timeSeconds: storageProvider.boardStatusCoolDown,
+          onConfirm: () {
+            storageProvider.reStartBoardStatusCoolDown();
+          },
         );
       } else {
         commonNavigator.showSingleDialog(
