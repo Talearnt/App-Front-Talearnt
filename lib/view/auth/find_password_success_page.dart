@@ -88,7 +88,7 @@ class FindPasswordSuccessPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 12),
                     Text(
-                      "${findPasswordProvider.createdAt} 발송",
+                      "${findPasswordProvider.sentDate} 발송",
                       style: TextTypes.captionSemi02(
                         color: Palette.text03,
                       ),

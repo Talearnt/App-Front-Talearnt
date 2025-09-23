@@ -31,7 +31,7 @@ class FindPasswordProvider extends ChangeNotifier with ClearText {
   bool _isValidNewPassword = false;
 
   String _userId = '';
-  String _createdAt = '';
+  String _sentDate = '';
 
   bool _loadFindPasswordSuccessPage = false;
 
@@ -82,7 +82,7 @@ class FindPasswordProvider extends ChangeNotifier with ClearText {
 
   String get userId => _userId;
 
-  String get createdAt => _createdAt;
+  String get sentDate => _sentDate;
 
   bool get loadFindPasswordSuccessPage => _loadFindPasswordSuccessPage;
 
@@ -113,7 +113,7 @@ class FindPasswordProvider extends ChangeNotifier with ClearText {
     _passwordCheckValidMessage = '';
 
     _userId = '';
-    _createdAt = '';
+    _sentDate = '';
 
     _loadFindPasswordSuccessPage = false;
 
@@ -265,9 +265,9 @@ class FindPasswordProvider extends ChangeNotifier with ClearText {
     }
   }
 
-  void setFindedUserIdInfo(String userId, String createdAt) {
+  void setFindedUserIdInfo(String userId, String sentDate) {
     _userId = userId;
-    _createdAt = createdAt;
+    _sentDate = sentDate;
     notifyListeners();
   }
 
