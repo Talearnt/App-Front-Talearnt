@@ -121,7 +121,7 @@ class SignUpMainPage extends StatelessWidget {
                             });
                           },
                         )
-                      : storageProvider.isCoolDown
+                      : storageProvider.isCertNumResendCoolDown
                           ? BottomBtn(
                               mediaBottom:
                                   MediaQuery.of(context).viewInsets.bottom,
@@ -129,7 +129,7 @@ class SignUpMainPage extends StatelessWidget {
                                   '인증번호 요청 ${commonProvider.getFormattedTime(storageProvider.certNumResendCoolDown)}',
                               isEnabled: false,
                               onPressed: () {
-                                storageProvider.startTimer();
+                                storageProvider.startCertNumResendTimer();
                               },
                             )
                           : signUpProvider.sendCertNum

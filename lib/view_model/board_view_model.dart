@@ -20,6 +20,7 @@ import '../data/model/param/community_board_param.dart';
 import '../data/model/param/match_board_list_search_param.dart';
 import '../data/model/param/s3_controller_param.dart';
 import '../data/repositories/board_repository.dart';
+import '../provider/auth/storage_provider.dart';
 import '../provider/board/community_board_detail_provider.dart';
 import '../provider/board/community_board_provider.dart';
 import '../provider/board/community_edit_provider.dart';
@@ -43,23 +44,27 @@ class BoardViewModel extends ChangeNotifier {
   final CommunityEditProvider communityEditProvider;
   final HomeProvider homeProvider;
   final ProfileProvider profileProvider;
+  final StorageProvider storageProvider;
 
-  BoardViewModel(this.commonNavigator,
-      this.boardRepository,
-      this.keywordProvider,
-      this.matchWriteProvider,
-      this.matchBoardProvider,
-      this.matchBoardDetailProvider,
-      this.matchEditProvider,
-      this.communityBoardProvider,
-      this.communityWriteProvider,
-      this.communityBoardDetailProvider,
-      this.communityEditProvider,
-      this.homeProvider,
-      this.profileProvider);
+  BoardViewModel(
+    this.commonNavigator,
+    this.boardRepository,
+    this.keywordProvider,
+    this.matchWriteProvider,
+    this.matchBoardProvider,
+    this.matchBoardDetailProvider,
+    this.matchEditProvider,
+    this.communityBoardProvider,
+    this.communityWriteProvider,
+    this.communityBoardDetailProvider,
+    this.communityEditProvider,
+    this.homeProvider,
+    this.profileProvider,
+    this.storageProvider,
+  );
 
-  Future<void> getImageUploadUrl(List<Map<String, dynamic>> uploadImageInfos,
-      String type) async {
+  Future<void> getImageUploadUrl(
+      List<Map<String, dynamic>> uploadImageInfos, String type) async {
     List<S3FileParam> fileParams = uploadImageInfos.map((imageInfo) {
       return S3FileParam(
         fileName: imageInfo["fileName"],
@@ -73,20 +78,19 @@ class BoardViewModel extends ChangeNotifier {
     final result = await boardRepository.getImageUploadUrl(param);
 
     result.fold(
-            (failure) =>
-            commonNavigator.showSingleDialog(
-                content: ErrorMessages.getMessage(failure.errorCode)),
-            (result) async {
-          if (type == "MW") {
-            matchWriteProvider.setImageUploadUrl(result.data);
-          } else if (type == "ME") {
-            matchEditProvider.setImageUploadUrl(result.data);
-          } else if (type == "CW") {
-            communityWriteProvider.setImageUploadUrl(result.data);
-          } else if (type == "CE") {
-            communityEditProvider.setImageUploadUrl(result.data);
-          }
-        });
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)),
+        (result) async {
+      if (type == "MW") {
+        matchWriteProvider.setImageUploadUrl(result.data);
+      } else if (type == "ME") {
+        matchEditProvider.setImageUploadUrl(result.data);
+      } else if (type == "CW") {
+        communityWriteProvider.setImageUploadUrl(result.data);
+      } else if (type == "CE") {
+        communityEditProvider.setImageUploadUrl(result.data);
+      }
+    });
   }
 
   Future<void> uploadImage(String imageUploadUrl, File image, int fileSize,
@@ -113,7 +117,8 @@ class BoardViewModel extends ChangeNotifier {
     });
   }
 
-  Future<void> insertMatchBoard(String title,
+  Future<void> insertMatchBoard(
+      String title,
       String content,
       List<int> giveTalents,
       List<int> receiveTalents,
@@ -137,24 +142,24 @@ class BoardViewModel extends ChangeNotifier {
     final result = await boardRepository.insertMatchBoard(param);
 
     result.fold(
-            (failure) =>
-            commonNavigator.showSingleDialog(
-                content: ErrorMessages.getMessage(failure.errorCode)), (
-        result) {
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)), (result) {
       matchWriteProvider.clearProvider();
       commonNavigator.goRoute('/write-success');
     });
   }
 
-  Future<void> editMatchBoard(String title,
-      String content,
-      List<int> giveTalents,
-      List<int> receiveTalents,
-      String exchangeType,
-      bool? requiredBadge,
-      String duration,
-      List<String>? imageUrls,
-      int postNo,) async {
+  Future<void> editMatchBoard(
+    String title,
+    String content,
+    List<int> giveTalents,
+    List<int> receiveTalents,
+    String exchangeType,
+    bool? requiredBadge,
+    String duration,
+    List<String>? imageUrls,
+    int postNo,
+  ) async {
     final badge = requiredBadge ?? false;
     final urlList = imageUrls ?? [];
     MatchBoardParam param = MatchBoardParam(
@@ -171,22 +176,19 @@ class BoardViewModel extends ChangeNotifier {
     final result = await boardRepository.editMatchBoard(param, postNo);
 
     result.fold(
-            (failure) =>
-            commonNavigator.showSingleDialog(
-                content: ErrorMessages.getMessage(failure.errorCode)),
-            (result) async {
-          await getEditedPostData(postNo);
-        });
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)),
+        (result) async {
+      await getEditedPostData(postNo);
+    });
   }
 
   Future<void> getInitMatchBoardList() async {
     MatchBoardListSearchParam param = MatchBoardListSearchParam();
     final result = await boardRepository.getMatchBoardList(param);
     result.fold(
-            (failure) =>
-            commonNavigator.showSingleDialog(
-                content: ErrorMessages.getMessage(failure.errorCode)), (
-        result) {
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)), (result) {
       final posts = result['posts'];
       final pagination = result['pagination'];
       matchBoardProvider.updateTalentExchangePosts(posts);
@@ -195,7 +197,8 @@ class BoardViewModel extends ChangeNotifier {
     });
   }
 
-  Future<void> getMatchBoardList(List<String>? giveTalents,
+  Future<void> getMatchBoardList(
+      List<String>? giveTalents,
       List<String>? receiveTalents,
       String? order,
       String? duration,
@@ -206,7 +209,7 @@ class BoardViewModel extends ChangeNotifier {
       String? size,
       String? lastNo,
       String
-      searchType) // searchType : reset(새로고침), add(스크롤), new(홈화면), userMatch(유저한테 맞는거 추천)
+          searchType) // searchType : reset(새로고침), add(스크롤), new(홈화면), userMatch(유저한테 맞는거 추천)
   async {
     MatchBoardListSearchParam param = MatchBoardListSearchParam(
         giveTalents: giveTalents,
@@ -221,10 +224,8 @@ class BoardViewModel extends ChangeNotifier {
         lastNo: lastNo);
     final result = await boardRepository.getMatchBoardList(param);
     result.fold(
-            (failure) =>
-            commonNavigator.showSingleDialog(
-                content: ErrorMessages.getMessage(failure.errorCode)), (
-        result) {
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)), (result) {
       final posts = result['posts'];
       final pagination = result['pagination'];
       if (searchType == "reset") {
@@ -244,9 +245,8 @@ class BoardViewModel extends ChangeNotifier {
   Future<void> getMatchDetailBoard(int postNo) async {
     final result = await boardRepository.getMatchDetailBoard(postNo);
     result.fold(
-            (failure) =>
-            commonNavigator.showSingleDialog(
-                content: ErrorMessages.getMessage(failure.errorCode)), (post) {
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)), (post) {
       matchBoardDetailProvider.updateTalentDetailPost(post);
       matchBoardDetailProvider
           .setRecruiting(post.status == "모집중" ? true : false);
@@ -257,9 +257,8 @@ class BoardViewModel extends ChangeNotifier {
   Future<void> getEditedPostData(int postNo) async {
     final result = await boardRepository.getMatchDetailBoard(postNo);
     result.fold(
-            (failure) =>
-            commonNavigator.showSingleDialog(
-                content: ErrorMessages.getMessage(failure.errorCode)), (post) {
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)), (post) {
       matchBoardDetailProvider.updateTalentDetailPost(post);
       matchEditProvider.clearProvider();
       commonNavigator.goRoute('/match-board-detail-page');
@@ -277,10 +276,8 @@ class BoardViewModel extends ChangeNotifier {
     );
     final result = await boardRepository.setCommunityBoard(param);
     result.fold(
-            (failure) =>
-            commonNavigator.showSingleDialog(
-                content: ErrorMessages.getMessage(failure.errorCode)), (
-        result) {
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)), (result) {
       commonNavigator.goRoute('/write-success');
     });
   }
@@ -289,10 +286,8 @@ class BoardViewModel extends ChangeNotifier {
     CommunityBoardListSearchParam param = CommunityBoardListSearchParam();
     final result = await boardRepository.getCommunityBoardList(param);
     result.fold(
-            (failure) =>
-            commonNavigator.showSingleDialog(
-                content: ErrorMessages.getMessage(failure.errorCode)), (
-        result) {
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)), (result) {
       final posts = result['posts'];
       final pagination = result['pagination'];
       communityBoardProvider.updateCommunityBoardList(posts);
@@ -311,10 +306,8 @@ class BoardViewModel extends ChangeNotifier {
         lastNo: lastNo);
     final result = await boardRepository.getCommunityBoardList(param);
     result.fold(
-            (failure) =>
-            commonNavigator.showSingleDialog(
-                content: ErrorMessages.getMessage(failure.errorCode)), (
-        result) {
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)), (result) {
       final posts = result['posts'];
       final pagination = result['pagination'];
       communityBoardProvider.updateCommunityBoardList(posts);
@@ -332,10 +325,8 @@ class BoardViewModel extends ChangeNotifier {
         lastNo: lastNo);
     final result = await boardRepository.getCommunityBoardList(param);
     result.fold(
-            (failure) =>
-            commonNavigator.showSingleDialog(
-                content: ErrorMessages.getMessage(failure.errorCode)), (
-        result) {
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)), (result) {
       final posts = result['posts'];
       final pagination = result['pagination'];
       communityBoardProvider.addCommunityBoardList(posts);
@@ -353,10 +344,8 @@ class BoardViewModel extends ChangeNotifier {
         lastNo: lastNo);
     final result = await boardRepository.getCommunityBoardList(param);
     result.fold(
-            (failure) =>
-            commonNavigator.showSingleDialog(
-                content: ErrorMessages.getMessage(failure.errorCode)), (
-        result) {
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)), (result) {
       final posts = result['posts'];
       homeProvider.setBestCommunityBoardList(posts);
     });
@@ -365,9 +354,8 @@ class BoardViewModel extends ChangeNotifier {
   Future<void> getCommunityDetailBoard(int postNo) async {
     final result = await boardRepository.getCommunityDetailBoard(postNo);
     result.fold(
-            (failure) =>
-            commonNavigator.showSingleDialog(
-                content: ErrorMessages.getMessage(failure.errorCode)), (post) {
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)), (post) {
       communityBoardDetailProvider.updateCommunityDetailBoard(post);
       commonNavigator.pushRoute('/community-board-detail');
     });
@@ -376,50 +364,50 @@ class BoardViewModel extends ChangeNotifier {
   Future<void> deleteMatchBoard(int postNo) async {
     final result = await boardRepository.deleteMatchBoard(postNo);
     result.fold(
-            (failure) =>
-            commonNavigator.showSingleDialog(
-                content: ErrorMessages.getMessage(failure.errorCode)),
-            (success) async {
-          await getMatchBoardList(
-              matchBoardProvider.selectedGiveTalentKeywordCodes
-                  .map((e) => e.toString())
-                  .toList(),
-              matchBoardProvider.selectedInterestTalentKeywordCodes
-                  .map((e) => e.toString())
-                  .toList(),
-              matchBoardProvider.selectedOrderType,
-              matchBoardProvider.selectedDurationType,
-              matchBoardProvider.selectedOperationType,
-              null,
-              null,
-              null,
-              null,
-              null,
-              "mobile");
-          commonNavigator.goBack();
-          commonNavigator.goBack();
-        });
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)),
+        (success) async {
+      await getMatchBoardList(
+          matchBoardProvider.selectedGiveTalentKeywordCodes
+              .map((e) => e.toString())
+              .toList(),
+          matchBoardProvider.selectedInterestTalentKeywordCodes
+              .map((e) => e.toString())
+              .toList(),
+          matchBoardProvider.selectedOrderType,
+          matchBoardProvider.selectedDurationType,
+          matchBoardProvider.selectedOperationType,
+          null,
+          null,
+          null,
+          null,
+          null,
+          "mobile");
+      commonNavigator.goBack();
+      commonNavigator.goBack();
+    });
   }
 
   Future<void> deleteCommunityBoard(int postNo) async {
     final result = await boardRepository.deleteCommunityBoard(postNo);
     result.fold(
-            (failure) =>
-            commonNavigator.showSingleDialog(
-                content: ErrorMessages.getMessage(failure.errorCode)),
-            (success) async {
-          await getCommunityBoardList(communityBoardProvider.selectedPostType,
-              communityBoardProvider.selectedOrderType, null, null, null, null);
-          commonNavigator.goBack();
-          commonNavigator.goBack();
-        });
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)),
+        (success) async {
+      await getCommunityBoardList(communityBoardProvider.selectedPostType,
+          communityBoardProvider.selectedOrderType, null, null, null, null);
+      commonNavigator.goBack();
+      commonNavigator.goBack();
+    });
   }
 
-  Future<void> editCommunityBoard(String title,
-      String content,
-      String postType,
-      List<String>? imageUrls,
-      int postNo,) async {
+  Future<void> editCommunityBoard(
+    String title,
+    String content,
+    String postType,
+    List<String>? imageUrls,
+    int postNo,
+  ) async {
     final urlList = imageUrls ?? [];
     CommunityBoardParam param = CommunityBoardParam(
       title: title,
@@ -431,12 +419,11 @@ class BoardViewModel extends ChangeNotifier {
     final result = await boardRepository.editCommunityBoard(param, postNo);
 
     result.fold(
-            (failure) =>
-            commonNavigator.showSingleDialog(
-                content: ErrorMessages.getMessage(failure.errorCode)),
-            (result) async {
-          await getCommunityDetailBoard(postNo);
-        });
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)),
+        (result) async {
+      await getCommunityDetailBoard(postNo);
+    });
   }
 
   Future<void> getComments(int postNo, int lastNo) async {
@@ -444,10 +431,8 @@ class BoardViewModel extends ChangeNotifier {
         postNo: postNo.toString(), lastNo: lastNo.toString());
     final result = await boardRepository.getCommunityComments(postNo, param);
     result.fold(
-            (failure) =>
-            commonNavigator.showSingleDialog(
-                content: ErrorMessages.getMessage(failure.errorCode)), (
-        result) {
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)), (result) {
       if (lastNo == 0) {
         communityBoardDetailProvider.setComments(result['comments'],
             hasNextPage: result['hasNext']);
@@ -463,10 +448,8 @@ class BoardViewModel extends ChangeNotifier {
         commnetNO: commentNo.toString(), lastNo: lastNo.toString());
     final result = await boardRepository.getCommunityReplies(commentNo, param);
     result.fold(
-            (failure) =>
-            commonNavigator.showSingleDialog(
-                content: ErrorMessages.getMessage(failure.errorCode)), (
-        result) {
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)), (result) {
       if (lastNo == 0) {
         communityBoardDetailProvider.setReplies(commentNo, result['comments'],
             hasNextPage: result['hasNext']);
@@ -484,10 +467,8 @@ class BoardViewModel extends ChangeNotifier {
     final result = await boardRepository.insertCommunityComment(param);
 
     result.fold(
-            (failure) =>
-            commonNavigator.showSingleDialog(
-                content: ErrorMessages.getMessage(failure.errorCode)), (
-        result) {
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)), (result) {
       communityBoardDetailProvider.mergeComments(result['comments']);
     });
   }
@@ -499,10 +480,8 @@ class BoardViewModel extends ChangeNotifier {
         param, communityBoardDetailProvider.targetComment);
 
     result.fold(
-            (failure) =>
-            commonNavigator.showSingleDialog(
-                content: ErrorMessages.getMessage(failure.errorCode)), (
-        result) {
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)), (result) {
       communityBoardDetailProvider.updateCommentContent(
           communityBoardDetailProvider.targetComment, content);
     });
@@ -511,12 +490,11 @@ class BoardViewModel extends ChangeNotifier {
   Future<void> deleteComment(int commentNo) async {
     final result = await boardRepository.deleteCommunityComment(commentNo);
     result.fold(
-            (failure) =>
-            commonNavigator.showSingleDialog(
-                content: ErrorMessages.getMessage(failure.errorCode)),
-            (success) async {
-          communityBoardDetailProvider.removeComment(commentNo);
-        });
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)),
+        (success) async {
+      communityBoardDetailProvider.removeComment(commentNo);
+    });
   }
 
   Future<void> insertReply(int commentNo, String content) async {
@@ -525,11 +503,10 @@ class BoardViewModel extends ChangeNotifier {
     final resultEither = await boardRepository.insertCommunityReply(param);
 
     resultEither.fold(
-          (failure) =>
-          commonNavigator.showSingleDialog(
-            content: ErrorMessages.getMessage(failure.errorCode),
-          ),
-          (map) {
+      (failure) => commonNavigator.showSingleDialog(
+        content: ErrorMessages.getMessage(failure.errorCode),
+      ),
+      (map) {
         final newReply = map['reply'] as CommunityReplyResponse;
 
         communityBoardDetailProvider.addReply(commentNo, newReply);
@@ -540,12 +517,11 @@ class BoardViewModel extends ChangeNotifier {
   Future<void> deleteReply(int commentNo, int replyNo) async {
     final result = await boardRepository.deleteReply(replyNo);
     result.fold(
-            (failure) =>
-            commonNavigator.showSingleDialog(
-                content: ErrorMessages.getMessage(failure.errorCode)),
-            (success) async {
-          communityBoardDetailProvider.removeReply(commentNo, replyNo);
-        });
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)),
+        (success) async {
+      communityBoardDetailProvider.removeReply(commentNo, replyNo);
+    });
   }
 
   Future<void> updateReply(String content) async {
@@ -555,10 +531,8 @@ class BoardViewModel extends ChangeNotifier {
         param, communityBoardDetailProvider.targetReply);
 
     result.fold(
-            (failure) =>
-            commonNavigator.showSingleDialog(
-                content: ErrorMessages.getMessage(failure.errorCode)), (
-        result) {
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)), (result) {
       communityBoardDetailProvider.updateReplyContent(
           communityBoardDetailProvider.targetComment,
           communityBoardDetailProvider.targetReply,
@@ -567,29 +541,49 @@ class BoardViewModel extends ChangeNotifier {
   }
 
   Future<void> handleMatchBoardLike(int postNo, bool isFavorite) async {
-    final result = await boardRepository.handleMatchBoardLike(
-        postNo, isFavorite);
+    final result =
+        await boardRepository.handleMatchBoardLike(postNo, isFavorite);
     result.fold((failure) {
+      if (failure.errorCode == "429-REQ-09") {
+        storageProvider.startFavoriteCoolDown();
+        commonNavigator.showSingleDialog(
+          content: ErrorMessages.getMessage(failure.errorCode,
+              unknown: "알 수 없는 이유로\n인증번호 재발송에 실패하였습니다.\n다시 시도해 주세요."),
+          timer: true,
+          timeSeconds: storageProvider.favoriteCoolDown,
+        );
+      } else {
+        commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode));
+      }
       matchBoardDetailProvider.changeMatchBoardLike();
       matchBoardProvider.changeMatchBoardLikeFromDetail(postNo, !isFavorite);
       homeProvider.changeBothTalentBoardLikeFromDetail(postNo, !isFavorite);
       profileProvider.changeMatchBoardLikeFromDetail(postNo, !isFavorite);
-      commonNavigator.showSingleDialog(
-          content: ErrorMessages.getMessage(failure.errorCode));
     }, (post) {});
   }
 
   Future<void> handleCommunityBoardLike(int postNo, bool isLike) async {
-    final result = await boardRepository.handleCommunityBoardLike(
-        postNo, isLike);
+    final result =
+        await boardRepository.handleCommunityBoardLike(postNo, isLike);
     result.fold((failure) {
+      if (failure.errorCode == "429-REQ-09") {
+        storageProvider.startLikeCoolDown();
+        commonNavigator.showSingleDialog(
+          content: ErrorMessages.getMessage(failure.errorCode,
+              unknown: "알 수 없는 이유로\n인증번호 재발송에 실패하였습니다.\n다시 시도해 주세요."),
+          timer: true,
+          timeSeconds: storageProvider.likeCoolDown,
+        );
+      } else {
+        commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode));
+      }
       communityBoardDetailProvider.changeCommunityBoardLike();
       communityBoardProvider.changeCommunityBoardLikeFromDetail(
           postNo, !isLike);
       homeProvider.changeCommunityBoardLikeFromDetail(postNo, !isLike);
       profileProvider.changeCommunityBoardLikeFromDetail(postNo, !isLike);
-      commonNavigator.showSingleDialog(
-          content: ErrorMessages.getMessage(failure.errorCode));
     }, (post) {});
   }
 
@@ -597,10 +591,8 @@ class BoardViewModel extends ChangeNotifier {
     MatchBoardListSearchParam param = MatchBoardListSearchParam();
     final result = await boardRepository.getMatchBoardLikeList(param);
     result.fold(
-            (failure) =>
-            commonNavigator.showSingleDialog(
-                content: ErrorMessages.getMessage(failure.errorCode)), (
-        result) {
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)), (result) {
       final posts = result['posts'];
       final pagination = result['pagination'];
       matchBoardProvider.updateTalentExchangePosts(posts);
@@ -611,9 +603,20 @@ class BoardViewModel extends ChangeNotifier {
   Future<void> changeRecuriting(String recuruiting, int postNo) async {
     RecuruitingParam param = RecuruitingParam(status: recuruiting);
     final result = await boardRepository.changeRecuruiting(param, postNo);
-    result.fold(
-        (failure) => commonNavigator.showSingleDialog(
-            content: ErrorMessages.getMessage(failure.errorCode)), (result) {
+    result.fold((failure) {
+      if (failure.errorCode == "429-REQ-09") {
+        storageProvider.startLikeCoolDown();
+        commonNavigator.showSingleDialog(
+          content: ErrorMessages.getMessage(failure.errorCode,
+              unknown: "알 수 없는 이유로\n인증번호 재발송에 실패하였습니다.\n다시 시도해 주세요."),
+          timer: true,
+          timeSeconds: storageProvider.likeCoolDown,
+        );
+      } else {
+        commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode));
+      }
+    }, (result) {
       if (recuruiting == "NOW_RECRUITING") {
         matchBoardDetailProvider.setRecruiting(true);
         matchBoardProvider.updateMatchBoardStatus(postNo, "모집중");

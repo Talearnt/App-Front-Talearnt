@@ -192,14 +192,14 @@ class FindIdPage extends StatelessWidget {
                 const Spacer(),
                 Consumer<CommonProvider>(
                   builder: (subContext, commonProvider, child) {
-                    if (storageProvider.isCoolDown) {
+                    if (storageProvider.isCertNumResendCoolDown) {
                       return BottomBtn(
                         mediaBottom: MediaQuery.of(context).viewInsets.bottom,
                         content:
                             '인증번호 요청 ${commonProvider.getFormattedTime(storageProvider.certNumResendCoolDown)}',
                         isEnabled: false,
                         onPressed: () {
-                          storageProvider.startTimer();
+                          storageProvider.startCertNumResendTimer();
                         },
                       );
                     } else {
