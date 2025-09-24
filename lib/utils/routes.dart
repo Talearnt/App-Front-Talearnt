@@ -12,6 +12,8 @@ import 'package:app_front_talearnt/view/board/match_board/match_board_like_page.
 import 'package:app_front_talearnt/view/board/match_board/match_edit1_page.dart';
 import 'package:app_front_talearnt/view/board/match_board/match_edit2_page.dart';
 import 'package:app_front_talearnt/view/board/match_board/match_edit_preview_page.dart';
+import 'package:app_front_talearnt/view/home/agreement/footer_privacy_agreement_required.dart';
+import 'package:app_front_talearnt/view/home/agreement/footer_terms_agreement_required.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -37,7 +39,7 @@ import '../view/board/match_board/match_write1_page.dart';
 import '../view/board/match_board/match_write2_page.dart';
 import '../view/board/match_board/match_write_preview_page.dart';
 import '../view/board/write_success_page.dart';
-import '../view/home_page.dart';
+import '../view/home/home_page.dart';
 import '../view/init_page.dart';
 import '../view/keyword/set_talent_keyword_main_page.dart';
 import '../view/keyword/set_talent_keyword_success_page.dart';
@@ -379,7 +381,18 @@ class Routes {
           return const EventDetailPage();
         },
       ),
-
+      GoRoute(
+        path: '/footer-privacy-agree-required',
+        builder: (BuildContext context, GoRouterState state) {
+          return const FooterPrivacyAgreementRequired();
+        },
+      ),
+      GoRoute(
+        path: '/footer-terms-agree-required',
+        builder: (BuildContext context, GoRouterState state) {
+          return const FooterTermsAgreementRequired();
+        },
+      ),
     ],
     errorPageBuilder: (BuildContext context, GoRouterState state) {
       return const MaterialPage(

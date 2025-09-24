@@ -13,10 +13,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import '../common/widget/button.dart';
-import '../common/widget/common_bottom_navigation_bar.dart';
-import '../provider/board/common_board_provider.dart';
-import '../view_model/board_view_model.dart';
+import '../../common/widget/button.dart';
+import '../../common/widget/common_bottom_navigation_bar.dart';
+import '../../provider/board/common_board_provider.dart';
+import '../../view_model/board_view_model.dart';
+import '../../view_model/profile_view_model.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -39,6 +40,7 @@ class HomePage extends StatelessWidget {
         Provider.of<NotificationViewModel>(context);
     final NotificationProvider notificationProvider =
         Provider.of<NotificationProvider>(context);
+    final profileViewModel = Provider.of<ProfileViewModel>(context);
 
     Future<void> loadHome() async {
       commonProvider.changeIsLoading(true);
@@ -511,7 +513,7 @@ class HomePage extends StatelessWidget {
                       Container(
                         width: double.infinity,
                         height: 800,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: Palette.bgUp01,
                         ),
                         child: Padding(
@@ -526,64 +528,89 @@ class HomePage extends StatelessWidget {
                                 'assets/icons/default_logo.svg',
                                 height: 22,
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 32,
                               ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    '회사소개',
-                                    style: TextTypes.captionMedium02(
-                                        color: Palette.text03),
-                                  ),
-                                  VerticalDivider(
-                                    color: Palette.line02,
-                                    thickness: 1,
-                                  ),
-                                  Text(
-                                    '이벤트',
-                                    style: TextTypes.captionMedium02(
-                                        color: Palette.text03),
-                                  ),
-                                  VerticalDivider(
-                                    color: Palette.line02,
-                                    thickness: 1,
-                                  ),
-                                  Text(
-                                    '공지사항',
-                                    style: TextTypes.captionMedium02(
-                                        color: Palette.text03),
-                                  ),
-                                  VerticalDivider(
-                                    color: Palette.line02,
-                                    thickness: 1,
-                                  ),
-                                  Text(
-                                    '이용약관',
-                                    style: TextTypes.captionMedium02(
-                                        color: Palette.text03),
-                                  ),
-                                  VerticalDivider(
-                                    color: Palette.line02,
-                                    thickness: 1,
-                                  ),
-                                  Text(
-                                    '개인정보처리방침',
-                                    style: TextTypes.captionMedium02(
-                                        color: Palette.text02),
-                                  ),
-                                ],
+                              IntrinsicHeight(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () async {
+                                        commonProvider.changeIsLoading(true);
+                                        await profileViewModel.getEvent();
+                                        await profileViewModel.getNotice();
+                                        profileProvider.changeTabIndex(0);
+                                        commonProvider.changeIsLoading(false);
+                                        context.push('/event-notice');
+                                      },
+                                      child: Text(
+                                        '이벤트',
+                                        style: TextTypes.captionMedium02(
+                                            color: Palette.text03),
+                                      ),
+                                    ),
+                                    const VerticalDivider(
+                                      color: Palette.line02,
+                                      thickness: 1,
+                                    ),
+                                    GestureDetector(
+                                      onTap: () async {
+                                        commonProvider.changeIsLoading(true);
+                                        await profileViewModel.getEvent();
+                                        await profileViewModel.getNotice();
+                                        profileProvider.changeTabIndex(1);
+                                        commonProvider.changeIsLoading(false);
+                                        context.push('/event-notice');
+                                      },
+                                      child: Text(
+                                        '공지사항',
+                                        style: TextTypes.captionMedium02(
+                                            color: Palette.text03),
+                                      ),
+                                    ),
+                                    const VerticalDivider(
+                                      color: Palette.line02,
+                                      thickness: 1,
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        context.push(
+                                            '/footer-terms-agree-required');
+                                      },
+                                      child: Text(
+                                        '이용약관',
+                                        style: TextTypes.captionMedium02(
+                                            color: Palette.text03),
+                                      ),
+                                    ),
+                                    const VerticalDivider(
+                                      color: Palette.line02,
+                                      thickness: 1,
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        context.push(
+                                            '/footer-privacy-agree-required');
+                                      },
+                                      child: Text(
+                                        '개인정보처리방침',
+                                        style: TextTypes.captionMedium02(
+                                            color: Palette.text02),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 24,
                               ),
-                              Divider(
+                              const Divider(
                                 color: Palette.line02,
                                 height: 1,
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 24,
                               ),
                               Text(
@@ -592,7 +619,7 @@ class HomePage extends StatelessWidget {
                                   color: Palette.text03,
                                 ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 8,
                               ),
                               Text(
@@ -601,7 +628,7 @@ class HomePage extends StatelessWidget {
                                   color: Palette.text03,
                                 ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 8,
                               ),
                               Text(
@@ -610,7 +637,7 @@ class HomePage extends StatelessWidget {
                                   color: Palette.text03,
                                 ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 8,
                               ),
                               Text(
@@ -619,14 +646,14 @@ class HomePage extends StatelessWidget {
                                   color: Palette.text03,
                                 ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 24,
                               ),
-                              Divider(
+                              const Divider(
                                 color: Palette.line01,
                                 height: 1,
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 24,
                               ),
                               Text(
@@ -635,7 +662,7 @@ class HomePage extends StatelessWidget {
                                   color: Palette.text03,
                                 ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 8,
                               ),
                               Text(
