@@ -383,7 +383,7 @@ class BoardViewModel extends ChangeNotifier {
           null,
           null,
           "mobile");
-      commonNavigator.goBack();
+
       commonNavigator.goBack();
     });
   }
@@ -549,8 +549,10 @@ class BoardViewModel extends ChangeNotifier {
           storageProvider.startFavoriteCoolDown();
         }
         commonNavigator.showSingleDialog(
-          content: ErrorMessages.getMessage(failure.errorCode,
-              unknown: "알 수 없는 이유로\n인증번호 재발송에 실패하였습니다.\n다시 시도해 주세요."),
+          content: ErrorMessages.getMessage(
+            failure.errorCode,
+            unknown: "짧은 시간에 너무 많은 요청이 왔습니다. 잠시 후 다시 시도해주세요.",
+          ),
           timer: true,
           timeSeconds: storageProvider.favoriteCoolDown,
           onConfirm: () {
@@ -579,8 +581,10 @@ class BoardViewModel extends ChangeNotifier {
           storageProvider.startLikeCoolDown();
         }
         commonNavigator.showSingleDialog(
-          content: ErrorMessages.getMessage(failure.errorCode,
-              unknown: "알 수 없는 이유로\n인증번호 재발송에 실패하였습니다.\n다시 시도해 주세요."),
+          content: ErrorMessages.getMessage(
+            failure.errorCode,
+            unknown: "짧은 시간에 너무 많은 요청이 왔습니다. 잠시 후 다시 시도해주세요.",
+          ),
           timer: true,
           timeSeconds: storageProvider.likeCoolDown,
           onConfirm: () {
@@ -624,8 +628,10 @@ class BoardViewModel extends ChangeNotifier {
         }
 
         commonNavigator.showSingleDialog(
-          content: ErrorMessages.getMessage(failure.errorCode,
-              unknown: "알 수 없는 이유로\n인증번호 재발송에 실패하였습니다.\n다시 시도해 주세요."),
+          content: ErrorMessages.getMessage(
+            failure.errorCode,
+            unknown: "짧은 시간에 너무 많은 요청이 왔습니다. 잠시 후 다시 시도해주세요.",
+          ),
           timer: true,
           timeSeconds: storageProvider.boardStatusCoolDown,
           onConfirm: () {
