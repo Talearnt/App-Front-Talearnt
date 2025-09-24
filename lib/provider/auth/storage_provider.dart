@@ -298,4 +298,19 @@ class StorageProvider extends ChangeNotifier {
       }
     }
   }
+
+  void toggleIsBoardStatusCoolDown(bool div) {
+    _isBoardStatusCoolDown = div;
+    notifyListeners();
+  }
+
+  void toggleIsFavoriteCoolDown(bool div) {
+    _isFavoriteCoolDown = div;
+    notifyListeners();
+  }
+
+  void toggleIsLikeCoolDown(bool div) {
+    _isLikeCoolDown = div;
+    notifyListeners();
+  }
 }

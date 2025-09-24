@@ -545,14 +545,18 @@ class BoardViewModel extends ChangeNotifier {
         await boardRepository.handleMatchBoardLike(postNo, isFavorite);
     result.fold((failure) {
       if (failure.errorCode == "429-REQ-09") {
-        storageProvider.startFavoriteCoolDown();
+        if (storageProvider.favoriteCoolDown.value == 60) {
+          storageProvider.startFavoriteCoolDown();
+        }
         commonNavigator.showSingleDialog(
           content: ErrorMessages.getMessage(failure.errorCode,
               unknown: "알 수 없는 이유로\n인증번호 재발송에 실패하였습니다.\n다시 시도해 주세요."),
           timer: true,
           timeSeconds: storageProvider.favoriteCoolDown,
           onConfirm: () {
-            storageProvider.resetFavoriteCoolDownTimer();
+            if (storageProvider.favoriteCoolDown.value <= 0) {
+              storageProvider.resetFavoriteCoolDownTimer();
+            }
           },
         );
       } else {
@@ -571,14 +575,18 @@ class BoardViewModel extends ChangeNotifier {
         await boardRepository.handleCommunityBoardLike(postNo, isLike);
     result.fold((failure) {
       if (failure.errorCode == "429-REQ-09") {
-        storageProvider.startLikeCoolDown();
+        if (storageProvider.likeCoolDown.value == 60) {
+          storageProvider.startLikeCoolDown();
+        }
         commonNavigator.showSingleDialog(
           content: ErrorMessages.getMessage(failure.errorCode,
               unknown: "알 수 없는 이유로\n인증번호 재발송에 실패하였습니다.\n다시 시도해 주세요."),
           timer: true,
           timeSeconds: storageProvider.likeCoolDown,
           onConfirm: () {
-            storageProvider.resetLikeCoolDownTimer();
+            if (storageProvider.likeCoolDown.value <= 0) {
+              storageProvider.resetLikeCoolDownTimer();
+            }
           },
         );
       } else {
@@ -611,14 +619,19 @@ class BoardViewModel extends ChangeNotifier {
     final result = await boardRepository.changeRecuruiting(param, postNo);
     result.fold((failure) {
       if (failure.errorCode == "429-REQ-09") {
-        storageProvider.startBoardStatusCoolDown();
+        if (storageProvider.boardStatusCoolDown.value == 60) {
+          storageProvider.startBoardStatusCoolDown();
+        }
+
         commonNavigator.showSingleDialog(
           content: ErrorMessages.getMessage(failure.errorCode,
               unknown: "알 수 없는 이유로\n인증번호 재발송에 실패하였습니다.\n다시 시도해 주세요."),
           timer: true,
           timeSeconds: storageProvider.boardStatusCoolDown,
           onConfirm: () {
-            storageProvider.reStartBoardStatusCoolDown();
+            if (storageProvider.boardStatusCoolDown.value <= 0) {
+              storageProvider.resetBoardStatusCoolDownTimer();
+            }
           },
         );
       } else {
