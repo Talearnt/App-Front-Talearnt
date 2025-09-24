@@ -25,7 +25,8 @@ class DoubleBtnDialog extends StatelessWidget {
   });
 
   // showDialog를 포함하는 정적 메서드
-  static void show(BuildContext context, {
+  static void show(
+    BuildContext context, {
     required String content,
     required String leftText,
     required String rightText,
@@ -42,11 +43,11 @@ class DoubleBtnDialog extends StatelessWidget {
           leftText: leftText,
           rightText: rightText,
           leftFun: leftFun ??
-                  () {
+              () {
                 context.pop();
               },
           rightFun: rightFun ??
-                  () {
+              () {
                 context.pop();
               },
           timer: timer,
@@ -88,9 +89,9 @@ class DoubleBtnDialog extends StatelessWidget {
                   !timer
                       ? const SizedBox()
                       : SizedBox(
-                    height: 24,
-                    child: TimeSet(timerSeconds: timeSeconds),
-                  ),
+                          height: 24,
+                          child: TimeSet(timerSeconds: timeSeconds),
+                        ),
                 ],
               ),
             ),
@@ -113,10 +114,10 @@ class DoubleBtnDialog extends StatelessWidget {
                   ),
                   Expanded(
                       child: PrimaryM(
-                        vertical: vertical,
-                        content: rightText,
-                        onPressed: rightFun,
-                      )),
+                    vertical: vertical,
+                    content: rightText,
+                    onPressed: rightFun,
+                  )),
                 ],
               ),
             ),
@@ -142,11 +143,13 @@ class SingleBtnDialog extends StatelessWidget {
   });
 
   // showDialog를 포함하는 정적 메서드
-  static void show(BuildContext context, {
+  static void show(
+    BuildContext context, {
     required String content,
     Widget? button,
     bool timer = false,
     ValueNotifier<int>? timeSeconds,
+    VoidCallback? onConfirm,
   }) {
     showDialog(
       context: context,
@@ -159,6 +162,7 @@ class SingleBtnDialog extends StatelessWidget {
               PrimaryM(
                 content: '확인',
                 onPressed: () {
+                  if (onConfirm != null) onConfirm();
                   Navigator.of(dialogContext).pop();
                 },
               ),
@@ -198,12 +202,12 @@ class SingleBtnDialog extends StatelessWidget {
                 ),
                 timer
                     ? SizedBox(
-                    height: 24,
-                    child: ValueListenableBuilder<int>(
-                        valueListenable: timeSeconds!, // ValueNotifier를 감시
-                        builder: (context, value, child) {
-                          return TimeSet(timerSeconds: timeSeconds);
-                        }))
+                        height: 24,
+                        child: ValueListenableBuilder<int>(
+                            valueListenable: timeSeconds!, // ValueNotifier를 감시
+                            builder: (context, value, child) {
+                              return TimeSet(timerSeconds: timeSeconds);
+                            }))
                     : const SizedBox()
               ],
             ),

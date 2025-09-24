@@ -14,12 +14,15 @@ class CommonNavigator {
     Widget? button,
     bool timer = false,
     ValueNotifier<int>? timeSeconds,
+    VoidCallback? onConfirm,
   }) {
     SingleBtnDialog.show(
       context,
       content: content,
       button: button,
       timer: timer,
+      timeSeconds: timeSeconds,
+      onConfirm: onConfirm,
     );
   }
 
