@@ -104,7 +104,7 @@ class FindPasswordPage extends StatelessWidget {
                     ),
                     DefaultTextField(
                       type: 'default',
-                      hint: '01012345678 형식으로 입력해주세요',
+                      hint: '01012345678',
                       textEditingController:
                           findPasswordProvider.phoneNumberController,
                       keyboardType: "num",
@@ -134,6 +134,7 @@ class FindPasswordPage extends StatelessWidget {
                 content: '비밀번호 찾기',
                 isEnabled: findPasswordProvider.isValidEmailAndPhoneNumber,
                 onPressed: () async {
+                  FocusScope.of(context).unfocus();
                   commonProvider.changeIsLoading(true);
                   await authViewModel
                       .sendResetPasswordEmail(
@@ -143,6 +144,7 @@ class FindPasswordPage extends StatelessWidget {
                           () => commonProvider.changeIsLoading(false));
 
                   if (findPasswordProvider.userId.isNotEmpty) {
+                    findPasswordProvider.setLoad(false);
                     context.go('/find-password-success');
                   }
                 },

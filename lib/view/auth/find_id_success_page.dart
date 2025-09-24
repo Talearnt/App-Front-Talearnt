@@ -6,6 +6,7 @@ import 'package:app_front_talearnt/provider/auth/find_id_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class FindIdSuccessPage extends StatelessWidget {
@@ -14,6 +15,16 @@ class FindIdSuccessPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final findIdProvider = Provider.of<FindIdProvider>(context);
+    String createdAt = findIdProvider.createdAt;
+    DateTime? createDate;
+
+    if (createdAt.isNotEmpty) {
+      try {
+        createDate = DateTime.parse(createdAt);
+      } catch (_) {
+        createDate = null; // 잘못된 형식일 경우 null 처리
+      }
+    }
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!findIdProvider.loadFindIdSuccessPage) {
         ToastMessage.show(
@@ -22,7 +33,7 @@ class FindIdSuccessPage extends StatelessWidget {
           type: 1,
           bottom: 46,
         );
-        findIdProvider.afterLoad();
+        findIdProvider.setLoad(true);
       }
     });
     return Scaffold(
@@ -35,8 +46,7 @@ class FindIdSuccessPage extends StatelessWidget {
           ),
           onPressed: () {
             findIdProvider.clearProvider();
-            context.pop();
-            context.pop();
+            context.go('/login');
           },
         ),
       ),
@@ -101,7 +111,9 @@ class FindIdSuccessPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 12),
                     Text(
-                      "${findIdProvider.createdAt} 가입",
+                      createDate != null
+                          ? "${DateFormat('yyyy-MM-dd HH:mm').format(createDate)}에 가입"
+                          : '-',
                       style: TextTypes.captionSemi02(
                         color: Palette.text03,
                       ),
@@ -128,8 +140,7 @@ class FindIdSuccessPage extends StatelessWidget {
                     content: "로그인",
                     onPressed: () {
                       findIdProvider.clearProvider();
-                      context.pop();
-                      context.pop();
+                      context.go('/login');
                     },
                   ),
                 ),
