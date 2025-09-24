@@ -1,5 +1,5 @@
 abstract class ApiConstants {
-  static const String baseUrl = "http://3.35.198.221";
+  static const String baseUrl = "https://api.talearnt.net";
   static const String joinUrl = "$baseUrl/v1/auth/join";
   static const String joinKakaoUrl = "$baseUrl/v1/auth/join/kakao";
   static const String refreshTokenUrl = "$baseUrl/v1/auth/login/refresh";

@@ -104,7 +104,7 @@ class CommonBottomNavigationBar extends StatelessWidget {
                         },
                       );
                     } else {
-                      context.go('/login');
+                      context.push('/login');
                     }
                   },
                   child: Column(
