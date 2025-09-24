@@ -32,7 +32,7 @@ class FindIdProvider extends ChangeNotifier with ClearText {
   String _userId = '';
   String _createdAt = '';
 
-  bool _loadFindIdSuccessPage = false;
+  bool _loadFindIdSuccessPage = true;
 
   bool _textInputEnabled = true;
 
@@ -104,7 +104,7 @@ class FindIdProvider extends ChangeNotifier with ClearText {
 
     _userId = '';
     _createdAt = '';
-    _loadFindIdSuccessPage = false;
+    _loadFindIdSuccessPage = true;
     _textInputEnabled = true;
     stopTimer();
 
@@ -223,8 +223,8 @@ class FindIdProvider extends ChangeNotifier with ClearText {
     _certNumSecond = ValueNotifier<int>(180);
   }
 
-  void afterLoad() {
-    _loadFindIdSuccessPage = true;
+  void setLoad(bool load) {
+    _loadFindIdSuccessPage = load;
   }
 
   void overValidTime() {

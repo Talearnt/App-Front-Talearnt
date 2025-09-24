@@ -6,6 +6,7 @@ import 'package:app_front_talearnt/provider/auth/find_password_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class FindPasswordSuccessPage extends StatelessWidget {
@@ -14,6 +15,16 @@ class FindPasswordSuccessPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final findPasswordProvider = Provider.of<FindPasswordProvider>(context);
+    String sentDateStr = findPasswordProvider.sentDate;
+    DateTime? sentDate;
+
+    if (sentDateStr.isNotEmpty) {
+      try {
+        sentDate = DateTime.parse(sentDateStr);
+      } catch (_) {
+        sentDate = null; // 잘못된 형식일 경우 null 처리
+      }
+    }
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!findPasswordProvider.loadFindPasswordSuccessPage) {
         ToastMessage.show(
@@ -22,7 +33,7 @@ class FindPasswordSuccessPage extends StatelessWidget {
           type: 1,
           bottom: 46,
         );
-        findPasswordProvider.afterLoad();
+        findPasswordProvider.setLoad(true);
       }
     });
     return Scaffold(
@@ -34,7 +45,7 @@ class FindPasswordSuccessPage extends StatelessWidget {
           ),
           onPressed: () {
             findPasswordProvider.clearProvider();
-            context.pop();
+            context.go('/login');
           },
         ),
       ),
@@ -88,7 +99,9 @@ class FindPasswordSuccessPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 12),
                     Text(
-                      "${findPasswordProvider.sentDate} 발송",
+                      sentDate != null
+                          ? "${DateFormat('yyyy-MM-dd HH:mm').format(sentDate)}에 발송"
+                          : '-',
                       style: TextTypes.captionSemi02(
                         color: Palette.text03,
                       ),
@@ -105,7 +118,7 @@ class FindPasswordSuccessPage extends StatelessWidget {
                     content: "로그인",
                     onPressed: () {
                       findPasswordProvider.clearProvider();
-                      context.pop();
+                      context.go('/login');
                     },
                   ),
                 ),
