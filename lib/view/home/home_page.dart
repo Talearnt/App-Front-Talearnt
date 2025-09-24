@@ -15,6 +15,7 @@ import 'package:provider/provider.dart';
 
 import '../../common/widget/button.dart';
 import '../../common/widget/common_bottom_navigation_bar.dart';
+import '../../common/widget/toast_message.dart';
 import '../../provider/board/common_board_provider.dart';
 import '../../view_model/board_view_model.dart';
 import '../../view_model/profile_view_model.dart';
@@ -143,8 +144,22 @@ class HomePage extends StatelessWidget {
                             ),
                             GestureDetector(
                               onTap: () async {
-                                await notificationViewModel.getNotification();
-                                context.push('/alarm');
+                                if (loginProvider.isLoggedIn) {
+                                  commonProvider.changeIsLoading(true);
+                                  await notificationViewModel
+                                      .getNotification()
+                                      .whenComplete(() {
+                                    commonProvider.changeIsLoading(true);
+                                  });
+                                  context.push('/alarm');
+                                } else {
+                                  ToastMessage.show(
+                                    context: context,
+                                    message: "로그인이 필요합니다.",
+                                    type: 1,
+                                    bottom: 50,
+                                  );
+                                }
                               },
                               child: SvgPicture.asset(
                                 notificationProvider.notifications
