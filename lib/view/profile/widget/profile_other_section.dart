@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 
 import '../../../common/common_navigator.dart';
 import '../../../common/theme.dart';
+import '../../../provider/profile/profile_provider.dart';
 import 'create_setting_menu.dart';
 
 class ProfileOtherSection extends StatelessWidget {
@@ -17,6 +18,7 @@ class ProfileOtherSection extends StatelessWidget {
     final commonProvider = context.read<CommonProvider>();
     final profileViewModel = Provider.of<ProfileViewModel>(context);
     final commonNavigator = Provider.of<CommonNavigator>(context);
+    final profileProvider = Provider.of<ProfileProvider>(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -24,7 +26,7 @@ class ProfileOtherSection extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12),
           child:
-          Text('기타', style: TextTypes.bodyMedium03(color: Palette.text03)),
+              Text('기타', style: TextTypes.bodyMedium03(color: Palette.text03)),
         ),
         CreateSettingMenu(
           iconPath: 'assets/icons/notice.svg',
@@ -33,6 +35,7 @@ class ProfileOtherSection extends StatelessWidget {
             commonProvider.changeIsLoading(true);
             await profileViewModel.getEvent();
             await profileViewModel.getNotice();
+            profileProvider.changeTabIndex(0);
             commonProvider.changeIsLoading(false);
             context.push('/event-notice');
           },
@@ -64,7 +67,7 @@ class ProfileOtherSection extends StatelessWidget {
             } catch (error) {
               commonNavigator.showSingleDialog(
                   content:
-                  "메일 앱을 열 수 없습니다.\n 아래 메일로 문의 부탁드립니다!\nwoong9421@nate.com");
+                      "메일 앱을 열 수 없습니다.\n 아래 메일로 문의 부탁드립니다!\nwoong9421@nate.com");
             }
           },
         ),

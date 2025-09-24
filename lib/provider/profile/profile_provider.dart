@@ -803,6 +803,11 @@ class ProfileProvider extends ChangeNotifier with ClearText {
     notifyListeners();
   }
 
+  void changeTabIndex(int index) {
+    _eventNoticeTabController.index = index;
+    notifyListeners();
+  }
+
   void clearAllProviders(BuildContext context) {
     clearProvider();
     Provider.of<FindIdProvider>(context, listen: false).clearProvider();

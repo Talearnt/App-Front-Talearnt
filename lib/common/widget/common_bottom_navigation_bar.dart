@@ -1,4 +1,4 @@
-import 'package:app_front_talearnt/view/home_bottom_sheet.dart';
+import 'package:app_front_talearnt/view/home/widget/home_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
