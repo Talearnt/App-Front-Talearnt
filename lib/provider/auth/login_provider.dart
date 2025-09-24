@@ -147,12 +147,6 @@ class LoginProvider extends ChangeNotifier with ClearText {
     notifyListeners();
   }
 
-  void testAutoLogin() {
-    _emailController.text = "test@test.com";
-    _passwordController.text = "!1q2w3e4r";
-    notifyListeners();
-  }
-
   Future<void> changeRoot(String newRoot) async {
     _loginRoot = newRoot;
     notifyListeners();
