@@ -3,7 +3,6 @@ class MatchBoardListSearchParam {
   final List<String>? receiveTalents; // 받고픈 재능 코드
   final String? order; // 정렬 - recent: 최신순, popular: 인기순
   final String? duration; // 진행 기간 - 기간 미정, 1개월, 2개월, 3개월, 3개월 이상
-  final String? type; // 진행 방식 - 온라인, 오프라인, 온_오프라인
   final String? badge; // 인증 뱃지 필요 여부 - true, false
   final String? status; // 모집 상태 - 모집중, 모집_완료
   final String? page; // 기본값 1
@@ -15,7 +14,6 @@ class MatchBoardListSearchParam {
     this.receiveTalents,
     this.order,
     this.duration,
-    this.type,
     this.badge,
     this.status,
     String? page,
@@ -29,7 +27,6 @@ class MatchBoardListSearchParam {
         receiveTalents = [],
         order = null,
         duration = null,
-        type = null,
         badge = null,
         status = null,
         page = '1',
@@ -42,7 +39,6 @@ class MatchBoardListSearchParam {
       'receiveTalents': receiveTalents,
       'order': order,
       'duration': duration,
-      'type': type,
       'badge': badge,
       'status': status,
       'page': page,

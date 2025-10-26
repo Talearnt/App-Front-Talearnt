@@ -46,8 +46,8 @@ class HomePage extends StatelessWidget {
       commonProvider.changeIsLoading(true);
       final futures = <Future>[];
       if (homeProvider.newTalentExchangePosts.isEmpty) {
-        futures.add(viewModel.getMatchBoardList(
-            [], [], '', '', '', '', '', '', '10', '', 'new'));
+        futures.add(viewModel
+            .getMatchBoardList([], [], '', '', '', '', '', '10', '', 'new'));
       }
       if (homeProvider.bestCommunityPosts.isEmpty) {
         futures.add(
@@ -59,7 +59,7 @@ class HomePage extends StatelessWidget {
             .map((e) => e.toString())
             .toList();
         futures.add(viewModel.getMatchBoardList(
-            giveTalents, [], '', '', '', '', '', '', '10', '', 'userMatch'));
+            giveTalents, [], '', '', '', '', '', '10', '', 'userMatch'));
       }
       await Future.wait(futures);
       commonProvider.changeIsLoading(false);
@@ -71,7 +71,7 @@ class HomePage extends StatelessWidget {
         _wasLoggedIn = loginProvider.isLoggedIn;
         // 비로그인 상태일 때만 최초 loadHome 실행
         if (!loginProvider.isLoggedIn) {
-          await loadHome();
+          //await loadHome();
         }
       });
     }
@@ -106,7 +106,6 @@ class HomePage extends StatelessWidget {
                 .toList(),
             matchBoardProvider.selectedOrderType,
             matchBoardProvider.selectedDurationType,
-            matchBoardProvider.selectedOperationType,
             null,
             null,
             null,

@@ -81,7 +81,6 @@ class AfterFilterNoBoardListPage extends StatelessWidget {
                               .toList(),
                           matchBoardProvider.selectedOrderType,
                           matchBoardProvider.selectedDurationType,
-                          matchBoardProvider.selectedOperationType,
                           null,
                           null,
                           null,
