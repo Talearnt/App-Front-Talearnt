@@ -412,29 +412,6 @@ class MatchBoardDetailPage extends StatelessWidget {
                             Row(
                               children: [
                                 Text(
-                                  "진행 방식",
-                                  style: TextTypes.body02(
-                                    color: Palette.text03,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 24,
-                                ),
-                                Text(
-                                  matchBoardDetailProvider
-                                      .matchingDetailPost.exchangeType,
-                                  style: TextTypes.body02(
-                                    color: Palette.text02,
-                                  ),
-                                )
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 4,
-                            ),
-                            Row(
-                              children: [
-                                Text(
                                   "진행 기간",
                                   style: TextTypes.body02(
                                     color: Palette.text03,
