@@ -153,7 +153,8 @@ class MatchBoardDetailPage extends StatelessWidget {
                                                           BoxShadow(
                                                             color: Colors.black
                                                                 .withValues(
-                                                                    alpha: 20),
+                                                                    alpha:
+                                                                        0.08),
                                                             spreadRadius: 0,
                                                             blurRadius: 20,
                                                             offset:
@@ -212,7 +213,7 @@ class MatchBoardDetailPage extends StatelessWidget {
                                                           BoxShadow(
                                                             color: Colors.black
                                                               ..withValues(
-                                                                  alpha: 20),
+                                                                  alpha: 0.08),
                                                             spreadRadius: 0,
                                                             blurRadius: 20,
                                                             offset:
@@ -497,7 +498,7 @@ class MatchBoardDetailPage extends StatelessWidget {
                                                   color: index == 3
                                                       ? Colors.black.withValues(
                                                           alpha:
-                                                              153) // 0.6 * 255 = 153
+                                                              0.08) // 0.6 * 255 = 153
                                                       : null,
                                                   colorBlendMode: index == 3
                                                       ? BlendMode.darken
