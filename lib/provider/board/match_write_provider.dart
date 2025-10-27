@@ -85,7 +85,6 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
   String _giveTalentRequiredMessage = "";
   String _interestTalentRequiredMessage = "";
   String _durationRequiredMessage = "";
-  String _exchangeTypeRequiredMesage = "";
 
   String _htmlContent = "";
 
@@ -235,8 +234,6 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
 
   String get durationRequiredMessage => _durationRequiredMessage;
 
-  String get exchangeTypeRequiredMesage => _exchangeTypeRequiredMesage;
-
   bool get isChipsSelected => _isChipsSelected;
 
   bool get isTitleAndBoardEmpty => _isTitleAndBoardEmpty;
@@ -317,7 +314,6 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
     _giveTalentRequiredMessage = '';
     _interestTalentRequiredMessage = '';
     _durationRequiredMessage = '';
-    _exchangeTypeRequiredMesage = '';
     _htmlContent = '';
     _onToolBar = 'default';
     _isBold = false;
