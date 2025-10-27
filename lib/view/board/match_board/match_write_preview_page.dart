@@ -91,7 +91,6 @@ class MatchWritePreviewPage extends StatelessWidget {
                   matchWriteProvider.htmlContent,
                   matchWriteProvider.selectedGiveTalentKeywordCodes,
                   matchWriteProvider.selectedInterestTalentKeywordCodes,
-                  matchWriteProvider.selectedExchangeType,
                   false,
                   matchWriteProvider.selectedDuration,
                   matchWriteProvider.imageUploadedUrls,

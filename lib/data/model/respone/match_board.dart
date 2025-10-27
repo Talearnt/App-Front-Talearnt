@@ -6,7 +6,6 @@ class MatchBoard {
   final String authority;
   final int exchangePostNo;
   String status;
-  final String exchangeType;
   final String duration;
   final bool requiredBadge;
   final String title;
@@ -26,7 +25,6 @@ class MatchBoard {
     required this.authority,
     required this.exchangePostNo,
     required this.status,
-    required this.exchangeType,
     required this.duration,
     required this.requiredBadge,
     required this.title,
@@ -49,7 +47,6 @@ class MatchBoard {
       authority: json['authority'],
       exchangePostNo: json['exchangePostNo'],
       status: json['status'],
-      exchangeType: json['exchangeType'],
       duration: json['duration'],
       requiredBadge: json['requiredBadge'],
       title: json['title'],
@@ -71,7 +68,6 @@ class MatchBoard {
       'authority': authority,
       'exchangePostNo': exchangePostNo,
       'status': status,
-      'exchangeType': exchangeType,
       'duration': duration,
       'requiredBadge': requiredBadge,
       'title': title,

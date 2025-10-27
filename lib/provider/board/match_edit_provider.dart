@@ -83,17 +83,14 @@ class MatchEditProvider extends ChangeNotifier with ClearText {
   final FocusNode _interestTalentFocusNode = FocusNode();
 
   final List<String> _duration = ['기간 미정', '1개월', '2개월', '3개월', '3개월 이상'];
-  final List<String> _exchangeType = ['온라인', '오프라인', '온/오프라인'];
   late String _boardStatus = "";
   int _count = 0;
 
   String _selectedDuration = "";
-  String _selectedExchangeType = "";
 
   String _giveTalentRequiredMessage = "";
   String _interestTalentRequiredMessage = "";
   String _durationRequiredMessage = "";
-  String _exchangeTypeRequiredMessage = "";
 
   String _htmlContent = "";
 
@@ -245,8 +242,6 @@ class MatchEditProvider extends ChangeNotifier with ClearText {
 
   String get durationRequiredMessage => _durationRequiredMessage;
 
-  String get exchangeTypeRequiredMessage => _exchangeTypeRequiredMessage;
-
   bool get isChipsSelected => _isChipsSelected;
 
   bool get isTitleAndBoardEmpty => _isTitleAndBoardEmpty;
@@ -273,13 +268,9 @@ class MatchEditProvider extends ChangeNotifier with ClearText {
 
   List<String> get duration => _duration;
 
-  List<String> get exchangeType => _exchangeType;
-
   String get boardStatus => _boardStatus;
 
   String get selectedDuration => _selectedDuration;
-
-  String get selectedExchangeType => _selectedExchangeType;
 
   String get boardToastMessage => _boardToastMessage;
 
@@ -337,12 +328,10 @@ class MatchEditProvider extends ChangeNotifier with ClearText {
     _searchedInterestTalentKeywordCodes.clear();
 
     _selectedDuration = '';
-    _selectedExchangeType = '';
 
     _giveTalentRequiredMessage = '';
     _interestTalentRequiredMessage = '';
     _durationRequiredMessage = '';
-    _exchangeTypeRequiredMessage = '';
 
     _htmlContent = '';
     _onToolBar = 'default';
@@ -395,7 +384,6 @@ class MatchEditProvider extends ChangeNotifier with ClearText {
     _selectedGiveTalentKeywordCodes.clear();
     _selectedInterestTalentKeywordCodes.clear();
     _selectedDuration = "";
-    _selectedExchangeType = "";
     _tickerProvider.dispose();
 
     notifyListeners();
@@ -524,19 +512,6 @@ class MatchEditProvider extends ChangeNotifier with ClearText {
     notifyListeners();
   }
 
-  void updateSelectedExchangeType(String keywordTalent) {
-    _selectedExchangeType = "";
-    if (keywordTalent.isNotEmpty) {
-      _selectedExchangeType = keywordTalent;
-    }
-    notifyListeners();
-  }
-
-  void removeSelectedExchangeType() {
-    _selectedExchangeType = "";
-    notifyListeners();
-  }
-
   void setGiveTalentKeyword(List<dynamic> keywords) {
     for (final keyword in keywords) {
       if (!_giveTalentKeywordCodes.contains(keyword.code)) {
@@ -565,12 +540,6 @@ class MatchEditProvider extends ChangeNotifier with ClearText {
       _durationRequiredMessage = "*필수";
       _isChipsSelected = false;
       _errorMessage == "" ? _errorMessage = "진행기간을 선택해주세요" : "";
-    }
-
-    if (_selectedExchangeType == "") {
-      _exchangeTypeRequiredMessage = "*필수";
-      _isChipsSelected = false;
-      _errorMessage == "" ? _errorMessage = "진행방식을 선택해주세요" : "";
     }
 
     notifyListeners();
@@ -887,7 +856,6 @@ class MatchEditProvider extends ChangeNotifier with ClearText {
 
     updateSelectedDuration(matchingDetailPost.duration);
     updateBoardStatus(matchingDetailPost.status);
-    updateSelectedExchangeType(matchingDetailPost.exchangeType);
     updateTalentDetailPost(matchingDetailPost.content);
     updateTitle(matchingDetailPost.title);
     updateCount(matchingDetailPost.count);

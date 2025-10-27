@@ -84,19 +84,6 @@ class MatchBoardListCard extends StatelessWidget {
                       color: Palette.primaryBG04,
                     ),
                     child: Text(
-                      post.exchangeType,
-                      style: TextTypes.captionSemi02(color: Palette.primary01),
-                    ),
-                  ),
-                  const SizedBox(width: 4),
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(999),
-                      color: Palette.primaryBG04,
-                    ),
-                    child: Text(
                       post.duration,
                       style: TextTypes.captionSemi02(color: Palette.primary01),
                     ),

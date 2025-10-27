@@ -97,7 +97,6 @@ class MatchEditPreviewPage extends StatelessWidget {
                   matchEditProvider.htmlContent,
                   matchEditProvider.selectedGiveTalentKeywordCodes,
                   matchEditProvider.selectedInterestTalentKeywordCodes,
-                  matchEditProvider.selectedExchangeType,
                   false,
                   matchEditProvider.selectedDuration,
                   matchEditProvider.imageUploadedUrls,
@@ -342,25 +341,6 @@ class MatchEditPreviewPage extends StatelessWidget {
                         ),
                         const SizedBox(
                           height: 4,
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              "진행 기간",
-                              style: TextTypes.body02(
-                                color: Palette.text03,
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 24,
-                            ),
-                            Text(
-                              matchEditProvider.selectedExchangeType,
-                              style: TextTypes.body02(
-                                color: Palette.text02,
-                              ),
-                            )
-                          ],
                         ),
                         const SizedBox(
                           height: 28,

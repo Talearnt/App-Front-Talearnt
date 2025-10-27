@@ -83,7 +83,6 @@ class MatchWrite2Page extends StatelessWidget {
                 matchWriteProvider.htmlContent,
                 matchWriteProvider.selectedGiveTalentKeywordCodes,
                 matchWriteProvider.selectedInterestTalentKeywordCodes,
-                matchWriteProvider.selectedExchangeType,
                 false,
                 matchWriteProvider.selectedDuration,
                 matchWriteProvider.imageUploadedUrls,

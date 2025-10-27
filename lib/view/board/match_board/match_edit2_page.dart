@@ -82,7 +82,6 @@ class MatchEdit2Page extends StatelessWidget {
                 matchEditProvider.htmlContent,
                 matchEditProvider.selectedGiveTalentKeywordCodes,
                 matchEditProvider.selectedInterestTalentKeywordCodes,
-                matchEditProvider.selectedExchangeType,
                 false,
                 matchEditProvider.selectedDuration,
                 matchEditProvider.imageUploadedUrls,

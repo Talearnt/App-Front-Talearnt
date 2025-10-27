@@ -71,7 +71,7 @@ class HomePage extends StatelessWidget {
         _wasLoggedIn = loginProvider.isLoggedIn;
         // 비로그인 상태일 때만 최초 loadHome 실행
         if (!loginProvider.isLoggedIn) {
-          //await loadHome();
+          await loadHome();
         }
       });
     }
