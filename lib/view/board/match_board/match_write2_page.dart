@@ -29,7 +29,7 @@ class MatchWrite2Page extends StatelessWidget {
       resizeToAvoidBottomInset: true,
       appBar: TopAppBar(
         onPressed: () {
-          context.go('/match-write1');
+          context.pop();
         },
         second: TextBtnM(
           content: '미리보기',

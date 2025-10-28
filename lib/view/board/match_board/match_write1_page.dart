@@ -58,7 +58,7 @@ class MatchWrite1Page extends StatelessWidget {
                     onPressed: () async {
                       matchWriteProvider.checkChipsSelected();
                       matchWriteProvider.isChipsSelected
-                          ? context.go('/match-write2')
+                          ? context.push('/match-write2')
                           : {
                               ToastMessage.infinityShow(
                                 context: context,

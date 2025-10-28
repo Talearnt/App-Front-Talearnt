@@ -200,6 +200,8 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
 
   int _totalImageCount = 0;
 
+  int _postNo = 0;
+
   String get onToolBar => _onToolBar;
 
   bool get isBold => _isBold;
@@ -294,6 +296,8 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
 
   int get totalImageCount => _totalImageCount;
 
+  int get postNo => _postNo;
+
   void clearProvider() {
     _subscription?.cancel();
     _titleController.clear();
@@ -341,6 +345,7 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
     _isLinkTextNotEmpty = false;
     _isS3Upload = false;
     _errorMessage = '';
+    _postNo = 0;
     notifyListeners();
   }
 
@@ -739,6 +744,11 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
       _isLinkTextNotEmpty = false;
     }
 
+    notifyListeners();
+  }
+
+  void updatePostNo(int postNo) {
+    _postNo = postNo;
     notifyListeners();
   }
 }

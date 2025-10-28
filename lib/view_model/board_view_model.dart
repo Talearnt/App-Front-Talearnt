@@ -142,7 +142,7 @@ class BoardViewModel extends ChangeNotifier {
     result.fold(
         (failure) => commonNavigator.showSingleDialog(
             content: ErrorMessages.getMessage(failure.errorCode)), (result) {
-      matchWriteProvider.clearProvider();
+      matchWriteProvider.updatePostNo(result.data);
       commonNavigator.goRoute('/write-success');
     });
   }
