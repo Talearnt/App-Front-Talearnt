@@ -3,6 +3,7 @@ import 'package:app_front_talearnt/provider/board/community_board_detail_provide
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../common/widget/toast_message.dart';
 import '../../../../provider/auth/login_provider.dart';
@@ -23,7 +24,7 @@ class CommunityDetailBoardBottom extends StatelessWidget {
   Widget build(BuildContext context) {
     final boardViewModel = Provider.of<BoardViewModel>(context);
     final CommunityBoardProvider communityBoardProvider =
-    Provider.of<CommunityBoardProvider>(context);
+        Provider.of<CommunityBoardProvider>(context);
     final HomeProvider homeProvider = Provider.of<HomeProvider>(context);
     final loginProvider = Provider.of<LoginProvider>(context);
     final profileProvider = Provider.of<ProfileProvider>(context);
@@ -41,8 +42,10 @@ class CommunityDetailBoardBottom extends StatelessWidget {
         children: [
           Expanded(
             child: GestureDetector(
-              onTap: () {
-                communityBoardDetailProvider.setInsertComment();
+              onTap: () async {
+                loginProvider.isLoggedIn
+                    ? communityBoardDetailProvider.setInsertComment()
+                    : await context.push("/login");
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -66,8 +69,7 @@ class CommunityDetailBoardBottom extends StatelessWidget {
                 SvgPicture.asset('assets/icons/comment.svg'),
                 const SizedBox(width: 4),
                 Text(
-                  "댓글수 ${communityBoardDetailProvider.communityDetailBoard
-                      .commentCount}",
+                  "댓글수 ${communityBoardDetailProvider.communityDetailBoard.commentCount}",
                   style: TextTypes.captionMedium02(color: Palette.text03),
                 ),
               ],
@@ -85,10 +87,10 @@ class CommunityDetailBoardBottom extends StatelessWidget {
                   await communityBoardDetailProvider.changeCommunityBoardLike();
                   await communityBoardProvider
                       .changeCommunityBoardLikeFromDetail(
-                      communityBoardDetailProvider
-                          .communityDetailBoard.communityPostNo,
-                      communityBoardDetailProvider
-                          .communityDetailBoard.isLike);
+                          communityBoardDetailProvider
+                              .communityDetailBoard.communityPostNo,
+                          communityBoardDetailProvider
+                              .communityDetailBoard.isLike);
                   await homeProvider.changeCommunityBoardLikeFromDetail(
                       communityBoardDetailProvider
                           .communityDetailBoard.communityPostNo,
@@ -118,8 +120,7 @@ class CommunityDetailBoardBottom extends StatelessWidget {
                       : SvgPicture.asset('assets/icons/thumb_up_off.svg'),
                   const SizedBox(width: 4),
                   Text(
-                    "추천 ${communityBoardDetailProvider.communityDetailBoard
-                        .likeCount}",
+                    "추천 ${communityBoardDetailProvider.communityDetailBoard.likeCount}",
                     style: TextTypes.captionMedium02(color: Palette.text03),
                   ),
                 ],
