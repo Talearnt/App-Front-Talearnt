@@ -492,7 +492,10 @@ class HomePage extends StatelessWidget {
                                                   .changeIsLoading(true);
                                               await viewModel
                                                   .getCommunityDetailBoard(
-                                                      post.communityPostNo)
+                                                      post.communityPostNo);
+                                              await viewModel
+                                                  .getComments(
+                                                      post.communityPostNo, 0)
                                                   .then((value) {
                                                 commonProvider
                                                     .changeIsLoading(false);
