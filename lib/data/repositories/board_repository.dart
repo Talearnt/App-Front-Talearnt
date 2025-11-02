@@ -207,21 +207,14 @@ class BoardRepository {
     return response.fold(
       left,
       (result) {
-        final data = result['data'] as Map<String, dynamic>;
-        final rawList = data['results'] as List<dynamic>;
+        final rawData = result['data'];
 
-        final comments = rawList
-            .map((e) =>
-                CommunityCommentResponse.fromJson(e as Map<String, dynamic>))
-            .toList();
-
-        final hasNext = (data['pagination']
-                as Map<String, dynamic>?)?['hasNext'] as bool? ??
-            false;
+        final comment =
+            CommunityCommentResponse.fromJson(rawData as Map<String, dynamic>);
 
         return right(<String, dynamic>{
-          'comments': comments,
-          'hasNext': hasNext,
+          'comments': <CommunityCommentResponse>[comment],
+          'hasNext': false,
         });
       },
     );

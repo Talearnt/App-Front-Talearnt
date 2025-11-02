@@ -72,6 +72,29 @@ class CommunityDetailBoardCommentInput extends StatelessWidget {
                       : '',
               type: "B",
               onPressed: () {
+                if (communityBoardDetailProvider
+                    .commentController.text.isEmpty) {
+                  ToastMessage.show(
+                    context: context,
+                    message: "댓글을 입력해주세요.",
+                    type: 0,
+                    bottom: 50,
+                  );
+                  return;
+                }
+                if (communityBoardDetailProvider.commentController.text.length >
+                        300 ||
+                    communityBoardDetailProvider.commentController.text.length <
+                        3) {
+                  ToastMessage.show(
+                    context: context,
+                    message: "댓글은 3자 이상 300자 이하로 입력해주세요.",
+                    type: 0,
+                    bottom: 50,
+                  );
+                  return;
+                }
+
                 if (communityBoardDetailProvider.commentType == "insertC") {
                   insertComment(
                     communityBoardDetailProvider
