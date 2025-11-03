@@ -58,7 +58,7 @@ class MatchWrite1Page extends StatelessWidget {
                     onPressed: () async {
                       matchWriteProvider.checkChipsSelected();
                       matchWriteProvider.isChipsSelected
-                          ? context.go('/match-write2')
+                          ? context.push('/match-write2')
                           : {
                               ToastMessage.infinityShow(
                                 context: context,
@@ -407,88 +407,6 @@ class MatchWrite1Page extends StatelessWidget {
                                   ? matchWriteProvider.removeSelectedDuration()
                                   : matchWriteProvider
                                       .updateSelectedDuration(item);
-
-                              if (!matchWriteProvider.isChipsSelected) {
-                                matchWriteProvider.checkChipsSelected();
-                                if (matchWriteProvider.isChipsSelected) {
-                                  commonProvider.removeToast();
-                                } else {
-                                  commonProvider.removeToast();
-                                  ToastMessage.infinityShow(
-                                    context: context,
-                                    message: matchWriteProvider.errorMessage,
-                                    type: 2,
-                                    bottom: 42,
-                                    commonProvider: commonProvider,
-                                  );
-                                }
-                              }
-                            },
-                          );
-                        }).toList(),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 24,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          '진행 방식',
-                          style: TextTypes.bodySemi03(
-                            color: Palette.text01,
-                          ),
-                        ),
-                        Text(
-                          matchWriteProvider.exchangeTypeRequiredMesage,
-                          style: TextTypes.caption01(
-                            color: Palette.error01,
-                          ),
-                        )
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    Wrap(
-                      spacing: 12.0,
-                      runSpacing: 12.0,
-                      children: [
-                        ...matchWriteProvider.exchangeType.map((item) {
-                          String labelText = item;
-                          return ChoiceChip(
-                            showCheckmark: false,
-                            shape: RoundedRectangleBorder(
-                              side: BorderSide(
-                                color:
-                                    matchWriteProvider.selectedExchangeType ==
-                                            item
-                                        ? Palette.primary01
-                                        : Palette.line01,
-                                width: 1,
-                              ),
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                            backgroundColor: Palette.bgBackGround,
-                            label: Text(labelText),
-                            labelStyle: TextStyle(
-                              color: matchWriteProvider.selectedExchangeType ==
-                                      item
-                                  ? Palette.primary01
-                                  : Palette.text04,
-                            ),
-                            selected:
-                                matchWriteProvider.selectedExchangeType == item,
-                            selectedColor: Palette.bgBackGround,
-                            onSelected: (selected) {
-                              final updatedFilter =
-                                  matchWriteProvider.selectedExchangeType;
-                              updatedFilter == item
-                                  ? matchWriteProvider
-                                      .removeSelectedExchangeType()
-                                  : matchWriteProvider
-                                      .updateSelectedExhangeType(item);
 
                               if (!matchWriteProvider.isChipsSelected) {
                                 matchWriteProvider.checkChipsSelected();

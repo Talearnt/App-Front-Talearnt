@@ -87,6 +87,9 @@ class CommunityBoardDetailProvider extends ChangeNotifier with ClearText {
     _targetComment = 0;
     _targetReply = 0;
 
+    _commentController.clear();
+    _commentFocusNode.unfocus();
+
     notifyListeners();
   }
 
@@ -309,6 +312,12 @@ class CommunityBoardDetailProvider extends ChangeNotifier with ClearText {
     ];
 
     setReplyCount(commentNo, 1);
+    toggleCommentInputActive(false);
+    _commentType = 'insertC';
+    _targetComment = 0;
+    _targetReply = 0;
+    _commentController.clear();
+    _commentFocusNode.unfocus();
 
     notifyListeners();
   }

@@ -1,3 +1,6 @@
+import 'package:app_front_talearnt/provider/board/match_board_provider.dart';
+import 'package:app_front_talearnt/provider/common/common_provider.dart';
+import 'package:app_front_talearnt/view_model/board_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
@@ -16,6 +19,9 @@ class WriteSuccessPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final matchWriteProvider = Provider.of<MatchWriteProvider>(context);
     final communityWriteProvider = Provider.of<CommunityWriteProvider>(context);
+    final viewModel = Provider.of<BoardViewModel>(context);
+    final commonProvider = Provider.of<CommonProvider>(context);
+    final matchBoardProvider = Provider.of<MatchBoardProvider>(context);
 
     return Scaffold(
       backgroundColor: Palette.bgBackGround,
@@ -25,7 +31,7 @@ class WriteSuccessPage extends StatelessWidget {
             onTap: () {
               matchWriteProvider.clearProvider();
               communityWriteProvider.clearProvider();
-              context.pop();
+              context.go('/home');
             },
             child: SvgPicture.asset("assets/icons/close.svg")),
       ),
@@ -62,10 +68,13 @@ class WriteSuccessPage extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: PrimaryM(
                 content: '내가 쓴 글 확인하기',
-                onPressed: () {
+                onPressed: () async {
+                  commonProvider.changeIsLoading(true);
+                  await viewModel
+                      .getMatchDetailBoard(matchWriteProvider.postNo);
                   communityWriteProvider.clearProvider();
                   matchWriteProvider.clearProvider();
-                  context.pop();
+                  commonProvider.changeIsLoading(false);
                 },
               ),
             ),
@@ -77,7 +86,7 @@ class WriteSuccessPage extends StatelessWidget {
                 onPressed: () {
                   communityWriteProvider.clearProvider();
                   matchWriteProvider.clearProvider();
-                  context.pop();
+                  context.go('/home');
                 },
               ),
             )

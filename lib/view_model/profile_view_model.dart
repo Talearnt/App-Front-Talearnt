@@ -131,7 +131,6 @@ class ProfileViewModel extends ChangeNotifier {
         receiveTalents: null,
         order: null,
         duration: null,
-        type: null,
         badge: null,
         status: null,
         page: page,

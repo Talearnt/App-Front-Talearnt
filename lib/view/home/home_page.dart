@@ -46,8 +46,8 @@ class HomePage extends StatelessWidget {
       commonProvider.changeIsLoading(true);
       final futures = <Future>[];
       if (homeProvider.newTalentExchangePosts.isEmpty) {
-        futures.add(viewModel.getMatchBoardList(
-            [], [], '', '', '', '', '', '', '10', '', 'new'));
+        futures.add(viewModel
+            .getMatchBoardList([], [], '', '', '', '', '', '10', '', 'new'));
       }
       if (homeProvider.bestCommunityPosts.isEmpty) {
         futures.add(
@@ -59,7 +59,7 @@ class HomePage extends StatelessWidget {
             .map((e) => e.toString())
             .toList();
         futures.add(viewModel.getMatchBoardList(
-            giveTalents, [], '', '', '', '', '', '', '10', '', 'userMatch'));
+            giveTalents, [], '', '', '', '', '', '10', '', 'userMatch'));
       }
       await Future.wait(futures);
       commonProvider.changeIsLoading(false);
@@ -106,7 +106,6 @@ class HomePage extends StatelessWidget {
                 .toList(),
             matchBoardProvider.selectedOrderType,
             matchBoardProvider.selectedDurationType,
-            matchBoardProvider.selectedOperationType,
             null,
             null,
             null,
@@ -493,7 +492,10 @@ class HomePage extends StatelessWidget {
                                                   .changeIsLoading(true);
                                               await viewModel
                                                   .getCommunityDetailBoard(
-                                                      post.communityPostNo)
+                                                      post.communityPostNo);
+                                              await viewModel
+                                                  .getComments(
+                                                      post.communityPostNo, 0)
                                                   .then((value) {
                                                 commonProvider
                                                     .changeIsLoading(false);

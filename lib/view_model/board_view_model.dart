@@ -122,7 +122,6 @@ class BoardViewModel extends ChangeNotifier {
       String content,
       List<int> giveTalents,
       List<int> receiveTalents,
-      String exchangeType,
       bool? requiredBadge,
       String duration,
       List<String>? imageUrls) async {
@@ -133,7 +132,6 @@ class BoardViewModel extends ChangeNotifier {
       content: content,
       giveTalents: giveTalents,
       receiveTalents: receiveTalents,
-      exchangeType: exchangeType,
       requiredBadge: badge,
       duration: duration,
       imageUrls: urlList,
@@ -144,7 +142,7 @@ class BoardViewModel extends ChangeNotifier {
     result.fold(
         (failure) => commonNavigator.showSingleDialog(
             content: ErrorMessages.getMessage(failure.errorCode)), (result) {
-      matchWriteProvider.clearProvider();
+      matchWriteProvider.updatePostNo(result.data);
       commonNavigator.goRoute('/write-success');
     });
   }
@@ -154,7 +152,6 @@ class BoardViewModel extends ChangeNotifier {
     String content,
     List<int> giveTalents,
     List<int> receiveTalents,
-    String exchangeType,
     bool? requiredBadge,
     String duration,
     List<String>? imageUrls,
@@ -167,7 +164,6 @@ class BoardViewModel extends ChangeNotifier {
       content: content,
       giveTalents: giveTalents,
       receiveTalents: receiveTalents,
-      exchangeType: exchangeType,
       requiredBadge: badge,
       duration: duration,
       imageUrls: urlList,
@@ -202,7 +198,6 @@ class BoardViewModel extends ChangeNotifier {
       List<String>? receiveTalents,
       String? order,
       String? duration,
-      String? type,
       String? badge,
       String? status,
       String? page,
@@ -216,7 +211,6 @@ class BoardViewModel extends ChangeNotifier {
         receiveTalents: receiveTalents,
         order: order,
         duration: duration,
-        type: type,
         badge: badge,
         status: status,
         page: page,
@@ -376,7 +370,6 @@ class BoardViewModel extends ChangeNotifier {
               .toList(),
           matchBoardProvider.selectedOrderType,
           matchBoardProvider.selectedDurationType,
-          matchBoardProvider.selectedOperationType,
           null,
           null,
           null,

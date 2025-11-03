@@ -200,7 +200,6 @@ class MatchBoardProvider extends ChangeNotifier {
         selectedInterestTalentKeywordCodes.map((e) => e.toString()).toList(),
         selectedOrderType,
         selectedDurationType,
-        selectedOperationType,
         null,
         null,
         null,

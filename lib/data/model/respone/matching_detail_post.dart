@@ -8,7 +8,6 @@ class MatchingDetailPost {
   final int exchangePostNo;
   final List<String> giveTalents;
   final List<String> receiveTalents;
-  final String exchangeType;
   final String status;
   final String createdAt;
   final String duration;
@@ -30,7 +29,6 @@ class MatchingDetailPost {
     required this.exchangePostNo,
     required this.giveTalents,
     required this.receiveTalents,
-    required this.exchangeType,
     required this.status,
     required this.createdAt,
     required this.duration,
@@ -53,7 +51,6 @@ class MatchingDetailPost {
         exchangePostNo = 0,
         giveTalents = [],
         receiveTalents = [],
-        exchangeType = '',
         status = '',
         createdAt = '',
         duration = '',
@@ -78,7 +75,6 @@ class MatchingDetailPost {
       exchangePostNo: json['exchangePostNo'],
       giveTalents: List<String>.from(json['giveTalents']),
       receiveTalents: List<String>.from(json['receiveTalents']),
-      exchangeType: json['exchangeType'],
       status: json['status'],
       createdAt: formattedDate,
       duration: json['duration'],
@@ -103,7 +99,6 @@ class MatchingDetailPost {
       'exchangePostNo': exchangePostNo,
       'giveTalents': giveTalents,
       'receiveTalents': receiveTalents,
-      'exchangeType': exchangeType,
       'status': status,
       'createdAt': createdAt,
       'duration': duration,

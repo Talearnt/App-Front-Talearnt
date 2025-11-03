@@ -79,15 +79,12 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
   final FocusNode _interestTalentFocusNode = FocusNode();
 
   final List<String> _duration = ['기간 미정', '1개월', '2개월', '3개월', '3개월 이상'];
-  final List<String> _exchangeType = ['온라인', '오프라인', '온/오프라인'];
 
   String _selectedDuration = "";
-  String _selectedExchangeType = "";
 
   String _giveTalentRequiredMessage = "";
   String _interestTalentRequiredMessage = "";
   String _durationRequiredMessage = "";
-  String _exchangeTypeRequiredMesage = "";
 
   String _htmlContent = "";
 
@@ -203,6 +200,8 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
 
   int _totalImageCount = 0;
 
+  int _postNo = 0;
+
   String get onToolBar => _onToolBar;
 
   bool get isBold => _isBold;
@@ -237,8 +236,6 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
 
   String get durationRequiredMessage => _durationRequiredMessage;
 
-  String get exchangeTypeRequiredMesage => _exchangeTypeRequiredMesage;
-
   bool get isChipsSelected => _isChipsSelected;
 
   bool get isTitleAndBoardEmpty => _isTitleAndBoardEmpty;
@@ -265,11 +262,7 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
 
   List<String> get duration => _duration;
 
-  List<String> get exchangeType => _exchangeType;
-
   String get selectedDuration => _selectedDuration;
-
-  String get selectedExchangeType => _selectedExchangeType;
 
   String get boardToastMessage => _boardToastMessage;
 
@@ -303,6 +296,8 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
 
   int get totalImageCount => _totalImageCount;
 
+  int get postNo => _postNo;
+
   void clearProvider() {
     _subscription?.cancel();
     _titleController.clear();
@@ -320,11 +315,9 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
     _selectedInterestTalentKeywordCodes.clear();
     _searchedInterestTalentKeywordCodes.clear();
     _selectedDuration = '';
-    _selectedExchangeType = '';
     _giveTalentRequiredMessage = '';
     _interestTalentRequiredMessage = '';
     _durationRequiredMessage = '';
-    _exchangeTypeRequiredMesage = '';
     _htmlContent = '';
     _onToolBar = 'default';
     _isBold = false;
@@ -352,6 +345,7 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
     _isLinkTextNotEmpty = false;
     _isS3Upload = false;
     _errorMessage = '';
+    _postNo = 0;
     notifyListeners();
   }
 
@@ -364,7 +358,6 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
     _selectedGiveTalentKeywordCodes.clear();
     _selectedInterestTalentKeywordCodes.clear();
     _selectedDuration = "";
-    _selectedExchangeType = "";
     _tickerProvider.dispose();
 
     notifyListeners();
@@ -482,19 +475,6 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
     notifyListeners();
   }
 
-  void updateSelectedExhangeType(String keywordTalent) {
-    _selectedExchangeType = "";
-    if (keywordTalent.isNotEmpty) {
-      _selectedExchangeType = keywordTalent;
-    }
-    notifyListeners();
-  }
-
-  void removeSelectedExchangeType() {
-    _selectedExchangeType = "";
-    notifyListeners();
-  }
-
   void setGiveTalentKeyword(List<int> keywords) {
     _giveTalentKeywordCodes.addAll(keywords);
   }
@@ -519,12 +499,6 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
       _durationRequiredMessage = "*필수";
       _isChipsSelected = false;
       _errorMessage == "" ? _errorMessage = "진행기간을 선택해주세요" : "";
-    }
-
-    if (_selectedExchangeType == "") {
-      _exchangeTypeRequiredMesage = "*필수";
-      _isChipsSelected = false;
-      _errorMessage == "" ? _errorMessage = "진행방식을 선택해주세요" : "";
     }
 
     notifyListeners();
@@ -770,6 +744,11 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
       _isLinkTextNotEmpty = false;
     }
 
+    notifyListeners();
+  }
+
+  void updatePostNo(int postNo) {
+    _postNo = postNo;
     notifyListeners();
   }
 }

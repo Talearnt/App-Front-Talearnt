@@ -3,7 +3,6 @@ class MatchBoardParam {
   final String content;
   final List<int> giveTalents;
   final List<int> receiveTalents;
-  final String exchangeType;
   final bool requiredBadge;
   final String duration;
   final List<String> imageUrls;
@@ -13,7 +12,6 @@ class MatchBoardParam {
     required this.content,
     required this.giveTalents,
     required this.receiveTalents,
-    required this.exchangeType,
     required this.requiredBadge,
     required this.duration,
     required this.imageUrls,
@@ -25,7 +23,6 @@ class MatchBoardParam {
       'content': content,
       'giveTalents': giveTalents,
       'receiveTalents': receiveTalents,
-      'exchangeType': exchangeType,
       'requiredBadge': requiredBadge,
       'duration': duration,
       'imageUrls': imageUrls,
