@@ -24,13 +24,17 @@ class ProfileMeSection extends StatelessWidget {
               Text('설정', style: TextTypes.bodyMedium03(color: Palette.text03)),
         ),
         CreateSettingMenu(
-          iconPath: 'assets/icons/bookmark_off.svg',
-          title: '찜 목록',
-          onTap: () async {
-            await boardViewModel.getInitMatchBoardLikeList();
-            context.push('/match_board_like');
-          },
-        ),
+            iconPath: 'assets/icons/bookmark_off.svg',
+            title: '찜 목록',
+            onTap: () async {
+              final result = await boardViewModel.getInitMatchBoardLikeList();
+              result.fold(
+                (failure) {},
+                (value) {
+                  context.push('/match_board_like');
+                },
+              );
+            }),
         CreateSettingMenu(
           iconPath: 'assets/icons/post_off.svg',
           title: '작성한 게시물',
@@ -38,13 +42,6 @@ class ProfileMeSection extends StatelessWidget {
             await profileViewModel.getMyWriteMatchBoardList(
                 null, null, null, 'reset');
             context.push('/my-write');
-          },
-        ),
-        CreateSettingMenu(
-          iconPath: 'assets/icons/comment.svg',
-          title: '작성한 댓글',
-          onTap: () {
-            // 작성한 댓글 이동
           },
         ),
       ],

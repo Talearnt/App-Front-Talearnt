@@ -45,9 +45,9 @@ class NoMatchBoardLikeListPage extends StatelessWidget {
               content: '게시물 찜하러가기',
               onPressed: () async {
                 commonProvider.changeIsLoading(true);
-                await boardViewModel.getInitMatchBoardList();
-                commonProvider.changeSelectedPage('board_list');
-                commonProvider.changeIsLoading(false);
+                await boardViewModel.getInitMatchBoardList().whenComplete(() {
+                  commonProvider.changeSelectedPage('board_list');
+                });
               },
             ),
           ),

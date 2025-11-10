@@ -11,6 +11,11 @@ class Success {
     required this.success,
   });
 
+  Success.empty() :  data = 0,
+        errorCode = null,
+        errorMessage = null,
+        success = true;
+
   factory Success.fromJson(Map<String, dynamic> json) {
     return Success(
       data: json['data'],

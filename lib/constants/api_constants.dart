@@ -42,7 +42,7 @@ abstract class ApiConstants {
   static const String insertCommunityReply = "$baseUrl/v1/communities/replies";
 
   static const String getMatchBoardLikeListUrl =
-      "$baseUrl/v1/posts/exchanges/favorites";
+      "$baseUrl/v1/users/exchanges/favorites";
 
   static const String getNotification = "$baseUrl/notifications";
 
