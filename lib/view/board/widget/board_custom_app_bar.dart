@@ -1,12 +1,18 @@
 import 'package:app_front_talearnt/common/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import '../../../common/widget/toast_message.dart';
+import '../../../provider/auth/login_provider.dart';
 import '../../../provider/board/common_board_provider.dart';
 import '../../../provider/board/community_board_provider.dart';
 import '../../../provider/board/match_board_provider.dart';
+import '../../../provider/common/common_provider.dart';
+import '../../../provider/notification/notification_provider.dart';
 import '../../../view_model/board_view_model.dart';
+import '../../../view_model/notification_view_model.dart';
 
 class BoardCustomAppBar extends StatelessWidget {
   final String type;
@@ -22,6 +28,10 @@ class BoardCustomAppBar extends StatelessWidget {
         Provider.of<MatchBoardProvider>(context);
     final CommunityBoardProvider communityBoardProvider =
         Provider.of<CommunityBoardProvider>(context);
+    final loginProvider = Provider.of<LoginProvider>(context);
+    final commonProvider = Provider.of<CommonProvider>(context);
+    final notificationViewModel = Provider.of<NotificationViewModel>(context);
+    final notificationProvider = Provider.of<NotificationProvider>(context);
     return Container(
       height: kToolbarHeight,
       decoration: BoxDecoration(
@@ -35,7 +45,7 @@ class BoardCustomAppBar extends StatelessWidget {
               )
             : null,
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -99,13 +109,30 @@ class BoardCustomAppBar extends StatelessWidget {
               ),
             ],
           ),
-          // 오른쪽 아이콘 버튼
-          IconButton(
-            hoverColor: Colors.transparent,
-            icon: SvgPicture.asset(
-              'assets/icons/bell_off.svg',
+          GestureDetector(
+            onTap: () async {
+              if (loginProvider.isLoggedIn) {
+                commonProvider.changeIsLoading(true);
+                await notificationViewModel.getNotification().whenComplete(() {
+                  commonProvider.changeIsLoading(true);
+                });
+                context.push('/alarm');
+              } else {
+                ToastMessage.show(
+                  context: context,
+                  message: "로그인이 필요합니다.",
+                  type: 1,
+                  bottom: 50,
+                );
+              }
+            },
+            child: SvgPicture.asset(
+              notificationProvider.notifications.any((n) => n.isRead == false)
+                  ? 'assets/icons/bell_on.svg'
+                  : 'assets/icons/bell_off.svg',
+              width: 18,
+              height: 20,
             ),
-            onPressed: () {},
           ),
         ],
       ),

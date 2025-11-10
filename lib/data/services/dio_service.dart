@@ -37,7 +37,7 @@ class DioService {
         var result = await handleAuthResponse(e.response, () {
           return get(path, data, params);
         });
-        return right(result.data as Map<String, dynamic>);
+        return left(Failure.fromJson(result));
       }
       if (e.response?.data is Map<String, dynamic>) {
         final failureData = e.response!.data;
@@ -63,7 +63,7 @@ class DioService {
         var result = await handleAuthResponse(e.response, () {
           return get(path, data, params);
         });
-        return right(result.data as dynamic);
+        return left(Failure.fromJson(result));
       }
       if (e.response?.data is Map<String, dynamic>) {
         final failureData = e.response!.data;
@@ -98,7 +98,7 @@ class DioService {
         var result = await handleAuthResponse(e.response, () {
           return put(path, data, size: size, contentType: contentType);
         });
-        return right(result.data as dynamic);
+        return left(Failure.fromJson(result));
       }
       if (e.response?.data is Map<String, dynamic>) {
         final failureData = e.response!.data;
@@ -128,7 +128,7 @@ class DioService {
         var result = await handleAuthResponse(e.response, () {
           return delete(path, data);
         });
-        return right(result.data as dynamic);
+        return left(Failure.fromJson(result));
       }
       if (e.response?.data is Map<String, dynamic>) {
         final failureData = e.response!.data;
@@ -154,7 +154,7 @@ class DioService {
         var result = await handleAuthResponse(e.response, () {
           return get(path, data, params);
         });
-        return right(result.data as dynamic);
+        return left(Failure.fromJson(result));
       }
       if (e.response?.data is Map<String, dynamic>) {
         final failureData = e.response!.data;
