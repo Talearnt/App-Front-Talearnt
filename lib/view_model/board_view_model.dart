@@ -12,6 +12,7 @@ import 'package:app_front_talearnt/provider/board/community_write_provider.dart'
 import 'package:app_front_talearnt/provider/board/match_edit_provider.dart';
 import 'package:app_front_talearnt/provider/home/home_provider.dart';
 import 'package:app_front_talearnt/provider/profile/profile_provider.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 
 import '../common/common_navigator.dart';
@@ -19,6 +20,8 @@ import '../data/model/param/community_board_list_search_param.dart';
 import '../data/model/param/community_board_param.dart';
 import '../data/model/param/match_board_list_search_param.dart';
 import '../data/model/param/s3_controller_param.dart';
+import '../data/model/respone/failure.dart';
+import '../data/model/respone/success.dart';
 import '../data/repositories/board_repository.dart';
 import '../provider/auth/storage_provider.dart';
 import '../provider/board/community_board_detail_provider.dart';
@@ -598,16 +601,19 @@ class BoardViewModel extends ChangeNotifier {
     }, (post) {});
   }
 
-  Future<void> getInitMatchBoardLikeList() async {
+  Future<Either<Failure, Success>> getInitMatchBoardLikeList() async {
     MatchBoardListSearchParam param = MatchBoardListSearchParam();
     final result = await boardRepository.getMatchBoardLikeList(param);
-    result.fold(
-        (failure) => commonNavigator.showSingleDialog(
-            content: ErrorMessages.getMessage(failure.errorCode)), (result) {
+    return result.fold((failure) {
+      commonNavigator.showSingleDialog(
+          content: ErrorMessages.getMessage(failure.errorCode));
+      return left(failure);
+    }, (result) {
       final posts = result['posts'];
       final pagination = result['pagination'];
       matchBoardProvider.updateTalentExchangePosts(posts);
       matchBoardProvider.updateTalentExchangePostsPage(pagination);
+      return right(Success.empty());
     });
   }
 
