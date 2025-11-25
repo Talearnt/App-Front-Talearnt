@@ -127,7 +127,8 @@ class BoardViewModel extends ChangeNotifier {
       List<int> receiveTalents,
       bool? requiredBadge,
       String duration,
-      List<String>? imageUrls) async {
+      List<String>? imageUrls,
+      String hyperLink) async {
     final badge = requiredBadge ?? false;
     final urlList = imageUrls ?? [];
     MatchBoardParam param = MatchBoardParam(
@@ -138,6 +139,7 @@ class BoardViewModel extends ChangeNotifier {
       requiredBadge: badge,
       duration: duration,
       imageUrls: urlList,
+      hyperLink: hyperLink,
     );
 
     final result = await boardRepository.insertMatchBoard(param);
@@ -158,6 +160,7 @@ class BoardViewModel extends ChangeNotifier {
     bool? requiredBadge,
     String duration,
     List<String>? imageUrls,
+    String hyperLink,
     int postNo,
   ) async {
     final badge = requiredBadge ?? false;
@@ -170,6 +173,7 @@ class BoardViewModel extends ChangeNotifier {
       requiredBadge: badge,
       duration: duration,
       imageUrls: urlList,
+      hyperLink: hyperLink,
     );
 
     final result = await boardRepository.editMatchBoard(param, postNo);

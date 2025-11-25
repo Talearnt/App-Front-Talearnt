@@ -85,6 +85,7 @@ class MatchEdit2Page extends StatelessWidget {
                 false,
                 matchEditProvider.selectedDuration,
                 matchEditProvider.imageUploadedUrls,
+                matchEditProvider.hyperLinkTextController.text,
                 matchEditProvider.postNo,
               )
                   .then(

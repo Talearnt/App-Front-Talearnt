@@ -100,6 +100,7 @@ class MatchEditPreviewPage extends StatelessWidget {
                   false,
                   matchEditProvider.selectedDuration,
                   matchEditProvider.imageUploadedUrls,
+                  matchEditProvider.hyperLinkTextController.text,
                 );
               } else {
                 ToastMessage.show(
