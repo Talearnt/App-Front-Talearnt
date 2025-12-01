@@ -5,7 +5,7 @@ import 'package:app_front_talearnt/common/widget/toast_message.dart';
 import 'package:app_front_talearnt/common/widget/top_app_bar.dart';
 import 'package:app_front_talearnt/provider/common/common_provider.dart';
 import 'package:app_front_talearnt/view/board/match_board/match_write_editor_toolbar.dart';
-import 'package:app_front_talearnt/view/board/match_board/widget/match_board_hyperlink_dialog.dart';
+import 'package:app_front_talearnt/view/board/match_board/widget/match_write_hyperlink_dialog.dart';
 import 'package:app_front_talearnt/view_model/board_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
@@ -55,7 +55,7 @@ class MatchWrite2Page extends StatelessWidget {
             matchWriteProvider.checkTitleAndBoard();
 
             if (matchWriteProvider.isTitleAndBoardEmpty) {
-              await MatchBoardHyperlinkDialog.show(context, null);
+              await MatchWriteHyperlinkDialog.show(context, null);
             } else {
               ToastMessage.show(
                 context: context,

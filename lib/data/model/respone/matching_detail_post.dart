@@ -20,6 +20,7 @@ class MatchingDetailPost {
   int favoriteCount;
   final int openedChatRoomCount;
   final int chatRoomNo;
+  final String hyperLink;
 
   MatchingDetailPost({
     required this.userNo,
@@ -41,6 +42,7 @@ class MatchingDetailPost {
     required this.favoriteCount,
     required this.openedChatRoomCount,
     required this.chatRoomNo,
+    required this.hyperLink,
   });
 
   MatchingDetailPost.empty()
@@ -62,7 +64,8 @@ class MatchingDetailPost {
         count = 0,
         favoriteCount = 0,
         openedChatRoomCount = 0,
-        chatRoomNo = 0;
+        chatRoomNo = 0,
+        hyperLink = '';
 
   factory MatchingDetailPost.fromJson(Map<String, dynamic> json) {
     DateTime dateTime = DateTime.parse(json['createdAt']);
@@ -87,6 +90,7 @@ class MatchingDetailPost {
       favoriteCount: json['favoriteCount'],
       openedChatRoomCount: json['openedChatRoomCount'],
       chatRoomNo: json['chatRoomNo'],
+      hyperLink: json['hyperLink'],
     );
   }
 
@@ -111,6 +115,7 @@ class MatchingDetailPost {
       'favoriteCount': favoriteCount,
       'openedChatRoomCount': openedChatRoomCount,
       'chatRoomNo': chatRoomNo,
+      'hyperLink': hyperLink,
     };
   }
 }

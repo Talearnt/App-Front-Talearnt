@@ -883,6 +883,8 @@ class MatchEditProvider extends ChangeNotifier with ClearText {
     updateInterestKeywordList(selectedInterestCode);
     updateSelectedInterestTalentKeywordCodes(selectedInterestCode);
 
+    updateHyperLink(matchingDetailPost.hyperLink);
+
     await countImage();
   }
 
@@ -952,6 +954,13 @@ class MatchEditProvider extends ChangeNotifier with ClearText {
 
     _isHyperLinkTextNotEmpty = isValidEmail || isValidUrl;
 
+    notifyListeners();
+  }
+
+  void updateHyperLink(String hyperLink) {
+    _hyperLinkTextController.text = hyperLink;
+    _urlController.text = hyperLink;
+    checkHyperLinkText();
     notifyListeners();
   }
 }

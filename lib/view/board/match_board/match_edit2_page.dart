@@ -6,6 +6,8 @@ import 'package:app_front_talearnt/common/widget/top_app_bar.dart';
 import 'package:app_front_talearnt/provider/board/match_edit_provider.dart';
 import 'package:app_front_talearnt/provider/common/common_provider.dart';
 import 'package:app_front_talearnt/view/board/match_board/match_edit_editor_toolbar.dart';
+import 'package:app_front_talearnt/view/board/match_board/widget/match_edit_hyperlink_dialog.dart';
+import 'package:app_front_talearnt/view/board/match_board/widget/match_write_hyperlink_dialog.dart';
 import 'package:app_front_talearnt/view_model/board_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
@@ -50,54 +52,10 @@ class MatchEdit2Page extends StatelessWidget {
         first: PrimaryS(
           content: '완료',
           onPressed: () async {
-            commonProvider.changeIsLoading(true);
-            await matchEditProvider.getUploadImagesInfo();
-
-            if (matchEditProvider.uploadImageInfos.isNotEmpty) {
-              await boardViewModel.getImageUploadUrl(
-                  matchEditProvider.uploadImageInfos, "ME");
-
-              for (int idx = 0;
-                  idx < matchEditProvider.imageUploadUrls.length;
-                  idx++) {
-                await boardViewModel.uploadImage(
-                    matchEditProvider.imageUploadUrls[idx],
-                    matchEditProvider.uploadImageInfos[idx]["file"],
-                    matchEditProvider.uploadImageInfos[idx]["fileSize"],
-                    matchEditProvider.uploadImageInfos[idx]["fileType"],
-                    "ME");
-              }
-
-              matchEditProvider.finishImageUpload();
-            }
-
             matchEditProvider.checkTitleAndBoard();
 
             if (matchEditProvider.isTitleAndBoardEmpty) {
-              matchEditProvider.insertMatchBoard();
-
-              await boardViewModel
-                  .editMatchBoard(
-                matchEditProvider.titleController.text,
-                matchEditProvider.htmlContent,
-                matchEditProvider.selectedGiveTalentKeywordCodes,
-                matchEditProvider.selectedInterestTalentKeywordCodes,
-                false,
-                matchEditProvider.selectedDuration,
-                matchEditProvider.imageUploadedUrls,
-                matchEditProvider.hyperLinkTextController.text,
-                matchEditProvider.postNo,
-              )
-                  .then(
-                (value) {
-                  ToastMessage.show(
-                    context: context,
-                    message: '수정이 완료되었습니다.',
-                    type: 1,
-                    bottom: 42,
-                  );
-                },
-              );
+              await MatchEditHyperlinkDialog.show(context, null);
             } else {
               ToastMessage.show(
                 context: context,
@@ -106,7 +64,6 @@ class MatchEdit2Page extends StatelessWidget {
                 bottom: 50,
               );
             }
-            commonProvider.changeIsLoading(false);
           },
         ),
       ),

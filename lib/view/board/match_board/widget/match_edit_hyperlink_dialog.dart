@@ -1,6 +1,7 @@
 import 'package:app_front_talearnt/common/theme.dart';
 import 'package:app_front_talearnt/common/widget/button.dart';
 import 'package:app_front_talearnt/common/widget/toast_message.dart';
+import 'package:app_front_talearnt/provider/board/match_edit_provider.dart';
 import 'package:app_front_talearnt/provider/common/common_provider.dart';
 import 'package:app_front_talearnt/view_model/board_view_model.dart';
 import 'package:provider/provider.dart';
@@ -9,8 +10,8 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../provider/board/match_write_provider.dart';
 
-class MatchBoardHyperlinkDialog extends StatelessWidget {
-  const MatchBoardHyperlinkDialog({super.key, String? initialHyperLink})
+class MatchEditHyperlinkDialog extends StatelessWidget {
+  const MatchEditHyperlinkDialog({super.key, String? initialHyperLink})
       : super();
 
   static Future<Map<String, String>?> show(
@@ -19,13 +20,13 @@ class MatchBoardHyperlinkDialog extends StatelessWidget {
       context: context,
       barrierDismissible: false,
       builder: (context) =>
-          MatchBoardHyperlinkDialog(initialHyperLink: initialHyperLink),
+          MatchEditHyperlinkDialog(initialHyperLink: initialHyperLink),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final matchWriteProvider = Provider.of<MatchWriteProvider>(context);
+    final matchEditProvider = Provider.of<MatchEditProvider>(context);
     final boardViewModel = Provider.of<BoardViewModel>(context);
     final commonProvider = Provider.of<CommonProvider>(context);
 
@@ -70,12 +71,12 @@ class MatchBoardHyperlinkDialog extends StatelessWidget {
             ),
             const SizedBox(height: 4),
             TextField(
-              controller: matchWriteProvider.hyperLinkTextController,
+              controller: matchEditProvider.hyperLinkTextController,
               onChanged: (value) {
-                matchWriteProvider.updateController(
-                  matchWriteProvider.hyperLinkTextController,
+                matchEditProvider.updateController(
+                  matchEditProvider.hyperLinkTextController,
                 );
-                matchWriteProvider.checkHyperLinkText();
+                matchEditProvider.checkHyperLinkText();
               },
               decoration: InputDecoration(
                 hintText: "example@gmail.com",
@@ -113,59 +114,54 @@ class MatchBoardHyperlinkDialog extends StatelessWidget {
                 const SizedBox(width: 8),
                 Expanded(
                   child: PrimaryM(
-                    isEnabled: matchWriteProvider.isHyperLinkTextNotEmpty,
-                    content: "등록",
+                    isEnabled: matchEditProvider.isHyperLinkTextNotEmpty,
+                    content: "수정",
                     onPressed: () async {
                       // 다이얼로그 닫기
                       Navigator.pop(context);
 
-                      // 로딩 시작
                       commonProvider.changeIsLoading(true);
+                      await matchEditProvider.getUploadImagesInfo();
 
-                      // 이미지 업로드 정보 가져오기
-                      await matchWriteProvider.getUploadImagesInfo();
-
-                      // 이미지가 있으면 S3 업로드
-                      if (matchWriteProvider.uploadImageInfos.isNotEmpty) {
+                      if (matchEditProvider.uploadImageInfos.isNotEmpty) {
                         await boardViewModel.getImageUploadUrl(
-                            matchWriteProvider.uploadImageInfos, "MW");
+                            matchEditProvider.uploadImageInfos, "ME");
 
                         for (int idx = 0;
-                            idx < matchWriteProvider.imageUploadUrls.length;
+                            idx < matchEditProvider.imageUploadUrls.length;
                             idx++) {
                           await boardViewModel.uploadImage(
-                            matchWriteProvider.imageUploadUrls[idx],
-                            matchWriteProvider.uploadImageInfos[idx]["file"],
-                            matchWriteProvider.uploadImageInfos[idx]
-                                ["fileSize"],
-                            matchWriteProvider.uploadImageInfos[idx]
-                                ["fileType"],
-                            "MW",
+                            matchEditProvider.imageUploadUrls[idx],
+                            matchEditProvider.uploadImageInfos[idx]["file"],
+                            matchEditProvider.uploadImageInfos[idx]["fileSize"],
+                            matchEditProvider.uploadImageInfos[idx]["fileType"],
+                            "E",
                           );
                         }
 
-                        matchWriteProvider.finishImageUpload();
+                        matchEditProvider.finishImageUpload();
                       }
 
-                      // 유효성 검사 통과 시 게시글 등록
-                      if (matchWriteProvider.isTitleAndBoardEmpty) {
-                        matchWriteProvider.insertMatchBoard();
+                      matchEditProvider.checkTitleAndBoard();
 
-                        await boardViewModel.insertMatchBoard(
-                          matchWriteProvider.titleController.text,
-                          matchWriteProvider.htmlContent,
-                          matchWriteProvider.selectedGiveTalentKeywordCodes,
-                          matchWriteProvider.selectedInterestTalentKeywordCodes,
+                      if (matchEditProvider.isTitleAndBoardEmpty) {
+                        matchEditProvider.insertMatchBoard();
+
+                        await boardViewModel.editMatchBoard(
+                          matchEditProvider.titleController.text,
+                          matchEditProvider.htmlContent,
+                          matchEditProvider.selectedGiveTalentKeywordCodes,
+                          matchEditProvider.selectedInterestTalentKeywordCodes,
                           false,
-                          matchWriteProvider.selectedDuration,
-                          matchWriteProvider.imageUploadedUrls,
-                          matchWriteProvider.hyperLinkTextController.text,
+                          matchEditProvider.selectedDuration,
+                          matchEditProvider.imageUploadedUrls,
+                          matchEditProvider.hyperLinkTextController.text,
+                          matchEditProvider.postNo,
                         );
                       } else {
-                        // 유효성 검사 실패 시 토스트 메시지
                         ToastMessage.show(
                           context: context,
-                          message: matchWriteProvider.boardToastMessage,
+                          message: matchEditProvider.boardToastMessage,
                           type: 2,
                           bottom: 50,
                         );
