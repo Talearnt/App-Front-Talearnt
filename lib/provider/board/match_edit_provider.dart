@@ -206,6 +206,11 @@ class MatchEditProvider extends ChangeNotifier with ClearText {
 
   bool _isS3Upload = false;
 
+  bool _isHyperLinkTextNotEmpty = false;
+
+  final TextEditingController _hyperLinkTextController =
+      TextEditingController();
+
   int get postNo => _postNo;
 
   String get onToolBar => _onToolBar;
@@ -306,6 +311,10 @@ class MatchEditProvider extends ChangeNotifier with ClearText {
 
   int get count => _count;
 
+  bool get isHyperLinkTextNotEmpty => _isHyperLinkTextNotEmpty;
+
+  TextEditingController get hyperLinkTextController => _hyperLinkTextController;
+
   void clearProvider() {
     _subscription?.cancel();
 
@@ -371,6 +380,10 @@ class MatchEditProvider extends ChangeNotifier with ClearText {
 
     _postNo = 0;
     _errorMessage = '';
+
+    _isHyperLinkTextNotEmpty = false;
+
+    _hyperLinkTextController.clear();
 
     notifyListeners();
   }
@@ -870,6 +883,84 @@ class MatchEditProvider extends ChangeNotifier with ClearText {
     updateInterestKeywordList(selectedInterestCode);
     updateSelectedInterestTalentKeywordCodes(selectedInterestCode);
 
+    updateHyperLink(matchingDetailPost.hyperLink);
+
     await countImage();
+  }
+
+  void checkHyperLinkText() {
+    final text = _hyperLinkTextController.text.trim();
+
+    if (text.isEmpty) {
+      _isHyperLinkTextNotEmpty = false;
+      notifyListeners();
+      return;
+    }
+
+    if (text.contains(' ')) {
+      _isHyperLinkTextNotEmpty = false;
+      notifyListeners();
+      return;
+    }
+
+    bool isValidEmail = false;
+    if (text.contains('@')) {
+      final emailParts = text.split('@');
+
+      if (emailParts.length == 2 &&
+          emailParts[0].isNotEmpty &&
+          emailParts[1].isNotEmpty) {
+        final domain = emailParts[1];
+
+        if (domain.contains('.')) {
+          final domainParts = domain.split('.');
+          final tld = domainParts.last;
+          if (tld.length >= 2 && domainParts.length >= 2) {
+            final emailRegex =
+                RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
+            isValidEmail = emailRegex.hasMatch(text);
+          }
+        }
+      }
+    }
+
+    bool isValidUrl = false;
+    if (!isValidEmail) {
+      if (text.startsWith('http://') || text.startsWith('https://')) {
+        final withoutProtocol = text.replaceFirst(RegExp(r'^https?://'), '');
+
+        if (withoutProtocol.isNotEmpty && withoutProtocol.contains('.')) {
+          final urlRegex = RegExp(
+              r'^(https?:\/\/)(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-zA-Z]{2,6}\b([-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$');
+          isValidUrl = urlRegex.hasMatch(text);
+        }
+      } else if (text.contains('.')) {
+        final parts = text.split('/')[0].split('.');
+
+        if (parts.length >= 2) {
+          final tld = parts.last;
+          final domain = parts[parts.length - 2];
+
+          if (domain.length >= 2 && tld.length >= 2) {
+            final domainRegex = RegExp(r'^[a-zA-Z0-9-]+$');
+            final tldRegex = RegExp(r'^[a-zA-Z]+$');
+            if (domainRegex.hasMatch(domain) && tldRegex.hasMatch(tld)) {
+              isValidUrl = true;
+            }
+          }
+        }
+      }
+    }
+
+    _isHyperLinkTextNotEmpty = isValidEmail || isValidUrl;
+
+    notifyListeners();
+  }
+
+  void updateHyperLink(String hyperLink) {
+    _hyperLinkTextController.text = hyperLink;
+    _urlController.text = hyperLink;
+    checkHyperLinkText();
+    notifyListeners();
   }
 }

@@ -5,6 +5,7 @@ import 'package:app_front_talearnt/common/widget/toast_message.dart';
 import 'package:app_front_talearnt/common/widget/top_app_bar.dart';
 import 'package:app_front_talearnt/provider/common/common_provider.dart';
 import 'package:app_front_talearnt/view/board/match_board/match_write_editor_toolbar.dart';
+import 'package:app_front_talearnt/view/board/match_board/widget/match_write_hyperlink_dialog.dart';
 import 'package:app_front_talearnt/view_model/board_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
@@ -51,42 +52,10 @@ class MatchWrite2Page extends StatelessWidget {
         first: PrimaryS(
           content: '등록',
           onPressed: () async {
-            commonProvider.changeIsLoading(true);
-            await matchWriteProvider.getUploadImagesInfo();
-
-            if (matchWriteProvider.uploadImageInfos.isNotEmpty) {
-              await boardViewModel.getImageUploadUrl(
-                  matchWriteProvider.uploadImageInfos, "MW");
-
-              for (int idx = 0;
-                  idx < matchWriteProvider.imageUploadUrls.length;
-                  idx++) {
-                await boardViewModel.uploadImage(
-                  matchWriteProvider.imageUploadUrls[idx],
-                  matchWriteProvider.uploadImageInfos[idx]["file"],
-                  matchWriteProvider.uploadImageInfos[idx]["fileSize"],
-                  matchWriteProvider.uploadImageInfos[idx]["fileType"],
-                  "MW",
-                );
-              }
-
-              matchWriteProvider.finishImageUpload();
-            }
-
             matchWriteProvider.checkTitleAndBoard();
 
             if (matchWriteProvider.isTitleAndBoardEmpty) {
-              matchWriteProvider.insertMatchBoard();
-
-              await boardViewModel.insertMatchBoard(
-                matchWriteProvider.titleController.text,
-                matchWriteProvider.htmlContent,
-                matchWriteProvider.selectedGiveTalentKeywordCodes,
-                matchWriteProvider.selectedInterestTalentKeywordCodes,
-                false,
-                matchWriteProvider.selectedDuration,
-                matchWriteProvider.imageUploadedUrls,
-              );
+              await MatchWriteHyperlinkDialog.show(context, null);
             } else {
               ToastMessage.show(
                 context: context,
@@ -95,7 +64,6 @@ class MatchWrite2Page extends StatelessWidget {
                 bottom: 50,
               );
             }
-            commonProvider.changeIsLoading(false);
           },
         ),
       ),

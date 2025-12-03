@@ -6,6 +6,7 @@ class MatchBoardParam {
   final bool requiredBadge;
   final String duration;
   final List<String> imageUrls;
+  final String hyperLink;
 
   MatchBoardParam({
     required this.title,
@@ -15,6 +16,7 @@ class MatchBoardParam {
     required this.requiredBadge,
     required this.duration,
     required this.imageUrls,
+    required this.hyperLink,
   });
 
   Map<String, dynamic> toJson() {
@@ -26,6 +28,7 @@ class MatchBoardParam {
       'requiredBadge': requiredBadge,
       'duration': duration,
       'imageUrls': imageUrls,
+      'hyperLink': hyperLink,
     };
   }
 }

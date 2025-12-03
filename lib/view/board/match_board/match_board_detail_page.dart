@@ -10,6 +10,8 @@ import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter/services.dart';
 
 import '../../../common/widget/bottom_btn.dart';
 import '../../../common/widget/toast_message.dart';
@@ -598,9 +600,53 @@ class MatchBoardDetailPage extends StatelessWidget {
                       : SvgPicture.asset('assets/icons/bookmark_default.svg'),
                 ),
                 mediaBottom: MediaQuery.of(context).viewInsets.bottom,
-                content: '채팅하기',
+                content: '지원하기',
                 isEnabled: true,
-                onPressed: () async {},
+                onPressed: () async {
+                  final value = matchBoardDetailProvider
+                          .matchingDetailPost.hyperLink
+                          ?.trim() ??
+                      "";
+
+                  if (value.isEmpty) return;
+
+                  final emailRegex = RegExp(r'^[\w\.-]+@[\w\.-]+\.\w+$');
+
+                  final urlRegex = RegExp(r'^(http|https)://');
+
+                  if (emailRegex.hasMatch(value)) {
+                    await Clipboard.setData(ClipboardData(text: value));
+
+                    if (context.mounted) {
+                      ToastMessage.show(
+                        context: context,
+                        message: "클립보드에 연락처가 복사되었습니다.",
+                        type: 1,
+                        bottom: 50,
+                      );
+                    }
+                  } else if (urlRegex.hasMatch(value)) {
+                    final uri = Uri.parse(value);
+                    if (await canLaunchUrl(uri)) {
+                      await launchUrl(uri,
+                          mode: LaunchMode.externalApplication);
+                    } else {
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('URL을 열 수 없습니다.')),
+                        );
+                      }
+                    }
+                  } else {
+                    // 둘 다 아님
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                            content: Text('올바른 URL 또는 이메일 형식이 아닙니다.')),
+                      );
+                    }
+                  }
+                },
               )
             ],
           ),
