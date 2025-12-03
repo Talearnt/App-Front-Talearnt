@@ -217,7 +217,7 @@ class HomePage extends StatelessWidget {
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .width *
-                                                            0.35), // 원하는 최대 너비
+                                                            0.30), // 원하는 최대 너비
                                                 child: Text(
                                                   profileProvider
                                                       .userProfile.nickname,

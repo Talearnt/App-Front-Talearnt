@@ -179,6 +179,7 @@ class ModifyUserInfoPage extends StatelessWidget {
                     onServerCheck:
                         profileViewModel.checkEditNickNameDuplication,
                     helperType: profileProvider.editNickNameHelperType,
+                    maxTextLength: 12,
                   ),
                 ),
                 const SizedBox(height: 28),
