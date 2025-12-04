@@ -70,8 +70,8 @@ class WriteSuccessPage extends StatelessWidget {
                 content: '내가 쓴 글 확인하기',
                 onPressed: () async {
                   commonProvider.changeIsLoading(true);
-                  await viewModel
-                      .getMatchDetailBoard(matchWriteProvider.postNo);
+                  await viewModel.getMatchDetailBoard(matchWriteProvider.postNo,
+                      source: 'checkMyWrite');
                   communityWriteProvider.clearProvider();
                   matchWriteProvider.clearProvider();
                   commonProvider.changeIsLoading(false);

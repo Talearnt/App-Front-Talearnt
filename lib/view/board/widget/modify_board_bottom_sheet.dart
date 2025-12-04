@@ -52,12 +52,14 @@ class ModifyBoardBottomSheet extends StatelessWidget {
                   highlightColor: Colors.transparent,
                   hoverColor: Colors.transparent,
                   onTap: () async {
+                    commonNavigator.goBack();
                     commonProvider.changeIsLoading(true);
                     if (boardType == "match") {
                       await keywordViewModel.getOfferedKeywords();
                       await matchEditProvider.setPostInfo(
                           matchBoardDetailProvider.matchingDetailPost);
-                      context.go('/match-edit1');
+                      commonNavigator.pushRoute(
+                          '/board-list/match-board-detail-page/match-edit1');
                     } else {
                       await communityEditProvider.setPostInfo(
                           communityBoardDetailProvider.communityDetailBoard);

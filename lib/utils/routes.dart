@@ -185,29 +185,44 @@ class Routes {
           return const TermsAgreementOptional();
         },
       ),
-      GoRoute(
-        path: '/board-list',
-        builder: (BuildContext context, GoRouterState state) {
-          return const BoardList();
+      ShellRoute(
+        builder: (context, state, child) {
+          return Scaffold(
+            body: child, // 내부 페이지들이 여기에 렌더링됨
+          );
         },
-      ),
-      GoRoute(
-        path: '/match-board-detail-page',
-        builder: (BuildContext context, GoRouterState state) {
-          return const MatchBoardDetailPage();
-        },
-        routes: <RouteBase>[
+        routes: [
           GoRoute(
-            path: 'match-image-view',
-            builder: (BuildContext context, GoRouterState state) {
-              return const MatchBoardImageViewPage();
-            },
-          ),
-          GoRoute(
-            path: 'match-image-view-detail',
-            builder: (BuildContext context, GoRouterState state) {
-              return const MatchBoardImageViewDetailPage();
-            },
+            path: '/board-list',
+            builder: (context, state) => const BoardList(),
+            routes: [
+              GoRoute(
+                path: 'match-board-detail-page',
+                builder: (context, state) => const MatchBoardDetailPage(),
+                routes: [
+                  GoRoute(
+                    path: 'match-image-view',
+                    builder: (context, state) => const MatchBoardImageViewPage(),
+                  ),
+                  GoRoute(
+                    path: 'match-image-view-detail',
+                    builder: (context, state) => const MatchBoardImageViewDetailPage(),
+                  ),
+                  GoRoute(
+                    path: 'match-edit1',
+                    builder: (context, state) => const MatchEdit1Page(),
+                  ),
+                  GoRoute(
+                    path: 'match-edit2',
+                    builder: (context, state) => const MatchEdit2Page(),
+                  ),
+                  GoRoute(
+                    path: 'match-edit-preview',
+                    builder: (context, state) => const MatchEditPreviewPage(),
+                  ),
+                ],
+              ),
+            ],
           ),
         ],
       ),
@@ -227,24 +242,6 @@ class Routes {
         path: '/community-preview',
         builder: (BuildContext context, GoRouterState state) {
           return const CommunityWritePreviewPage();
-        },
-      ),
-      GoRoute(
-        path: '/match-edit1',
-        builder: (BuildContext context, GoRouterState state) {
-          return const MatchEdit1Page();
-        },
-      ),
-      GoRoute(
-        path: '/match-edit2',
-        builder: (BuildContext context, GoRouterState state) {
-          return const MatchEdit2Page();
-        },
-      ),
-      GoRoute(
-        path: '/match-edit-preview',
-        builder: (BuildContext context, GoRouterState state) {
-          return const MatchEditPreviewPage();
         },
       ),
       GoRoute(

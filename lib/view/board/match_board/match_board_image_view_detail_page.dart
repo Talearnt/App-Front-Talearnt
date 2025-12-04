@@ -56,7 +56,8 @@ class MatchBoardImageViewDetailPage extends StatelessWidget {
                     ),
                   ),
                   onPressed: () {
-                    context.go('/match-board-detail-page/match-image-view');
+                    context.go(
+                        '/board-list/match-board-detail-page/match-image-view');
                   },
                 ),
                 title: Text.rich(

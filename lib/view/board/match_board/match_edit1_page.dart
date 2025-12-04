@@ -23,7 +23,7 @@ class MatchEdit1Page extends StatelessWidget {
       appBar: TopAppBar(
         onPressed: () {
           matchEditProvider.clearProvider();
-          context.go('/match-board-detail-page');
+          context.pop();
         },
       ),
       bottomNavigationBar: Container(
@@ -57,7 +57,8 @@ class MatchEdit1Page extends StatelessWidget {
                     onPressed: () async {
                       matchEditProvider.checkChipsSelected();
                       matchEditProvider.isChipsSelected
-                          ? context.go('/match-edit2')
+                          ? context.push(
+                              '/board-list/match-board-detail-page/match-edit2')
                           : null;
                     },
                   ),

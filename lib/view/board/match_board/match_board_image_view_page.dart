@@ -33,8 +33,8 @@ class MatchBoardImageViewPage extends StatelessWidget {
               return GestureDetector(
                 onTap: () {
                   matchBoardDetailProvider.setPreviewImageIndex(index);
-                  context
-                      .push('/match-board-detail-page/match-image-view-detail');
+                  context.push(
+                      '/board-list/match-board-detail-page/match-image-view-detail');
                 },
                 child: Container(
                   child: Image.network(
