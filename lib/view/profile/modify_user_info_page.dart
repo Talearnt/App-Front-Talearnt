@@ -40,47 +40,58 @@ class ModifyUserInfoPage extends StatelessWidget {
           content: "프로필 수정",
           first: TextBtnM(
               content: '저장',
-              btnStyle: TextTypes.body02(color: Palette.primary01),
+              btnStyle: profileProvider.nickNameValid
+                  ? TextTypes.body02(color: Palette.primary01)
+                  : TextTypes.body02(color: Palette.text03),
               onPressed: () async {
-                final bool isSuccess;
-                commonProvider.changeIsLoading(true);
-                await profileProvider.getUploadImagesInfo();
+                if (profileProvider.nickNameValid) {
+                  final bool isSuccess;
+                  commonProvider.changeIsLoading(true);
+                  await profileProvider.getUploadImagesInfo();
 
-                if (profileProvider.changeImage) {
-                  await profileViewModel.getUserImageUploadUrl(
-                      profileProvider.uploadUserImageInfo);
+                  if (profileProvider.changeImage) {
+                    await profileViewModel.getUserImageUploadUrl(
+                        profileProvider.uploadUserImageInfo);
 
-                  await profileViewModel.uploadImage(
-                    profileProvider.imageUploadS3Url,
-                    profileProvider.uploadUserImageInfo["file"],
-                    profileProvider.uploadUserImageInfo["fileSize"],
-                    profileProvider.uploadUserImageInfo["fileType"],
-                  );
+                    await profileViewModel.uploadImage(
+                      profileProvider.imageUploadS3Url,
+                      profileProvider.uploadUserImageInfo["file"],
+                      profileProvider.uploadUserImageInfo["fileSize"],
+                      profileProvider.uploadUserImageInfo["fileType"],
+                    );
 
-                  isSuccess = await profileViewModel.editUserInfo(
-                      profileProvider.editImageUploadUrl,
-                      profileProvider.editNickNameController.text,
-                      profileProvider.giveTalents,
-                      profileProvider.receiveTalents);
+                    isSuccess = await profileViewModel.editUserInfo(
+                        profileProvider.editImageUploadUrl,
+                        profileProvider.editNickNameController.text,
+                        profileProvider.giveTalents,
+                        profileProvider.receiveTalents);
+                  } else {
+                    isSuccess = await profileViewModel.editUserInfo(
+                        profileProvider.imageFile == null
+                            ? null
+                            : profileProvider.imageFile as String,
+                        profileProvider.editNickNameController.text,
+                        profileProvider.giveTalents,
+                        profileProvider.receiveTalents);
+                  }
+                  commonProvider.changeIsLoading(false);
+
+                  if (isSuccess) {
+                    ToastMessage.show(
+                      context: context,
+                      message: "프로필이 수정되었습니다.",
+                      type: 1,
+                      bottom: 50,
+                    );
+                    context.go('/profile');
+                  }
                 } else {
-                  isSuccess = await profileViewModel.editUserInfo(
-                      profileProvider.imageFile == null
-                          ? null
-                          : profileProvider.imageFile as String,
-                      profileProvider.editNickNameController.text,
-                      profileProvider.giveTalents,
-                      profileProvider.receiveTalents);
-                }
-                commonProvider.changeIsLoading(false);
-
-                if (isSuccess) {
                   ToastMessage.show(
                     context: context,
-                    message: "프로필이 수정되었습니다.",
-                    type: 1,
+                    message: "닉네임을 확인해주세요!",
+                    type: 2,
                     bottom: 50,
                   );
-                  context.go('/profile');
                 }
               }),
           onPressed: () {
@@ -162,6 +173,8 @@ class ModifyUserInfoPage extends StatelessWidget {
                     onChanged: (value) {
                       profileProvider.updateController(
                           profileProvider.editNickNameController);
+
+                      profileProvider.changeNickNameValid();
                     },
                     provider: profileProvider,
                     validType: 'nickName',
