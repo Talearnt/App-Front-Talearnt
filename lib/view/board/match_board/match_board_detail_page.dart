@@ -214,8 +214,9 @@ class MatchBoardDetailPage extends StatelessWidget {
                                                       ? [
                                                           BoxShadow(
                                                             color: Colors.black
-                                                              ..withValues(
-                                                                  alpha: 0.08),
+                                                                .withValues(
+                                                                    alpha:
+                                                                        0.08),
                                                             spreadRadius: 0,
                                                             blurRadius: 20,
                                                             offset:
