@@ -7,8 +7,6 @@ import 'package:app_front_talearnt/provider/board/match_edit_provider.dart';
 import 'package:app_front_talearnt/provider/common/common_provider.dart';
 import 'package:app_front_talearnt/view/board/match_board/match_edit_editor_toolbar.dart';
 import 'package:app_front_talearnt/view/board/match_board/widget/match_edit_hyperlink_dialog.dart';
-import 'package:app_front_talearnt/view/board/match_board/widget/match_write_hyperlink_dialog.dart';
-import 'package:app_front_talearnt/view_model/board_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
@@ -21,7 +19,6 @@ class MatchEdit2Page extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final matchEditProvider = Provider.of<MatchEditProvider>(context);
-    final boardViewModel = Provider.of<BoardViewModel>(context);
     final commonProvider = Provider.of<CommonProvider>(context);
 
     ScrollController scrollController = ScrollController();
@@ -30,7 +27,7 @@ class MatchEdit2Page extends StatelessWidget {
       resizeToAvoidBottomInset: true,
       appBar: TopAppBar(
         onPressed: () {
-          context.go('/match-edit1');
+          context.pop();
         },
         second: TextBtnM(
           content: '미리보기',
@@ -39,7 +36,8 @@ class MatchEdit2Page extends StatelessWidget {
 
             if (matchEditProvider.isTitleAndBoardEmpty) {
               matchEditProvider.makePreviewImageList();
-              context.push('/match-edit-preview');
+              context.push(
+                  '/board-list/match-board-detail-page/match-edit-preview');
             } else {
               ToastMessage.show(
                   context: context,

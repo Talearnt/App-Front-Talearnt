@@ -243,15 +243,38 @@ class BoardViewModel extends ChangeNotifier {
     });
   }
 
-  Future<void> getMatchDetailBoard(int postNo) async {
+  Future<void> getMatchDetailBoard(
+    int postNo, {
+    String? source,
+  }) async {
     final result = await boardRepository.getMatchDetailBoard(postNo);
     result.fold(
         (failure) => commonNavigator.showSingleDialog(
-            content: ErrorMessages.getMessage(failure.errorCode)), (post) {
+            content: ErrorMessages.getMessage(failure.errorCode)),
+        (post) async {
       matchBoardDetailProvider.updateTalentDetailPost(post);
       matchBoardDetailProvider
           .setRecruiting(post.status == "모집중" ? true : false);
-      commonNavigator.pushRoute('/match-board-detail-page');
+      if (source == 'checkMyWrite') {
+        await getMatchBoardList(
+            matchBoardProvider.selectedGiveTalentKeywordCodes
+                .map((e) => e.toString())
+                .toList(),
+            matchBoardProvider.selectedInterestTalentKeywordCodes
+                .map((e) => e.toString())
+                .toList(),
+            matchBoardProvider.selectedOrderType,
+            matchBoardProvider.selectedDurationType,
+            null,
+            null,
+            null,
+            null,
+            null,
+            "reset");
+        commonNavigator.goRoute('/board-list/match-board-detail-page');
+      } else {
+        commonNavigator.pushRoute('/board-list/match-board-detail-page');
+      }
     });
   }
 
@@ -262,7 +285,7 @@ class BoardViewModel extends ChangeNotifier {
             content: ErrorMessages.getMessage(failure.errorCode)), (post) {
       matchBoardDetailProvider.updateTalentDetailPost(post);
       matchEditProvider.clearProvider();
-      commonNavigator.goRoute('/match-board-detail-page');
+      commonNavigator.goRoute('/board-list/match-board-detail-page');
     });
   }
 

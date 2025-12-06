@@ -5,13 +5,13 @@ import 'package:app_front_talearnt/common/widget/state_badge.dart';
 import 'package:app_front_talearnt/common/widget/top_app_bar.dart';
 import 'package:app_front_talearnt/provider/common/common_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter/services.dart';
 
 import '../../../common/widget/bottom_btn.dart';
 import '../../../common/widget/toast_message.dart';
@@ -475,12 +475,12 @@ class MatchBoardDetailPage extends StatelessWidget {
                                           onTap: () {
                                             if (index == 3) {
                                               context.push(
-                                                  '/match-board-detail-page/match-image-view');
+                                                  '/board-list/match-board-detail-page/match-image-view');
                                             } else {
                                               matchBoardDetailProvider
                                                   .setPreviewImageIndex(index);
                                               context.push(
-                                                  '/match-board-detail-page/match-image-view-detail');
+                                                  '/board-list/match-board-detail-page/match-image-view-detail');
                                             }
                                           },
                                           child: Stack(
@@ -511,7 +511,7 @@ class MatchBoardDetailPage extends StatelessWidget {
                                                 Positioned.fill(
                                                   child: GestureDetector(
                                                     onTap: () => context.push(
-                                                        '/match-board-detail-page/match-image-view'),
+                                                        '/board-list/match-board-detail-page/match-image-view'),
                                                     child: Center(
                                                       child: Text(
                                                         "이미지\n더보기",
@@ -605,7 +605,7 @@ class MatchBoardDetailPage extends StatelessWidget {
                 onPressed: () async {
                   final value = matchBoardDetailProvider
                           .matchingDetailPost.hyperLink
-                          ?.trim() ??
+                          .trim() ??
                       "";
 
                   if (value.isEmpty) return;
