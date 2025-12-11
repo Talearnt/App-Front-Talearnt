@@ -155,12 +155,13 @@ class CommunityEdit1Page extends StatelessWidget {
               },
             ),
             mediaBottom: MediaQuery.of(context).viewInsets.bottom,
-            content: "확인",
+            content: "다음",
             isEnabled: true,
             onPressed: () async {
               communityEditProvider.checkChipsSelected();
               if (communityEditProvider.isChipsSelected) {
-                context.push('/community-edit2');
+                context
+                    .push('/board-list/community-board-detail/community-edit2');
               } else {
                 null;
               }
