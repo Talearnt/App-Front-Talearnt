@@ -148,7 +148,7 @@ class HomePage extends StatelessWidget {
                                   await notificationViewModel
                                       .getNotification()
                                       .whenComplete(() {
-                                    commonProvider.changeIsLoading(true);
+                                    commonProvider.changeIsLoading(false);
                                   });
                                   context.push('/alarm');
                                 } else {
