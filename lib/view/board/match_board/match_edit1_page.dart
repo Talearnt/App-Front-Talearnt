@@ -22,6 +22,7 @@ class MatchEdit1Page extends StatelessWidget {
     return Scaffold(
       appBar: TopAppBar(
         onPressed: () {
+          commonProvider.removeToast();
           matchEditProvider.clearProvider();
           context.go('/match-board-detail-page');
         },

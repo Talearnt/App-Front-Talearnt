@@ -778,56 +778,16 @@ class MatchWriteProvider extends ChangeNotifier with ClearText {
       return;
     }
 
-    bool isValidEmail = false;
-    if (text.contains('@')) {
-      final emailParts = text.split('@');
+    final emailRegex =
+        RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
+    final isValidEmail = emailRegex.hasMatch(text);
 
-      if (emailParts.length == 2 &&
-          emailParts[0].isNotEmpty &&
-          emailParts[1].isNotEmpty) {
-        final domain = emailParts[1];
+    final openKakaoRegex =
+        RegExp(r'^(https?:\/\/)?open\.kakao\.com\/o\/[A-Za-z0-9]+$');
 
-        if (domain.contains('.')) {
-          final domainParts = domain.split('.');
-          final tld = domainParts.last;
-          if (tld.length >= 2 && domainParts.length >= 2) {
-            final emailRegex =
-                RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
-            isValidEmail = emailRegex.hasMatch(text);
-          }
-        }
-      }
-    }
+    final isValidOpenKakao = openKakaoRegex.hasMatch(text);
 
-    bool isValidUrl = false;
-    if (!isValidEmail) {
-      if (text.startsWith('http://') || text.startsWith('https://')) {
-        final withoutProtocol = text.replaceFirst(RegExp(r'^https?://'), '');
-
-        if (withoutProtocol.isNotEmpty && withoutProtocol.contains('.')) {
-          final urlRegex = RegExp(
-              r'^(https?:\/\/)(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-zA-Z]{2,6}\b([-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$');
-          isValidUrl = urlRegex.hasMatch(text);
-        }
-      } else if (text.contains('.')) {
-        final parts = text.split('/')[0].split('.');
-
-        if (parts.length >= 2) {
-          final tld = parts.last;
-          final domain = parts[parts.length - 2];
-
-          if (domain.length >= 2 && tld.length >= 2) {
-            final domainRegex = RegExp(r'^[a-zA-Z0-9-]+$');
-            final tldRegex = RegExp(r'^[a-zA-Z]+$');
-            if (domainRegex.hasMatch(domain) && tldRegex.hasMatch(tld)) {
-              isValidUrl = true;
-            }
-          }
-        }
-      }
-    }
-
-    _isHyperLinkTextNotEmpty = isValidEmail || isValidUrl;
+    _isHyperLinkTextNotEmpty = isValidEmail || isValidOpenKakao;
 
     notifyListeners();
   }

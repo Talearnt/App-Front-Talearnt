@@ -23,6 +23,7 @@ class MatchWrite1Page extends StatelessWidget {
     return Scaffold(
       appBar: TopAppBar(
         onPressed: () {
+          commonProvider.removeToast();
           matchWriteProvider.clearProvider();
           context.pop();
         },
