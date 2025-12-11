@@ -89,6 +89,7 @@ class ProfileProvider extends ChangeNotifier with ClearText {
   bool _editNickNameHelper = false;
   bool _changeEditNickName = false; //닉네임 변경했는지
   String _errorMessage = "";
+  bool _nickNameValid = true;
 
   String _imageUploadS3Url = "";
   bool _isS3Upload = false;
@@ -258,6 +259,8 @@ class ProfileProvider extends ChangeNotifier with ClearText {
 
   List<CommunityBoard> get communityBoardList => _communityBoardList;
 
+  bool get nickNameValid => _nickNameValid;
+
   void clearProvider() {
     _editNickNameController.clear();
     _editNickNameFocusNode.unfocus();
@@ -304,6 +307,8 @@ class ProfileProvider extends ChangeNotifier with ClearText {
 
     _noticeDetail = NoticeDetail.empty();
     _eventDetail = EventDetail.empty();
+
+    _nickNameValid = true;
   }
 
   void _onScroll(String type) {
@@ -827,5 +832,13 @@ class ProfileProvider extends ChangeNotifier with ClearText {
     Provider.of<CommonProvider>(context, listen: false).clearProvider();
     Provider.of<HomeProvider>(context, listen: false).clearProvider();
     Provider.of<KeywordProvider>(context, listen: false).clearProvider();
+  }
+
+  void changeNickNameValid() {
+    final text = _editNickNameController.text;
+    final length = text.length;
+    final isValidPattern = RegExp(r'^[가-힣a-zA-Z0-9#]{2,12}$').hasMatch(text);
+    _nickNameValid = length >= 2 && length <= 12 && isValidPattern;
+    notifyListeners();
   }
 }

@@ -4,6 +4,7 @@ import 'package:app_front_talearnt/common/widget/toast_message.dart';
 import 'package:app_front_talearnt/provider/board/match_edit_provider.dart';
 import 'package:app_front_talearnt/provider/common/common_provider.dart';
 import 'package:app_front_talearnt/view_model/board_view_model.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -91,6 +92,22 @@ class MatchEditHyperlinkDialog extends StatelessWidget {
                 ),
               ),
               keyboardType: TextInputType.url,
+            ),
+            const SizedBox(height: 4),
+            Row(
+              children: [
+                SvgPicture.asset(
+                  'assets/icons/fail_helper.svg',
+                  width: 12,
+                  height: 12,
+                  color: Palette.text03,
+                ),
+                const SizedBox(
+                  width: 4,
+                ),
+                Text("오픈채팅 URL 또는 이메일 주소만 입력가능합니다.",
+                    style: TextTypes.captionSemi02(color: Palette.text03))
+              ],
             ),
             SizedBox(
               height: 20,

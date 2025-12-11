@@ -23,8 +23,7 @@ class ProfileUserInfo extends StatelessWidget {
               radius: 52,
               backgroundImage: profileProvider.userProfile.profileImg == null
                   ? null
-                  : NetworkImage(
-                      profileProvider.userProfile.profileImg!),
+                  : NetworkImage(profileProvider.userProfile.profileImg!),
               child: profileProvider.userProfile.profileImg == null
                   ? SvgPicture.asset(
                       'assets/img/default_user_image.svg',
