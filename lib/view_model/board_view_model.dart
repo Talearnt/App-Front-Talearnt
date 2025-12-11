@@ -24,12 +24,14 @@ import '../data/model/respone/failure.dart';
 import '../data/model/respone/success.dart';
 import '../data/repositories/board_repository.dart';
 import '../provider/auth/storage_provider.dart';
+import '../provider/board/common_board_provider.dart';
 import '../provider/board/community_board_detail_provider.dart';
 import '../provider/board/community_board_provider.dart';
 import '../provider/board/community_edit_provider.dart';
 import '../provider/board/match_board_detail_provider.dart';
 import '../provider/board/match_board_provider.dart';
 import '../provider/board/match_write_provider.dart';
+import '../provider/common/common_provider.dart';
 import '../provider/keyword/keyword_provider.dart';
 import '../utils/error_message.dart';
 
@@ -48,6 +50,8 @@ class BoardViewModel extends ChangeNotifier {
   final HomeProvider homeProvider;
   final ProfileProvider profileProvider;
   final StorageProvider storageProvider;
+  final CommonBoardProvider commonBoardProvider;
+  final CommonProvider commonProvider;
 
   BoardViewModel(
     this.commonNavigator,
@@ -64,6 +68,8 @@ class BoardViewModel extends ChangeNotifier {
     this.homeProvider,
     this.profileProvider,
     this.storageProvider,
+    this.commonBoardProvider,
+    this.commonProvider,
   );
 
   Future<void> getImageUploadUrl(
@@ -148,7 +154,7 @@ class BoardViewModel extends ChangeNotifier {
         (failure) => commonNavigator.showSingleDialog(
             content: ErrorMessages.getMessage(failure.errorCode)), (result) {
       matchWriteProvider.updatePostNo(result.data);
-      commonNavigator.goRoute('/write-success');
+      commonNavigator.goRoute('/match-write-success');
     });
   }
 
@@ -286,6 +292,7 @@ class BoardViewModel extends ChangeNotifier {
       matchBoardDetailProvider.updateTalentDetailPost(post);
       matchEditProvider.clearProvider();
       commonNavigator.goRoute('/board-list/match-board-detail-page');
+      commonProvider.changeSelectedPage('board-list');
     });
   }
 
@@ -302,7 +309,8 @@ class BoardViewModel extends ChangeNotifier {
     result.fold(
         (failure) => commonNavigator.showSingleDialog(
             content: ErrorMessages.getMessage(failure.errorCode)), (result) {
-      commonNavigator.goRoute('/write-success');
+      communityWriteProvider.updatePostNo(result.data);
+      commonNavigator.goRoute('/community-write-success');
     });
   }
 
@@ -375,13 +383,39 @@ class BoardViewModel extends ChangeNotifier {
     });
   }
 
-  Future<void> getCommunityDetailBoard(int postNo) async {
+  Future<void> getCommunityDetailBoard(int postNo, {String? source}) async {
+    final result = await boardRepository.getCommunityDetailBoard(postNo);
+    result.fold(
+        (failure) => commonNavigator.showSingleDialog(
+            content: ErrorMessages.getMessage(failure.errorCode)),
+        (post) async {
+      communityBoardDetailProvider.updateCommunityDetailBoard(post);
+      if (source == 'checkMyWrite') {
+        await getCommunityBoardList(
+          communityBoardProvider.selectedPostType,
+          communityBoardProvider.selectedOrderType,
+          null,
+          null,
+          null,
+          null,
+        );
+        commonBoardProvider.setBoardType("community");
+        commonNavigator.goRoute('/board-list/community-board-detail');
+      } else {
+        commonNavigator.pushRoute('/board-list/community-board-detail');
+      }
+    });
+  }
+
+  Future<void> getEditedCommunityDetailBoard(int postNo) async {
     final result = await boardRepository.getCommunityDetailBoard(postNo);
     result.fold(
         (failure) => commonNavigator.showSingleDialog(
             content: ErrorMessages.getMessage(failure.errorCode)), (post) {
       communityBoardDetailProvider.updateCommunityDetailBoard(post);
-      commonNavigator.pushRoute('/community-board-detail');
+      communityEditProvider.clearProvider();
+      commonNavigator.goRoute('/board-list/community-board-detail');
+      commonProvider.changeSelectedPage('board_list');
     });
   }
 
@@ -445,7 +479,7 @@ class BoardViewModel extends ChangeNotifier {
         (failure) => commonNavigator.showSingleDialog(
             content: ErrorMessages.getMessage(failure.errorCode)),
         (result) async {
-      await getCommunityDetailBoard(postNo);
+      await getEditedCommunityDetailBoard(postNo);
     });
   }
 

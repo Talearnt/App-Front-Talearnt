@@ -28,7 +28,7 @@ class CommunityEdit2Page extends StatelessWidget {
       resizeToAvoidBottomInset: true,
       appBar: TopAppBar(
         onPressed: () {
-          context.go('/community-edit1');
+          context.pop();
         },
         second: TextBtnM(
           content: '미리보기',
@@ -38,7 +38,8 @@ class CommunityEdit2Page extends StatelessWidget {
             if (communityEditProvider.isTitleAndBoardEmpty) {
               communityEditProvider.makePreviewImageList();
               commonProvider.updateBackGesture(false);
-              context.push('/community-edit-preview');
+              context.push(
+                  '/board-list/community-board-detail/community-edit-preview');
             } else {
               ToastMessage.show(
                   context: context,
