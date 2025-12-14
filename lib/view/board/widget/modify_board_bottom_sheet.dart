@@ -36,6 +36,7 @@ class ModifyBoardBottomSheet extends StatelessWidget {
         Provider.of<CommunityBoardDetailProvider>(context);
     final commonNavigator = Provider.of<CommonNavigator>(context);
     final commonProvider = Provider.of<CommonProvider>(context);
+    final boardViewModel = Provider.of<BoardViewModel>(context);
 
     return Wrap(children: [
       Padding(
@@ -98,7 +99,14 @@ class ModifyBoardBottomSheet extends StatelessWidget {
                         },
                         rightFun: () async {
                           if (boardType == "match") {
-                            await viewModel.deleteMatchBoard(postNo);
+                            await viewModel.deleteMatchBoard(postNo).then(
+                              (value) async {
+                                commonProvider.changeIsLoading(true);
+                                await boardViewModel.getInitMatchBoardList();
+                                commonProvider.changeSelectedPage('board_list');
+                                commonProvider.changeIsLoading(false);
+                              },
+                            );
                           } else {
                             await viewModel.deleteCommunityBoard(postNo);
                           }
