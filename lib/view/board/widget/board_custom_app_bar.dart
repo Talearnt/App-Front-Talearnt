@@ -114,7 +114,7 @@ class BoardCustomAppBar extends StatelessWidget {
               if (loginProvider.isLoggedIn) {
                 commonProvider.changeIsLoading(true);
                 await notificationViewModel.getNotification().whenComplete(() {
-                  commonProvider.changeIsLoading(true);
+                  commonProvider.changeIsLoading(false);
                 });
                 context.push('/alarm');
               } else {
