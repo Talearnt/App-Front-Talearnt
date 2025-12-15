@@ -32,13 +32,14 @@ import '../view/board/community_board/community_board_image_view_page.dart';
 import '../view/board/community_board/community_write1_page.dart';
 import '../view/board/community_board/community_write2_page.dart';
 import '../view/board/community_board/community_write_preview_page.dart';
+import '../view/board/community_board/community_write_success_page.dart';
 import '../view/board/match_board/match_board_detail_page.dart';
 import '../view/board/match_board/match_board_image_view_detail_page.dart';
 import '../view/board/match_board/match_board_image_view_page.dart';
 import '../view/board/match_board/match_write1_page.dart';
 import '../view/board/match_board/match_write2_page.dart';
 import '../view/board/match_board/match_write_preview_page.dart';
-import '../view/board/write_success_page.dart';
+import '../view/board/match_board/match_write_success_page.dart';
 import '../view/home/home_page.dart';
 import '../view/init_page.dart';
 import '../view/keyword/set_talent_keyword_main_page.dart';
@@ -156,9 +157,15 @@ class Routes {
         },
       ),
       GoRoute(
-        path: '/write-success',
+        path: '/match-write-success',
         builder: (BuildContext context, GoRouterState state) {
-          return const WriteSuccessPage();
+          return const MatchWriteSuccessPage();
+        },
+      ),
+      GoRoute(
+        path: '/community-write-success',
+        builder: (BuildContext context, GoRouterState state) {
+          return const CommunityWriteSuccessPage();
         },
       ),
       GoRoute(
@@ -202,11 +209,13 @@ class Routes {
                 routes: [
                   GoRoute(
                     path: 'match-image-view',
-                    builder: (context, state) => const MatchBoardImageViewPage(),
+                    builder: (context, state) =>
+                        const MatchBoardImageViewPage(),
                   ),
                   GoRoute(
                     path: 'match-image-view-detail',
-                    builder: (context, state) => const MatchBoardImageViewDetailPage(),
+                    builder: (context, state) =>
+                        const MatchBoardImageViewDetailPage(),
                   ),
                   GoRoute(
                     path: 'match-edit1',
@@ -219,6 +228,44 @@ class Routes {
                   GoRoute(
                     path: 'match-edit-preview',
                     builder: (context, state) => const MatchEditPreviewPage(),
+                  ),
+                ],
+              ),
+              GoRoute(
+                path: 'community-board-detail',
+                builder: (BuildContext context, GoRouterState state) {
+                  return const CommunityBoardDetailPage();
+                },
+                routes: [
+                  GoRoute(
+                    path: 'community-image-view',
+                    builder: (BuildContext context, GoRouterState state) {
+                      return const CommunityBoardImageViewPage();
+                    },
+                  ),
+                  GoRoute(
+                    path: 'community-image-view-detail',
+                    builder: (BuildContext context, GoRouterState state) {
+                      return const CommunityBoardImageViewDetailPage();
+                    },
+                  ),
+                  GoRoute(
+                    path: 'community-edit1',
+                    builder: (BuildContext context, GoRouterState state) {
+                      return const CommunityEdit1Page();
+                    },
+                  ),
+                  GoRoute(
+                    path: 'community-edit2',
+                    builder: (BuildContext context, GoRouterState state) {
+                      return const CommunityEdit2Page();
+                    },
+                  ),
+                  GoRoute(
+                    path: 'community-edit-preview',
+                    builder: (BuildContext context, GoRouterState state) {
+                      return const CommunityEditPreviewPage();
+                    },
                   ),
                 ],
               ),
@@ -243,26 +290,6 @@ class Routes {
         builder: (BuildContext context, GoRouterState state) {
           return const CommunityWritePreviewPage();
         },
-      ),
-      GoRoute(
-        path: '/community-board-detail',
-        builder: (BuildContext context, GoRouterState state) {
-          return const CommunityBoardDetailPage();
-        },
-        routes: <RouteBase>[
-          GoRoute(
-            path: 'community-image-view',
-            builder: (BuildContext context, GoRouterState state) {
-              return const CommunityBoardImageViewPage();
-            },
-          ),
-          GoRoute(
-            path: 'community-image-view-detail',
-            builder: (BuildContext context, GoRouterState state) {
-              return const CommunityBoardImageViewDetailPage();
-            },
-          ),
-        ],
       ),
       GoRoute(
         path: '/profile',
@@ -310,24 +337,6 @@ class Routes {
         path: '/match_board_like',
         builder: (BuildContext context, GoRouterState state) {
           return const MatchBoardLikePage();
-        },
-      ),
-      GoRoute(
-        path: '/community-edit1',
-        builder: (BuildContext context, GoRouterState state) {
-          return const CommunityEdit1Page();
-        },
-      ),
-      GoRoute(
-        path: '/community-edit2',
-        builder: (BuildContext context, GoRouterState state) {
-          return const CommunityEdit2Page();
-        },
-      ),
-      GoRoute(
-        path: '/community-edit-preview',
-        builder: (BuildContext context, GoRouterState state) {
-          return const CommunityEditPreviewPage();
         },
       ),
       GoRoute(

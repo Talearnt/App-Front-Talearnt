@@ -152,6 +152,8 @@ class CommunityWriteProvider extends ChangeNotifier with ClearText {
 
   bool _isS3Upload = false;
 
+  int _postNo = 0;
+
   TextEditingController get titleController => _titleController;
 
   QuillController get contentController => _contentController;
@@ -222,6 +224,8 @@ class CommunityWriteProvider extends ChangeNotifier with ClearText {
 
   int get totalImageCount => _totalImageCount;
 
+  int get postNo => _postNo;
+
   void clearProvider() {
     _subscription?.cancel();
     _subscription = null;
@@ -261,6 +265,7 @@ class CommunityWriteProvider extends ChangeNotifier with ClearText {
 
     _linkTextController.clear();
     _urlController.clear();
+    _postNo = 0;
 
     reset();
 
@@ -585,5 +590,10 @@ class CommunityWriteProvider extends ChangeNotifier with ClearText {
   void finishImageUpload() {
     _isS3Upload = false;
     _uploadImageInfo.clear();
+  }
+
+  void updatePostNo(int postNo) {
+    _postNo = postNo;
+    notifyListeners();
   }
 }

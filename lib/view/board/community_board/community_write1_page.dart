@@ -156,12 +156,12 @@ class CommunityWrite1Page extends StatelessWidget {
               },
             ),
             mediaBottom: MediaQuery.of(context).viewInsets.bottom,
-            content: "확인",
+            content: "다음",
             isEnabled: true,
             onPressed: () async {
               communityWriteProvider.checkChipsSelected();
               if (communityWriteProvider.isChipsSelected) {
-                context.go('/community-write2');
+                context.push('/community-write2');
               } else {
                 null;
               }

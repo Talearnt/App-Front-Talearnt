@@ -63,7 +63,8 @@ class ModifyBoardBottomSheet extends StatelessWidget {
                     } else {
                       await communityEditProvider.setPostInfo(
                           communityBoardDetailProvider.communityDetailBoard);
-                      context.go('/community-edit1');
+                      commonNavigator.pushRoute(
+                          '/board-list/community-board-detail/community-edit1');
                     }
                     commonProvider.changeIsLoading(false);
                   },

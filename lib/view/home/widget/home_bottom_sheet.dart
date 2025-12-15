@@ -35,7 +35,6 @@ class HomeBottomSheet extends StatelessWidget {
                   matchWriteProvider.setGiveTalentKeyword(
                     profileProvider.userProfile.giveTalents,
                   );
-                  commonProvider.changeSelectedPage('write_board');
                   context.pop();
                   context.push('/match-write1');
                   commonProvider.changeIsLoading(false);
@@ -62,7 +61,6 @@ class HomeBottomSheet extends StatelessWidget {
                 hoverColor: Colors.transparent,
                 onTap: () async {
                   commonProvider.changeIsLoading(true);
-                  commonProvider.changeSelectedPage('write_board');
                   context.pop();
                   context.push('/community-write1');
                   commonProvider.changeIsLoading(false);

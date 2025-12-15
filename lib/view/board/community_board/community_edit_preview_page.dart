@@ -58,7 +58,7 @@ class CommunityEditPreviewPage extends StatelessWidget {
             context.pop();
           },
           first: PrimaryS(
-            content: '등록',
+            content: '완료',
             onPressed: () async {
               commonProvider.updateBackGesture(true);
               commonProvider.removeToast();
